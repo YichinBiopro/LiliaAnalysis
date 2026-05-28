@@ -1,0 +1,33 @@
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Local tooling
+.codex/
+.idea/
+.vscode/
+.DS_Store
+
+# Generated analysis outputs
+10Hz/
+1Hz/
+ECEO/
+sample_quality/
+*/comparison/
+*/event_verification/
+*/eeg_overview/
+merged.csv
+
+# Raw data and source captures
+iBrainCenter/
+YoGa/
+*.csv
+*.pdf
+*.docx
+
+# Large model artifacts
+*.pth
+*.tflite
