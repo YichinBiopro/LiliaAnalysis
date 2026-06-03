@@ -1,6 +1,6 @@
 # Lilia EEG Analysis
 
-本專案包含六個 Python scripts / modules，涵蓋 EEG 訊號分析、qEEG wellness indices 計算、EEG 品質評分、受試者資料合併、活動標記驗證圖、以及模型轉檔。
+本專案包含多個 Python scripts / modules，涵蓋 EEG 訊號分析、qEEG wellness indices、band entropy、EEG 品質評分、受試者資料合併、活動標記驗證圖、以及模型轉檔。
 
 ## Python Scripts 總覽
 
@@ -8,6 +8,7 @@
 | --- | --- |
 | `data_analysis.py` | 比較 APP 與 NUC EEG 資料，進行前處理、TinyUNetV4 模型推論，並輸出分析圖（含 qEEG indices 圖） |
 | `qeeg_indices.py` | 實作 Appendix J §3 的 qEEG wellness indices（Focus / Flow / Calm / Relaxation），可獨立執行或被其他 script 匯入 |
+| `spectral_entropy.py` | 使用 Welch PSD 計算 delta / theta / alpha / beta / gamma 五個頻段能量、正規化成比例後計算 BandEn |
 | `eeg_quality_v2.py` | 從 SleepStage 抽出的獨立 EEG quality v2 scorer，核心為 `get_eeg_quality_index_v2_parametric()` 與其參數 / wrapper |
 | `eeg_utils.py` | 共用低階工具：`load_merged_csv()`（4-row header CSV 載入）、`bandpass_filter()`（零相位 Butterworth bandpass） |
 | `merge_subject_csvs.py` | 將 `iBrainCenter/` 與 `YoGa/` 底下各 subject 的多個 CSV 合併為單一 `merged.csv` |
@@ -21,6 +22,7 @@
 lilia_analysis/
 ├── data_analysis.py           # APP vs NUC 分析主程式
 ├── qeeg_indices.py            # qEEG wellness indices（Appendix J §3）
+├── spectral_entropy.py        # Welch PSD + five-band entropy
 ├── eeg_quality_v2.py          # 獨立 EEG quality v2 scorer
 ├── eeg_utils.py               # 共用工具：CSV 載入、bandpass filter
 ├── merge_subject_csvs.py      # 合併各 subject 的多個 CSV
@@ -181,6 +183,82 @@ python qeeg_indices.py --csv <path.csv> [--fs 500] [--ch 1] [--win 5] [--out <di
 | `--ch` | 1 | 1-based channel index |
 | `--win` | 5 | 視窗長度（秒） |
 | `--out` | CSV 所在目錄 | 輸出目錄 |
+
+---
+
+## spectral_entropy.py
+
+以 2 秒 EEG window 為單位，先用 Welch's method 計算 PSD，再整合五個 EEG 頻段能量：
+
+- Delta: 0.5–4 Hz
+- Theta: 4–8 Hz
+- Alpha: 8–13 Hz
+- Beta: 13–30 Hz
+- Gamma: 30–45 Hz
+
+接著計算：
+
+- `E_total = E_delta + E_theta + E_alpha + E_beta + E_gamma`
+- `p_k = E_k / E_total`
+- `BandEn = -sum(p_k * log2(p_k))`
+
+另外可選擇對一組左右通道加入**非零時滯互資訊**同步分析：
+
+- `I(X(t); Y(t+tau))`，其中 `tau > 0`
+- 預設 `tau = 5, 10, 15, 20 ms`
+- 以雙向平均 `0.5 * [I(L(t); R(t+tau)) + I(R(t); L(t+tau))]` 作為該 `tau` 的左右腦同步量
+- 再輸出各 `tau`、`lagged_mi_mean`、`lagged_mi_max`、`lagged_mi_best_tau_ms`
+
+> **設計依據：** 容積傳導（volume conduction）為即時物理效應（時間差 ≈ 0），因此在 `tau = 0` 的互資訊中會被計入。引入 `tau > 0`（如 5–20 ms）可完全過濾這類偽同步訊號，抓到兩半球間真正的**動態資訊交換**（例如透過胼胝體的跨半球傳遞）。
+
+### 獨立執行
+
+```bash
+# 基本使用
+python spectral_entropy.py --csv <path.csv> [--fs 500] [--ch 1] [--win 2] [--step 2] [--out <dir>]
+
+# 加入左右腦同步分析
+python spectral_entropy.py --csv <path.csv> --sync-pair 1 2 [--tau-ms 5 10 15 20]
+
+# 加入 iBrainCenter 活動標記，並將 x 軸轉為絕對時間（UTC+8）
+python spectral_entropy.py --csv <path.csv> --ibrain-events
+
+# 完整組合
+python spectral_entropy.py --csv iBrainCenter/Ann(SN027)/merged.csv \
+    --ch 1 --sync-pair 1 2 --tau-ms 5 10 15 20 --ibrain-events
+```
+
+| 參數 | 預設 | 說明 |
+| --- | --- | --- |
+| `--csv` | （必填） | 輸入 CSV（lilia 格式） |
+| `--fs` | 500 | 取樣率 (Hz) |
+| `--ch` | 1 | 1-based channel index |
+| `--win` | 2 | 分析視窗長度（秒） |
+| `--step` | `--win` | 滑動步長（秒） |
+| `--sync-pair` | 無 | 可選，指定 1-based 左右通道配對，追加非零時滯互資訊同步分析 |
+| `--tau-ms` | `5 10 15 20` | 可選，指定 lagged MI 的毫秒延遲列表，必須皆大於 0 |
+| `--mi-bins` | 16 | 互資訊直方圖分箱數 |
+| `--out` | CSV 所在目錄 | 輸出目錄 |
+| `--ibrain-events` | 未設定 | 啟用後：x 軸改為絕對本地時間（HH:MM:SS UTC+8），並在每個子圖疊加 iBrainCenter 活動色塊與起始標記 |
+
+### 活動標記說明（`--ibrain-events`）
+
+加上 `--ibrain-events` 後，所有子圖（Band Proportion × 5、BandEn、Sync）均會疊加下列視覺元素：
+
+- **色塊**（`axvspan`）：活動持續期間的半透明背景，每個活動有獨立顏色
+- **起始虛線**（`axvline`）：活動開始時間
+- **旋轉文字標籤**：標示活動名稱，貼齊起始線左緣
+
+活動定義來自 `plot_event_markers.EVENTS`（見 `plot_event_markers.py` 章節）。
+
+### 輸出檔案
+
+| 檔名 | 說明 |
+| --- | --- |
+| `<basename>_band_entropy_ch<N>.csv` | 每個 window 的時間點、五個頻段能量、總能量、各頻段比例、BandEn |
+| `<basename>_band_entropy_ch<N>.png` | 每個 band 各自獨立子圖的比例時序圖，並疊加 smooth 趨勢線；最下方附 BandEn |
+| `<basename>_band_entropy_ch<N>_sync_ch<L>_ch<R>.csv` | 在原 BandEn 欄位外，追加各 `tau` 的 lagged MI、`lagged_mi_mean`、`lagged_mi_max`、`lagged_mi_best_tau_ms` |
+| `<basename>_band_entropy_ch<N>_sync_ch<L>_ch<R>.png` | 在原 BandEn 圖下方追加左右腦非零時滯互資訊同步面板；指定 `--ibrain-events` 時 x 軸改為絕對時間並疊加活動標記 |
 
 ---
 
