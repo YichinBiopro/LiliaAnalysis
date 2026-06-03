@@ -280,9 +280,12 @@ def apply_tflite_windowed(data: np.ndarray,
     chunks = []
     for i in range(n_win):
         seg = data[i * TFLITE_WIN : (i + 1) * TFLITE_WIN][np.newaxis].astype(np.float32)
-        interp.set_tensor(inp_det['index'], seg)
+        seg_rms = np.sqrt(np.mean(seg.astype(np.float64) ** 2)) + 1e-8
+        seg_norm = (seg / np.float32(seg_rms)).astype(np.float32, copy=False)
+        interp.set_tensor(inp_det['index'], seg_norm)
         interp.invoke()
-        chunks.append(interp.get_tensor(out_det['index'])[0])   # (400, 2)
+        pred = interp.get_tensor(out_det['index'])[0] * np.float32(seg_rms)
+        chunks.append(pred.astype(np.float32, copy=False))   # (400, 2)
     return np.concatenate(chunks, axis=0) if chunks else np.zeros((0, 2), np.float32)
 
 
@@ -311,6 +314,74 @@ def _overlay_events(
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
     ax.xaxis.set_major_locator(mdates.MinuteLocator(byminute=range(0, 60, 5)))
     ax.grid(True, alpha=0.2)
+
+
+def _time_mask(time_arr: np.ndarray,
+               start_dt: datetime.datetime | None = None,
+               end_dt: datetime.datetime | None = None) -> np.ndarray:
+    """Build a half-open [start_dt, end_dt) mask on a datetime array."""
+    mask = np.ones(len(time_arr), dtype=bool)
+    if start_dt is not None:
+        mask &= time_arr >= start_dt
+    if end_dt is not None:
+        mask &= time_arr < end_dt
+    return mask
+
+
+def _build_pre_event_rest_specs(evt_list: list) -> list:
+    """Map each participating event to the immediately preceding non-event span."""
+    specs = []
+    prev_end = None
+    for start_dt, end_dt, label, color, participates in evt_list:
+        if participates:
+            specs.append((start_dt, end_dt, label, color, prev_end, start_dt))
+        if prev_end is None or end_dt > prev_end:
+            prev_end = end_dt
+    return specs
+
+
+def _piecewise_event_delta(time_arr: np.ndarray,
+                           abs_values: np.ndarray,
+                           event_specs: list) -> np.ndarray:
+    """Apply per-event baseline subtraction using each event's pre-event rest."""
+    delta = np.full_like(abs_values, np.nan)
+    for start_dt, end_dt, _label, _color, bl_start, bl_end in event_specs:
+        baseline_mask = _time_mask(time_arr, bl_start, bl_end)
+        segment_mask = baseline_mask | _time_mask(time_arr, start_dt, end_dt)
+        if not np.any(segment_mask):
+            continue
+        for idx_i in range(abs_values.shape[0]):
+            bl_vals = abs_values[idx_i, baseline_mask]
+            if np.any(~np.isnan(bl_vals)):
+                bl_ref = float(np.nanmedian(bl_vals))
+                delta[idx_i, segment_mask] = abs_values[idx_i, segment_mask] - bl_ref
+    return delta
+
+
+def _draw_baseline_spans(ax: plt.Axes,
+                         time_arr: np.ndarray,
+                         baseline_mode: str,
+                         participating_events: list,
+                         pre_event_rest_specs: list) -> None:
+    """Highlight the baseline regions used for delta comparisons."""
+    if len(time_arr) == 0:
+        return
+    if baseline_mode == 'session-start':
+        if participating_events:
+            first_evt_dt = min(e[0] for e in participating_events)
+            ax.axvspan(time_arr[0], first_evt_dt,
+                       color='grey', alpha=0.08, label='baseline')
+        return
+
+    baseline_label_drawn = False
+    for _start_dt, _end_dt, _label, _color, bl_start, bl_end in pre_event_rest_specs:
+        span_start = time_arr[0] if bl_start is None else max(bl_start, time_arr[0])
+        span_end = min(bl_end, time_arr[-1])
+        if span_start >= span_end:
+            continue
+        ax.axvspan(span_start, span_end, color='grey', alpha=0.08,
+                   label='baseline' if not baseline_label_drawn else None)
+        baseline_label_drawn = True
 
 
 def _bandpower_from_psd(freqs: np.ndarray, psd: np.ndarray,
@@ -578,7 +649,8 @@ def plot_hardy2_band_and_indices(outdir: str,
 def plot_subject(name: str, info: dict, outdir: str, ds: int,
                  base_dir: str = None, with_events: bool = True,
                  group_label: str = 'iBrainCenter',
-                 use_tflite: bool = True):
+                 use_tflite: bool = True,
+                 baseline_mode: str = 'session-start'):
     """
     Plot EEG traces + quality panel for one subject.
 
@@ -587,6 +659,7 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
     base_dir    : root directory that contains info['dir'] (default: IBRAIN_DIR)
     with_events : if True, overlay iBrainCenter event spans/lines and legend
     group_label : string used in the figure title and output filename prefix
+    baseline_mode : 'session-start' or 'pre-event-rest' for delta reference
     """
     if base_dir is None:
         base_dir = IBRAIN_DIR
@@ -665,6 +738,9 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
             if participates:
                 participating_events.append((start_dt, end_dt, label, color))
         cone_stage_dt = [hhmm_to_dt(t) for t in CONE_STAGES]
+    pre_event_rest_specs = (_build_pre_event_rest_specs(evt_list)
+                            if with_events and baseline_mode == 'pre-event-rest'
+                            else [])
 
     # ── Derived data ─────────────────────────────────────────────────────────────
     # Quality arrays
@@ -714,28 +790,43 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
                 heatmap_abs[idx_i, b] = float(np.median(gv))
 
     bin_t_arr = np.array(bin_t)
-    # baseline = bins before first participating event (or first 20% if no events)
-    if with_events and participating_events:
-        first_evt_dt  = min(e[0] for e in participating_events)
-        bl_mask_bin   = bin_t_arr < first_evt_dt
+    # baseline = session start or each event's immediately preceding rest span
+    if with_events and participating_events and baseline_mode == 'pre-event-rest':
+        heatmap_delta = _piecewise_event_delta(bin_t_arr, heatmap_abs,
+                                              pre_event_rest_specs)
     else:
+        heatmap_delta = np.full_like(heatmap_abs, np.nan)
+        if with_events and participating_events:
+            first_evt_dt  = min(e[0] for e in participating_events)
+            bl_mask_bin   = bin_t_arr < first_evt_dt
+        else:
+            bl_mask_bin   = np.zeros(n_bins, dtype=bool)
+            bl_mask_bin[:max(1, n_bins // 5)] = True
+        for idx_i in range(4):
+            bl_vals = heatmap_abs[idx_i, bl_mask_bin]
+            bl_ref  = float(np.nanmedian(bl_vals)) if np.any(~np.isnan(bl_vals)) else 0.0
+            heatmap_delta[idx_i] = heatmap_abs[idx_i] - bl_ref
+    if (np.all(np.isnan(heatmap_delta)) and n_bins > 0):
         bl_mask_bin   = np.zeros(n_bins, dtype=bool)
         bl_mask_bin[:max(1, n_bins // 5)] = True
-    heatmap_delta = np.full_like(heatmap_abs, np.nan)
-    for idx_i in range(4):
-        bl_vals = heatmap_abs[idx_i, bl_mask_bin]
-        bl_ref  = float(np.nanmedian(bl_vals)) if np.any(~np.isnan(bl_vals)) else 0.0
-        heatmap_delta[idx_i] = heatmap_abs[idx_i] - bl_ref
+        for idx_i in range(4):
+            bl_vals = heatmap_abs[idx_i, bl_mask_bin]
+            bl_ref  = float(np.nanmedian(bl_vals)) if np.any(~np.isnan(bl_vals)) else 0.0
+            heatmap_delta[idx_i] = heatmap_abs[idx_i] - bl_ref
     heatmap_delta_ma = np.ma.masked_invalid(heatmap_delta)
 
     # ── Block-level delta bar chart (quality-masked) ──────────────────────────
     block_deltas = []
     if with_events and len(participating_events) > 0 and len(qeeg_t_arr) > 0:
         good_qual     = ~qual_mask
-        first_evt_dt  = min(e[0] for e in participating_events)
-        baseline_mask = (qeeg_t_arr < first_evt_dt) & good_qual
-        for (start_dt, end_dt, label, color) in participating_events:
+        baseline_specs = (pre_event_rest_specs if baseline_mode == 'pre-event-rest'
+                          else [(start_dt, end_dt, label, color, None, start_dt)
+                                for (start_dt, end_dt, label, color) in participating_events])
+        for (start_dt, end_dt, label, color, bl_start, bl_end) in baseline_specs:
             block_mask = (qeeg_t_arr >= start_dt) & (qeeg_t_arr < end_dt) & good_qual
+            baseline_mask = _time_mask(qeeg_t_arr, bl_start, bl_end) & good_qual
+            if baseline_mode == 'pre-event-rest' and baseline_mask.sum() == 0:
+                baseline_mask = (qeeg_t_arr < start_dt) & good_qual
             per_index  = {}
             for k in INDEX_KEYS:
                 scores = qeeg_filt[k]
@@ -790,26 +881,41 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
                     tfl_heatmap_abs[idx_i, b] = float(np.median(gv))
         tfl_bin_t_arr = np.array(tfl_bin_t_list)
 
-        if with_events and participating_events:
-            first_evt_dt = min(e[0] for e in participating_events)
-            tfl_bl_mask  = tfl_bin_t_arr < first_evt_dt
+        if with_events and participating_events and baseline_mode == 'pre-event-rest':
+            tfl_heatmap_delta = _piecewise_event_delta(tfl_bin_t_arr, tfl_heatmap_abs,
+                                                      pre_event_rest_specs)
         else:
+            tfl_heatmap_delta = np.full_like(tfl_heatmap_abs, np.nan)
+            if with_events and participating_events:
+                first_evt_dt = min(e[0] for e in participating_events)
+                tfl_bl_mask  = tfl_bin_t_arr < first_evt_dt
+            else:
+                tfl_bl_mask = np.zeros(n_tfl_bins, dtype=bool)
+                tfl_bl_mask[:max(1, n_tfl_bins // 5)] = True
+            for idx_i in range(4):
+                bl_vals = tfl_heatmap_abs[idx_i, tfl_bl_mask]
+                bl_ref  = float(np.nanmedian(bl_vals)) if np.any(~np.isnan(bl_vals)) else 0.0
+                tfl_heatmap_delta[idx_i] = tfl_heatmap_abs[idx_i] - bl_ref
+        if (np.all(np.isnan(tfl_heatmap_delta)) and n_tfl_bins > 0):
             tfl_bl_mask = np.zeros(n_tfl_bins, dtype=bool)
             tfl_bl_mask[:max(1, n_tfl_bins // 5)] = True
-        tfl_heatmap_delta = np.full_like(tfl_heatmap_abs, np.nan)
-        for idx_i in range(4):
-            bl_vals = tfl_heatmap_abs[idx_i, tfl_bl_mask]
-            bl_ref  = float(np.nanmedian(bl_vals)) if np.any(~np.isnan(bl_vals)) else 0.0
-            tfl_heatmap_delta[idx_i] = tfl_heatmap_abs[idx_i] - bl_ref
+            for idx_i in range(4):
+                bl_vals = tfl_heatmap_abs[idx_i, tfl_bl_mask]
+                bl_ref  = float(np.nanmedian(bl_vals)) if np.any(~np.isnan(bl_vals)) else 0.0
+                tfl_heatmap_delta[idx_i] = tfl_heatmap_abs[idx_i] - bl_ref
         tfl_heatmap_delta_ma = np.ma.masked_invalid(tfl_heatmap_delta)
 
         if with_events and len(participating_events) > 0:
             good_qual_tfl     = ~tfl_qual_mask
-            first_evt_dt      = min(e[0] for e in participating_events)
-            baseline_mask_tfl = (tfl_t_arr < first_evt_dt) & good_qual_tfl
-            for (start_dt, end_dt, label, color) in participating_events:
+            baseline_specs_tfl = (pre_event_rest_specs if baseline_mode == 'pre-event-rest'
+                                  else [(start_dt, end_dt, label, color, None, start_dt)
+                                        for (start_dt, end_dt, label, color) in participating_events])
+            for (start_dt, end_dt, label, color, bl_start, bl_end) in baseline_specs_tfl:
                 block_mask_tfl = ((tfl_t_arr >= start_dt) & (tfl_t_arr < end_dt)
                                   & good_qual_tfl)
+                baseline_mask_tfl = _time_mask(tfl_t_arr, bl_start, bl_end) & good_qual_tfl
+                if baseline_mode == 'pre-event-rest' and baseline_mask_tfl.sum() == 0:
+                    baseline_mask_tfl = (tfl_t_arr < start_dt) & good_qual_tfl
                 per_index = {}
                 for k in INDEX_KEYS:
                     scores = qeeg_tfl[k]
@@ -950,9 +1056,8 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
                           label=lbl)
         ax_trend.axhline(0, color='k', lw=0.5, ls=':')
         if with_events and participating_events:
-            first_evt_dt = min(e[0] for e in participating_events)
-            ax_trend.axvspan(qeeg_t_arr[0], first_evt_dt,
-                             color='grey', alpha=0.08, label='baseline')
+            _draw_baseline_spans(ax_trend, qeeg_t_arr, baseline_mode,
+                                 participating_events, pre_event_rest_specs)
     _overlay_events(ax_trend, evt_list, cone_stage_dt)
     ax_trend.set_ylim(-1.1, 1.1)
     ax_trend.set_ylabel('Summary\n(30s smooth)', fontsize=8)
@@ -1004,9 +1109,8 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
                                   label=lbl)
             ax_tfl_trend.axhline(0, color='k', lw=0.5, ls=':')
             if with_events and participating_events:
-                first_evt_dt = min(e[0] for e in participating_events)
-                ax_tfl_trend.axvspan(tfl_t_arr[0], first_evt_dt,
-                                     color='grey', alpha=0.08, label='baseline')
+                _draw_baseline_spans(ax_tfl_trend, tfl_t_arr, baseline_mode,
+                                     participating_events, pre_event_rest_specs)
         _overlay_events(ax_tfl_trend, evt_list, cone_stage_dt)
         ax_tfl_trend.set_ylim(-1.1, 1.1)
         ax_tfl_trend.set_ylabel('TFLite Summary\n(30s smooth)', fontsize=8)
@@ -1104,6 +1208,13 @@ def parse_args():
     p.add_argument('--hardy2-outdir',
                    default=os.path.join(IBRAIN_DIR, 'event_verification'),
                    metavar='DIR', help='Output directory for Hardy_2 analysis figures.')
+    p.add_argument('--ibrain-baseline-mode',
+                   choices=['pre-event-rest', 'session-start'],
+                   default='pre-event-rest',
+                   help=('Baseline mode for iBrainCenter delta plots: '
+                         "'pre-event-rest' uses each event's immediately preceding "
+                         "non-event interval; 'session-start' keeps the original "
+                         'pre-first-event baseline.'))
     return p.parse_args()
 
 
@@ -1128,14 +1239,16 @@ def main():
         plot_subject(name, info, args.ibrain_outdir, args.ds,
                      base_dir=IBRAIN_DIR, with_events=True,
                      group_label='iBrainCenter',
-                     use_tflite=not args.no_tflite)
+                     use_tflite=not args.no_tflite,
+                     baseline_mode=args.ibrain_baseline_mode)
 
     print(f'\n── YoGa → {args.yoga_outdir}')
     for name, info in YOGA_SUBJECTS.items():
         plot_subject(name, info, args.yoga_outdir, args.ds,
                      base_dir=YOGA_DIR, with_events=False,
                      group_label='YoGa',
-                     use_tflite=not args.no_tflite)
+                     use_tflite=not args.no_tflite,
+                     baseline_mode='session-start')
 
     print('\nDone.')
 
