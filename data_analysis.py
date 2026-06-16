@@ -17,6 +17,7 @@ from scipy import signal
 # ── Constants ──────────────────────────────────────────────────────────────────
 BASE_DIR       = '/home/bps-yichin/lilia_analysis'
 FS             = 500
+DOWNSAMPLED_FS = 200
 BANDPASS_LOW   = 0.5
 BANDPASS_HIGH  = 45.0
 NOTCH_FREQ     = 60.0
@@ -83,7 +84,8 @@ def resolve_paths(args: argparse.Namespace) -> tuple[str, str, str, str]:
 def load_file(path: str) -> tuple[np.ndarray, np.ndarray, str, float]:
     """Load a lilia EEG CSV and return (time_s, data, filename, gain).
 
-    Reads gain from row 2, skips 4-row header, deduplicates column names.
+    Reads gain from row 2, skips 4-row header. Time and channel columns are
+    selected positionally (col 0 = time, cols 1..N_CH = channels).
     Returns time in seconds (float64), data as (N, N_CH) float64.
     """
     with open(path) as f:
@@ -91,13 +93,6 @@ def load_file(path: str) -> tuple[np.ndarray, np.ndarray, str, float]:
     gain = float(lines[1].split(',')[1])
     df   = pd.read_csv(path, skiprows=4)
     time_s = df.iloc[:, 0].values.astype(float) / 1e6
-
-    cols, seen, new_cols = list(df.columns), {}, []
-    for c in cols:
-        seen[c] = seen.get(c, 0) + 1
-        new_cols.append(c if seen[c] == 1 else f'{c}_{seen[c]}')
-    df.columns = new_cols
-
     data = df.iloc[:, 1 : N_CH + 1].values.astype(float)
     return time_s, data, os.path.basename(path), gain
 
@@ -133,6 +128,27 @@ def apply_filters(data: np.ndarray) -> np.ndarray:
     data = notch(data)
     data = bandstop(data)
     return data
+
+
+def downsample_data(time_s: np.ndarray, data: np.ndarray,
+                    fs_in: float = FS,
+                    fs_out: float = DOWNSAMPLED_FS,
+                    ) -> tuple[np.ndarray, np.ndarray]:
+    """Resample time and data together from fs_in to fs_out."""
+    if fs_in == fs_out:
+        return time_s, data
+
+    up = int(fs_out)
+    dn = int(fs_in)
+    gcd = np.gcd(up, dn)
+    up //= gcd
+    dn //= gcd
+
+    data_ds = signal.resample_poly(data, up, dn, axis=0).astype(np.float32)
+    t_orig = np.arange(len(data), dtype=np.float64)
+    t_new = np.arange(len(data_ds), dtype=np.float64) * (dn / up)
+    time_ds = np.interp(t_new, t_orig, time_s).astype(np.float64)
+    return time_ds, data_ds
 
 
 # ── Artifact removal ───────────────────────────────────────────────────────────
@@ -382,7 +398,7 @@ def plot_artifact_removal(time, raw, cleaned, counts, title, outpath, color):
     print(f'Saved: {os.path.basename(outpath)}')
 
 
-def plot_psd_before_after(raw, cleaned, title, outpath, color):
+def plot_psd_before_after(raw, cleaned, title, outpath, color, fs=FS):
     """Plot per-channel PSD before and after processing."""
     n_ch = raw.shape[1]
     fig, axes = plt.subplots(n_ch, 1, figsize=(12, 3.5*n_ch), sharex=True)
@@ -391,8 +407,8 @@ def plot_psd_before_after(raw, cleaned, title, outpath, color):
     fig.suptitle(title, fontsize=14, fontweight='bold')
     for i in range(n_ch):
         ax = axes[i]
-        f_b, p_b = compute_psd(raw[:, i])
-        f_a, p_a = compute_psd(cleaned[:, i])
+        f_b, p_b = compute_psd(raw[:, i], fs=fs)
+        f_a, p_a = compute_psd(cleaned[:, i], fs=fs)
         ax.plot(f_b, p_b, color='#aaaaaa', lw=1.2, label='before')
         ax.plot(f_a, p_a, color=color,     lw=1.2, label='after')
         ax.set_ylabel('PSD (dB/Hz)'); ax.set_title(f'Channel {i+1}')
@@ -428,14 +444,14 @@ def plot_td_comparison(time, sig_a, sig_b, n_ch, title, outpath,
 
 
 def plot_psd_comparison(sig_a, sig_b, n_ch, title, outpath,
-                        label_a, label_b, colors):
+                        label_a, label_b, colors, fs=FS):
     """Plot per-channel PSD comparison of two signals."""
     fig, axes = plt.subplots(n_ch, 1, figsize=(12, 3.5*n_ch), sharex=True)
     fig.suptitle(title, fontsize=14, fontweight='bold')
     for i in range(n_ch):
         ax = axes[i]
-        f_a, p_a = compute_psd(sig_a[:, i])
-        f_b, p_b = compute_psd(sig_b[:, i])
+        f_a, p_a = compute_psd(sig_a[:, i], fs=fs)
+        f_b, p_b = compute_psd(sig_b[:, i], fs=fs)
         ax.plot(f_a, p_a, color=colors[0], lw=1.2, label=f'{label_a} | ch{i+1}')
         ax.plot(f_b, p_b, color=colors[1], lw=1.2, label=f'{label_b} | ch{i+1}')
         ax.set_ylabel('PSD (dB/Hz)'); ax.set_title(f'Channel {i+1}')
@@ -488,6 +504,11 @@ def main():
     filt_a, counts_a = remove_artifacts(filt_a_raw, label='APP')
     filt_b, counts_b = remove_artifacts(filt_b_raw, label='NUC')
 
+    print(f'--- Downsampling {FS}Hz to {DOWNSAMPLED_FS}Hz ---')
+    time_a_ds, filt_a_ds = downsample_data(time_a, filt_a)
+    time_b_ds, filt_b_ds = downsample_data(time_b, filt_b)
+    analysis_fs = DOWNSAMPLED_FS
+
     # ── Artifact removal plots: APP ────────────────────────────────────────────
     plot_artifact_removal(
         time_a, filt_a_raw, filt_a, counts_a,
@@ -514,31 +535,33 @@ def main():
     print('--- Model inference ---')
     model = load_model()
     print('Running model on APP...')
-    out_a = run_model(model, filt_a)
+    out_a = run_model(model, filt_a_ds)
     print('Running model on NUC...')
-    out_b = run_model(model, filt_b)
+    out_b = run_model(model, filt_b_ds)
 
     # ── Model before/after plots ────────────────────────────────────────────────
-    plot_model_before_after(time_a, filt_a[:, :N_CH_OUT], out_a,
+    plot_model_before_after(time_a_ds, filt_a_ds[:, :N_CH_OUT], out_a,
                             'APP: Before vs After Model (ch1 & ch2)',
                             out('app_model_before_after_td.png'), colors[0])
-    plot_model_before_after(time_b, filt_b[:, :N_CH_OUT], out_b,
+    plot_model_before_after(time_b_ds, filt_b_ds[:, :N_CH_OUT], out_b,
                             'NUC: Before vs After Model (ch1 & ch2)',
                             out('nuc_model_before_after_td.png'), colors[1])
 
     plot_psd_before_after(
-        filt_a[:, :N_CH_OUT], out_a,
+        filt_a_ds[:, :N_CH_OUT], out_a,
         'APP: PSD Before vs After Model (ch1 & ch2)',
-        out('app_model_before_after_psd.png'), colors[0])
+        out('app_model_before_after_psd.png'), colors[0], fs=analysis_fs)
     plot_psd_before_after(
-        filt_b[:, :N_CH_OUT], out_b,
+        filt_b_ds[:, :N_CH_OUT], out_b,
         'NUC: PSD Before vs After Model (ch1 & ch2)',
-        out('nuc_model_before_after_psd.png'), colors[1])
+        out('nuc_model_before_after_psd.png'), colors[1], fs=analysis_fs)
 
     # ── Phase-lag alignment ─────────────────────────────────────────────────────
-    lag = estimate_lag(filt_a, filt_b)
-    filt_a_cmp, filt_b_cmp, time_cmp   = align_for_comparison(filt_a, time_a, filt_b, lag)
-    out_a_cmp,  out_b_cmp,  time_m_cmp = align_for_comparison(out_a,  time_a, out_b,  lag)
+    lag = estimate_lag(filt_a_ds, filt_b_ds, fs=analysis_fs)
+    filt_a_cmp, filt_b_cmp, time_cmp = align_for_comparison(
+        filt_a_ds, time_a_ds, filt_b_ds, lag)
+    out_a_cmp, out_b_cmp, time_m_cmp = align_for_comparison(
+        out_a, time_a_ds, out_b, lag)
 
     # ── Filtered 4-ch comparison ────────────────────────────────────────────────
     plot_td_comparison(
@@ -548,10 +571,10 @@ def main():
         short_a, short_b, colors)
 
     plot_psd_comparison(
-        filt_a, filt_b, N_CH,
+        filt_a_ds, filt_b_ds, N_CH,
         'PSD Comparison (Filtered, 4ch)',
         out('psd_comparison.png'),
-        short_a, short_b, colors)
+        short_a, short_b, colors, fs=analysis_fs)
 
     # ── Model output comparison ─────────────────────────────────────────────────
     plot_td_comparison(
@@ -564,19 +587,19 @@ def main():
         out_a, out_b, N_CH_OUT,
         'Model Output: PSD Comparison (ch1 & ch2)',
         out('model_output_psd.png'),
-        short_a, short_b, colors)
+        short_a, short_b, colors, fs=analysis_fs)
 
     # ── STFT / Spectrogram analysis ─────────────────────────────────────────────
     print('--- STFT analysis ---')
     plot_stft_before_after(
-        time_a, filt_a[:, :N_CH_OUT], out_a,
+        time_a_ds, filt_a_ds[:, :N_CH_OUT], out_a,
         'APP: Spectrogram Before vs After Model (ch1 & ch2)',
-        out('app_model_stft.png'), colors[0])
+        out('app_model_stft.png'), colors[0], fs=analysis_fs)
 
     plot_stft_before_after(
-        time_b, filt_b[:, :N_CH_OUT], out_b,
+        time_b_ds, filt_b_ds[:, :N_CH_OUT], out_b,
         'NUC: Spectrogram Before vs After Model (ch1 & ch2)',
-        out('nuc_model_stft.png'), colors[1])
+        out('nuc_model_stft.png'), colors[1], fs=analysis_fs)
 
     plot_stft_comparison(
         time_cmp, filt_a_cmp[:, :N_CH_OUT],
@@ -584,7 +607,7 @@ def main():
         N_CH_OUT,
         f'Spectrogram Comparison — Filtered (lag={lag:+d} samples)',
         out('stft_filtered_comparison.png'),
-        short_a, short_b)
+        short_a, short_b, fs=analysis_fs)
 
     plot_stft_comparison(
         time_m_cmp, out_a_cmp,
@@ -592,13 +615,13 @@ def main():
         N_CH_OUT,
         f'Spectrogram Comparison — Model Output (lag={lag:+d} samples)',
         out('stft_model_output_comparison.png'),
-        short_a, short_b)
+        short_a, short_b, fs=analysis_fs)
 
     # ── qEEG wellness indices ────────────────────────────────────────────────────
     print('--- qEEG wellness indices ---')
     for ch_idx in range(N_CH_OUT):
         for sig, tag in [(out_a, short_a), (out_b, short_b)]:
-            indices = compute_qeeg_indices_windowed(sig[:, ch_idx])
+            indices = compute_qeeg_indices_windowed(sig[:, ch_idx], fs=analysis_fs)
             fname   = f'qeeg_indices_{tag.lower()}_ch{ch_idx+1}.png'
             plot_qeeg_indices(
                 indices,
