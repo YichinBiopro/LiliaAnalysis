@@ -757,9 +757,11 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
                    'restfulness': '#6f42c1', 'engagement':  '#00a6c8'}
     qeeg_t_arr = np.array(qeeg_dt)
 
-    # quality mask (1-to-1 with 5s qEEG windows)
+    # quality mask (1-to-1 with 5s qEEG windows): preserve the known overlap,
+    # default any unmatched tail windows to good rather than discarding all flags.
     n_q, n_hm = len(q_median), qeeg_filt[INDEX_KEYS[0]].shape[0]
-    qual_mask  = low_qual if n_q == n_hm else np.zeros(n_hm, dtype=bool)
+    qual_mask  = np.zeros(n_hm, dtype=bool)
+    qual_mask[:min(n_q, n_hm)] = low_qual[:min(n_q, n_hm)]
 
     # ── 5s channel-median series (quality-masked) for smooth trend ────────────
     SMOOTH_WIN = max(1, int(30.0 / QEEG_WIN_SEC))   # 6 × 5s = 30s
@@ -852,8 +854,8 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
     if has_tflite:
         n_tfl_hm = qeeg_tfl[INDEX_KEYS[0]].shape[0]
         n_tfl_q  = len(q_median)
-        tfl_qual_mask = (low_qual[:n_tfl_hm] if n_tfl_q >= n_tfl_hm
-                         else np.zeros(n_tfl_hm, dtype=bool))
+        tfl_qual_mask = np.zeros(n_tfl_hm, dtype=bool)
+        tfl_qual_mask[:min(n_tfl_q, n_tfl_hm)] = low_qual[:min(n_tfl_q, n_tfl_hm)]
 
         for k in INDEX_KEYS:
             series = np.where(tfl_qual_mask, np.nan,

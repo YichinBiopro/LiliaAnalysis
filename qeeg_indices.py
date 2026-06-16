@@ -25,7 +25,7 @@ from scipy import signal
 EPSILON    = 1e-9
 BAND_THETA = (4.0,  8.0)
 BAND_ALPHA = (8.0, 13.0)
-BAND_BETA  = (12.0, 30.0)
+BAND_BETA  = (13.0, 30.0)
 
 DEFAULT_FS      = 500
 DEFAULT_WIN_SEC = 5.0
@@ -34,7 +34,8 @@ DEFAULT_WIN_SEC = 5.0
 # ── §3.1  Relative Power Normalisation ────────────────────────────────────────
 
 def _band_power(freqs, psd_linear, fmin, fmax):
-    mask = (freqs >= fmin) & (freqs <= fmax)
+    # Half-open [fmin, fmax) so adjacent bands never share a boundary bin.
+    mask = (freqs >= fmin) & (freqs < fmax)
     return float(np.trapz(psd_linear[mask], freqs[mask]))
 
 
@@ -255,7 +256,7 @@ def main():
     print(f'Loading: {args.csv}')
     time_s, data = _load_eeg_csv(args.csv)
     ch_idx = args.ch - 1
-    if ch_idx >= data.shape[1]:
+    if ch_idx < 0 or ch_idx >= data.shape[1]:
         sys.exit(f'Error: channel {args.ch} not found '
                  f'(file has {data.shape[1]} channels).')
 

@@ -6,14 +6,17 @@
 
 | Script | 功能 |
 | --- | --- |
-| `data_analysis.py` | 比較 APP 與 NUC EEG 資料，進行前處理、TinyUNetV4 模型推論，並輸出分析圖（含 qEEG indices 圖） |
+| `data_analysis.py` | 比較 APP 與 NUC EEG 資料，進行前處理、500→200 Hz downsampling、TinyUNetV4 模型推論，並輸出分析圖（含 qEEG indices 圖） |
 | `qeeg_indices.py` | 實作 Appendix J §3 的 qEEG wellness indices（Focus / Flow / Calm / Relaxation），可獨立執行或被其他 script 匯入 |
 | `spectral_entropy.py` | 使用 Welch PSD 計算 delta / theta / alpha / beta / gamma 五個頻段能量、正規化成比例後計算 BandEn |
-| `eeg_quality_v2.py` | 從 SleepStage 抽出的獨立 EEG quality v2 scorer，核心為 `get_eeg_quality_index_v2_parametric()` 與其參數 / wrapper |
+| `eeg_quality_v2.py` | 從 SleepStage 抽出的獨立 EEG quality v2 scorer，核心為 `get_eeg_quality_index_v2_parametric()`，搭配 `DEFAULT` / `BEST_MEAN_ABS_CORR` 參數集與 `get_best_eeg_quality_v2_flat_spectrum_only_params()` |
 | `eeg_utils.py` | 共用低階工具：`load_merged_csv()`（4-row header CSV 載入）、`bandpass_filter()`（零相位 Butterworth bandpass） |
 | `merge_subject_csvs.py` | 將 `iBrainCenter/` 與 `YoGa/` 底下各 subject 的多個 CSV 合併為單一 `merged.csv` |
 | `plot_event_markers.py` | 將 evt_time.docx 的活動時間點疊加至 iBrainCenter 各 subject 的 merged.csv，輸出驗證圖（含 EEG quality、qEEG heatmap、30s smooth summary、event-level delta，以及 TFLite 模型對照組） |
+| `plot_tyy_meditation.py` | 針對 TYY (SN041) 的 Mindfulness Meditation 區段，輸出 Ch1 / Ch2 波形與 BP / TFLite qEEG Δ heatmap 的聚焦圖（PNG + SVG） |
+| `compare_subjects.py` | 跨受試者比較 BP 與 TFLite qEEG delta index（iBrainCenter 以 event block、YoGa 以整段 session 計算） |
 | `sample_quality_check.py` | 從每份 merged.csv 隨機取樣 2 個 30 秒片段，計算 EEG quality 與 qEEG indices，輸出品質檢查圖 |
+| `plot_raw_eeg.py` | 從每份 iBrainCenter merged.csv 隨機取樣 N 個 30 秒非重疊片段，繪製未濾波、未下採樣的 4-ch 原始 EEG 波形 |
 | `convert_to_tflite.py` | 將 PyTorch checkpoint (`tiny_v4_optimized.pth`) 轉換成 float32 TFLite 模型 |
 
 ## 專案結構
@@ -27,7 +30,10 @@ lilia_analysis/
 ├── eeg_utils.py               # 共用工具：CSV 載入、bandpass filter
 ├── merge_subject_csvs.py      # 合併各 subject 的多個 CSV
 ├── plot_event_markers.py      # 活動時間標記驗證圖（含 quality / qEEG / TFLite 對照面板）
+├── plot_tyy_meditation.py     # TYY 冥想區段聚焦圖（Ch1/Ch2 + BP/TFLite qEEG Δ heatmap）
+├── compare_subjects.py        # 跨受試者 BP / TFLite qEEG delta 比較
 ├── sample_quality_check.py    # 隨機取樣品質檢查圖
+├── plot_raw_eeg.py            # 隨機取樣原始 EEG 波形圖（未濾波、未下採樣）
 ├── convert_to_tflite.py       # PyTorch → TFLite 轉換
 ├── Appendix_J_qEEG_Description.pdf
 ├── tiny_v4_optimized.pth
@@ -56,9 +62,13 @@ lilia_analysis/
 │   ├── Hsin(SN032)/  ...
 │   ├── James(SN035)/ ...
 │   ├── TYY(SN041)/   ...
-│   └── event_verification/    # plot_event_markers.py 輸出的驗證圖
+│   ├── event_verification/    # plot_event_markers.py 輸出的驗證圖
+│   ├── comparison/            # compare_subjects.py 輸出（iBrainCenter group）
+│   └── TYY_meditation/        # plot_tyy_meditation.py 輸出（PNG + SVG）
+├── sample_quality/            # plot_raw_eeg.py 輸出的原始波形圖
 └── YoGa/
     ├── James(SN035)/ ...
+    ├── comparison/            # compare_subjects.py 輸出（YoGa group）
     ├── Jammie(SN036)/
     │   ├── 20260513_135528.csv  ┐
     │   ├── 20260513_151700.csv  ├ 3 files → merged.csv
@@ -87,26 +97,32 @@ from eeg_denoise.tiny_model_v4 import TinyUNetV4
 比較 APP 與 NUC 的 EEG CSV 檔案，並產生 time-domain、PSD、STFT 及 qEEG indices 等分析圖。
 `qeeg_indices` 的計算邏輯已拆分至 `qeeg_indices.py`，透過 import 使用。
 
+目前流程會先以 500 Hz 進行濾波與 artifact removal，之後將訊號以 `scipy.signal.resample_poly` 降採樣到 200 Hz，再送入模型與後續分析。
+
 ### 分析流程
 
 1. 讀取 APP 與 NUC CSV。
 2. 訊號前處理：0.5–45 Hz bandpass → 60 Hz notch → 33.25 Hz bandstop。
 3. MAD threshold artifact 偵測與 interpolation 修補。
-4. TinyUNetV4 模型推論（4-ch in → 2-ch out）。
-5. Cross-correlation 估計 APP/NUC lag 並對齊。
-6. 輸出 time-domain、PSD、STFT 比較圖。
-7. 對模型輸出 channel 計算 qEEG wellness indices 並輸出圖。
+4. 將清理後訊號從 500 Hz downsample 到 200 Hz。
+5. TinyUNetV4 模型推論（4-ch in → 2-ch out）。
+6. 以 200 Hz 訊號做 cross-correlation 估計 APP/NUC lag 並對齊。
+7. 輸出 time-domain、PSD、STFT 比較圖。
+8. 對模型輸出 channel 計算 qEEG wellness indices 並輸出圖。
 
 ### 重要參數
 
 ```python
 BASE_DIR     = '/home/bps-yichin/lilia_analysis'
 FS           = 500       # Hz
+DOWNSAMPLED_FS = 200     # Hz, artifact removal 後供模型與後續分析使用
 N_CH         = 4         # 模型輸入 channels
 N_CH_OUT     = 2         # 模型輸出 channels
 MODEL_WINDOW = 400       # samples
 MODEL_PATH   = os.path.join(BASE_DIR, 'tiny_v4_optimized.pth')
 ```
+
+補充：artifact removal 前後圖仍基於原始 500 Hz 訊號；模型前後比較、APP/NUC lag、PSD、STFT、qEEG indices 則使用 downsample 後的 200 Hz 訊號。
 
 ### 執行方式
 
@@ -163,12 +179,14 @@ python data_analysis.py \
 
 | 函式 | §  | 說明 |
 | --- | --- | --- |
-| `compute_relative_powers` | 3.1 | 計算 θ / α / β 相對功率（排除 Delta 與 Gamma） |
+| `compute_relative_powers` | 3.1 | 計算 θ / α / β 相對功率（排除 Delta 與 Gamma），三者相加 ≈ 1 |
 | `bounded_ratio(E, I)` | 3.2 | `clamp((E−I)/(E+I+ε), −1, 1)` |
 | `focus_index` | 3.3 | 持續注意力：高 β（去 EMG）vs 抑制 α/θ |
 | `flow_index` | 3.3 | 心流：α-θ 同步，加入 β flexibility 與 α-θ imbalance 懲罰項 |
 | `calm_index` | 3.3 | 平靜清醒：θ+α vs β+excess-theta（避免將嗜睡誤判為平靜） |
 | `relaxation_index` | 3.3 | 深度放鬆：高 α 主導，高 β 與過量 θ 均有懲罰 |
+
+頻段定義為半開區間 `[fmin, fmax)`，相鄰頻段不共用邊界 bin：Theta 4–8 Hz、Alpha 8–13 Hz、Beta 13–30 Hz（與 `spectral_entropy.py` 一致）。
 
 ### 獨立執行
 
@@ -268,9 +286,9 @@ python spectral_entropy.py --csv iBrainCenter/Ann(SN027)/merged.csv \
 
 ### 合併邏輯
 
-1. 讀取每個 CSV 第 2 行的 `Abs Time Offset[us]`。
-2. 將各 CSV 的相對 `Time[us]` 加上 offset → 絕對時間戳記。
-3. 合併後依絕對時間排序，去除重複時間點。
+1. 讀取每個 CSV 第 2 行的 `Abs Time Offset[us]`（容許 float / 含引號 / 含空白的數值）。
+2. 將各 CSV 的相對 `Time[us]` 加上 offset → 絕對時間戳記；空白或非數值的時間列會被略過而非中斷合併。
+3. 合併後依絕對時間穩定排序，僅去除「完全相同的整列」（避免不同檔案在同一時間戳的不同樣本被誤刪）。
 4. 以最早 offset 對應的 CSV header 為基準，更新 `Abs Time Offset[us]` 欄位。
 5. 寫出 `<subject_folder>/merged.csv`。
 
@@ -399,6 +417,71 @@ YoGa/eeg_overview/
 ├── Jammie_SN036_eeg.png
 └── TYY_SN041_eeg.png
 ```
+
+---
+
+## plot_tyy_meditation.py
+
+針對 TYY (SN041) 的 **Mindfulness Meditation** 區段輸出聚焦圖，由上而下四個面板：
+
+1. Ch1 EEG 波形
+2. Ch2 EEG 波形
+3. BP-filtered qEEG Δ vs baseline heatmap（灰階）
+4. TFLite qEEG Δ vs baseline heatmap（灰階，模型存在時）
+
+X 軸限制在「pre-baseline + meditation」視窗內，同時輸出 PNG（150 dpi）與 SVG。
+
+- baseline 取冥想開始前的區段（`BASELINE_END_HHMM = 14:24`，第一個 TYY 參與活動 Push-ups 之前）。
+- 冥想區段：`MEDITATION_START_HHMM = 15:06`、時長 11 分鐘。
+- TFLite 推論與 `plot_event_markers.py` / `data_analysis.py` 一致，採 per-window RMS 正規化（推論前除以 RMS、輸出再乘回）。
+
+```bash
+python plot_tyy_meditation.py [--outdir <dir>] [--ds <factor>] [--no-tflite]
+```
+
+| 參數 | 預設 | 說明 |
+| --- | --- | --- |
+| `--outdir` | `iBrainCenter/TYY_meditation/` | PNG / SVG 輸出目錄 |
+| `--ds` | 500 | EEG 波形下採樣倍率 |
+| `--no-tflite` | （未設定時啟用 TFLite 對照） | 跳過 TFLite heatmap 面板 |
+
+---
+
+## compare_subjects.py
+
+跨受試者比較 BP 與 TFLite qEEG delta index，兩組獨立分析：
+
+- **iBrainCenter**（Ann、Hsin、Hardy、TYY、James）：以 8 個 event block 計算相對 baseline 的 delta。
+- **YoGa**（James、Jammie、TYY）：無活動標記，計算整段 session 的 delta。
+
+Quality gating 與 `plot_event_markers.py` 相同（5 s window @ 500 Hz、flat+spectrum 參數集），低品質 window 會在 delta 計算中遮罩；quality 旗標與 qEEG window 以重疊區段對齊（不再因視窗數不一致而整體失效）。
+
+```bash
+python compare_subjects.py [--ibrain-outdir <dir>] [--yoga-outdir <dir>]
+```
+
+| 參數 | 預設 | 說明 |
+| --- | --- | --- |
+| `--ibrain-outdir` | `iBrainCenter/comparison/` | iBrainCenter 比較圖輸出目錄 |
+| `--yoga-outdir` | `YoGa/comparison/` | YoGa 比較圖輸出目錄 |
+
+輸出（每組）：`{group}_bp_delta_comparison.png`、`{group}_tflite_delta_comparison.png`、`{group}_combined_comparison.png`。
+
+---
+
+## plot_raw_eeg.py
+
+對每份 iBrainCenter `merged.csv` 隨機取樣 `N_SEGS` 個非重疊 30 秒片段，繪製**未濾波、未下採樣**的 4-channel 原始 EEG 波形，用於快速目視檢查訊號品質。當錄製長度不足一個片段時會略過該檔（不會中斷）。
+
+```bash
+python plot_raw_eeg.py [--outdir <dir>] [--seed <int>] [--seg_sec <float>]
+```
+
+| 參數 | 預設 | 說明 |
+| --- | --- | --- |
+| `--outdir` | `sample_quality/` | PNG 輸出目錄 |
+| `--seed` | 42 | 隨機取樣種子 |
+| `--seg_sec` | 30.0 | 每個片段長度（秒） |
 
 ---
 

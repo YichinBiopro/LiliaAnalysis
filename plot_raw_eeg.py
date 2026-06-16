@@ -39,6 +39,8 @@ SUBJECTS = {
 def pick_segments(n_total: int, seg_len: int, n_segs: int, rng: np.random.Generator):
     starts, attempts = [], 0
     max_start = n_total - seg_len
+    if max_start < 0:          # recording shorter than one segment
+        return []
     while len(starts) < n_segs and attempts < 10_000:
         attempts += 1
         s = int(rng.integers(0, max_start + 1))

@@ -164,7 +164,11 @@ def _band_power(
     if band_freqs.size == 0:
         return 0.0
     if band_freqs.size == 1:
-        return float(band_psd[0])
+        # Integrate the lone bin over the PSD frequency resolution so the result
+        # is a power (uV^2), consistent with the trapezoid branch — not a raw
+        # PSD density (uV^2/Hz).
+        df = float(freqs[1] - freqs[0]) if freqs.size > 1 else 1.0
+        return float(band_psd[0] * df)
     return float(np.trapezoid(band_psd, band_freqs))
 
 

@@ -133,9 +133,13 @@ def _apply_tflite(data: np.ndarray) -> np.ndarray:
     chunks = []
     for i in range(n_win):
         seg = data[i * TFLITE_WIN : (i + 1) * TFLITE_WIN][np.newaxis].astype(np.float32)
-        interp.set_tensor(inp['index'], seg)
+        # Per-window RMS normalization matching the training convention
+        # (same as plot_event_markers.apply_tflite_windowed / data_analysis.run_model).
+        seg_rms  = np.sqrt(np.mean(seg.astype(np.float64) ** 2)) + 1e-8
+        seg_norm = (seg / np.float32(seg_rms)).astype(np.float32, copy=False)
+        interp.set_tensor(inp['index'], seg_norm)
         interp.invoke()
-        chunks.append(interp.get_tensor(out['index'])[0])
+        chunks.append(interp.get_tensor(out['index'])[0] * np.float32(seg_rms))
     return np.concatenate(chunks, axis=0) if chunks else np.zeros((0, 2), np.float32)
 
 

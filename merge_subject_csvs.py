@@ -41,7 +41,8 @@ def read_abs_time_offset(path):
             if i == 1:
                 parts = line.strip().split(',')
                 # format: Amp Gain, 500, Abs Time Offset[us], <value>, ...
-                return int(parts[3])
+                # Tolerate float / quoted / whitespace-padded values.
+                return int(float(parts[3].strip().strip('"').strip("'")))
     raise ValueError(f'Could not read Abs Time Offset from {path}')
 
 
@@ -77,7 +78,12 @@ def load_csv_data(path, offset_us):
     Returns DataFrame with absolute Time[us] in the first column.
     """
     df = pd.read_csv(path, skiprows=N_HEADER_ROWS)
-    df.iloc[:, 0] = df.iloc[:, 0].astype('int64') + offset_us
+    # Coerce the time column robustly: drop rows with blank / non-numeric
+    # timestamps (e.g. a trailing partial row) instead of crashing the merge.
+    col0 = df.columns[0]
+    time_us = pd.to_numeric(df[col0], errors='coerce')
+    df = df.loc[time_us.notna()].copy()
+    df[col0] = time_us.loc[df.index].astype('int64') + offset_us
     return df
 
 
@@ -96,10 +102,12 @@ def merge_subject(csv_paths, out_path):
     frames = [load_csv_data(p, offsets[p]) for p in csv_paths]
     merged = pd.concat(frames, ignore_index=True)
 
-    # Sort by absolute Time[us] and drop exact duplicates
+    # Sort by absolute Time[us] and drop only fully-identical rows. Dropping on
+    # the timestamp alone would silently discard distinct samples from different
+    # files that happen to collide on time.
     time_col = merged.columns[0]
-    merged.sort_values(time_col, inplace=True)
-    merged.drop_duplicates(subset=[time_col], inplace=True)
+    merged.sort_values(time_col, inplace=True, kind='stable')
+    merged.drop_duplicates(inplace=True)
     merged.reset_index(drop=True, inplace=True)
 
     # Write: header lines first, then data (no extra index column)

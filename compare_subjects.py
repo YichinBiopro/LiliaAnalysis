@@ -195,7 +195,11 @@ def extract_subject_deltas(
     qeeg_dt, qeeg_scores = compute_qeeg_windowed(time_us, data_filt)
     n_q   = len(q_dt)
     n_qeeg = len(qeeg_dt)
-    qual_mask = low_qual[:n_qeeg] if n_q >= n_qeeg else np.zeros(n_qeeg, dtype=bool)
+    # Align quality flags 1-to-1 with qEEG windows (both 5s, non-overlapping).
+    # Preserve the known overlap; default any unmatched tail windows to good.
+    qual_mask = np.zeros(n_qeeg, dtype=bool)
+    n_align = min(n_q, n_qeeg)
+    qual_mask[:n_align] = low_qual[:n_align]
     print(f'{n_qeeg} windows')
 
     if participating_events is not None:
@@ -226,7 +230,9 @@ def extract_subject_deltas(
             tfl_dt, tfl_scores = compute_qeeg_windowed(tfl_time, tfl_raw,
                                                        fs=TFLITE_FS)
             n_tfl = len(tfl_dt)
-            tfl_mask = low_qual[:n_tfl] if n_q >= n_tfl else np.zeros(n_tfl, dtype=bool)
+            tfl_mask = np.zeros(n_tfl, dtype=bool)
+            n_align_tfl = min(n_q, n_tfl)
+            tfl_mask[:n_align_tfl] = low_qual[:n_align_tfl]
             print(f'{n_tfl} windows')
 
             if participating_events is not None:

@@ -3,14 +3,12 @@
 Standalone EEG quality v2 scorer extracted from SleepStage.
 
 This module centers on `get_eeg_quality_index_v2_parametric()` and the
-parameter presets / wrappers it depends on, so it can be reused directly from
+parameter presets / helpers it depends on, so it can be reused directly from
 this repository without importing the original SleepStage codebase.
 """
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
 from typing import Dict, Mapping, Optional
 
 import numpy as np
@@ -106,18 +104,6 @@ BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS = {
     "corr_weight": 0.15,
 }
 
-BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_BRAIN_IC_PARAMS = dict(
-    BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS
-)
-
-STABLE_EEG_QUALITY_V2_THRESHOLD = float(
-    BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS["target_score"]
-)
-STABLE_EEG_QUALITY_V2_THRESHOLD_BRAIN_IC = float(
-    BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_BRAIN_IC_PARAMS["target_score"]
-)
-ACTIVE_BEST_PARAMS_PROFILE = "all"
-
 
 def get_default_eeg_quality_v2_params(target_score: float = 0.8) -> Dict[str, float]:
     params = dict(DEFAULT_EEG_QUALITY_V2_PARAMS)
@@ -125,27 +111,11 @@ def get_default_eeg_quality_v2_params(target_score: float = 0.8) -> Dict[str, fl
     return params
 
 
-def get_best_eeg_quality_v2_mean_abs_corr_params() -> Dict[str, float]:
-    return dict(BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS)
-
-
-def get_best_eeg_quality_v2_mean_abs_corr_brain_ic_params() -> Dict[str, float]:
-    return dict(BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_BRAIN_IC_PARAMS)
-
-
 def get_best_eeg_quality_v2_flat_spectrum_only_params() -> Dict[str, float]:
     params = dict(BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS)
     params["kurtosis_weight"] = 0.0
     params["corr_weight"] = 0.0
     return params
-
-
-def set_active_best_params_profile(profile: str) -> str:
-    global ACTIVE_BEST_PARAMS_PROFILE
-    if profile not in {"all", "brain", "flat_spec"}:
-        raise ValueError("profile must be one of: all, brain, flat_spec")
-    ACTIVE_BEST_PARAMS_PROFILE = profile
-    return ACTIVE_BEST_PARAMS_PROFILE
 
 
 def _resolve_eeg_quality_v2_params(
@@ -198,14 +168,8 @@ def _piecewise_linear_correlation_score(
 
 def _weighted_geometric_quality(
     component_scores: Mapping[str, np.ndarray],
-    params: Mapping[str, float],
+    weights: Mapping[str, float],
 ) -> np.ndarray:
-    weights = {
-        "flat": max(float(params["flat_weight"]), 0.0),
-        "spectrum": max(float(params["spectrum_weight"]), 0.0),
-        "kurtosis": max(float(params["kurtosis_weight"]), 0.0),
-        "corr": max(float(params["corr_weight"]), 0.0),
-    }
     active_items = [(name, weight) for name, weight in weights.items() if weight > 0]
     if not active_items:
         raise ValueError("At least one v2 component weight must be > 0")
@@ -230,15 +194,14 @@ def get_eeg_quality_index_v2_parametric(
     """
     Score one EEG segment of shape (n_channels, n_samples).
 
+    Only the components with a positive weight in `params` are computed; the
+    overall quality is their weighted geometric mean (a single bad component
+    drags the whole score down).
+
     Returns:
         {
             "overall": np.ndarray shape (n_channels,),
-            "detail": {
-                "flat": ...,
-                "spectrum": ...,
-                "kurtosis": ...,
-                "corr": ...,
-            }
+            "detail": {<component>: np.ndarray, ...}  # active components only
         }
     """
     params = _resolve_eeg_quality_v2_params(params)
@@ -247,6 +210,13 @@ def get_eeg_quality_index_v2_parametric(
         raise ValueError("data must have shape (n_channels, n_samples)")
 
     n_channels, n_samples = data.shape
+
+    weights = {
+        "flat": max(float(params["flat_weight"]), 0.0),
+        "spectrum": max(float(params["spectrum_weight"]), 0.0),
+        "kurtosis": max(float(params["kurtosis_weight"]), 0.0),
+        "corr": max(float(params["corr_weight"]), 0.0),
+    }
 
     def check_flat_and_sat_v2(ch_data: np.ndarray) -> float:
         if ch_data is None or np.size(ch_data) == 0:
@@ -269,7 +239,6 @@ def get_eeg_quality_index_v2_parametric(
         win_stds = np.array(win_stds)
         positive_stds = win_stds[win_stds > 0]
         median_std = np.median(positive_stds) if positive_stds.size else 0.0
-        flat_std_th = max(1e-7, median_std * 0.1)
 
         activity_ratio = win_stds / max(median_std, 1e-7)
         activity_k = 0.8
@@ -381,6 +350,8 @@ def get_eeg_quality_index_v2_parametric(
     def check_kurt_v2(ch_data: np.ndarray) -> float:
         try:
             k = kurtosis(ch_data, fisher=False)
+            if not np.isfinite(k):
+                return float(params["kurtosis_floor"])
             good_low = float(params["kurtosis_good_low"])
             good_high = float(params["kurtosis_good_high"])
             bad_high = float(params["kurtosis_bad_high"])
@@ -409,201 +380,46 @@ def get_eeg_quality_index_v2_parametric(
         except Exception:
             return 0.5
 
-    if n_channels <= 1:
-        corr_matrix = np.eye(n_channels)
-    else:
+    def check_corr_v2() -> np.ndarray:
+        if n_channels <= 1:
+            return np.ones(n_channels, dtype=np.float64)
         try:
             corr_matrix = np.abs(np.corrcoef(data))
         except Exception:
             corr_matrix = np.eye(n_channels)
+        mean_abs_corr = (np.sum(corr_matrix, axis=1) - 1) / (n_channels - 1)
+        return np.array(
+            [_piecewise_linear_correlation_score(c, params) for c in mean_abs_corr]
+        )
 
-    q_flat = np.array([check_flat_and_sat_v2(data[i]) for i in range(n_channels)])
-    q_spec = np.array([check_spectrum_v2(data[i]) for i in range(n_channels)])
-    q_kurt = np.array([check_kurt_v2(data[i]) for i in range(n_channels)])
-    if n_channels <= 1:
-        q_corr = np.array([1.0] * n_channels)
-    else:
-        q_corr = (np.sum(corr_matrix, axis=1) - 1) / (n_channels - 1)
+    detail: Dict[str, np.ndarray] = {}
+    if weights["flat"] > 0:
+        detail["flat"] = np.array(
+            [check_flat_and_sat_v2(data[i]) for i in range(n_channels)]
+        )
+    if weights["spectrum"] > 0:
+        detail["spectrum"] = np.array(
+            [check_spectrum_v2(data[i]) for i in range(n_channels)]
+        )
+    if weights["kurtosis"] > 0:
+        detail["kurtosis"] = np.array(
+            [check_kurt_v2(data[i]) for i in range(n_channels)]
+        )
+    if weights["corr"] > 0:
+        detail["corr"] = check_corr_v2()
 
-    q_corr_score = np.ones_like(q_corr, dtype=np.float64)
-    for i in range(len(q_corr)):
-        q_corr_score[i] = _piecewise_linear_correlation_score(q_corr[i], params)
-    q_corr_score = np.clip(q_corr_score, params["corr_floor"], 1.0)
-
-    overall_quality = _weighted_geometric_quality(
-        {
-            "flat": q_flat,
-            "spectrum": q_spec,
-            "kurtosis": q_kurt,
-            "corr": q_corr_score,
-        },
-        params,
-    )
+    overall_quality = _weighted_geometric_quality(detail, weights)
 
     return {
         "overall": overall_quality,
-        "detail": {
-            "flat": q_flat,
-            "spectrum": q_spec,
-            "kurtosis": q_kurt,
-            "corr": q_corr_score,
-        },
+        "detail": detail,
     }
 
 
-def get_eeg_quality_index_v2(data, fs: int = 200):
-    return get_eeg_quality_index_v2_parametric(data, fs=fs, params=None)
-
-
-def get_eeg_quality_index_v2_best_mean_abs_corr(data, fs: int = 200):
-    return get_eeg_quality_index_v2_parametric(
-        data,
-        fs=fs,
-        params=BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS,
-    )
-
-
-def get_eeg_quality_index_v2_best_mean_abs_corr_brain_ic(data, fs: int = 200):
-    return get_eeg_quality_index_v2_parametric(
-        data,
-        fs=fs,
-        params=BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_BRAIN_IC_PARAMS,
-    )
-
-
-def get_eeg_quality_index_v2_best_flat_spectrum_only(data, fs: int = 200):
-    return get_eeg_quality_index_v2_parametric(
-        data,
-        fs=fs,
-        params=get_best_eeg_quality_v2_flat_spectrum_only_params(),
-    )
-
-
-def get_eeg_quality_index_v2_stable(data, fs: int = 200):
-    if ACTIVE_BEST_PARAMS_PROFILE == "brain":
-        return get_eeg_quality_index_v2_best_mean_abs_corr_brain_ic(data, fs=fs)
-    if ACTIVE_BEST_PARAMS_PROFILE == "flat_spec":
-        return get_eeg_quality_index_v2_best_flat_spectrum_only(data, fs=fs)
-    return get_eeg_quality_index_v2_best_mean_abs_corr(data, fs=fs)
-
-
-def get_active_stable_eeg_quality_v2_threshold() -> float:
-    if ACTIVE_BEST_PARAMS_PROFILE == "brain":
-        return float(STABLE_EEG_QUALITY_V2_THRESHOLD_BRAIN_IC)
-    if ACTIVE_BEST_PARAMS_PROFILE == "flat_spec":
-        return float(get_best_eeg_quality_v2_flat_spectrum_only_params()["target_score"])
-    return float(STABLE_EEG_QUALITY_V2_THRESHOLD)
-
-
-def _load_best_eeg_quality_v2_params_from_json_impl(
-    target_params: Dict[str, float],
-    candidate_paths,
-    json_path: Optional[Path],
-    profile_name: str,
-) -> Dict[str, float]:
-    if json_path is not None:
-        candidate_paths = [Path(json_path)] + list(candidate_paths)
-
-    resolved_path = None
-    for path in candidate_paths:
-        path = Path(path)
-        if path.exists():
-            resolved_path = path
-            break
-
-    if resolved_path is None:
-        raise FileNotFoundError(
-            f"找不到 {profile_name} 的 best_parameter_set.json，請確認檔案路徑。"
-        )
-
-    with resolved_path.open("r", encoding="utf-8") as f:
-        payload = json.load(f)
-
-    loaded_params = payload.get("best_params", payload)
-    if not isinstance(loaded_params, dict):
-        raise ValueError(f"best_parameter_set.json 格式錯誤: {resolved_path}")
-
-    merged_params = get_default_eeg_quality_v2_params()
-    merged_params.update(loaded_params)
-
-    target_params.clear()
-    target_params.update(merged_params)
-
-    print(f"✅ 已載入並更新 {profile_name} 參數: {resolved_path}")
-    print(f"   target_score = {float(target_params['target_score']):.4f}")
-    return dict(target_params)
-
-
-def load_best_eeg_quality_v2_params_from_json_all_ic(
-    json_path: Optional[Path] = None,
-) -> Dict[str, float]:
-    global STABLE_EEG_QUALITY_V2_THRESHOLD
-
-    params = _load_best_eeg_quality_v2_params_from_json_impl(
-        target_params=BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS,
-        candidate_paths=[
-            Path("plots/quality_v2_parameter_search/best_parameter_set.json"),
-            Path("plots/quality_assessment/quality_v2_parameter_search/best_parameter_set.json"),
-        ],
-        json_path=json_path,
-        profile_name="all-IC",
-    )
-    STABLE_EEG_QUALITY_V2_THRESHOLD = float(
-        BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS["target_score"]
-    )
-    return params
-
-
-def load_best_eeg_quality_v2_params_from_json_brain_ic(
-    json_path: Optional[Path] = None,
-) -> Dict[str, float]:
-    global STABLE_EEG_QUALITY_V2_THRESHOLD_BRAIN_IC
-
-    params = _load_best_eeg_quality_v2_params_from_json_impl(
-        target_params=BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_BRAIN_IC_PARAMS,
-        candidate_paths=[
-            Path(
-                "plots/quality_assessment/quality_v2_parameter_search_brain_ic_only/best_parameter_set.json"
-            ),
-            Path(
-                "plots/quality_assessment/quality_v2_parameter_search_brain_ic_only_smoke/best_parameter_set.json"
-            ),
-        ],
-        json_path=json_path,
-        profile_name="brain-IC-only",
-    )
-    STABLE_EEG_QUALITY_V2_THRESHOLD_BRAIN_IC = float(
-        BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_BRAIN_IC_PARAMS["target_score"]
-    )
-    return params
-
-
-def load_best_eeg_quality_v2_params_from_json(
-    json_path: Optional[Path] = None,
-) -> Dict[str, float]:
-    return load_best_eeg_quality_v2_params_from_json_all_ic(json_path)
-
-
 __all__ = [
-    "ACTIVE_BEST_PARAMS_PROFILE",
-    "BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_BRAIN_IC_PARAMS",
     "BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS",
     "DEFAULT_EEG_QUALITY_V2_PARAMS",
-    "STABLE_EEG_QUALITY_V2_THRESHOLD",
-    "STABLE_EEG_QUALITY_V2_THRESHOLD_BRAIN_IC",
-    "get_active_stable_eeg_quality_v2_threshold",
     "get_best_eeg_quality_v2_flat_spectrum_only_params",
-    "get_best_eeg_quality_v2_mean_abs_corr_brain_ic_params",
-    "get_best_eeg_quality_v2_mean_abs_corr_params",
     "get_default_eeg_quality_v2_params",
-    "get_eeg_quality_index_v2",
-    "get_eeg_quality_index_v2_best_flat_spectrum_only",
-    "get_eeg_quality_index_v2_best_mean_abs_corr",
-    "get_eeg_quality_index_v2_best_mean_abs_corr_brain_ic",
     "get_eeg_quality_index_v2_parametric",
-    "get_eeg_quality_index_v2_stable",
-    "load_best_eeg_quality_v2_params_from_json",
-    "load_best_eeg_quality_v2_params_from_json_all_ic",
-    "load_best_eeg_quality_v2_params_from_json_brain_ic",
-    "set_active_best_params_profile",
 ]
