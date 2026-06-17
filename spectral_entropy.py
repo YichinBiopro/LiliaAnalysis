@@ -3,25 +3,57 @@ spectral_entropy.py
 ===================
 Compute EEG band-structure entropy from lilia-format CSV files.
 
+Pipeline (aligned with ``plot_tflite_summary.py`` / ``plot_event_markers.py``)
+-----------------------------------------------------------------------------
+The raw-data front-end mirrors the canonical qEEG pipeline so that this
+analysis is directly comparable to the Flow/Focus/Calm/Relax indices:
+
+    load_merged_csv(...)                       # 4-row-header lilia CSV → (time_us, data @ FS)
+    bandpass_filter(data, fs=FS, lo=0.5, hi=45)# zero-phase Butterworth, BP_LOW–BP_HIGH
+
+Unlike the TFLite branch, no 500→200 Hz resampling is applied: spectral
+entropy is a *direct* PSD measurement (not a model input), so we keep the full
+500 Hz record for the best frequency resolution. The 0.5–45 Hz bandpass is the
+shared step that matters, and it is reused here from ``eeg_utils.bandpass_filter``.
+
 Method
 ------
-1. Split the EEG signal into sliding 2-second windows.
+1. Split the (bandpass-filtered) EEG into sliding windows.
 2. Use Welch's method to estimate the power spectral density (PSD).
-3. Integrate PSD within five EEG bands to obtain band energies:
-   delta, theta, alpha, beta, gamma.
-4. Compute total energy across the five bands.
-5. Convert band energies into proportions p_k.
-6. Compute band entropy:
-       BandEn = -sum(p_k * log2(p_k))
-7. Optionally compute left-right synchrony from non-zero-lag mutual
+3. Integrate the PSD within the THREE task-relevant EEG bands —
+   theta (4-8 Hz), alpha (8-13 Hz), beta (13-30 Hz) — to obtain band energies.
+   Delta (0.5-4 Hz) and gamma (30-45 Hz) are deliberately DISCARDED; see the
+   ``BAND_DEFINITIONS`` note below for the methodological justification.
+4. Convert band energies into proportions p_k (sum to 1).
+5. Compute band entropy:  BandEn = -sum(p_k * log2(p_k)).  Max = log2(3) bits.
+6. Optionally compute left-right synchrony from non-zero-lag mutual
    information I(X(t); Y(t+tau)) using small positive delays tau.
+
+Baseline-vs-event mode (``--baseline`` / ``--event``)
+-----------------------------------------------------
+Instead of (only) a per-window entropy time series, this mode estimates a
+single entropy for a *baseline* interval and an *event* interval, where the
+probability distribution p_k is derived from the **pooled power distribution**
+over that interval (the averaged Welch PSD across all clean windows). It also
+reports the per-window entropy distribution and a non-parametric test of the
+baseline-vs-event difference. See ``compute_state_entropy`` for the rigour
+caveats (pooling, stationarity, artefact rejection, entropy non-linearity).
+
+With ``--clean`` the baseline/event intervals are micro-epoched and only
+artefact-free epochs are kept (ADC-saturation guard + eeg_quality_v2 score),
+reusing the exact "clean" definition of the qEEG baseline builder in
+``plot_tflite_summary``; per-epoch PSDs are then averaged into the pooled
+distribution. This is the peer-review-grade path.
 
 CLI usage
 ---------
     python spectral_entropy.py --csv <path.csv> [--fs 500] [--ch 1]
                                [--win 2] [--step 2] [--out <dir>]
+                               [--no-bandpass]
                                [--sync-pair LEFT RIGHT]
                                [--tau-ms 5 10 15 20]
+                               [--baseline START_S END_S --event START_S END_S]
+                               [--clean] [--quality-threshold 0.5]
 """
 
 from __future__ import annotations
@@ -50,6 +82,22 @@ try:
 except ImportError:
     _IBRAIN_AVAILABLE = False
 
+# ── Quality-control machinery for the --clean baseline/event mode (optional) ───
+# Reuse the exact artefact-rejection primitives that build the qEEG baselines in
+# plot_tflite_summary so the "clean" entropy estimates share one definition of
+# "clean": ADC-saturation rejection on the RAW signal + eeg_quality_v2 scoring
+# on the bandpass-filtered signal (channel-median ≥ threshold).
+try:
+    from plot_event_markers import QUALITY_PARAMS as _QUALITY_PARAMS, \
+        QUALITY_THRESHOLD as _QUALITY_THRESHOLD
+    from eeg_quality_v2 import get_eeg_quality_index_v2_parametric \
+        as _eeg_quality_v2
+    from plot_tflite_summary import _saturation_frac, SAT_FRAC_MAX as _SAT_FRAC_MAX
+    _QC_AVAILABLE = True
+except Exception:  # pragma: no cover - defensive fallback
+    _QC_AVAILABLE = False
+    _QUALITY_THRESHOLD = 0.5
+
 # ── Time-conversion helpers ────────────────────────────────────────────────────
 _UTC_EPOCH = datetime.datetime(1970, 1, 1)
 _TZ_LOCAL_H = 8   # UTC+8 (Asia/Taipei)
@@ -70,12 +118,42 @@ def _rel_times_to_dt(
 EPSILON = 1e-12
 DEFAULT_FS = 500.0
 DEFAULT_WIN_SEC = 2.0
+
+# ── Bandpass front-end (single source of truth = plot_event_markers) ───────────
+# Reuse the project-wide cutoffs so spectral entropy is computed on exactly the
+# same passband as the qEEG indices. Fall back to the documented defaults
+# (0.5–45 Hz) if plot_event_markers is unavailable.
+try:
+    from plot_event_markers import BP_LOW as _BP_LOW, BP_HIGH as _BP_HIGH
+    DEFAULT_BP_LOW = float(_BP_LOW)
+    DEFAULT_BP_HIGH = float(_BP_HIGH)
+except Exception:  # pragma: no cover - defensive fallback
+    DEFAULT_BP_LOW = 0.5
+    DEFAULT_BP_HIGH = 45.0
+
+# ── Band definitions ───────────────────────────────────────────────────────────
+# Only the three task-relevant bands are kept. Delta and gamma are DISCARDED.
+#
+#   Why this is correct (and consistent with the rest of the pipeline)
+#   ------------------------------------------------------------------
+#   * Consistency: qeeg_indices.compute_relative_powers (§3.1) already normalises
+#     over θ/α/β ONLY and excludes delta & gamma "to minimise motion/EMG
+#     artefacts". The Flow index (flow_index) is a function of θ/α/β alone.
+#     Computing band entropy over the same three bands keeps this measure
+#     directly comparable to Flow/Focus/Calm/Relax rather than mixing in bands
+#     the indices never see.
+#   * Delta (0.5–4 Hz): on a dry-electrode wearable during *active* tasks
+#     (e.g. Agility Ladder) this band is dominated by movement, sweat potentials
+#     and baseline drift — low-frequency artefact, not cortical "flow" signal.
+#   * Gamma (30–45 Hz): dominated by EMG (muscle) and approaches the line-noise
+#     region; an unreliable cortical estimate on consumer EEG, again especially
+#     during movement.
+#   Net effect: BandEn now describes the spectral balance of the flow-relevant
+#   bands; maximum entropy is log2(3) ≈ 1.585 bits (was log2(5) ≈ 2.322 bits).
 BAND_DEFINITIONS = (
-    ('delta', (0.5, 4.0)),
     ('theta', (4.0, 8.0)),
     ('alpha', (8.0, 13.0)),
     ('beta', (13.0, 30.0)),
-    ('gamma', (30.0, 45.0)),
 )
 DEFAULT_TAU_MS = (5.0, 10.0, 15.0, 20.0)
 DEFAULT_MI_BINS = 16
@@ -329,6 +407,305 @@ def compute_band_entropy_windowed(
     return output
 
 
+def compute_state_entropy(
+    data_col: np.ndarray,
+    fs: float = DEFAULT_FS,
+    win_sec: float = DEFAULT_WIN_SEC,
+    step_sec: float | None = None,
+    nperseg: int | None = None,
+    noverlap: int | None = None,
+) -> dict[str, np.ndarray | dict[str, float] | float]:
+    """Estimate one band entropy for a whole *state* (e.g. baseline or event).
+
+    Two distinct entropies are returned, and the distinction is methodologically
+    important — they answer different questions and must not be conflated:
+
+    * ``pooled_entropy`` — the probability distribution p_k is taken from the
+      **pooled power distribution** of the interval: the per-window Welch PSDs
+      are *averaged* (equivalently, band energies are summed) across every
+      window in the interval, then integrated into θ/α/β and normalised. This
+      is simply a longer Welch average and is the natural reading of "the power
+      distribution during baseline / event-time". It summarises the spectral
+      shape of the aggregate state in a single number.
+
+    * ``mean_window_entropy`` (± ``std_window_entropy``) — the mean of the
+      per-window entropies. Because entropy is a *non-linear* function of p_k,
+      entropy(mean PSD) ≠ mean(entropy). The per-window distribution is what a
+      statistical test should operate on (see ``compare_baseline_event``).
+
+    Rigour caveats
+    --------------
+    * **Stationarity / pooling**: averaging PSDs across windows is valid only if
+      the interval is quasi-stationary and artefact-free. Feed clean, bandpass-
+      filtered data and keep baseline/event durations comparable.
+    * **Comparability**: baseline and event MUST use identical bands, Welch
+      parameters and ``fs``; otherwise the comparison is confounded. This is
+      guaranteed by calling this function with the same arguments for both.
+    * **Coarse distribution**: with only three bands the maximum entropy is
+      log2(3) ≈ 1.585 bits, so absolute differences are small — always report
+      ΔEntropy together with the per-window test, not the pooled value alone.
+
+    Returns a dict with the mean PSD, pooled band proportions/energies,
+    ``pooled_entropy`` (bits + normalised) and the per-window entropy array.
+    """
+    if win_sec <= 0:
+        raise ValueError('win_sec must be positive.')
+    if step_sec is None:
+        step_sec = win_sec
+    if step_sec <= 0:
+        raise ValueError('step_sec must be positive.')
+
+    win = int(round(win_sec * fs))
+    step = int(round(step_sec * fs))
+    if win < 8:
+        raise ValueError('Window length is too short for Welch PSD estimation.')
+
+    signal_1d = np.asarray(data_col, dtype=float).reshape(-1)
+    if signal_1d.size < win:
+        raise ValueError('Interval is shorter than one analysis window.')
+
+    psd_accum: np.ndarray | None = None
+    freqs_ref: np.ndarray | None = None
+    n_windows = 0
+    per_window_entropy: list[float] = []
+    per_window_entropy_norm: list[float] = []
+
+    for start in range(0, signal_1d.size - win + 1, step):
+        segment = signal_1d[start:start + win]
+        freqs, psd = _compute_welch_psd(segment, fs=fs, nperseg=nperseg, noverlap=noverlap)
+        if psd_accum is None:
+            psd_accum = np.zeros_like(psd)
+            freqs_ref = freqs
+        psd_accum += psd
+        n_windows += 1
+
+        # Per-window band entropy (for the distribution-level statistics).
+        win_result = compute_band_entropy(segment, fs=fs, nperseg=nperseg, noverlap=noverlap)
+        per_window_entropy.append(float(win_result['band_entropy']))
+        per_window_entropy_norm.append(float(win_result['band_entropy_norm']))
+
+    if psd_accum is None or freqs_ref is None or n_windows == 0:
+        raise ValueError('No analysis windows were produced for this interval.')
+
+    return _assemble_state_entropy(
+        freqs_ref, psd_accum / n_windows,
+        per_window_entropy, per_window_entropy_norm, n_windows)
+
+
+def _assemble_state_entropy(
+    freqs_ref: np.ndarray,
+    mean_psd: np.ndarray,
+    per_window_entropy: list[float],
+    per_window_entropy_norm: list[float],
+    n_windows: int,
+) -> dict[str, np.ndarray | dict[str, float] | float]:
+    """Build the state-entropy result dict from an averaged PSD and the
+    per-window entropy list. Shared by ``compute_state_entropy`` (sliding
+    windows over a contiguous interval) and ``compute_state_entropy_from_epochs``
+    (a set of pre-screened clean epochs) so both report identically."""
+    energies: dict[str, float] = {}
+    for idx, (name, (fmin, fmax)) in enumerate(BAND_DEFINITIONS):
+        energies[name] = _band_power(
+            freqs_ref, mean_psd, fmin, fmax,
+            include_upper=(idx == len(BAND_DEFINITIONS) - 1),
+        )
+    total_energy = float(sum(energies.values()))
+    if total_energy <= EPSILON:
+        proportions = {name: 0.0 for name, _ in BAND_DEFINITIONS}
+    else:
+        proportions = {name: float(energies[name] / total_energy)
+                       for name, _ in BAND_DEFINITIONS}
+    probs = np.array([proportions[name] for name, _ in BAND_DEFINITIONS], dtype=float)
+
+    per_window_arr = np.asarray(per_window_entropy, dtype=float)
+    return {
+        'freqs': freqs_ref,
+        'mean_psd': mean_psd,
+        'energies': energies,
+        'total_energy': total_energy,
+        'proportions': proportions,
+        'pooled_entropy': shannon_entropy(probs, normalise=False),
+        'pooled_entropy_norm': shannon_entropy(probs, normalise=True),
+        'per_window_entropy': per_window_arr,
+        'per_window_entropy_norm': np.asarray(per_window_entropy_norm, dtype=float),
+        'mean_window_entropy': float(per_window_arr.mean()) if per_window_arr.size else 0.0,
+        'std_window_entropy': float(per_window_arr.std()) if per_window_arr.size else 0.0,
+        'n_windows': int(n_windows),
+    }
+
+
+def compute_state_entropy_from_epochs(
+    epochs: list[np.ndarray],
+    fs: float = DEFAULT_FS,
+    nperseg: int | None = None,
+    noverlap: int | None = None,
+) -> dict[str, np.ndarray | dict[str, float] | float]:
+    """Like ``compute_state_entropy`` but over a list of pre-screened *clean*
+    epochs (each a 1-D channel segment) instead of contiguous sliding windows.
+
+    Each epoch contributes one Welch PSD; the PSDs are averaged into the pooled
+    distribution and each epoch yields one per-window entropy. Because epochs
+    are scored and selected independently (see ``collect_clean_epochs``), no
+    sliding window ever straddles a discarded/artefactual span — the join
+    between non-contiguous epochs is never spanned by an FFT window.
+    """
+    if not epochs:
+        raise ValueError('No clean epochs were supplied.')
+
+    psd_accum: np.ndarray | None = None
+    freqs_ref: np.ndarray | None = None
+    per_window_entropy: list[float] = []
+    per_window_entropy_norm: list[float] = []
+    for epoch in epochs:
+        freqs, psd = _compute_welch_psd(epoch, fs=fs, nperseg=nperseg, noverlap=noverlap)
+        if psd_accum is None:
+            psd_accum = np.zeros_like(psd)
+            freqs_ref = freqs
+        psd_accum += psd
+        win_result = compute_band_entropy(epoch, fs=fs, nperseg=nperseg, noverlap=noverlap)
+        per_window_entropy.append(float(win_result['band_entropy']))
+        per_window_entropy_norm.append(float(win_result['band_entropy_norm']))
+
+    return _assemble_state_entropy(
+        freqs_ref, psd_accum / len(epochs),
+        per_window_entropy, per_window_entropy_norm, len(epochs))
+
+
+def collect_clean_epochs(
+    time_us_full: np.ndarray,
+    data_filt_full: np.ndarray,
+    data_raw_full: np.ndarray | None,
+    lo_us: float,
+    hi_us: float,
+    ch_idx: int,
+    *,
+    fs: float = DEFAULT_FS,
+    epoch_sec: float = DEFAULT_WIN_SEC,
+    quality_threshold: float = _QUALITY_THRESHOLD,
+) -> tuple[list[np.ndarray], dict]:
+    """Cut [lo_us, hi_us) into non-overlapping ``epoch_sec`` epochs and return
+    every epoch that survives artefact rejection (for channel ``ch_idx``).
+
+    Rejection mirrors the qEEG baseline builder in plot_tflite_summary:
+      1. ADC-saturation guard on the RAW window (bandpass smears clipping, so
+         saturation must be detected pre-filter);
+      2. eeg_quality_v2 score on the bandpass-filtered window, channel-median
+         ≥ ``quality_threshold``.
+
+    Unlike ``build_baseline_epochs`` we keep ALL clean epochs (no blind
+    subsampling): there is no subset to bias, every QC-passing epoch is used,
+    which also maximises statistical power for the per-epoch test. The procedure
+    is fully deterministic, hence reproducible.
+    """
+    if not _QC_AVAILABLE:
+        raise RuntimeError(
+            'Quality-control modules unavailable; --clean mode requires '
+            'plot_event_markers / eeg_quality_v2 / plot_tflite_summary to import.')
+
+    epoch_n = int(round(epoch_sec * fs))
+    in_win = np.where((time_us_full >= lo_us) & (time_us_full < hi_us))[0]
+
+    clean: list[np.ndarray] = []
+    n_total = n_saturated = n_lowq = 0
+    if in_win.size >= epoch_n:
+        i0, i1 = in_win[0], in_win[-1] + 1
+        for s in range(i0, i1 - epoch_n + 1, epoch_n):
+            seg = data_filt_full[s:s + epoch_n]            # (epoch_n, n_ch)
+            n_total += 1
+            if data_raw_full is not None and \
+                    _saturation_frac(data_raw_full[s:s + epoch_n]) > _SAT_FRAC_MAX:
+                n_saturated += 1
+                continue
+            res = _eeg_quality_v2(seg.T.astype(np.float64), fs=fs, params=_QUALITY_PARAMS)
+            if float(np.median(res['overall'])) >= quality_threshold:
+                clean.append(seg[:, ch_idx].astype(float))
+            else:
+                n_lowq += 1
+    meta = {'n_total_epochs': n_total, 'n_saturated_epochs': n_saturated,
+            'n_lowquality_epochs': n_lowq, 'n_clean_epochs': len(clean)}
+    return clean, meta
+
+
+def _finalise_comparison(
+    baseline_state: dict,
+    event_state: dict,
+    baseline_range: tuple[float, float],
+    event_range: tuple[float, float],
+) -> dict[str, object]:
+    """Compute ΔEntropy and the per-window Mann–Whitney U test from two
+    pre-computed state-entropy dicts. Shared by the raw and --clean paths."""
+    from scipy import stats
+    bw = baseline_state['per_window_entropy']
+    ew = event_state['per_window_entropy']
+    if bw.size >= 1 and ew.size >= 1 and (bw.size + ew.size) >= 3:
+        u_stat, p_value = stats.mannwhitneyu(ew, bw, alternative='two-sided')
+        u_stat, p_value = float(u_stat), float(p_value)
+    else:
+        u_stat, p_value = float('nan'), float('nan')
+    return {
+        'baseline': baseline_state,
+        'event': event_state,
+        'baseline_range': (float(baseline_range[0]), float(baseline_range[1])),
+        'event_range': (float(event_range[0]), float(event_range[1])),
+        'delta_pooled_entropy': float(
+            event_state['pooled_entropy'] - baseline_state['pooled_entropy']),
+        'delta_mean_window_entropy': float(
+            event_state['mean_window_entropy'] - baseline_state['mean_window_entropy']),
+        'mannwhitneyu_u': u_stat,
+        'mannwhitneyu_p': p_value,
+    }
+
+
+def compare_baseline_event(
+    data_col: np.ndarray,
+    baseline_range: tuple[float, float],
+    event_range: tuple[float, float],
+    fs: float = DEFAULT_FS,
+    win_sec: float = DEFAULT_WIN_SEC,
+    step_sec: float | None = None,
+    nperseg: int | None = None,
+    noverlap: int | None = None,
+) -> dict[str, object]:
+    """Compute baseline vs event band entropy and test their difference.
+
+    *baseline_range* / *event_range* are ``(start_s, end_s)`` intervals in
+    seconds relative to the first sample of *data_col*. Both intervals are cut
+    from the same (already bandpass-filtered) channel, analysed with identical
+    Welch/band settings, and compared via:
+
+    * ΔEntropy(pooled) = event.pooled_entropy − baseline.pooled_entropy, and
+    * a two-sided Mann–Whitney U test on the per-window entropy distributions
+      (non-parametric: window entropies are bounded and not guaranteed normal).
+
+    The pooled value is the headline summary; the U test tells you whether the
+    window-level distributions actually differ. Reporting both is what makes the
+    baseline/event comparison defensible.
+    """
+    signal_1d = np.asarray(data_col, dtype=float).reshape(-1)
+
+    def _slice(rng: tuple[float, float], which: str) -> np.ndarray:
+        lo_s, hi_s = float(rng[0]), float(rng[1])
+        if hi_s <= lo_s:
+            raise ValueError(f'{which} range end must be greater than start.')
+        lo = max(0, int(round(lo_s * fs)))
+        hi = min(signal_1d.size, int(round(hi_s * fs)))
+        seg = signal_1d[lo:hi]
+        if seg.size < int(round(win_sec * fs)):
+            raise ValueError(
+                f'{which} interval [{lo_s:g}, {hi_s:g}]s yields fewer than one '
+                f'{win_sec:g}s window after clipping to the recording.')
+        return seg
+
+    baseline = compute_state_entropy(
+        _slice(baseline_range, 'baseline'), fs=fs, win_sec=win_sec,
+        step_sec=step_sec, nperseg=nperseg, noverlap=noverlap)
+    event = compute_state_entropy(
+        _slice(event_range, 'event'), fs=fs, win_sec=win_sec,
+        step_sec=step_sec, nperseg=nperseg, noverlap=noverlap)
+
+    return _finalise_comparison(baseline, event, baseline_range, event_range)
+
+
 def _normalise_mi_signal(values: np.ndarray) -> np.ndarray:
     signal_1d = np.asarray(values, dtype=float).reshape(-1)
     signal_1d = signal_1d - float(signal_1d.mean())
@@ -565,11 +942,9 @@ def plot_band_entropy(
     fig.suptitle(title, fontsize=14, fontweight='bold')
 
     colors = {
-        'delta': '#1f77b4',
         'theta': '#9467bd',
         'alpha': '#2ca02c',
         'beta': '#ff7f0e',
-        'gamma': '#d62728',
     }
     for idx, (name, _) in enumerate(BAND_DEFINITIONS):
         ax = axes[idx]
@@ -682,6 +1057,25 @@ def _parse_args() -> argparse.Namespace:
                         help=f'Window length in seconds (default {DEFAULT_WIN_SEC} s).')
     parser.add_argument('--step', type=float, metavar='SEC',
                         help='Step size in seconds (default = window length).')
+    parser.add_argument('--no-bandpass', action='store_true', default=False,
+                        help=(f'Skip the {DEFAULT_BP_LOW:g}-{DEFAULT_BP_HIGH:g} Hz bandpass '
+                              'front-end. By default the same zero-phase Butterworth '
+                              'bandpass used by the qEEG pipeline is applied first.'))
+    parser.add_argument('--baseline', type=float, nargs=2, metavar=('START_S', 'END_S'),
+                        help=('Baseline interval (seconds, relative to recording start) '
+                              'for baseline-vs-event entropy mode. Requires --event.'))
+    parser.add_argument('--event', type=float, nargs=2, metavar=('START_S', 'END_S'),
+                        help=('Event interval (seconds, relative to recording start) '
+                              'for baseline-vs-event entropy mode. Requires --baseline.'))
+    parser.add_argument('--clean', action='store_true', default=False,
+                        help=('Baseline-vs-event mode only: micro-epoch each interval '
+                              'and keep only artefact-free epochs (ADC-saturation guard '
+                              '+ eeg_quality_v2 ≥ threshold), matching the qEEG baseline '
+                              'builder in plot_tflite_summary. Requires the QC modules.'))
+    parser.add_argument('--quality-threshold', type=float, default=_QUALITY_THRESHOLD,
+                        metavar='Q',
+                        help=('Channel-median EEG quality (0-1) an epoch must reach to be '
+                              f'kept in --clean mode (default {_QUALITY_THRESHOLD:g}).'))
     parser.add_argument('--sync-pair', type=int, nargs=2, metavar=('LEFT', 'RIGHT'),
                         help='Optional 1-based left/right channel pair for lagged-MI synchrony.')
     parser.add_argument('--tau-ms', type=float, nargs='+', default=list(DEFAULT_TAU_MS),
@@ -698,19 +1092,134 @@ def _parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def _run_baseline_event_mode(args: argparse.Namespace,
+                             time_us: np.ndarray,
+                             data_filt: np.ndarray,
+                             data_raw: np.ndarray | None,
+                             ch_idx: int,
+                             outdir: str) -> None:
+    """Run and report the baseline-vs-event band-entropy comparison.
+
+    Two sampling regimes:
+      * default     — contiguous time slices (each interval taken as-is);
+      * ``--clean``  — micro-epoch each interval and keep only artefact-free
+                       epochs (ADC-saturation + eeg_quality_v2), then average
+                       per-epoch PSDs. This is the peer-review-grade path,
+                       sharing the qEEG baseline builder's definition of clean.
+    """
+    band_names = '/'.join(name for name, _ in BAND_DEFINITIONS)
+    mode_desc = 'clean micro-epochs' if args.clean else 'contiguous slices'
+    print(
+        'Baseline-vs-event entropy '
+        f'— ch{args.ch}, win={args.win}s, step={args.step or args.win}s, '
+        f'bands={band_names}, fs={args.fs}Hz, sampling={mode_desc}\n'
+        f'  baseline = [{args.baseline[0]:g}, {args.baseline[1]:g}] s | '
+        f'event = [{args.event[0]:g}, {args.event[1]:g}] s'
+    )
+
+    if args.clean:
+        if not _QC_AVAILABLE:
+            sys.exit('Error: --clean requires plot_event_markers / eeg_quality_v2 / '
+                     'plot_tflite_summary to be importable.')
+        t0 = int(time_us[0])
+
+        def _clean_state(rng, which):
+            lo_us = t0 + int(round(float(rng[0]) * 1e6))
+            hi_us = t0 + int(round(float(rng[1]) * 1e6))
+            epochs, meta = collect_clean_epochs(
+                time_us, data_filt, data_raw, lo_us, hi_us, ch_idx,
+                fs=args.fs, epoch_sec=args.win,
+                quality_threshold=args.quality_threshold)
+            print(f'  [{which}] clean {meta["n_clean_epochs"]}/{meta["n_total_epochs"]} '
+                  f'epochs (rejected: {meta["n_saturated_epochs"]} saturated, '
+                  f'{meta["n_lowquality_epochs"]} low-quality)')
+            if not epochs:
+                sys.exit(f'Error: no clean {args.win:g}s epochs in the {which} interval '
+                         f'(try a longer interval or a lower --quality-threshold).')
+            return compute_state_entropy_from_epochs(epochs, fs=args.fs)
+
+        baseline_state = _clean_state(args.baseline, 'baseline')
+        event_state = _clean_state(args.event, 'event')
+        result = _finalise_comparison(
+            baseline_state, event_state, tuple(args.baseline), tuple(args.event))
+    else:
+        result = compare_baseline_event(
+            data_filt[:, ch_idx],
+            baseline_range=tuple(args.baseline),
+            event_range=tuple(args.event),
+            fs=args.fs,
+            win_sec=args.win,
+            step_sec=args.step,
+        )
+
+    rows = []
+    for label, state in (('baseline', result['baseline']), ('event', result['event'])):
+        row = {
+            'state': label,
+            'sampling': 'clean_epochs' if args.clean else 'contiguous',
+            'range_start_s': result[f'{label}_range'][0],
+            'range_end_s': result[f'{label}_range'][1],
+            'n_windows': state['n_windows'],
+            'pooled_entropy': state['pooled_entropy'],
+            'pooled_entropy_norm': state['pooled_entropy_norm'],
+            'mean_window_entropy': state['mean_window_entropy'],
+            'std_window_entropy': state['std_window_entropy'],
+        }
+        for name, _ in BAND_DEFINITIONS:
+            row[f'p_{name}'] = state['proportions'][name]
+        rows.append(row)
+
+    basename = os.path.splitext(os.path.basename(args.csv))[0]
+    csv_out = os.path.join(outdir, f'{basename}_baseline_event_entropy_ch{args.ch}.csv')
+    pd.DataFrame(rows).to_csv(csv_out, index=False)
+    print(f'Saved: {csv_out}')
+
+    print('\nSummary (pooled-PSD band entropy, bits; max = log2(3) ≈ 1.585):')
+    for label, state in (('baseline', result['baseline']), ('event', result['event'])):
+        props = ', '.join(f'{n}={state["proportions"][n]:.3f}' for n, _ in BAND_DEFINITIONS)
+        print(f'  {label:<8s}: pooled={state["pooled_entropy"]:.4f}  '
+              f'per-window={state["mean_window_entropy"]:.4f}±{state["std_window_entropy"]:.4f}  '
+              f'(n={state["n_windows"]})  [{props}]')
+    print(f'  Δ pooled entropy (event − baseline)      : '
+          f'{result["delta_pooled_entropy"]:+.4f} bits')
+    print(f'  Δ mean per-window entropy (event − base) : '
+          f'{result["delta_mean_window_entropy"]:+.4f} bits')
+    print(f'  Mann–Whitney U (per-window, two-sided)   : '
+          f'U={result["mannwhitneyu_u"]:.1f}, p={result["mannwhitneyu_p"]:.4g}')
+
+
 def main() -> None:
     args = _parse_args()
     outdir = args.out or os.path.dirname(os.path.abspath(args.csv))
     os.makedirs(outdir, exist_ok=True)
 
     print(f'Loading: {args.csv}')
-    time_us, data = load_merged_csv(args.csv)
+    time_us, data_raw = load_merged_csv(args.csv)
+
+    # ── Bandpass front-end (same step as plot_tflite_summary / qEEG pipeline) ───
+    # All downstream measures (band entropy AND lagged-MI synchrony) run on the
+    # filtered signal, so the sync path below is told not to filter again. The
+    # raw (unfiltered) copy is retained for the --clean ADC-saturation guard.
+    if args.no_bandpass:
+        print('Bandpass: DISABLED (--no-bandpass) — analysing raw channels.')
+        data = data_raw
+    else:
+        print(f'Bandpass: {DEFAULT_BP_LOW:g}-{DEFAULT_BP_HIGH:g} Hz zero-phase Butterworth '
+              f'(fs={args.fs:g}Hz).')
+        data = bandpass_filter(data_raw, fs=args.fs, lo=DEFAULT_BP_LOW, hi=DEFAULT_BP_HIGH)
 
     ch_idx = args.ch - 1
     if ch_idx < 0:
         sys.exit('Error: --ch must be >= 1.')
     if ch_idx >= data.shape[1]:
         sys.exit(f'Error: channel {args.ch} not found (file has {data.shape[1]} channels).')
+
+    # ── Baseline-vs-event entropy mode ──────────────────────────────────────────
+    if (args.baseline is None) != (args.event is None):
+        sys.exit('Error: --baseline and --event must be supplied together.')
+    if args.baseline is not None:
+        _run_baseline_event_mode(args, time_us, data, data_raw, ch_idx, outdir)
+        return
 
     sync_result = None
     sync_suffix = ''
@@ -728,10 +1237,11 @@ def main() -> None:
             sys.exit('Error: --sync-pair must specify two different channels.')
         sync_suffix = f'_sync_ch{left_ch}_ch{right_ch}'
 
+    band_names = '/'.join(name for name, _ in BAND_DEFINITIONS)
     print(
         'Computing band entropy '
         f'— ch{args.ch}, win={args.win}s, step={args.step or args.win}s, '
-        f'bands=delta/theta/alpha/beta/gamma, fs={args.fs}Hz'
+        f'bands={band_names}, fs={args.fs}Hz'
     )
     entropy_result = compute_band_entropy_windowed(
         data[:, ch_idx],
@@ -754,6 +1264,9 @@ def main() -> None:
             step_sec=args.step,
             tau_ms_list=args.tau_ms,
             bins=args.mi_bins,
+            # data is already bandpassed above (unless --no-bandpass); avoid
+            # filtering twice. When --no-bandpass is set, leave the signal raw too.
+            apply_bandpass=False,
         )
 
     basename = os.path.splitext(os.path.basename(args.csv))[0]
