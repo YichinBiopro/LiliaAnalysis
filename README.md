@@ -9,10 +9,12 @@
 | `data_analysis.py` | 比較 APP 與 NUC EEG 資料，進行前處理、500→200 Hz downsampling、TinyUNetV4 模型推論，並輸出分析圖（含 qEEG indices 圖） |
 | `qeeg_indices.py` | 實作 Appendix J §3 的 qEEG wellness indices（Focus / Flow / Calm / Relaxation），可獨立執行或被其他 script 匯入 |
 | `spectral_entropy.py` | 使用 Welch PSD 計算 delta / theta / alpha / beta / gamma 五個頻段能量、正規化成比例後計算 BandEn |
-| `eeg_quality_v2.py` | 從 SleepStage 抽出的獨立 EEG quality v2 scorer，核心為 `get_eeg_quality_index_v2_parametric()`，搭配 `DEFAULT` / `BEST_MEAN_ABS_CORR` 參數集與 `get_best_eeg_quality_v2_flat_spectrum_only_params()` |
+| `eeg_quality_v2.py` | 從 SleepStage 抽出的獨立 EEG quality v2 scorer，核心為 `get_eeg_quality_index_v2_parametric()`，搭配 `DEFAULT` / `BEST_MEAN_ABS_CORR` 參數集與 `get_best_eeg_quality_v2_flat_spectrum_only_params()`；另含針對 iBrainCenter 4-ch 消費級裝置實測校準的 `get_ibrain_device_eeg_quality_v2_params()`（主流程預設採用） |
 | `eeg_utils.py` | 共用低階工具：`load_merged_csv()`（4-row header CSV 載入）、`bandpass_filter()`（零相位 Butterworth bandpass） |
 | `merge_subject_csvs.py` | 將 `iBrainCenter/` 與 `YoGa/` 底下各 subject 的多個 CSV 合併為單一 `merged.csv` |
 | `plot_event_markers.py` | 將 evt_time.docx 的活動時間點疊加至 iBrainCenter 各 subject 的 merged.csv，輸出驗證圖（含 EEG quality、qEEG heatmap、30s smooth summary、event-level delta，以及 TFLite 模型對照組） |
+| `plot_tflite_summary.py` | 以 `plot_event_markers.py` 的 Summary 風格產生 TFLite 專屬分析圖：原始 Relax / Calm / Flow / Focus 趨勢、TFLite 前後品質比較、qEEG Δ heatmap，並採「緩衝區 + 1s 微分段 + 盲抽樣（固定種子）」建構事件前基線 |
+| `check_quality_anomalies.py` | 診斷 EEG Quality 曲線上的異常線段：逐視窗偵測資料斷點 / ADC 削波 / 平線 / 低品質 / 驟跳，並與原始時域波形對照，分辨「連線假影」與「真實壞訊號」 |
 | `plot_tyy_meditation.py` | 針對 TYY (SN041) 的 Mindfulness Meditation 區段，輸出 Ch1 / Ch2 波形與 BP / TFLite qEEG Δ heatmap 的聚焦圖（PNG + SVG） |
 | `compare_subjects.py` | 跨受試者比較 BP 與 TFLite qEEG delta index（iBrainCenter 以 event block、YoGa 以整段 session 計算） |
 | `sample_quality_check.py` | 從每份 merged.csv 隨機取樣 2 個 30 秒片段，計算 EEG quality 與 qEEG indices，輸出品質檢查圖 |
@@ -30,6 +32,8 @@ lilia_analysis/
 ├── eeg_utils.py               # 共用工具：CSV 載入、bandpass filter
 ├── merge_subject_csvs.py      # 合併各 subject 的多個 CSV
 ├── plot_event_markers.py      # 活動時間標記驗證圖（含 quality / qEEG / TFLite 對照面板）
+├── plot_tflite_summary.py     # TFLite Summary 分析圖（raw 趨勢 + 品質前後比較 + Δ heatmap + 微分段基線）
+├── check_quality_anomalies.py # EEG Quality 異常線段診斷（斷點/削波/平線 vs 原始時域對照）
 ├── plot_tyy_meditation.py     # TYY 冥想區段聚焦圖（Ch1/Ch2 + BP/TFLite qEEG Δ heatmap）
 ├── compare_subjects.py        # 跨受試者 BP / TFLite qEEG delta 比較
 ├── sample_quality_check.py    # 隨機取樣品質檢查圖
@@ -63,6 +67,8 @@ lilia_analysis/
 │   ├── James(SN035)/ ...
 │   ├── TYY(SN041)/   ...
 │   ├── event_verification/    # plot_event_markers.py 輸出的驗證圖
+│   ├── tflite_summary/        # plot_tflite_summary.py 輸出的 TFLite Summary 圖
+│   ├── quality_anomalies/     # check_quality_anomalies.py 輸出的品質異常診斷圖
 │   ├── comparison/            # compare_subjects.py 輸出（iBrainCenter group）
 │   └── TYY_meditation/        # plot_tyy_meditation.py 輸出（PNG + SVG）
 ├── sample_quality/            # plot_raw_eeg.py 輸出的原始波形圖
@@ -361,11 +367,21 @@ python merge_subject_csvs.py --outname combined.csv
 
 ### Quality 計算參數
 
-- 使用 `eeg_quality_v2.get_best_eeg_quality_v2_flat_spectrum_only_params()`  
+- 使用 `eeg_quality_v2.get_ibrain_device_eeg_quality_v2_params()`（裝置校準參數集）  
   → `kurtosis_weight=0, corr_weight=0`（只計算 flat + spectrum 兩項）
 - 取樣率：**500 Hz**（原始取樣率，不做下採樣）
 - 視窗：**5 秒 non-overlapping**
-- 紅色虛線標示 threshold（由參數集決定）
+- 紅色虛線標示 threshold（`QUALITY_THRESHOLD=0.5`）
+
+> **為何改用裝置校準參數集？** 原 `flat_spectrum_only` 參數集是為較乾淨的 EEG 調的，套在 iBrainCenter 4-ch 消費級裝置上，正常資料的品質中位數只有 ~0.5，導致每段錄製有 **40–60% 視窗**被誤判為低品質而捨棄。經五位受試者實測校準後（見下表），乾淨資料分數回到 ~0.7–0.9，0.5 門檻才能正確區隔「乾淨 (~0.7+)」與「假影 (~0.3)」，而非把乾淨資料一刀切兩半。
+
+| 參數 | 原值 | 校準值 | 原因 |
+| --- | --- | --- | --- |
+| `flat_activity_k` | 0.8 | **0.35** | 活動度分數 `1−exp(−ratio/k)` 在 k=0.8 時，連完美穩態訊號上限也只有 ~0.71；調小 k 才讓乾淨訊號逼近 1.0 |
+| `spectrum_fit_hi` | 45 Hz | **40 Hz** | 原本斜率擬合上緣壓在 `BP_HIGH=45` 的濾波器滾降上，使斜率被高估（偏陡） |
+| `slope_center` | −2.0 | **−1.0** | 本裝置實測 1/f 斜率中位數 ≈ −0.9（非研究級 EEG 的 −2.0），原中心使乾淨資料落在帶緣只得 ~0.4 |
+| `slope_good_low/high` | −3.5 / −0.5 | **−2.5 / −0.2** | 配合上述中心重新設定「良好」斜率帶 |
+| `slope_edge_score` | 0.4 | **0.7** | 讓落在良好帶內的分數維持較高，而非從中心快速跌到 0.4 |
 
 ### qEEG 計算與摘要
 
@@ -417,6 +433,136 @@ YoGa/eeg_overview/
 ├── Jammie_SN036_eeg.png
 └── TYY_SN041_eeg.png
 ```
+
+---
+
+## plot_tflite_summary.py
+
+以 `plot_event_markers.py` 中 `*_session_start.png` / `*_pre_event_rest.png` 的 **Summary 子圖風格**改寫，產生 **TFLite 專屬**的分析圖，並針對基線（baseline）建構導入更嚴謹、符合同行審查的流程。資料來源只取 **TFLite 模型處理後**的訊號計算 qEEG 指標。
+
+### 圖表內容（由上而下）
+
+| 子圖 | 說明 |
+| --- | --- |
+| Signal quality (before vs after) | TFLite 處理「前」與「後」的 channel-median 品質曲線疊圖，檢視模型是否改變/劣化訊號品質。**兩者皆在 200 Hz 評分**（前 = 僅降採樣未經 TFLite、後 = TFLite 重建），使唯一差別是模型重建本身、而非降採樣（apples-to-apples）|
+| TFLite Summary (small multiples) | 每個指標各一條 strip（Relax / Calm / Flow / Focus），以「小倍數」呈現而非四線疊圖，較易讀且各自用滿縱軸。每條 strip：填色面積 = **原始**指標值（−1~+1，30 s smooth，**不減基線**）；黑色虛線 = 基線水準（填色與虛線的落差即 Δ，故單圖同時呈現絕對值與相對變化）。低品質/無訊號視窗（含時間斷點）一律捨棄並斷開，無效區段自然留白 |
+| qEEG Δ heatmap (vs baseline) | 沿用 `plot_event_markers.py` 的 Δ-vs-baseline 熱圖（30 s bins、OrgPur colormap、固定 ±`HEATMAP_DELTA_VABS`=2.0 色階）；著色範圍依「heatmap 基線模式」而定（見下） |
+| Per-event mean Δ (bar) | 各事件相對基線的平均 Δ，誤差棒為跨 channel 標準差 |
+
+### Heatmap 基線模式（`--heatmap-baseline`）
+
+heatmap 與長條圖的 Δ 可選兩種基線，解決「事件外/基線不足導致大量灰格」的問題：
+
+| 模式 | 基線來源 | 著色範圍 | 適用 |
+| --- | --- | --- | --- |
+| `session`（預設） | 整段 session 隨機抽樣乾淨 1 s 微分段（固定種子）為單一基線 | **整條時間軸**都著色，灰格僅剩真正低品質的 bin | 想看「相對 session 平均狀態」的偏離、減少灰格 |
+| `pre-event` | 每個事件各自的事件前微分段基線（含 Color Agility Ladder 特例） | 僅事件視窗內著色，事件之間維持灰色 | 聚焦「各任務 vs 其事前靜息」的變化 |
+| `both` | 兩者皆建 | 各輸出一張圖 | 同時比較兩種觀點 |
+
+> **為何 `session` 模式灰格大減？** `pre-event` 模式下，事件之間（佔約 40% 時間）依設計就是灰色，加上資料品質差的事件其微分段基線會建構失敗而整段留白。`session` 模式以整段隨機乾淨樣本為單一參照，每個品質足夠的 bin 都能算出 Δ，因此只有真正壞掉（低品質/斷點）的 bin 才會是灰色。
+
+> **為何趨勢用 raw、heatmap/bar 用 Δ？** 基線相減（Δ）只在「比較事件 vs 靜息」時有意義；要判讀受試者「當下的絕對狀態」應看原始指標。qEEG 指標本身即為有界比值（−1~+1），可跨時段直接比較，故 Summary 趨勢採原始值，基線僅保留給本質上是「相對變化量」的 heatmap 與 bar。
+
+### 事件前基線建構（核心方法）
+
+`build_baseline_epochs()` 以下列步驟建立每個事件的乾淨基線，所有步驟皆有神經科學或方法學依據：
+
+1. **緩衝區 Buffer Zone（`t_buffer = -3.0 s`）**：嚴格捨棄觸發點前 3 秒內的資料。受試者在「預期」任務開始時會出現預期焦慮波、關聯性負變化（CNV, Contingent Negative Variation）與 α 去同步化（alpha ERD），屬「任務預備」而非「靜息」狀態，納入會系統性污染基準值。
+2. **微分段 Micro-epoching**：將搜尋窗 `[t_search_start, t_buffer]`（預設 −15 ~ −3 s）切成 1 秒非重疊微分段，逐段做假影/雜訊篩選，僅剔除含眨眼、EMG、移動假影的片段，而非整段全取或全棄。
+3. **ADC 飽和篩選（原始訊號）**：在**未濾波**的原始視窗上偵測削波（任一通道貼在 ±2048 滿格、比例 > `SAT_FRAC_MAX=2%` 即剔除）。因為帶通濾波會把削波平滑掉（實測 64% 削波的視窗在濾波前評分 0.19、濾波後升到 0.42），單看濾波後分數會漏抓飽和；故先在原始訊號把關，再做品質評分。
+4. **品質篩選**：每個微分段以 `eeg_quality_v2`（裝置校準參數集）評分，channel 中位數 ≥ `QUALITY_THRESHOLD` 才視為乾淨。
+5. **盲抽樣 + 固定亂數種子**：從乾淨微分段中**隨機**抽樣至所需基線長度（`required_sec`），避免選樣偏差；固定 `random_seed` 確保結果可重現（reproducibility）。
+6. **基線參考值**：抽樣串接後的基線資料同樣經 `500 → 200 Hz → TFLite → qEEG` 處理，得到每 channel 的指標基準值，與趨勢/heatmap 的計算鏈一致（apples-to-apples）。
+
+### 特定模式的基線處理（Color Agility Ladder）
+
+在 `pre-event-rest` 模式下，「Color Agility Ladder」緊接在「Agility Ladder」之後，**沒有獨立的事件前靜息段**，硬取其前一段會取到上一個高強度任務的尾段，使 delta 失真。因此透過 `BASELINE_ANCHOR = {'Color Agility Ladder': 'Agility Ladder'}` 改用標準「Agility Ladder」的事件前靜息區間作為共同基線。
+
+### 錯誤處理
+
+當乾淨微分段總時長 **小於** `required_sec` 時，`build_baseline_epochs()` 會丟出明確的 `ValueError`，並指示使用者三種調整方式：放寬品質門檻、擴大搜尋窗、或縮短所需基線長度。主流程預設 `on_insufficient='raise'`（嚴格中止）；設為 `'skip'` 則僅警告並略過該事件，方便批次掃描資料品質。
+
+### 執行方式
+
+```bash
+# 對 iBrainCenter 全部受試者產圖（預設 pre-event-rest baseline）
+python plot_tflite_summary.py
+
+# 改用每事件事件前基線（僅事件內著色），或兩種模式都輸出
+python plot_tflite_summary.py --heatmap-baseline pre-event
+python plot_tflite_summary.py --heatmap-baseline both --on-insufficient skip
+
+# 自訂緩衝區/搜尋窗/基線長度/亂數種子
+python plot_tflite_summary.py --required-sec 8 --t-search -20 --seed 7
+
+# 調整品質門檻：調高 → 更嚴格地捨棄疑似假影視窗（無效區段留白更多）
+python plot_tflite_summary.py --quality-ratio 0.65
+```
+
+| 參數 | 預設 | 說明 |
+| --- | --- | --- |
+| `--outdir` | `iBrainCenter/tflite_summary/` | PNG 輸出目錄 |
+| `--heatmap-baseline` | `session` | heatmap/bar 的 Δ 基線模式：`session` / `pre-event` / `both`（見上表） |
+| `--t-buffer` | −3.0 | 緩衝區秒數（負值；觸發前此區間一律捨棄；僅 `pre-event` 用） |
+| `--t-search` | −15.0 | 基線搜尋窗起點（負值；觸發前幾秒開始找基線；僅 `pre-event` 用） |
+| `--required-sec` | 10.0 | 所需乾淨基線總長度（秒） |
+| `--quality-ratio` | 0.5 | EEG 品質分數門檻 (0~1)；低於此值的視窗視為無效並捨棄，亦作為基線微分段篩選門檻。調高更嚴格（捨棄更多疑似假影），調低保留更多 |
+| `--seed` | 42 | 固定亂數種子（確保可重現） |
+| `--on-insufficient` | `raise` | 基線不足時：`raise` 丟錯中止 / `skip` 警告略過 |
+
+### 輸出檔案
+
+每個 subject 依模式輸出 PNG（檔名以 `_session` 或 `_pre_event` 標記）：
+
+```
+iBrainCenter/tflite_summary/
+├── Hardy_SN036_tflite_summary_session.png      # --heatmap-baseline session（預設）
+└── Hardy_SN036_tflite_summary_pre_event.png    # --heatmap-baseline pre-event
+```
+
+> **品質面板的斜向長直線是什麼？** `merged.csv` 由多個錄製檔串接，檔間可能有數十~數百秒的時間斷點；繪圖時若直接連線，會在斷點兩端畫出「斜向長直線」假影。本腳本的品質面板已改用 `_series_with_gaps()` 在大缺口插入 NaN 自動斷開。若要進一步診斷這些異常線段的成因（連線假影 vs 真實壞訊號），請見下方 `check_quality_anomalies.py`。
+
+---
+
+## check_quality_anomalies.py
+
+診斷工具：找出 EEG Quality 曲線上的「異常線段」，逐視窗分類並與**原始時域波形**對照，判別每段異常的真正成因。異常主要分兩類：
+
+- **連線假影 (gap-bridging artifact)**：`merged.csv` 的檔間時間斷點被繪圖直線硬接，形成斜向長直線——並非真實品質變化。
+- **真實壞訊號**：ADC 飽和削波（數值貼在 ±2048）、平線/斷線（連續樣本相同）、或大幅雜訊使品質驟降。
+
+### 偵測項目（逐 5 s 視窗）
+
+| 標記 | 條件（預設） | 意義 |
+| --- | --- | --- |
+| `time-gap` | 視窗內最大相鄰樣本時間差 > 1 s | 視窗橫跨資料斷點（檔案邊界）→ 連線假影來源 |
+| `clip` | 削波樣本比例 > 1%（\|x\| ≥ 2047） | ADC 飽和削波（高動作任務常見的動作假影） |
+| `flat` | 四通道同時零變化樣本比例 > 5% | 平線 / 斷線 |
+| `low-Q` | 品質中位數 < 0.5 | 品質低落 |
+| `jump` | 相鄰視窗品質中位數跳動 > 0.40 | 品質驟跳 |
+
+### 輸出圖內容
+
+- **上方**：品質時間軸（已用 `_series_with_gaps()` 斷開缺口，不再有假影直線），各類異常以不同標記疊在曲線上，並標註 `#1…#N` 對應下方原始波形。
+- **下方**：依嚴重度挑選最多 6 個視窗的原始 4-ch 波形（含前後文），標出視窗範圍、±2048 ADC 滿格參考線與斷點位置，讓使用者一眼看出每段異常到底是「連線假影」還是「真實壞訊號」。
+
+### 執行方式
+
+```bash
+# 預設檢查 Hardy（其 merged.csv 含 5 個時間斷點，最具代表性）
+python check_quality_anomalies.py --subject Hardy
+
+# 檢查全部 iBrainCenter 受試者
+python check_quality_anomalies.py --all
+```
+
+| 參數 | 預設 | 說明 |
+| --- | --- | --- |
+| `--subject` | `Hardy` | 受試者名稱 |
+| `--all` | （未設定） | 對全部 iBrainCenter 受試者執行 |
+| `--outdir` | `iBrainCenter/quality_anomalies/` | PNG 輸出目錄 |
+
+偵測門檻（`RAIL_VALUE`、`CLIP_FRAC`、`FLAT_FRAC`、`GAP_SEC`、`JUMP_DELTA`、`MAX_RAW_PANELS`）定義於檔案頂端常數，可視資料情況調整。終端機亦會印出所有被標記視窗的時間與原因清單。
 
 ---
 

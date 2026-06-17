@@ -35,7 +35,7 @@ import pandas as pd
 from scipy import signal
 from eeg_quality_v2 import (
     get_eeg_quality_index_v2_parametric,
-    get_best_eeg_quality_v2_flat_spectrum_only_params,
+    get_ibrain_device_eeg_quality_v2_params,
 )
 from qeeg_indices import compute_qeeg_indices_windowed
 from qeeg_indices import compute_qeeg_indices
@@ -54,7 +54,12 @@ FS               = 500          # Hz
 QUALITY_WIN_SEC  = 5.0          # window length for quality scorer (5 s)
 QUALITY_STEP_SEC = 5.0          # non-overlapping windows (matches app refresh)
 QUALITY_WIN_SEC_LONG  = 30.0   # second quality scorer window (30 s)
-QUALITY_PARAMS    = get_best_eeg_quality_v2_flat_spectrum_only_params()
+# Device-calibrated preset for the iBrainCenter 4-ch headset. The previous
+# `flat_spectrum_only` preset was tuned for cleaner EEG and scored normal data
+# from this device at ~0.5 (40-60% of every recording rejected); the calibrated
+# preset puts clean data at ~0.7-0.9 so the 0.5 threshold separates clean from
+# artefact rather than bisecting the clean distribution. See eeg_quality_v2.py.
+QUALITY_PARAMS    = get_ibrain_device_eeg_quality_v2_params()
 QUALITY_THRESHOLD = 0.5
 
 TFLITE_MODEL_PATH = os.path.join(BASE_DIR, 'tiny_v4_optimized.tflite')
@@ -64,6 +69,9 @@ TFLITE_WIN        = 400   # model input window size at TFLITE_FS (400 samples = 
 BP_LOW       = 0.5    # Hz — bandpass lower cutoff
 BP_HIGH      = 45.0   # Hz — bandpass upper cutoff
 QEEG_WIN_SEC = 5.0    # window for qEEG indices (non-overlapping, seconds)
+# Fixed colorbar half-range (Δ index) shared by the BP and TFLite heatmaps so
+# both panels use an identical −VABS…+VABS scale for fair visual comparison.
+HEATMAP_DELTA_VABS = 0.6
 
 # ── Event table (from evt_time.docx) ──────────────────────────────────────────
 # Each entry: (english_name, start_HH_MM, duration_min, [participant_keys])
@@ -976,12 +984,21 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
         f'qEEG: BP {BP_LOW}–{BP_HIGH}Hz, ch median, {QEEG_WIN_SEC:.0f}s windows',
         fontsize=12, fontweight='bold',
     )
+    # Scientific context + cutoff explanation footnote (bottom, below legend row).
+    fig.text(
+        0.5, 0.008,
+        'Indices from relative band powers — Theta 4–8 Hz, Alpha 8–13 Hz, '
+        'Beta 13–30 Hz.   Focus: Beta↑ vs Alpha/Theta · Calm/Relax: '
+        'Alpha/Theta↑ vs Beta · Flow: Alpha–Theta synchrony.   '
+        'Gray heatmap cells = qEEG not computed (low-quality / artifact windows).',
+        ha='center', va='bottom', fontsize=7, color='#555555',
+    )
 
     # ── EEG panels ───────────────────────────────────────────────────────────────
     for ch_i, ax in enumerate(ax_eeg):
         ax.plot(t_dt, data_ds[:, ch_i], color='#444444', lw=0.4, alpha=0.8)
         _overlay_events(ax, evt_list, cone_stage_dt)
-        ax.set_ylim(-100, 100)
+        ax.set_ylim(-150, 150)
         ax.set_ylabel(f'ch{ch_i+1}\n(µV)', fontsize=8)
         plt.setp(ax.get_xticklabels(), visible=False)
     if with_events:
@@ -1025,12 +1042,13 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
                                      (bin_t_num[:-1] + bin_t_num[1:]) / 2,
                                      [bin_t_num[-1] + dt_h]])
         y_edges    = np.arange(5) - 0.5
-        v_abs      = max(0.3, float(np.nanpercentile(np.abs(heatmap_delta), 95)))
+        v_abs      = HEATMAP_DELTA_VABS
         pcm = ax_heatmap.pcolormesh(t_edges, y_edges, heatmap_delta_ma,
                                     cmap=cmap_hm, vmin=-v_abs, vmax=v_abs,
                                     shading='flat')
-        plt.colorbar(pcm, ax=ax_heatmap, pad=0.005, fraction=0.015,
-                     label=f'Δ Index  (−{v_abs:.1f} → +{v_abs:.1f})')
+        cbar = plt.colorbar(pcm, ax=ax_heatmap, pad=0.012, fraction=0.015)
+        cbar.set_label(f'Δ Index  (−{v_abs:.1f} → +{v_abs:.1f})', labelpad=12)
+        cbar.ax.tick_params(pad=4)
         for start_dt, end_dt, label, color, participates in evt_list:
             if participates:
                 ax_heatmap.axvline(mdates.date2num(start_dt),
@@ -1081,13 +1099,13 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
                                         (tfl_bin_t_num[:-1] + tfl_bin_t_num[1:]) / 2,
                                         [tfl_bin_t_num[-1] + dt_h2]])
             y_edges2 = np.arange(5) - 0.5
-            v_abs2   = max(0.3, float(np.nanpercentile(
-                np.abs(tfl_heatmap_delta[~np.isnan(tfl_heatmap_delta)]), 95)))
+            v_abs2   = HEATMAP_DELTA_VABS
             pcm2 = ax_tfl_heatmap.pcolormesh(t_edges2, y_edges2, tfl_heatmap_delta_ma,
                                               cmap=cmap_hm2, vmin=-v_abs2, vmax=v_abs2,
                                               shading='flat')
-            plt.colorbar(pcm2, ax=ax_tfl_heatmap, pad=0.005, fraction=0.015,
-                         label=f'Δ Index  (−{v_abs2:.1f} → +{v_abs2:.1f})')
+            cbar2 = plt.colorbar(pcm2, ax=ax_tfl_heatmap, pad=0.012, fraction=0.015)
+            cbar2.set_label(f'Δ Index  (−{v_abs2:.1f} → +{v_abs2:.1f})', labelpad=12)
+            cbar2.ax.tick_params(pad=4)
             for start_dt, end_dt, label, color, participates in evt_list:
                 if participates:
                     ax_tfl_heatmap.axvline(mdates.date2num(start_dt),
@@ -1177,14 +1195,16 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
     else:
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', UserWarning)
-            fig.tight_layout()
+            fig.tight_layout(rect=[0, 0.03, 1, 1])
 
     # Lock all sharex panels to the EEG recording time range (after tight_layout
     # so pcolormesh/xaxis_date autoscaling does not override the limit).
     ax_eeg[0].set_xlim(t_dt[0], t_dt[-1])
 
     suffix = '_tflite' if use_tflite else '_bp'
-    outpath = os.path.join(outdir, f'{name}_{info["sn"]}_eeg{suffix}.png')
+    baseline_tag = baseline_mode.replace('-', '_') if with_events else 'session_start'
+    outpath = os.path.join(
+        outdir, f'{name}_{info["sn"]}_eeg{suffix}_{baseline_tag}.png')
     fig.savefig(outpath, dpi=150, bbox_inches='tight')
     plt.close(fig)
     print(f'       → {outpath}')

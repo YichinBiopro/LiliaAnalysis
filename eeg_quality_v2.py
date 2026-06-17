@@ -18,6 +18,8 @@ from scipy.stats import kurtosis
 
 DEFAULT_EEG_QUALITY_V2_PARAMS = {
     "target_score": 0.8,
+    "flat_activity_k": 0.8,
+    "spectrum_fit_hi": 45.0,
     "flat_ratio_start": 0.3,
     "flat_penalty_floor": 0.2,
     "spike_ratio_start": 0.0001,
@@ -116,6 +118,45 @@ def get_best_eeg_quality_v2_flat_spectrum_only_params() -> Dict[str, float]:
     params["kurtosis_weight"] = 0.0
     params["corr_weight"] = 0.0
     return params
+
+
+# ---------------------------------------------------------------------------
+# Device-calibrated preset for the iBrainCenter 4-channel consumer headset
+# ---------------------------------------------------------------------------
+# Calibrated empirically from the five iBrainCenter recordings (band-pass
+# 0.5-45 Hz, 5 s windows). With the original `flat_spectrum_only` preset the
+# median quality of normal data sat at ~0.5 (40-60% of every recording fell
+# below QUALITY_THRESHOLD=0.5), because:
+#   * `flat`: activity_k=0.8 caps a perfectly stationary signal at ~0.71
+#     (1 - exp(-1/0.8)). Lowering activity_k raises that ceiling toward 1.0.
+#   * `spectrum`: this headset's physiological 1/f slope measures ~-0.9
+#     (range ~-1.7..-0.3), not the -2.0 the original band was centred on, so
+#     clean data landed on the band edge and scored ~0.4. The band is
+#     re-centred on the measured slope and the fit edge pulled to 40 Hz.
+IBRAIN_DEVICE_EEG_QUALITY_V2_PARAMS = {
+    **DEFAULT_EEG_QUALITY_V2_PARAMS,
+    # flat / activity
+    "flat_activity_k": 0.35,        # was 0.8 -> clean stationary ~0.94
+    # spectrum slope, re-centred on this device's measured 1/f slope
+    "spectrum_fit_hi": 40.0,        # was 45.0 (== BP_HIGH); avoid filter edge
+    "slope_good_low": -2.5,
+    "slope_center": -1.0,
+    "slope_good_high": -0.2,
+    "slope_edge_score": 0.7,        # keep in-band scores high (was 0.4)
+    "slope_outer_floor": 0.2,
+    # flat + spectrum only (kurtosis / corr disabled, as before)
+    "spectrum_weight": 0.9,
+    "kurtosis_weight": 0.0,
+    "corr_weight": 0.0,
+}
+
+
+def get_ibrain_device_eeg_quality_v2_params() -> Dict[str, float]:
+    """Device-calibrated flat+spectrum preset for the iBrainCenter headset.
+
+    See ``IBRAIN_DEVICE_EEG_QUALITY_V2_PARAMS`` for the calibration rationale.
+    """
+    return dict(IBRAIN_DEVICE_EEG_QUALITY_V2_PARAMS)
 
 
 def _resolve_eeg_quality_v2_params(
@@ -241,7 +282,7 @@ def get_eeg_quality_index_v2_parametric(
         median_std = np.median(positive_stds) if positive_stds.size else 0.0
 
         activity_ratio = win_stds / max(median_std, 1e-7)
-        activity_k = 0.8
+        activity_k = float(params["flat_activity_k"])
         window_activity_score = 1.0 - np.exp(-activity_ratio / activity_k)
         base_activity_score = float(
             np.mean(np.clip(window_activity_score, 0.0, 1.0))
@@ -314,7 +355,11 @@ def get_eeg_quality_index_v2_parametric(
     def check_spectrum_v2(ch_data: np.ndarray) -> float:
         try:
             f, psd = sp_signal.welch(ch_data, fs, nperseg=fs * 2)
-            mask = (f > 1) & (f < 45)
+            # Upper fit edge is configurable so it can be pulled below the
+            # band-pass cut-off (e.g. 40 Hz vs a 45 Hz BP_HIGH); fitting the
+            # slope right up to the filter roll-off otherwise biases it steeper.
+            fit_hi = float(params["spectrum_fit_hi"])
+            mask = (f > 1) & (f < fit_hi)
             if np.sum(mask) < 2:
                 return 0.5
 
@@ -419,7 +464,9 @@ def get_eeg_quality_index_v2_parametric(
 __all__ = [
     "BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS",
     "DEFAULT_EEG_QUALITY_V2_PARAMS",
+    "IBRAIN_DEVICE_EEG_QUALITY_V2_PARAMS",
     "get_best_eeg_quality_v2_flat_spectrum_only_params",
     "get_default_eeg_quality_v2_params",
+    "get_ibrain_device_eeg_quality_v2_params",
     "get_eeg_quality_index_v2_parametric",
 ]
