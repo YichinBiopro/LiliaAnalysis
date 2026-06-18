@@ -59,6 +59,9 @@ TFLITE_PATH    = os.path.join(BASE_DIR, 'tiny_v4_optimized.tflite')
 
 QEEG_WIN_SEC   = 5.0      # non-overlapping qEEG window length
 HEATMAP_BIN_SEC = 30      # bin width for the heatmap (seconds)
+# Fixed colorbar half-range (Δ index) shared by the BP and TFLite heatmaps so
+# both panels use an identical −VABS…+VABS scale for fair visual comparison.
+HEATMAP_DELTA_VABS = 0.6
 
 # ── Channels to display ───────────────────────────────────────────────────────
 SHOW_CHS       = [0, 1]   # 0-based → Ch1, Ch2
@@ -201,7 +204,8 @@ def _draw_meditation_span(ax, start_dt, end_dt, label=True):
 
 
 def _draw_heatmap_panel(ax, bin_t_arr, heatmap_delta_ma,
-                        med_start_dt, med_end_dt, ylabel):
+                        med_start_dt, med_end_dt, ylabel,
+                        v_abs=None, xlim_end_dt=None):
     n_bins = len(bin_t_arr)
     if n_bins == 0:
         ax.set_visible(False)
@@ -219,12 +223,24 @@ def _draw_heatmap_panel(ax, bin_t_arr, heatmap_delta_ma,
                                (bin_t_num[:-1] + bin_t_num[1:]) / 2,
                                [bin_t_num[-1] + dt_h]])
     y_edges = np.arange(5) - 0.5
-    v_abs   = max(0.3, float(np.nanpercentile(np.abs(heatmap_delta_ma.data), 95)))
+    if v_abs is None:
+        v_abs = max(0.3, float(np.nanpercentile(np.abs(heatmap_delta_ma.data), 95)))
 
     pcm = ax.pcolormesh(t_edges, y_edges, heatmap_delta_ma,
                         cmap=cmap, vmin=-v_abs, vmax=v_abs, shading='flat')
-    plt.colorbar(pcm, ax=ax, pad=0.005, fraction=0.015,
-                 label=f'Δ Index  (−{v_abs:.1f} → +{v_abs:.1f})')
+    cbar = plt.colorbar(pcm, ax=ax, pad=0.012, fraction=0.015)
+    cbar.set_label(f'Δ Index  (−{v_abs:.1f} → +{v_abs:.1f})', labelpad=12)
+    cbar.ax.tick_params(pad=4)
+
+    # Explain the right-edge cutoff when qEEG windows stop before the view edge.
+    if xlim_end_dt is not None:
+        xlim_end_num = mdates.date2num(xlim_end_dt)
+        if xlim_end_num - t_edges[-1] > dt_h:
+            ax.axvspan(t_edges[-1], xlim_end_num, color='#dddddd',
+                       alpha=0.6, hatch='//', zorder=0, lw=0)
+            ax.text(0.5 * (t_edges[-1] + xlim_end_num), 1.5,
+                    'no qEEG\n(cutoff)', ha='center', va='center',
+                    fontsize=6.5, color='#666666', style='italic')
 
     ax.axvline(mdates.date2num(med_start_dt),
                color=MEDITATION_COLOR, lw=1.2, ls='--', alpha=0.8)
@@ -346,7 +362,7 @@ def plot_tyy_meditation(outdir: str, ds: int = 500, use_tflite: bool = True):
         ax.plot(t_ds_w, data_ds[sel_ds, ch_i],
                 color=CH_COLORS[i], lw=0.5, alpha=0.85)
         _draw_meditation_span(ax, med_start_dt, med_end_dt, label=(i == 0))
-        ax.set_ylim(-100, 100)
+        ax.set_ylim(-150, 150)
         ax.set_ylabel(f'Ch{ch_i + 1}\n(µV)', fontsize=8)
         _fmt_xaxis(ax)
         plt.setp(ax.get_xticklabels(), visible=False)
@@ -354,7 +370,8 @@ def plot_tyy_meditation(outdir: str, ds: int = 500, use_tflite: bool = True):
     # ── qEEG Δ heatmap ───────────────────────────────────────────────────────
     _draw_heatmap_panel(ax_hm, bin_t_arr, heatmap_dm,
                         med_start_dt, med_end_dt,
-                        'qEEG Δ\n(vs baseline)')
+                        'qEEG Δ\n(vs baseline)',
+                        v_abs=HEATMAP_DELTA_VABS, xlim_end_dt=win_end_dt)
     plt.setp(ax_hm.get_xticklabels(),
              visible=(not has_tflite))
     if has_tflite:
@@ -364,7 +381,8 @@ def plot_tyy_meditation(outdir: str, ds: int = 500, use_tflite: bool = True):
     if ax_tfl_hm is not None:
         _draw_heatmap_panel(ax_tfl_hm, tfl_bin_t_arr, tfl_heatmap_dm,
                             med_start_dt, med_end_dt,
-                            'TFLite qEEG Δ\n(vs baseline)')
+                            'TFLite qEEG Δ\n(vs baseline)',
+                            v_abs=HEATMAP_DELTA_VABS, xlim_end_dt=win_end_dt)
         ax_tfl_hm.set_xlabel('Local Time (UTC+8, HH:MM)', fontsize=10)
 
     if not has_tflite:
@@ -379,15 +397,25 @@ def plot_tyy_meditation(outdir: str, ds: int = 500, use_tflite: bool = True):
         fontsize=12, fontweight='bold',
     )
 
-    # Event legend patch
+    # Event legend patch — placed top-right, near the title, for visibility.
     med_patch = mpatches.Patch(facecolor=MEDITATION_COLOR, alpha=0.35,
                                label=f'Mindfulness Meditation ({MEDITATION_START_HHMM})')
-    fig.legend(handles=[med_patch], loc='lower center', ncol=1,
-               fontsize=9, bbox_to_anchor=(0.5, -0.01), framealpha=0.9)
+    fig.legend(handles=[med_patch], loc='upper right', ncol=1,
+               fontsize=9, bbox_to_anchor=(0.995, 0.965), framealpha=0.9)
+
+    # Scientific context + cutoff explanation footnote.
+    fig.text(
+        0.5, 0.012,
+        'Indices from relative band powers — Theta 4–8 Hz, Alpha 8–13 Hz, '
+        'Beta 13–30 Hz.   Focus: Beta↑ vs Alpha/Theta · Calm/Relax: '
+        'Alpha/Theta↑ vs Beta · Flow: Alpha–Theta synchrony.   '
+        'Gray cells / hatched span = qEEG not computed (artifact / outside window).',
+        ha='center', va='bottom', fontsize=7, color='#555555',
+    )
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', UserWarning)
-        fig.tight_layout(rect=[0, 0.03, 1, 1])
+        fig.tight_layout(rect=[0, 0.05, 1, 0.99])
 
     # Lock x-axis to meditation window only (baseline used for Δ calc, not shown)
     ax_ch[0].set_xlim(plot_start_dt, win_end_dt)
