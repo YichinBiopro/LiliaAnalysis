@@ -138,6 +138,10 @@ def _rel_times_to_dt(
 EPSILON = 1e-12
 DEFAULT_FS = 500.0
 DEFAULT_WIN_SEC = 2.0
+# Laplace-style smoothing added to every band power before normalising the BASD
+# probability vectors, so a band that drops to zero cannot produce log(0) / a
+# divide-by-zero in the KL sum. Small relative to a unit-normalised mass of 1.
+DEFAULT_BASD_EPSILON = 1e-9
 
 # ── Bandpass front-end (single source of truth = plot_event_markers) ───────────
 # Reuse the project-wide cutoffs so spectral entropy is computed on exactly the
@@ -783,6 +787,238 @@ def compare_baseline_event(
         step_sec=step_sec, nperseg=nperseg, noverlap=noverlap)
 
     return _finalise_comparison(baseline, event, baseline_range, event_range)
+
+
+# ── Baseline-Anchored Spectral Divergence (BASD) ──────────────────────────────
+# BASD answers a different question from the band entropy above. Shannon entropy
+# H(P) = −Σ p_k log2 p_k is a *single-state* scalar: it measures how flat the
+# θ/α/β split is *within* one interval, and it is blind to *which* band carries
+# the power — (θ=0.7, α=0.2, β=0.1) and (θ=0.1, α=0.2, β=0.7) have identical
+# entropy. For a baseline→event contrast that property is exactly wrong: a
+# meditation/eyes-closed shift that moves mass from β into α barely changes the
+# entropy yet is the whole signal of interest.
+#
+# KL divergence (relative entropy) D_KL(P_event ‖ P_base) = Σ P_event(k)
+# log2[P_event(k)/P_base(k)] is the natural fix. It is *directed* and
+# *anchored*: it scores how many bits are wasted coding the event spectrum with
+# a code optimised for the baseline spectrum, i.e. how far the event distribution
+# has moved away from the subject's own resting prior. It is 0 iff the two
+# distributions are identical, strictly positive otherwise, and — unlike a
+# difference of entropies — it is sensitive to *band identity*, so a θ→α→β
+# redistribution registers even when overall flatness is preserved. The event is
+# the first argument (P_event ‖ P_base) on purpose: we want the expectation taken
+# under the event, "how surprising is the event under the baseline prior", which
+# is the asymmetric, baseline-anchored reading the name BASD denotes.
+
+
+def _band_power_matrix(data: object) -> np.ndarray:
+    """Coerce band-power input into a ``(n_windows, n_bands)`` float matrix in
+    canonical ``BAND_DEFINITIONS`` (θ, α, β) order.
+
+    Accepts:
+    * a ``{band_name: power}`` mapping (or ``{band_name: [power_t, …]}``),
+    * a 1-D sequence of ``n_bands`` powers (a single block), or
+    * a 2-D ``(n_windows, n_bands)`` array of time-resolved band powers.
+    """
+    band_names = [name for name, _ in BAND_DEFINITIONS]
+    n_bands = len(band_names)
+
+    if isinstance(data, dict):
+        missing = [b for b in band_names if b not in data]
+        if missing:
+            raise ValueError(f'Band-power mapping is missing bands: {missing}.')
+        cols = [np.atleast_1d(np.asarray(data[b], dtype=float)) for b in band_names]
+        lengths = {c.size for c in cols}
+        if len(lengths) != 1:
+            raise ValueError('All bands must carry the same number of samples.')
+        return np.column_stack(cols)
+
+    arr = np.asarray(data, dtype=float)
+    if arr.ndim == 1:
+        arr = arr.reshape(1, -1)
+    if arr.ndim != 2 or arr.shape[1] != n_bands:
+        raise ValueError(
+            f'Band-power array must have {n_bands} columns (θ, α, β); got shape '
+            f'{arr.shape}.')
+    return arr
+
+
+def _normalise_distribution(powers: np.ndarray, epsilon: float) -> np.ndarray:
+    """Turn a non-negative band-power vector into a probability distribution
+    (Σ p = 1) after adding *epsilon* smoothing so no band is exactly zero."""
+    powers = np.asarray(powers, dtype=float)
+    if np.any(powers < 0):
+        raise ValueError('Band powers must be non-negative.')
+    smoothed = powers + epsilon
+    total = float(smoothed.sum())
+    if total <= 0:
+        raise ValueError('Total band power is non-positive even after smoothing.')
+    return smoothed / total
+
+
+def kl_divergence(
+    p_event: np.ndarray,
+    p_base: np.ndarray,
+    epsilon: float = DEFAULT_BASD_EPSILON,
+) -> float:
+    """Kullback–Leibler divergence D_KL(P_event ‖ P_base) in **bits**.
+
+    Both inputs are treated as (already smoothed) probability vectors of the same
+    length; *epsilon* is re-applied defensively in case a caller passes a raw or
+    un-smoothed distribution, guaranteeing the log and the ratio stay finite.
+    The result is asymmetric (``kl_divergence(a, b) != kl_divergence(b, a)``) and
+    non-negative.
+    """
+    pe = _normalise_distribution(np.asarray(p_event, dtype=float), epsilon)
+    pb = _normalise_distribution(np.asarray(p_base, dtype=float), epsilon)
+    if pe.shape != pb.shape:
+        raise ValueError('P_event and P_base must have the same shape.')
+    # Σ pe * log2(pe / pb); both strictly positive after smoothing.
+    return float(np.sum(pe * np.log2(pe / pb)))
+
+
+def compute_basd(
+    baseline_data: object,
+    event_data: object,
+    time_resolved: bool = False,
+    epsilon: float = DEFAULT_BASD_EPSILON,
+) -> dict[str, object]:
+    """Baseline-Anchored Spectral Divergence between a baseline and an event.
+
+    Parameters
+    ----------
+    baseline_data, event_data
+        θ/α/β band powers for the two states, in any form accepted by
+        ``_band_power_matrix``: a ``{band: power}`` mapping, a 1-D 3-vector, or a
+        2-D ``(n_windows, 3)`` array of per-window powers. The baseline is always
+        collapsed to a single prior P_base by averaging its band powers over the
+        baseline duration, then normalising so Σ P_base = 1.
+    time_resolved
+        If ``False`` (default) the event is likewise block-averaged into one
+        P_event and a single scalar BASD is returned. If ``True`` the event must
+        be 2-D; each event window is normalised on its own and scored against the
+        shared P_base, yielding a BASD *time series* (plus its mean / std / peak).
+    epsilon
+        Laplace smoothing added to every band power before normalisation
+        (see ``DEFAULT_BASD_EPSILON``) — prevents log(0) / divide-by-zero.
+
+    Returns
+    -------
+    dict with:
+        ``bands``            – band order, ``['theta', 'alpha', 'beta']``.
+        ``p_base``           – baseline probability vector (sums to 1).
+        ``p_event``          – event probability vector, or ``(n_windows, 3)``
+                               matrix when ``time_resolved``.
+        ``basd_bits``        – the headline divergence in bits: the block KL, or
+                               the mean of the per-window KL when time-resolved.
+        ``basd_per_window``  – per-window KL array (``time_resolved`` only).
+        ``basd_std`` / ``basd_peak`` – dispersion / maximum of the series
+                               (``time_resolved`` only).
+        ``epsilon``          – the smoothing constant actually used.
+
+    Interpretation: BASD is in bits and bounded below by 0 (event ≡ baseline).
+    There is no fixed upper bound, but with three bands and ε smoothing it is
+    finite; larger values mean the event spectrum sits further from the subject's
+    resting θ/α/β prior. Report it alongside which band gained/lost mass
+    (``p_event − p_base``), since the scalar alone does not name the direction.
+    """
+    base_matrix = _band_power_matrix(baseline_data)
+    p_base = _normalise_distribution(base_matrix.mean(axis=0), epsilon)
+    band_names = [name for name, _ in BAND_DEFINITIONS]
+
+    if not time_resolved:
+        event_matrix = _band_power_matrix(event_data)
+        p_event = _normalise_distribution(event_matrix.mean(axis=0), epsilon)
+        return {
+            'bands': band_names,
+            'p_base': p_base,
+            'p_event': p_event,
+            'basd_bits': kl_divergence(p_event, p_base, epsilon=epsilon),
+            'epsilon': float(epsilon),
+        }
+
+    event_matrix = _band_power_matrix(event_data)
+    if event_matrix.shape[0] < 1:
+        raise ValueError('Time-resolved BASD needs at least one event window.')
+    p_event = np.vstack([
+        _normalise_distribution(row, epsilon) for row in event_matrix])
+    per_window = np.array([
+        kl_divergence(row, p_base, epsilon=epsilon) for row in p_event],
+        dtype=float)
+    return {
+        'bands': band_names,
+        'p_base': p_base,
+        'p_event': p_event,
+        'basd_bits': float(per_window.mean()),
+        'basd_per_window': per_window,
+        'basd_std': float(per_window.std()),
+        'basd_peak': float(per_window.max()),
+        'epsilon': float(epsilon),
+    }
+
+
+def compute_basd_from_segments(
+    data_col: np.ndarray,
+    baseline_range: tuple[float, float],
+    event_range: tuple[float, float],
+    fs: float = DEFAULT_FS,
+    win_sec: float = DEFAULT_WIN_SEC,
+    step_sec: float | None = None,
+    nperseg: int | None = None,
+    noverlap: int | None = None,
+    time_resolved: bool = False,
+    epsilon: float = DEFAULT_BASD_EPSILON,
+) -> dict[str, object]:
+    """Convenience wrapper that computes BASD straight from a raw channel.
+
+    The baseline / event ``(start_s, end_s)`` intervals are cut from
+    *data_col*, Welch-analysed with identical settings (so the comparison is not
+    confounded), and reduced to θ/α/β band energies via ``compute_state_entropy``
+    — the same pooled / per-window machinery used by ``compare_baseline_event``.
+    The pooled band energies form each block distribution; in ``time_resolved``
+    mode the event's per-window band energies (one distribution per window) are
+    taken from the windowed pass instead of the pooled average.
+
+    Returns the ``compute_basd`` dict augmented with ``baseline_range`` /
+    ``event_range`` for provenance.
+    """
+    signal_1d = np.asarray(data_col, dtype=float).reshape(-1)
+
+    def _slice(rng: tuple[float, float], which: str) -> np.ndarray:
+        lo_s, hi_s = float(rng[0]), float(rng[1])
+        if hi_s <= lo_s:
+            raise ValueError(f'{which} range end must be greater than start.')
+        lo = max(0, int(round(lo_s * fs)))
+        hi = min(signal_1d.size, int(round(hi_s * fs)))
+        seg = signal_1d[lo:hi]
+        if seg.size < int(round(win_sec * fs)):
+            raise ValueError(
+                f'{which} interval [{lo_s:g}, {hi_s:g}]s yields fewer than one '
+                f'{win_sec:g}s window after clipping to the recording.')
+        return seg
+
+    base_state = compute_state_entropy(
+        _slice(baseline_range, 'baseline'), fs=fs, win_sec=win_sec,
+        step_sec=step_sec, nperseg=nperseg, noverlap=noverlap)
+    baseline_data = base_state['energies']
+
+    if time_resolved:
+        ev = compute_band_entropy_windowed(
+            _slice(event_range, 'event'), fs=fs, win_sec=win_sec,
+            step_sec=step_sec, nperseg=nperseg, noverlap=noverlap)
+        band_names = [name for name, _ in BAND_DEFINITIONS]
+        event_data = np.column_stack([ev[f'E_{b}'] for b in band_names])
+    else:
+        event_state = compute_state_entropy(
+            _slice(event_range, 'event'), fs=fs, win_sec=win_sec,
+            step_sec=step_sec, nperseg=nperseg, noverlap=noverlap)
+        event_data = event_state['energies']
+
+    result = compute_basd(
+        baseline_data, event_data, time_resolved=time_resolved, epsilon=epsilon)
+    result['baseline_range'] = (float(baseline_range[0]), float(baseline_range[1]))
+    result['event_range'] = (float(event_range[0]), float(event_range[1]))
+    return result
 
 
 def _normalise_mi_signal(values: np.ndarray) -> np.ndarray:

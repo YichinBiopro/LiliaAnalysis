@@ -8,7 +8,7 @@
 | --- | --- |
 | `data_analysis.py` | 比較 APP 與 NUC EEG 資料，進行前處理、500→200 Hz downsampling、TinyUNetV4 模型推論，並輸出分析圖（含 qEEG indices 圖） |
 | `qeeg_indices.py` | 實作 Appendix J §3 的 qEEG wellness indices（Focus / Flow / Calm / Relaxation），可獨立執行或被其他 script 匯入 |
-| `spectral_entropy.py` | 使用 Welch PSD 計算 theta / alpha / beta 三個頻段能量、正規化成比例後計算 BandEn；另含 baseline-vs-event 比較、左右腦非零時滯互資訊同步，以及 joint probability distribution → mutual information 模式（可選 TinyUNetV4 denoise 後的 ch1/ch2） |
+| `spectral_entropy.py` | 使用 Welch PSD 計算 theta / alpha / beta 三個頻段能量、正規化成比例後計算 BandEn；另含 baseline-vs-event 比較、Baseline-Anchored Spectral Divergence（BASD，KL divergence）、左右腦非零時滯互資訊同步，以及 joint probability distribution → mutual information 模式（可選 TinyUNetV4 denoise 後的 ch1/ch2） |
 | `eeg_quality_v2.py` | 從 SleepStage 抽出的獨立 EEG quality v2 scorer，核心為 `get_eeg_quality_index_v2_parametric()`，搭配 `DEFAULT` / `BEST_MEAN_ABS_CORR` 參數集與 `get_best_eeg_quality_v2_flat_spectrum_only_params()`；另含針對 iBrainCenter 4-ch 消費級裝置實測校準的 `get_ibrain_device_eeg_quality_v2_params()`（主流程預設採用） |
 | `eeg_utils.py` | 共用低階工具：`load_merged_csv()`（4-row header CSV 載入）、`bandpass_filter()`（零相位 Butterworth bandpass） |
 | `merge_subject_csvs.py` | 將 `iBrainCenter/` 與 `YoGa/` 底下各 subject 的多個 CSV 合併為單一 `merged.csv` |
@@ -246,6 +246,17 @@ python qeeg_indices.py --csv <path.csv> [--fs 500] [--ch 1] [--win 5] [--out <di
 > **分箱策略（`--mi-binning`，重點）：** 預設為 **quantile（等機率分箱）**——各軸 bin 邊界放在資料分位數上，使每個 bin 樣本數 ≈ 相等。對乾電極 EEG 這類重尾、含假影的訊號至關重要：等寬（`uniform`）分箱會被假影撐大的振幅範圍稀釋，使分布塌縮到中央少數 bin（邊際熵遠低於 `log2(bins)` 上限），嚴重低估 MI（實測差約 5×：0.025 → 0.133 bits）。quantile 分箱讓邊際熵達到 `log2(bins)` 上限，並對重尾穩健。熱圖以等格的 **bin-index（copula / rank）空間** 呈現，邊際因等機率而呈平坦，對角線上的相依結構（MI 實際量到的部分）才看得見。
 
 > **偏差與顯著性：** plug-in 直方圖 MI 為正偏；因此同時回報 **Miller–Madow 偏差校正 MI**，以及 **circular-shift surrogate 虛無分布**（保留各通道自相關、僅破壞跨通道耦合）給出的 p-value 與 z 分數。
+
+### Baseline-Anchored Spectral Divergence（BASD，KL divergence）
+
+以 **Kullback–Leibler 相對熵**量化從 baseline 到 event 的頻譜位移，函式為 `compute_basd`（接受頻段能量；輸入可為 `{band: power}` dict、1-D 三元向量、或 `(n_windows, 3)` 矩陣）與 `compute_basd_from_segments`（直接吃原始 channel 與 `(start_s, end_s)` 區間）：
+
+- 將 baseline 各 window 的頻段能量平均後正規化為先驗分布 `P_base`（`Σ P_base = 1`）。
+- event 可整段平均為單一 `P_event`，或以 `time_resolved=True` 對每個 window 各自正規化，得到 BASD 時序（含 `basd_per_window` / `basd_std` / `basd_peak`）。
+- `D_KL(P_event ‖ P_base) = Σ P_event(k) · log2[P_event(k) / P_base(k)]`（bits），下界為 0（兩分布相同），值越大代表 event 頻譜離受試者自身靜息 θ/α/β 先驗越遠。
+- 對每個頻段能量加上 `DEFAULT_BASD_EPSILON = 1e-9` 的 Laplace 平滑後再正規化，避免某頻段能量歸零時出現 `log(0)` 或除以零。
+
+> **為何選 KL divergence 而非 Shannon entropy：** BandEn `H(P)` 是**單一狀態**的純量，只衡量 θ/α/β 分布有多平坦，對「能量落在哪個頻段」完全無感——`(θ=0.7, α=0.2, β=0.1)` 與 `(θ=0.1, α=0.2, β=0.7)` 的熵相同。對 baseline→event 對比而言這恰好是錯的：把能量由 β 移到 α 的冥想／閉眼位移幾乎不改變熵，卻正是我們要量的訊號。KL divergence 是**有方向、以 baseline 為錨**的：它量「用 baseline 最佳化的編碼去描述 event 頻譜要浪費多少 bits」，相同時為 0、否則嚴格為正，且對**頻段身分**敏感，因此即使整體平坦度不變，θ→α→β 的重分配仍會被偵測到。以 `P_event ‖ P_base` 為序是刻意的——期望值取在 event 上（「在靜息先驗下 event 有多意外」），即名稱 BASD 所指的非對稱、以 baseline 為錨的讀法。
 
 ### 獨立執行
 
