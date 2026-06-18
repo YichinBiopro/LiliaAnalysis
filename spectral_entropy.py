@@ -29,6 +29,22 @@ Method
 6. Optionally compute left-right synchrony from non-zero-lag mutual
    information I(X(t); Y(t+tau)) using small positive delays tau.
 
+Joint-distribution / mutual-information mode (``--joint-mi``)
+------------------------------------------------------------
+Estimate the 2-D **joint probability distribution** P(X, Y) of two channels and
+the mutual information it implies, I(X;Y) = H(X) + H(Y) − H(X,Y). With
+``--denoise`` the two channels are the outputs of the TinyUNetV4 neural denoiser
+(4 raw channels in → 2 *denoised* channels out @ 200 Hz, matching the
+``data_analysis`` inference pipeline) — i.e. "denoised ch1 vs denoised ch2".
+By default the joint histogram uses **equiprobable (quantile) binning**
+(``--mi-binning quantile``): per-axis edges at data quantiles keep every bin
+populated, which is essential on heavy-tailed dry-electrode EEG where equal-width
+bins collapse into a few central cells and badly under-estimate MI.
+Plug-in histogram MI is positively biased, so the Miller–Madow correction and a
+circular-shift surrogate null (p-value + z) are reported alongside it. Outputs:
+a P(X,Y) heatmap with marginals, a sliding-window zero-lag MI series, and a
+one-row summary CSV. See ``compute_joint_probability``.
+
 Baseline-vs-event mode (``--baseline`` / ``--event``)
 -----------------------------------------------------
 Instead of (only) a per-window entropy time series, this mode estimates a
@@ -54,6 +70,9 @@ CLI usage
                                [--tau-ms 5 10 15 20]
                                [--baseline START_S END_S --event START_S END_S]
                                [--clean] [--quality-threshold 0.5]
+                               [--joint-mi [--denoise | --joint-pair CH_X CH_Y]
+                                [--mi-bins 16] [--mi-binning quantile|uniform]
+                                [--mi-surrogates 200]]
 """
 
 from __future__ import annotations
@@ -77,6 +96,7 @@ try:
         EVENTS as _IBRAIN_EVENTS,
         EVT_COLORS as _IBRAIN_EVT_COLORS,
         hhmm_to_dt as _hhmm_to_dt,
+        hhmm_to_us as _hhmm_to_us,
     )
     _IBRAIN_AVAILABLE = True
 except ImportError:
@@ -170,10 +190,16 @@ def _smooth_series(values: np.ndarray, window: int = 5) -> np.ndarray:
     if window <= 1:
         return series.copy()
 
-    pad = window // 2
-    padded = np.pad(series, (pad, pad), mode='edge')
-    kernel = np.ones(window, dtype=float) / window
-    return np.convolve(padded, kernel, mode='valid')
+    # NaN-aware centred moving average. Low-quality windows are NaN-masked, so
+    # they are ignored when averaging (min_periods=1); the masked positions are
+    # then restored to NaN so a discarded window is never "filled in" from its
+    # neighbours — mirrors the smoothing/re-mask in plot_tflite_summary.
+    smoothed = (pd.Series(series)
+                .rolling(window, center=True, min_periods=1)
+                .mean()
+                .to_numpy())
+    smoothed[np.isnan(series)] = np.nan
+    return smoothed
 
 
 def _default_welch_params(segment_len: int, fs: float) -> tuple[int, int]:
@@ -626,6 +652,59 @@ def collect_clean_epochs(
     return clean, meta
 
 
+def compute_quality_windowed_aligned(
+    data_full: np.ndarray,
+    fs: float = DEFAULT_FS,
+    win_sec: float = DEFAULT_WIN_SEC,
+    step_sec: float | None = None,
+) -> np.ndarray:
+    """Channel-median EEG quality for each analysis window, aligned 1:1 with
+    ``compute_band_entropy_windowed`` (and the lagged-MI sync windows).
+
+    Quality is scored with the same method as plot_tflite_summary —
+    ``get_eeg_quality_index_v2_parametric`` (with ``QUALITY_PARAMS``) per window,
+    then the per-channel ``overall`` scores are reduced by the channel median.
+    The only difference is the window grid: plot_tflite_summary scores fixed 5 s
+    quality windows and maps them onto the 5 s qEEG windows, whereas here the
+    band-entropy windows are ``win_sec`` (default 2 s), so we score on those
+    exact windows to guarantee an exact 1:1 alignment for masking.
+
+    Returns a ``(n_windows,)`` array of channel-median quality in [0, 1].
+    """
+    if not _QC_AVAILABLE:
+        raise RuntimeError(
+            'Quality masking requires plot_event_markers / eeg_quality_v2 / '
+            'plot_tflite_summary to be importable.')
+    if step_sec is None:
+        step_sec = win_sec
+
+    win = int(round(win_sec * fs))
+    step = int(round(step_sec * fs))
+    data2d = np.asarray(data_full, dtype=float)
+    if data2d.ndim == 1:
+        data2d = data2d[:, None]
+    n = data2d.shape[0]
+
+    quality: list[float] = []
+    for start in range(0, n - win + 1, step):
+        seg = data2d[start:start + win]                       # (win, n_ch)
+        res = _eeg_quality_v2(seg.T, fs=fs, params=_QUALITY_PARAMS)
+        quality.append(float(np.median(res['overall'])))
+    return np.asarray(quality, dtype=float)
+
+
+def _mask_low_quality(result: dict, mask: np.ndarray, keys) -> None:
+    """Set masked (low-quality) windows to NaN, in place, for each of *keys*
+    present in *result*. ``time``/``quality`` axes are intentionally left whole
+    so the discarded windows still carry a timestamp and a quality value."""
+    for key in keys:
+        if key in result:
+            arr = np.asarray(result[key], dtype=float).copy()
+            if arr.shape[:1] == mask.shape:
+                arr[mask] = np.nan
+            result[key] = arr
+
+
 def _finalise_comparison(
     baseline_state: dict,
     event_state: dict,
@@ -715,14 +794,86 @@ def _normalise_mi_signal(values: np.ndarray) -> np.ndarray:
     return np.clip(signal_1d / std, -5.0, 5.0)
 
 
-def _histogram_mutual_information(
+def _joint_bin_edges(
+    x: np.ndarray,
+    y: np.ndarray,
+    bins: int,
+    binning: str,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return the (x_edges, y_edges) for the 2-D histogram.
+
+    ``'uniform'`` — a single shared set of equal-width edges spanning the pooled
+    range of both signals (legacy behaviour; fine for clean, comparably-scaled
+    signals but wastes bins when artefacts inflate the range).
+
+    ``'quantile'`` — per-axis *equiprobable* edges placed at data quantiles, so
+    every marginal bin holds ≈ the same number of samples. This adapts to the
+    real distribution, keeps all bins populated (each marginal entropy → its
+    log2(bins) ceiling) and is robust to the heavy-tailed artefacts typical of
+    dry-electrode EEG. Degenerate quantiles (ties / saturation) collapse via
+    ``np.unique``, which simply lowers the effective bin count for that axis.
+    """
+    if binning == 'uniform':
+        edges = np.histogram_bin_edges(np.concatenate([x, y]), bins=bins)
+        return edges, edges
+    if binning == 'quantile':
+        q = np.linspace(0.0, 1.0, bins + 1)
+        return np.unique(np.quantile(x, q)), np.unique(np.quantile(y, q))
+    raise ValueError("binning must be 'uniform' or 'quantile'.")
+
+
+def compute_joint_probability(
     sig_x: np.ndarray,
     sig_y: np.ndarray,
     *,
     bins: int = DEFAULT_MI_BINS,
-) -> float:
-    x = _normalise_mi_signal(sig_x)
-    y = _normalise_mi_signal(sig_y)
+    binning: str = 'uniform',
+    normalise_signals: bool = True,
+) -> dict[str, np.ndarray | float | int]:
+    """Estimate the 2-D joint probability distribution P(X, Y) of two equal-
+    length signals and the mutual information derived from it.
+
+    Method
+    ------
+    The two signals are (by default) z-scored and clipped to ±5 σ
+    (``_normalise_mi_signal``); the joint distribution ``pxy`` is then the
+    normalised 2-D histogram and the marginals ``px`` / ``py`` are its
+    row / column sums, so by construction ``pxy.sum() == 1`` and the marginals
+    are mutually consistent with the joint. ``binning`` selects the bin edges
+    (see ``_joint_bin_edges``): ``'quantile'`` (equiprobable, recommended for
+    real EEG) or ``'uniform'`` (equal-width, the default for backward
+    compatibility with the lagged-MI synchrony path).
+
+    Mutual information is read straight off the same distribution as
+
+        I(X; Y) = H(X) + H(Y) - H(X, Y)                         [bits]
+
+    which is algebraically identical to ``Σ P(x,y) log2[P(x,y)/(P(x)P(y))]`` but
+    keeps the joint and marginal entropies available for inspection.
+
+    Bias
+    ----
+    The plug-in (maximum-likelihood) entropy estimator is negatively biased, so
+    plug-in MI is *positively* biased — it grows with ``bins`` and shrinks with
+    sample size even for independent signals. The Miller–Madow bias-corrected MI
+    (``mutual_information_mm``) is therefore also returned; for an absolute,
+    defensible MI value prefer it and/or compare against the shuffled-surrogate
+    null in ``compute_joint_mi_significance``.
+
+    Returns
+    -------
+    dict with the joint PMF ``pxy`` (nx × ny), marginals ``px`` / ``py``, the
+    per-axis bin edges ``x_edges`` / ``y_edges``, the three entropies (bits),
+    the plug-in and Miller–Madow ``mutual_information`` / ``mutual_information_mm``
+    (bits), the normalised MI (plug-in MI ÷ min(H(X), H(Y))), the effective bin
+    counts ``n_bins_x`` / ``n_bins_y`` and the sample count.
+    """
+    if normalise_signals:
+        x = _normalise_mi_signal(sig_x)
+        y = _normalise_mi_signal(sig_y)
+    else:
+        x = np.asarray(sig_x, dtype=float).reshape(-1)
+        y = np.asarray(sig_y, dtype=float).reshape(-1)
     if x.size != y.size:
         raise ValueError('Signals must have the same length for mutual information.')
     if x.size < 8:
@@ -730,24 +881,82 @@ def _histogram_mutual_information(
     if bins < 2:
         raise ValueError('bins must be at least 2.')
 
-    all_values = np.concatenate([x, y])
-    edges = np.histogram_bin_edges(all_values, bins=bins)
-    if edges.size < 3:
-        return 0.0
+    x_edges, y_edges = _joint_bin_edges(x, y, bins, binning)
 
-    joint, _, _ = np.histogram2d(x, y, bins=(edges, edges))
+    def _empty() -> dict[str, np.ndarray | float | int]:
+        nx = max(1, x_edges.size - 1)
+        ny = max(1, y_edges.size - 1)
+        return {
+            'pxy': np.zeros((nx, ny), dtype=float),
+            'px': np.zeros(nx, dtype=float), 'py': np.zeros(ny, dtype=float),
+            'x_edges': x_edges, 'y_edges': y_edges,
+            'entropy_x': 0.0, 'entropy_y': 0.0, 'entropy_xy': 0.0,
+            'mutual_information': 0.0, 'mutual_information_mm': 0.0,
+            'mutual_information_norm': 0.0,
+            'n_bins_x': nx, 'n_bins_y': ny, 'n_samples': int(x.size),
+        }
+
+    if x_edges.size < 3 or y_edges.size < 3:
+        return _empty()
+
+    joint, _, _ = np.histogram2d(x, y, bins=(x_edges, y_edges))
     total = float(joint.sum())
     if total <= EPSILON:
-        return 0.0
+        return _empty()
 
     pxy = joint / total
-    px = pxy.sum(axis=1, keepdims=True)
-    py = pxy.sum(axis=0, keepdims=True)
-    denom = px * py
-    valid = pxy > 0
-    if not np.any(valid):
-        return 0.0
-    return float(np.sum(pxy[valid] * np.log2(pxy[valid] / denom[valid])))
+    px = pxy.sum(axis=1)
+    py = pxy.sum(axis=0)
+
+    h_x = shannon_entropy(px, normalise=False)
+    h_y = shannon_entropy(py, normalise=False)
+    h_xy = shannon_entropy(pxy.reshape(-1), normalise=False)
+    mi = max(0.0, h_x + h_y - h_xy)
+
+    # Miller–Madow correction: Ĥ_MM = Ĥ + (m̂ − 1) / (2N), where m̂ is the number
+    # of occupied bins (nats); the /ln2 converts the correction term to bits.
+    inv2n_ln2 = 1.0 / (2.0 * total * np.log(2.0))
+    m_x = int(np.count_nonzero(px))
+    m_y = int(np.count_nonzero(py))
+    m_xy = int(np.count_nonzero(pxy))
+    h_x_mm = h_x + (m_x - 1) * inv2n_ln2
+    h_y_mm = h_y + (m_y - 1) * inv2n_ln2
+    h_xy_mm = h_xy + (m_xy - 1) * inv2n_ln2
+    mi_mm = max(0.0, h_x_mm + h_y_mm - h_xy_mm)
+
+    denom = min(h_x, h_y)
+    mi_norm = float(mi / denom) if denom > EPSILON else 0.0
+
+    return {
+        'pxy': pxy,
+        'px': px,
+        'py': py,
+        'x_edges': x_edges,
+        'y_edges': y_edges,
+        'entropy_x': float(h_x),
+        'entropy_y': float(h_y),
+        'entropy_xy': float(h_xy),
+        'mutual_information': float(mi),
+        'mutual_information_mm': float(mi_mm),
+        'mutual_information_norm': mi_norm,
+        'n_bins_x': int(px.size),
+        'n_bins_y': int(py.size),
+        'n_samples': int(x.size),
+    }
+
+
+def _histogram_mutual_information(
+    sig_x: np.ndarray,
+    sig_y: np.ndarray,
+    *,
+    bins: int = DEFAULT_MI_BINS,
+    binning: str = 'uniform',
+) -> float:
+    """Plug-in histogram MI in bits (thin wrapper over the joint distribution)."""
+    return float(
+        compute_joint_probability(sig_x, sig_y, bins=bins, binning=binning)[
+            'mutual_information']
+    )
 
 
 def compute_lagged_mutual_information(
@@ -875,6 +1084,323 @@ def compute_lagged_interhemispheric_sync_windowed(
     for key, values in sync_by_tau.items():
         result[key] = np.asarray(values, dtype=float)
     return result
+
+
+def compute_joint_mi_windowed(
+    sig_x: np.ndarray,
+    sig_y: np.ndarray,
+    *,
+    fs: float = DEFAULT_FS,
+    win_sec: float = DEFAULT_WIN_SEC,
+    step_sec: float | None = None,
+    bins: int = DEFAULT_MI_BINS,
+    binning: str = 'uniform',
+) -> dict[str, np.ndarray]:
+    """Per-window *zero-lag* mutual information I(X(t); Y(t)) between two channels.
+
+    Companion to ``compute_lagged_interhemispheric_sync_windowed`` but at τ = 0:
+    it tracks the instantaneous shared information between the two (denoised)
+    channels by re-estimating their joint probability distribution in each
+    sliding window. Each window is normalised independently, so the series is
+    insensitive to slow amplitude drift between windows.
+
+    Returns ``time`` plus ``joint_mi`` (bits) and ``joint_mi_norm``.
+    """
+    if win_sec <= 0:
+        raise ValueError('win_sec must be positive.')
+    if step_sec is None:
+        step_sec = win_sec
+    if step_sec <= 0:
+        raise ValueError('step_sec must be positive.')
+    if bins < 2:
+        raise ValueError('bins must be at least 2.')
+
+    x = np.asarray(sig_x, dtype=float).reshape(-1)
+    y = np.asarray(sig_y, dtype=float).reshape(-1)
+    n = min(x.size, y.size)
+    if n == 0:
+        raise ValueError('Input signals must not be empty.')
+    x, y = x[:n], y[:n]
+
+    win = int(round(win_sec * fs))
+    step = int(round(step_sec * fs))
+    if win < 8:
+        raise ValueError('Window length is too short for mutual information.')
+    if step < 1:
+        raise ValueError('Step size is too small.')
+    if n < win:
+        raise ValueError('Signal is shorter than one analysis window.')
+
+    times: list[float] = []
+    joint_mi: list[float] = []
+    joint_mi_norm: list[float] = []
+    for start in range(0, n - win + 1, step):
+        joint = compute_joint_probability(
+            x[start:start + win], y[start:start + win], bins=bins, binning=binning)
+        times.append((start + win // 2) / fs)
+        joint_mi.append(float(joint['mutual_information']))
+        joint_mi_norm.append(float(joint['mutual_information_norm']))
+
+    return {
+        'time': np.asarray(times, dtype=float),
+        'joint_mi': np.asarray(joint_mi, dtype=float),
+        'joint_mi_norm': np.asarray(joint_mi_norm, dtype=float),
+    }
+
+
+def compute_joint_mi_significance(
+    sig_x: np.ndarray,
+    sig_y: np.ndarray,
+    *,
+    bins: int = DEFAULT_MI_BINS,
+    binning: str = 'uniform',
+    n_surrogates: int = 200,
+    seed: int = 0,
+) -> dict[str, float]:
+    """Assess whether the observed MI exceeds chance via a circular-shift null.
+
+    Plug-in histogram MI is positively biased, so a non-zero value is not by
+    itself evidence of dependence. Each surrogate circularly shifts ``Y`` by a
+    random offset — this destroys the cross-channel coupling while preserving
+    each channel's own autocorrelation and amplitude distribution — and MI is
+    recomputed. The one-sided p-value is the fraction of surrogates whose MI is
+    ≥ the observed MI (add-one smoothed), and ``z`` is the standardised excess
+    over the surrogate mean.
+
+    Returns the observed MI, surrogate mean/std, ``p_value`` and ``z``.
+    """
+    x = np.asarray(sig_x, dtype=float).reshape(-1)
+    y = np.asarray(sig_y, dtype=float).reshape(-1)
+    n = min(x.size, y.size)
+    x, y = x[:n], y[:n]
+    observed = _histogram_mutual_information(x, y, bins=bins, binning=binning)
+    if n_surrogates <= 0 or n < 16:
+        return {'mutual_information': float(observed), 'surrogate_mean': float('nan'),
+                'surrogate_std': float('nan'), 'p_value': float('nan'),
+                'z': float('nan'), 'n_surrogates': 0}
+
+    rng = np.random.default_rng(seed)
+    # Avoid trivial (near-zero) shifts that barely perturb the alignment.
+    shifts = rng.integers(low=max(1, n // 100), high=n, size=int(n_surrogates))
+    surrogate = np.empty(int(n_surrogates), dtype=float)
+    for i, shift in enumerate(shifts):
+        surrogate[i] = _histogram_mutual_information(
+            x, np.roll(y, int(shift)), bins=bins, binning=binning)
+
+    s_mean = float(surrogate.mean())
+    s_std = float(surrogate.std())
+    p_value = float((np.sum(surrogate >= observed) + 1) / (surrogate.size + 1))
+    z = float((observed - s_mean) / s_std) if s_std > EPSILON else float('nan')
+    return {'mutual_information': float(observed), 'surrogate_mean': s_mean,
+            'surrogate_std': s_std, 'p_value': p_value, 'z': z,
+            'n_surrogates': int(surrogate.size)}
+
+
+def denoise_channels(
+    data_raw: np.ndarray,
+    fs: float = DEFAULT_FS,
+) -> tuple[np.ndarray, float]:
+    """Produce the two denoised EEG channels with the TinyUNetV4 neural model.
+
+    Mirrors the inference pipeline in ``data_analysis`` exactly so the denoised
+    channels here match the rest of the project: filter (bandpass → notch →
+    bandstop) at *fs*, resample to the model's 200 Hz training rate, then run
+    overlap-add inference (4 raw channels in → 2 denoised channels out).
+
+    Returns ``(denoised (N, 2) float array, fs_out)`` where ``fs_out`` is the
+    model's output sampling rate (200 Hz). Requires PyTorch and the
+    ``eeg_denoise`` model package (imported lazily via ``data_analysis``).
+    """
+    try:
+        import data_analysis as da  # noqa: WPS433 (lazy: heavy torch dependency)
+    except Exception as exc:  # pragma: no cover - environment-dependent
+        raise RuntimeError(
+            'Neural denoising requires data_analysis (PyTorch + the eeg_denoise '
+            'TinyUNetV4 package) to be importable.') from exc
+
+    data2d = np.asarray(data_raw, dtype=float)
+    if data2d.ndim == 1:
+        data2d = data2d[:, None]
+    if data2d.shape[1] < da.N_CH:
+        raise ValueError(
+            f'Denoiser expects {da.N_CH} input channels, got {data2d.shape[1]}.')
+
+    filt = da.apply_filters(data2d[:, :da.N_CH])
+    t_idx = np.arange(filt.shape[0], dtype=float)
+    _, filt_ds = da.downsample_data(t_idx, filt, fs_in=fs, fs_out=da.DOWNSAMPLED_FS)
+    model = da.load_model()
+    denoised = da.run_model(model, filt_ds)
+    return np.asarray(denoised, dtype=float), float(da.DOWNSAMPLED_FS)
+
+
+def compute_event_pre_onset_joint_mi(
+    sig_x: np.ndarray,
+    sig_y: np.ndarray,
+    time_us_epoch: int,
+    *,
+    fs: float = DEFAULT_FS,
+    pre_sec: float = 30.0,
+    onset_sec: float = 30.0,
+    bins: int = DEFAULT_MI_BINS,
+    binning: str = 'quantile',
+) -> list[dict]:
+    """For each iBrainCenter event, compare the two channels' joint distribution
+    *just before* the event with the distribution *at its onset*.
+
+    For an event starting at absolute time ``onset_us`` the two intervals are
+        pre-event : [onset − pre_sec, onset)
+        onset     : [onset,          onset + onset_sec)
+    both relative to ``time_us_epoch`` (the UTC µs of sample 0). Each interval
+    yields a joint probability distribution P(X, Y) and the MI it implies, so a
+    shift in interhemispheric coupling around the event onset is directly
+    visible (ΔMI = onset − pre).
+
+    Events whose pre- or onset-window falls outside the recording (fewer than
+    ~1 s of data) are skipped. Returns one dict per usable event with the two
+    ``compute_joint_probability`` results and the headline MI values.
+    """
+    if not _IBRAIN_AVAILABLE:
+        raise RuntimeError('iBrainCenter event definitions are unavailable.')
+
+    n = min(sig_x.size, sig_y.size)
+    min_n = max(8, int(round(fs)))            # need ≳ 1 s per window
+    results: list[dict] = []
+    for name, start_hhmm, _dur_min, _participants in _IBRAIN_EVENTS:
+        onset_rel_s = (_hhmm_to_us(start_hhmm) - int(time_us_epoch)) / 1e6
+        onset_idx = int(round(onset_rel_s * fs))
+        pre_lo = max(0, onset_idx - int(round(pre_sec * fs)))
+        pre_hi = min(n, onset_idx)
+        on_lo = max(0, onset_idx)
+        on_hi = min(n, onset_idx + int(round(onset_sec * fs)))
+        if (pre_hi - pre_lo) < min_n or (on_hi - on_lo) < min_n:
+            continue
+
+        pre = compute_joint_probability(
+            sig_x[pre_lo:pre_hi], sig_y[pre_lo:pre_hi], bins=bins, binning=binning)
+        onset = compute_joint_probability(
+            sig_x[on_lo:on_hi], sig_y[on_lo:on_hi], bins=bins, binning=binning)
+        results.append({
+            'name': name,
+            'onset_rel_s': float(onset_rel_s),
+            'pre': pre,
+            'onset': onset,
+            'pre_mi': float(pre['mutual_information']),
+            'onset_mi': float(onset['mutual_information']),
+            'delta_mi': float(onset['mutual_information'] - pre['mutual_information']),
+        })
+    return results
+
+
+def plot_event_pre_onset_comparison(
+    events: list[dict],
+    title: str,
+    outpath: str,
+    label_x: str = 'X',
+    label_y: str = 'Y',
+) -> None:
+    """Bar chart of pre-event vs onset joint MI for each iBrainCenter event,
+    so the change in coupling at every onset is comparable at a glance."""
+    if not events:
+        return
+    names = [e['name'] for e in events]
+    pre_mi = [e['pre_mi'] for e in events]
+    onset_mi = [e['onset_mi'] for e in events]
+    x = np.arange(len(names))
+    w = 0.4
+
+    fig, ax = plt.subplots(figsize=(max(8, 1.6 * len(names)), 4.5))
+    ax.bar(x - w / 2, pre_mi, width=w, color='#8c9bb5', label='pre-event')
+    ax.bar(x + w / 2, onset_mi, width=w, color='#d62728', label='onset')
+    for xi, (p, o) in enumerate(zip(pre_mi, onset_mi)):
+        ax.annotate(f'{o - p:+.3f}', (xi, max(p, o)), ha='center', va='bottom',
+                    fontsize=8, color='#333333')
+    ax.set_xticks(x)
+    ax.set_xticklabels(names, rotation=30, ha='right', fontsize=8)
+    ax.set_ylabel('joint MI (bits)')
+    ax.set_title(f'{title}\nPre-event vs onset joint MI — {label_x} vs {label_y} '
+                 f'(ΔMI = onset − pre annotated)')
+    ax.legend(loc='upper right', fontsize=9)
+    ax.grid(True, axis='y', alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(outpath, dpi=150)
+    plt.close(fig)
+    print(f'Saved: {outpath}')
+
+
+def plot_joint_distribution(
+    joint: dict[str, np.ndarray | float],
+    title: str,
+    outpath: str,
+    label_x: str = 'X',
+    label_y: str = 'Y',
+    sig: dict[str, float] | None = None,
+) -> None:
+    """Plot the 2-D joint probability distribution P(X, Y) as a heatmap with the
+    two marginals, annotated with the mutual information it implies."""
+    from matplotlib.gridspec import GridSpec
+
+    pxy = np.asarray(joint['pxy'], dtype=float)
+    px = np.asarray(joint['px'], dtype=float)
+    py = np.asarray(joint['py'], dtype=float)
+    x_edges = np.asarray(joint['x_edges'], dtype=float)
+    y_edges = np.asarray(joint['y_edges'], dtype=float)
+    nx, ny = pxy.shape
+
+    fig = plt.figure(figsize=(8.5, 8.5))
+    gs = GridSpec(2, 2, width_ratios=[4, 1], height_ratios=[1, 4],
+                  wspace=0.05, hspace=0.05)
+    ax_joint = fig.add_subplot(gs[1, 0])
+    ax_top = fig.add_subplot(gs[0, 0], sharex=ax_joint)
+    ax_right = fig.add_subplot(gs[1, 1], sharey=ax_joint)
+
+    # Plot the joint *mass* P(X,Y) in equal-cell bin-index space (the copula /
+    # rank view). With quantile binning the cells have very unequal widths in
+    # signal units, so a signal-axis density view collapses visually; in
+    # bin-index space every cell is equal, the marginals are flat by
+    # construction, and any off-diagonal structure (the actual dependence that
+    # MI measures) is directly visible. Tick labels carry the real edge values.
+    im = ax_joint.imshow(pxy.T, origin='lower', aspect='auto', cmap='magma',
+                         extent=[0, nx, 0, ny])
+    ax_joint.set_xlabel(f'{label_x} (z-scored; bin index)')
+    ax_joint.set_ylabel(f'{label_y} (z-scored; bin index)')
+
+    def _edge_ticks(ax, edges, n, axis):
+        pos = np.linspace(0, n, min(n + 1, 6))
+        labels = [f'{np.interp(p, np.arange(edges.size), edges):.2f}' for p in pos]
+        (ax.set_xticks if axis == 'x' else ax.set_yticks)(pos)
+        (ax.set_xticklabels if axis == 'x' else ax.set_yticklabels)(labels)
+
+    _edge_ticks(ax_joint, x_edges, nx, 'x')
+    _edge_ticks(ax_joint, y_edges, ny, 'y')
+
+    ax_top.bar(np.arange(nx) + 0.5, px, width=1.0, color='#4292c6')
+    ax_top.tick_params(labelbottom=False)
+    ax_top.set_ylabel('P(X)')
+    ax_right.barh(np.arange(ny) + 0.5, py, height=1.0, color='#41ab5d')
+    ax_right.tick_params(labelleft=False)
+    ax_right.set_xlabel('P(Y)')
+
+    cax = fig.add_axes([0.13, 0.06, 0.5, 0.015])
+    fig.colorbar(im, cax=cax, orientation='horizontal', label='P(X, Y) per cell')
+
+    lines = [
+        f"I(X;Y) = {float(joint['mutual_information']):.4f} bits",
+        f"I_MM   = {float(joint['mutual_information_mm']):.4f} bits",
+        f"I_norm = {float(joint['mutual_information_norm']):.4f}",
+        f"H(X) = {float(joint['entropy_x']):.3f}  H(Y) = {float(joint['entropy_y']):.3f}",
+        f"H(X,Y) = {float(joint['entropy_xy']):.3f}  N = {int(joint['n_samples'])}",
+    ]
+    if sig is not None and sig.get('n_surrogates', 0):
+        lines.append(
+            f"surrogate null: p = {sig['p_value']:.3g}, z = {sig['z']:.2f}")
+    ax_top.text(0.02, 0.95, '\n'.join(lines), transform=ax_top.transAxes,
+                va='top', ha='left', fontsize=9, family='monospace',
+                bbox=dict(boxstyle='round', fc='white', ec='0.7', alpha=0.85))
+
+    fig.suptitle(title, fontsize=13, fontweight='bold')
+    fig.savefig(outpath, dpi=150, bbox_inches='tight')
+    plt.close(fig)
+    print(f'Saved: {outpath}')
 
 
 def _overlay_ibrain_events(ax: plt.Axes, t_min, t_max, use_abs: bool) -> None:
@@ -1074,8 +1600,15 @@ def _parse_args() -> argparse.Namespace:
                               'builder in plot_tflite_summary. Requires the QC modules.'))
     parser.add_argument('--quality-threshold', type=float, default=_QUALITY_THRESHOLD,
                         metavar='Q',
-                        help=('Channel-median EEG quality (0-1) an epoch must reach to be '
-                              f'kept in --clean mode (default {_QUALITY_THRESHOLD:g}).'))
+                        help=('Channel-median EEG quality (0-1) threshold. Windows below '
+                              'this are NaN-masked in the band-entropy/sync time series, '
+                              'and it is also the keep threshold for --clean micro-epochs '
+                              f'(default {_QUALITY_THRESHOLD:g}).'))
+    parser.add_argument('--no-quality-mask', action='store_true', default=False,
+                        help=('Do not mask low-quality windows in the band-entropy/sync '
+                              'time series. By default each analysis window is scored with '
+                              'eeg_quality_v2 (same method as plot_tflite_summary) and '
+                              'windows below --quality-threshold are discarded (set NaN).'))
     parser.add_argument('--sync-pair', type=int, nargs=2, metavar=('LEFT', 'RIGHT'),
                         help='Optional 1-based left/right channel pair for lagged-MI synchrony.')
     parser.add_argument('--tau-ms', type=float, nargs='+', default=list(DEFAULT_TAU_MS),
@@ -1084,12 +1617,231 @@ def _parse_args() -> argparse.Namespace:
                               f'(default: {" ".join(f"{tau:g}" for tau in DEFAULT_TAU_MS)}).'))
     parser.add_argument('--mi-bins', type=int, default=DEFAULT_MI_BINS, metavar='N',
                         help=f'Histogram bins for mutual-information estimation (default {DEFAULT_MI_BINS}).')
+    parser.add_argument('--joint-mi', action='store_true', default=False,
+                        help=('Joint-distribution mode: estimate the 2-D joint probability '
+                              'distribution P(X,Y) of two channels and the mutual information '
+                              'it implies (whole-recording + sliding-window series + a 2-D '
+                              'heatmap). By default uses the two denoised channels (see '
+                              '--denoise); otherwise the --joint-pair channels.'))
+    parser.add_argument('--joint-pair', type=int, nargs=2, metavar=('CH_X', 'CH_Y'),
+                        default=[1, 2],
+                        help=('1-based channel pair for --joint-mi when NOT denoising '
+                              '(default: 1 2). Ignored under --denoise (the two model '
+                              'outputs are always used).'))
+    parser.add_argument('--denoise', action='store_true', default=False,
+                        help=('--joint-mi only: produce the two channels with the TinyUNetV4 '
+                              'neural denoiser (4 raw ch in → 2 denoised ch out @200 Hz), '
+                              'matching the data_analysis inference pipeline. Requires PyTorch '
+                              'and the eeg_denoise model package.'))
+    parser.add_argument('--mi-binning', choices=('quantile', 'uniform'),
+                        default='quantile',
+                        help=('--joint-mi only: histogram bin-edge strategy. "quantile" '
+                              '(default) places per-axis equiprobable edges so every bin '
+                              'is populated — robust to EEG artefacts and recommended. '
+                              '"uniform" uses equal-width edges (collapses when artefacts '
+                              'inflate the amplitude range).'))
+    parser.add_argument('--mi-surrogates', type=int, default=200, metavar='N',
+                        help=('--joint-mi only: number of circular-shift surrogates for the '
+                              'MI significance test (0 disables; default 200).'))
     parser.add_argument('--out', metavar='DIR',
                         help='Output directory (default: same dir as CSV).')
     parser.add_argument('--ibrain-events', action='store_true', default=False,
                         help=('Overlay iBrainCenter session event markers and '
                               'convert x-axis to absolute local time (UTC+8).'))
     return parser.parse_args()
+
+
+def _run_joint_mi_mode(args: argparse.Namespace,
+                       time_us: np.ndarray,
+                       data_filt: np.ndarray,
+                       data_raw: np.ndarray | None,
+                       outdir: str) -> None:
+    """Estimate the joint probability distribution of two channels and the
+    mutual information it implies.
+
+    Two channel sources:
+      * ``--denoise`` — the two outputs of the TinyUNetV4 neural denoiser
+        (4 raw ch → 2 denoised ch @ 200 Hz). This is the requested path:
+        "denoised ch1 / denoised ch2".
+      * otherwise     — the two ``--joint-pair`` channels of the (bandpassed)
+        signal at the recording's own sampling rate.
+
+    Outputs: a whole-recording joint-distribution heatmap (P(X,Y) + marginals +
+    MI), a sliding-window zero-lag MI series (CSV + PNG), and a one-row summary
+    CSV with the MI, its Miller–Madow correction and the surrogate-null test.
+
+    With ``--ibrain-events`` the MI time series additionally carries the
+    iBrainCenter event overlay (absolute local time), and a per-event
+    *pre-event vs onset* joint-distribution comparison is produced (CSV + bar
+    plot) so the change in coupling at each event onset is quantified.
+    """
+    bins = args.mi_bins
+    binning = args.mi_binning
+    if args.denoise:
+        if data_raw is None:
+            sys.exit('Error: --denoise needs the raw channels (do not combine with '
+                     'a path that drops them).')
+        print('Denoising channels with TinyUNetV4 '
+              '(4 raw ch → 2 denoised ch @200 Hz)…', flush=True)
+        try:
+            chans, fs_eff = denoise_channels(data_raw, fs=args.fs)
+        except (RuntimeError, ValueError) as exc:
+            sys.exit(f'Error: {exc}')
+        if chans.shape[1] < 2:
+            sys.exit('Error: denoiser returned fewer than two channels.')
+        sig_x, sig_y = chans[:, 0], chans[:, 1]
+        label_x, label_y = 'denoised ch1', 'denoised ch2'
+        pair_suffix = 'denoised_ch1_ch2'
+    else:
+        cx, cy = args.joint_pair
+        ix, iy = cx - 1, cy - 1
+        if ix < 0 or iy < 0:
+            sys.exit('Error: --joint-pair channels must be >= 1.')
+        if ix >= data_filt.shape[1] or iy >= data_filt.shape[1]:
+            sys.exit(f'Error: --joint-pair channel not found (file has '
+                     f'{data_filt.shape[1]} channels).')
+        if ix == iy:
+            sys.exit('Error: --joint-pair must specify two different channels.')
+        sig_x, sig_y = data_filt[:, ix], data_filt[:, iy]
+        fs_eff = args.fs
+        label_x, label_y = f'ch{cx}', f'ch{cy}'
+        pair_suffix = f'ch{cx}_ch{cy}'
+
+    print(f'Computing joint probability distribution & mutual information '
+          f'— {label_x} vs {label_y}, bins={bins} ({binning}), fs={fs_eff:g}Hz')
+
+    joint = compute_joint_probability(sig_x, sig_y, bins=bins, binning=binning)
+    sig = compute_joint_mi_significance(
+        sig_x, sig_y, bins=bins, binning=binning, n_surrogates=args.mi_surrogates)
+    win_result = compute_joint_mi_windowed(
+        sig_x, sig_y, fs=fs_eff, win_sec=args.win, step_sec=args.step,
+        bins=bins, binning=binning)
+
+    basename = os.path.splitext(os.path.basename(args.csv))[0]
+    stem = f'{basename}_joint_mi_{pair_suffix}'
+
+    # ── Whole-recording summary (one row) ───────────────────────────────────────
+    summary = {
+        'channel_x': label_x, 'channel_y': label_y, 'fs_hz': fs_eff,
+        'mi_bins': bins, 'mi_binning': binning,
+        'n_bins_x': joint['n_bins_x'], 'n_bins_y': joint['n_bins_y'],
+        'n_samples': joint['n_samples'],
+        'mutual_information_bits': joint['mutual_information'],
+        'mutual_information_mm_bits': joint['mutual_information_mm'],
+        'mutual_information_norm': joint['mutual_information_norm'],
+        'entropy_x_bits': joint['entropy_x'], 'entropy_y_bits': joint['entropy_y'],
+        'entropy_xy_bits': joint['entropy_xy'],
+        'surrogate_n': sig['n_surrogates'], 'surrogate_mean_bits': sig['surrogate_mean'],
+        'surrogate_std_bits': sig['surrogate_std'],
+        'surrogate_p_value': sig['p_value'], 'surrogate_z': sig['z'],
+    }
+    summary_csv = os.path.join(outdir, f'{stem}_summary.csv')
+    pd.DataFrame([summary]).to_csv(summary_csv, index=False)
+    print(f'Saved: {summary_csv}')
+
+    # ── Sliding-window MI series ────────────────────────────────────────────────
+    series_csv = os.path.join(outdir, f'{stem}_timeseries.csv')
+    pd.DataFrame({
+        'time_s': win_result['time'],
+        'joint_mi': win_result['joint_mi'],
+        'joint_mi_norm': win_result['joint_mi_norm'],
+    }).to_csv(series_csv, index=False)
+    print(f'Saved: {series_csv}')
+
+    # ── Plots ───────────────────────────────────────────────────────────────────
+    heatmap_png = os.path.join(outdir, f'{stem}_distribution.png')
+    plot_joint_distribution(
+        joint,
+        title=(f'Joint P({label_x}, {label_y}) — {os.path.basename(args.csv)} '
+               f'[{binning}, {bins} bins]'),
+        outpath=heatmap_png, label_x=label_x, label_y=label_y, sig=sig)
+
+    # iBrainCenter event overlay (absolute local time) on the MI time series.
+    use_events = bool(args.ibrain_events)
+    if use_events and not _IBRAIN_AVAILABLE:
+        print('  [warn] --ibrain-events set but plot_event_markers unavailable — '
+              'skipping event overlay.')
+        use_events = False
+    t0_us = int(time_us[0])
+
+    series_png = os.path.join(outdir, f'{stem}_timeseries.png')
+    fig, ax = plt.subplots(figsize=(14, 3.2))
+    if use_events:
+        t_axis = _rel_times_to_dt(win_result['time'], t0_us)
+    else:
+        t_axis = win_result['time']
+    ax.plot(t_axis, win_result['joint_mi'], color='#111111', lw=1.0,
+            alpha=0.4, label='joint MI (bits)')
+    ax.plot(t_axis, _smooth_series(win_result['joint_mi']),
+            color='#111111', lw=2.0, label='joint MI smooth')
+    ax.set_ylabel('MI (bits)')
+    ax.set_ylim(bottom=0.0)
+    ax.set_title(f'Zero-lag mutual information — {label_x} vs {label_y} '
+                 f'(win={args.win:g}s)')
+    ax.grid(True, alpha=0.3)
+    if use_events:
+        _overlay_ibrain_events(ax, t_axis[0], t_axis[-1], use_abs=True)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+        ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+        ax.set_xlabel('Time (local, UTC+8)')
+        fig.autofmt_xdate(rotation=30, ha='right')
+    else:
+        ax.set_xlabel('Time (s)')
+    ax.legend(loc='upper right', fontsize=9)
+    fig.tight_layout()
+    fig.savefig(series_png, dpi=150)
+    plt.close(fig)
+    print(f'Saved: {series_png}')
+
+    # ── Pre-event vs onset joint-distribution comparison (--ibrain-events) ───────
+    if use_events:
+        events = compute_event_pre_onset_joint_mi(
+            sig_x, sig_y, t0_us, fs=fs_eff, bins=bins, binning=binning)
+        if not events:
+            print('  [warn] no iBrainCenter events fall within this recording — '
+                  'skipping pre-event/onset comparison.')
+        else:
+            ev_rows = [{
+                'event': e['name'], 'onset_rel_s': e['onset_rel_s'],
+                'pre_mi_bits': e['pre']['mutual_information'],
+                'pre_mi_mm_bits': e['pre']['mutual_information_mm'],
+                'pre_mi_norm': e['pre']['mutual_information_norm'],
+                'pre_n_samples': e['pre']['n_samples'],
+                'onset_mi_bits': e['onset']['mutual_information'],
+                'onset_mi_mm_bits': e['onset']['mutual_information_mm'],
+                'onset_mi_norm': e['onset']['mutual_information_norm'],
+                'onset_n_samples': e['onset']['n_samples'],
+                'delta_mi_bits': e['delta_mi'],
+            } for e in events]
+            events_csv = os.path.join(outdir, f'{stem}_events.csv')
+            pd.DataFrame(ev_rows).to_csv(events_csv, index=False)
+            print(f'Saved: {events_csv}')
+
+            events_png = os.path.join(outdir, f'{stem}_events.png')
+            plot_event_pre_onset_comparison(
+                events,
+                title=f'{os.path.basename(args.csv)} [{binning}, {bins} bins]',
+                outpath=events_png, label_x=label_x, label_y=label_y)
+
+            print('\nPre-event vs onset joint MI (bits):')
+            for e in events:
+                print(f'  {e["name"]:<24s}: pre={e["pre_mi"]:.4f}  '
+                      f'onset={e["onset_mi"]:.4f}  Δ={e["delta_mi"]:+.4f}')
+
+    # ── Summary to stdout ───────────────────────────────────────────────────────
+    print(f'\nJoint MI ({label_x} ↔ {label_y}):')
+    print(f'  I(X;Y)        : {joint["mutual_information"]:.4f} bits  '
+          f'(Miller–Madow {joint["mutual_information_mm"]:.4f}; '
+          f'norm {joint["mutual_information_norm"]:.4f})')
+    if sig['n_surrogates']:
+        print(f'  surrogate null: mean={sig["surrogate_mean"]:.4f}±'
+              f'{sig["surrogate_std"]:.4f} bits, p={sig["p_value"]:.3g}, '
+              f'z={sig["z"]:.2f} (n={sig["n_surrogates"]})')
+    finite = win_result['joint_mi'][np.isfinite(win_result['joint_mi'])]
+    if finite.size:
+        print(f'  windowed MI   : mean={finite.mean():.4f}, std={finite.std():.4f}, '
+              f'min={finite.min():.4f}, max={finite.max():.4f} '
+              f'(n={finite.size} windows)')
 
 
 def _run_baseline_event_mode(args: argparse.Namespace,
@@ -1214,6 +1966,11 @@ def main() -> None:
     if ch_idx >= data.shape[1]:
         sys.exit(f'Error: channel {args.ch} not found (file has {data.shape[1]} channels).')
 
+    # ── Joint-distribution / mutual-information mode ─────────────────────────────
+    if args.joint_mi:
+        _run_joint_mi_mode(args, time_us, data, data_raw, outdir)
+        return
+
     # ── Baseline-vs-event entropy mode ──────────────────────────────────────────
     if (args.baseline is None) != (args.event is None):
         sys.exit('Error: --baseline and --event must be supplied together.')
@@ -1269,6 +2026,34 @@ def main() -> None:
             apply_bandpass=False,
         )
 
+    # ── Quality masking (same scoring method as plot_tflite_summary) ────────────
+    # Score every analysis window with eeg_quality_v2, take the channel median,
+    # and discard (NaN-mask) windows below the threshold. Masked windows become
+    # gaps in the plot and blank cells in the CSV, so no band-entropy / sync
+    # value is ever reported for a window the quality scorer rejects.
+    quality = None
+    if not args.no_quality_mask:
+        if not _QC_AVAILABLE:
+            print('  [warn] quality modules unavailable — skipping quality masking '
+                  '(pass --no-quality-mask to silence).')
+        else:
+            print(f'  Scoring window quality (eeg_quality_v2, ch median) and masking '
+                  f'< {args.quality_threshold:g}…', flush=True)
+            quality = compute_quality_windowed_aligned(
+                data, fs=args.fs, win_sec=args.win, step_sec=args.step)
+            if quality.shape[0] != entropy_result['time'].shape[0]:
+                sys.exit('Error: quality window count does not match band-entropy windows.')
+            mask = quality < args.quality_threshold
+            entropy_keys = (['band_entropy', 'band_entropy_norm', 'total_energy']
+                            + [f'E_{n}' for n, _ in BAND_DEFINITIONS]
+                            + [f'p_{n}' for n, _ in BAND_DEFINITIONS])
+            _mask_low_quality(entropy_result, mask, entropy_keys)
+            if sync_result is not None:
+                sync_keys = [k for k in sync_result if k != 'time']
+                _mask_low_quality(sync_result, mask, sync_keys)
+            print(f'    masked {int(mask.sum())}/{mask.size} windows '
+                  f'({100.0 * mask.mean():.1f}%) below quality {args.quality_threshold:g}.')
+
     basename = os.path.splitext(os.path.basename(args.csv))[0]
     stem = f'{basename}_band_entropy_ch{args.ch}{sync_suffix}'
     csv_out = os.path.join(outdir, f'{stem}.csv')
@@ -1278,6 +2063,8 @@ def main() -> None:
     t_offset = float(time_s[0]) if time_s.size else 0.0
 
     csv_data = {'time_s': entropy_result['time'] + t_offset}
+    if quality is not None:
+        csv_data['quality'] = quality
     for name, _ in BAND_DEFINITIONS:
         csv_data[f'E_{name}'] = entropy_result[f'E_{name}']
     csv_data['E_total'] = entropy_result['total_energy']
@@ -1308,20 +2095,24 @@ def main() -> None:
         ibrain_events=args.ibrain_events,
     )
 
-    bits = entropy_result['band_entropy']
-    norm = entropy_result['band_entropy_norm']
+    # Summary statistics ignore NaN-masked (low-quality) windows.
+    def _stats(arr: np.ndarray) -> str:
+        a = np.asarray(arr, dtype=float)
+        if not np.any(np.isfinite(a)):
+            return 'no valid (all windows masked)'
+        return (f'mean={np.nanmean(a):.4f}, std={np.nanstd(a):.4f}, '
+                f'min={np.nanmin(a):.4f}, max={np.nanmax(a):.4f}')
+
     print('\nSummary:')
-    print(f'  band_entropy      : mean={bits.mean():.4f}, std={bits.std():.4f}, '
-          f'min={bits.min():.4f}, max={bits.max():.4f}')
-    print(f'  band_entropy_norm : mean={norm.mean():.4f}, std={norm.std():.4f}, '
-          f'min={norm.min():.4f}, max={norm.max():.4f}')
+    if quality is not None:
+        n_valid = int(np.sum(np.isfinite(entropy_result['band_entropy'])))
+        print(f'  valid windows     : {n_valid}/{quality.size} '
+              f'(quality ≥ {args.quality_threshold:g})')
+    print(f'  band_entropy      : {_stats(entropy_result["band_entropy"])}')
+    print(f'  band_entropy_norm : {_stats(entropy_result["band_entropy_norm"])}')
     if sync_result is not None:
-        sync_mean = sync_result['lagged_mi_mean']
-        sync_max = sync_result['lagged_mi_max']
-        print(f'  lagged_mi_mean    : mean={sync_mean.mean():.4f}, std={sync_mean.std():.4f}, '
-              f'min={sync_mean.min():.4f}, max={sync_mean.max():.4f}')
-        print(f'  lagged_mi_max     : mean={sync_max.mean():.4f}, std={sync_max.std():.4f}, '
-              f'min={sync_max.min():.4f}, max={sync_max.max():.4f}')
+        print(f'  lagged_mi_mean    : {_stats(sync_result["lagged_mi_mean"])}')
+        print(f'  lagged_mi_max     : {_stats(sync_result["lagged_mi_max"])}')
 
 
 if __name__ == '__main__':

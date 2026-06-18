@@ -8,7 +8,7 @@
 | --- | --- |
 | `data_analysis.py` | 比較 APP 與 NUC EEG 資料，進行前處理、500→200 Hz downsampling、TinyUNetV4 模型推論，並輸出分析圖（含 qEEG indices 圖） |
 | `qeeg_indices.py` | 實作 Appendix J §3 的 qEEG wellness indices（Focus / Flow / Calm / Relaxation），可獨立執行或被其他 script 匯入 |
-| `spectral_entropy.py` | 使用 Welch PSD 計算 delta / theta / alpha / beta / gamma 五個頻段能量、正規化成比例後計算 BandEn |
+| `spectral_entropy.py` | 使用 Welch PSD 計算 theta / alpha / beta 三個頻段能量、正規化成比例後計算 BandEn；另含 baseline-vs-event 比較、左右腦非零時滯互資訊同步，以及 joint probability distribution → mutual information 模式（可選 TinyUNetV4 denoise 後的 ch1/ch2） |
 | `eeg_quality_v2.py` | 從 SleepStage 抽出的獨立 EEG quality v2 scorer，核心為 `get_eeg_quality_index_v2_parametric()`，搭配 `DEFAULT` / `BEST_MEAN_ABS_CORR` 參數集與 `get_best_eeg_quality_v2_flat_spectrum_only_params()`；另含針對 iBrainCenter 4-ch 消費級裝置實測校準的 `get_ibrain_device_eeg_quality_v2_params()`（主流程預設採用） |
 | `eeg_utils.py` | 共用低階工具：`load_merged_csv()`（4-row header CSV 載入）、`bandpass_filter()`（零相位 Butterworth bandpass） |
 | `merge_subject_csvs.py` | 將 `iBrainCenter/` 與 `YoGa/` 底下各 subject 的多個 CSV 合併為單一 `merged.csv` |
@@ -27,7 +27,7 @@
 lilia_analysis/
 ├── data_analysis.py           # APP vs NUC 分析主程式
 ├── qeeg_indices.py            # qEEG wellness indices（Appendix J §3）
-├── spectral_entropy.py        # Welch PSD + five-band entropy
+├── spectral_entropy.py        # Welch PSD + three-band entropy + joint-MI
 ├── eeg_quality_v2.py          # 獨立 EEG quality v2 scorer
 ├── eeg_utils.py               # 共用工具：CSV 載入、bandpass filter
 ├── merge_subject_csvs.py      # 合併各 subject 的多個 CSV
@@ -212,19 +212,19 @@ python qeeg_indices.py --csv <path.csv> [--fs 500] [--ch 1] [--win 5] [--out <di
 
 ## spectral_entropy.py
 
-以 2 秒 EEG window 為單位，先用 Welch's method 計算 PSD，再整合五個 EEG 頻段能量：
+以 2 秒 EEG window 為單位，先用 Welch's method 計算 PSD，再整合三個任務相關 EEG 頻段能量：
 
-- Delta: 0.5–4 Hz
 - Theta: 4–8 Hz
 - Alpha: 8–13 Hz
 - Beta: 13–30 Hz
-- Gamma: 30–45 Hz
+
+> **為何丟棄 Delta / Gamma：** 與 `qeeg_indices.compute_relative_powers` 一致，僅以 θ/α/β 正規化、排除 delta（0.5–4 Hz，乾電極在動作時主要為移動 / 汗液 / 漂移假影）與 gamma（30–45 Hz，主要為 EMG 並逼近電源雜訊區）。這讓 BandEn 與 Flow / Focus / Calm / Relax 指標直接可比；最大熵由 log2(5) ≈ 2.322 bits 降為 log2(3) ≈ 1.585 bits。
 
 接著計算：
 
-- `E_total = E_delta + E_theta + E_alpha + E_beta + E_gamma`
+- `E_total = E_theta + E_alpha + E_beta`
 - `p_k = E_k / E_total`
-- `BandEn = -sum(p_k * log2(p_k))`
+- `BandEn = -sum(p_k * log2(p_k))`（最大值 log2(3) ≈ 1.585 bits）
 
 另外可選擇對一組左右通道加入**非零時滯互資訊**同步分析：
 
@@ -234,6 +234,18 @@ python qeeg_indices.py --csv <path.csv> [--fs 500] [--ch 1] [--win 5] [--out <di
 - 再輸出各 `tau`、`lagged_mi_mean`、`lagged_mi_max`、`lagged_mi_best_tau_ms`
 
 > **設計依據：** 容積傳導（volume conduction）為即時物理效應（時間差 ≈ 0），因此在 `tau = 0` 的互資訊中會被計入。引入 `tau > 0`（如 5–20 ms）可完全過濾這類偽同步訊號，抓到兩半球間真正的**動態資訊交換**（例如透過胼胝體的跨半球傳遞）。
+
+### Joint probability distribution → mutual information（`--joint-mi`）
+
+估計兩通道的 **2-D 聯合機率分布 `P(X, Y)`**，並由同一分布求互資訊：
+
+- `I(X; Y) = H(X) + H(Y) - H(X, Y)`（bits），代數上等同於 `Σ P(x,y) log2[P(x,y)/(P(x)P(y))]`
+- 加上 `--denoise` 時，兩通道為 **TinyUNetV4 神經網路去噪輸出**（4 raw ch 進 → 2 denoised ch 出 @ 200 Hz，與 `data_analysis.py` 推論流程一致），即「denoised ch1 vs denoised ch2」；否則使用 `--joint-pair` 指定的（bandpass 後）通道。
+- 輸出：整段錄製的 `P(X,Y)` 熱圖（含邊際分布與 MI 標註）、滑動視窗的零時滯 MI 時序，以及單列摘要 CSV。
+
+> **分箱策略（`--mi-binning`，重點）：** 預設為 **quantile（等機率分箱）**——各軸 bin 邊界放在資料分位數上，使每個 bin 樣本數 ≈ 相等。對乾電極 EEG 這類重尾、含假影的訊號至關重要：等寬（`uniform`）分箱會被假影撐大的振幅範圍稀釋，使分布塌縮到中央少數 bin（邊際熵遠低於 `log2(bins)` 上限），嚴重低估 MI（實測差約 5×：0.025 → 0.133 bits）。quantile 分箱讓邊際熵達到 `log2(bins)` 上限，並對重尾穩健。熱圖以等格的 **bin-index（copula / rank）空間** 呈現，邊際因等機率而呈平坦，對角線上的相依結構（MI 實際量到的部分）才看得見。
+
+> **偏差與顯著性：** plug-in 直方圖 MI 為正偏；因此同時回報 **Miller–Madow 偏差校正 MI**，以及 **circular-shift surrogate 虛無分布**（保留各通道自相關、僅破壞跨通道耦合）給出的 p-value 與 z 分數。
 
 ### 獨立執行
 
@@ -250,6 +262,17 @@ python spectral_entropy.py --csv <path.csv> --ibrain-events
 # 完整組合
 python spectral_entropy.py --csv iBrainCenter/Ann(SN027)/merged.csv \
     --ch 1 --sync-pair 1 2 --tau-ms 5 10 15 20 --ibrain-events
+
+# Joint probability distribution → mutual information（denoised ch1 vs ch2）
+python spectral_entropy.py --csv <path.csv> --joint-mi --denoise
+
+# 不去噪，直接比較 bandpass 後的 ch1 / ch2（可改分箱策略）
+python spectral_entropy.py --csv <path.csv> --joint-mi --joint-pair 1 2 \
+    --mi-binning quantile --mi-bins 16 --mi-surrogates 200
+
+# Joint MI 對齊活動：時序圖疊加事件 + 每個活動「事件前 vs 起始」分布比較
+python spectral_entropy.py --csv iBrainCenter/Hardy(SN036)/merged.csv \
+    --joint-mi --denoise --ibrain-events
 ```
 
 | 參數 | 預設 | 說明 |
@@ -262,18 +285,28 @@ python spectral_entropy.py --csv iBrainCenter/Ann(SN027)/merged.csv \
 | `--sync-pair` | 無 | 可選，指定 1-based 左右通道配對，追加非零時滯互資訊同步分析 |
 | `--tau-ms` | `5 10 15 20` | 可選，指定 lagged MI 的毫秒延遲列表，必須皆大於 0 |
 | `--mi-bins` | 16 | 互資訊直方圖分箱數 |
+| `--joint-mi` | 未設定 | 啟用 joint probability distribution → mutual information 模式（與 band-entropy / baseline 模式互斥，會直接執行並輸出後返回） |
+| `--joint-pair` | `1 2` | `--joint-mi` 非去噪時的 1-based 通道配對；`--denoise` 時忽略（固定用兩個模型輸出） |
+| `--denoise` | 未設定 | `--joint-mi` 限定：以 TinyUNetV4 產生兩個去噪通道（需 PyTorch 與 eeg_denoise 模型套件） |
+| `--mi-binning` | `quantile` | `--joint-mi` 限定：`quantile`（等機率，建議）或 `uniform`（等寬） |
+| `--mi-surrogates` | 200 | `--joint-mi` 限定：circular-shift surrogate 數量（0 關閉顯著性檢定） |
 | `--out` | CSV 所在目錄 | 輸出目錄 |
-| `--ibrain-events` | 未設定 | 啟用後：x 軸改為絕對本地時間（HH:MM:SS UTC+8），並在每個子圖疊加 iBrainCenter 活動色塊與起始標記 |
+| `--ibrain-events` | 未設定 | 啟用後：x 軸改為絕對本地時間（HH:MM:SS UTC+8），並疊加 iBrainCenter 活動色塊與起始標記；在 `--joint-mi` 模式下另外產生「事件前 vs 起始」聯合分布比較（見下節） |
 
 ### 活動標記說明（`--ibrain-events`）
 
-加上 `--ibrain-events` 後，所有子圖（Band Proportion × 5、BandEn、Sync）均會疊加下列視覺元素：
+加上 `--ibrain-events` 後，所有子圖（各 Band Proportion、BandEn、Sync）均會疊加下列視覺元素：
 
 - **色塊**（`axvspan`）：活動持續期間的半透明背景，每個活動有獨立顏色
 - **起始虛線**（`axvline`）：活動開始時間
 - **旋轉文字標籤**：標示活動名稱，貼齊起始線左緣
 
 活動定義來自 `plot_event_markers.EVENTS`（見 `plot_event_markers.py` 章節）。
+
+在 **`--joint-mi` 模式**下，`--ibrain-events` 還會：
+
+1. 將 **Zero-lag MI 時序圖** x 軸轉為絕對時間並疊加事件標記；
+2. 對每個活動，分別計算 **事件前 `[onset − 30s, onset)`** 與 **起始 `[onset, onset + 30s)`** 兩段的聯合機率分布 `P(X,Y)` 與 MI，並輸出 `ΔMI = onset − pre`（活動起始時左右腦耦合的變化量）。事件起始時間以絕對 UTC µs 對齊錄製時間戳，落在錄製範圍外或視窗不足的活動會自動略過。
 
 ### 輸出檔案
 
@@ -283,6 +316,10 @@ python spectral_entropy.py --csv iBrainCenter/Ann(SN027)/merged.csv \
 | `<basename>_band_entropy_ch<N>.png` | 每個 band 各自獨立子圖的比例時序圖，並疊加 smooth 趨勢線；最下方附 BandEn |
 | `<basename>_band_entropy_ch<N>_sync_ch<L>_ch<R>.csv` | 在原 BandEn 欄位外，追加各 `tau` 的 lagged MI、`lagged_mi_mean`、`lagged_mi_max`、`lagged_mi_best_tau_ms` |
 | `<basename>_band_entropy_ch<N>_sync_ch<L>_ch<R>.png` | 在原 BandEn 圖下方追加左右腦非零時滯互資訊同步面板；指定 `--ibrain-events` 時 x 軸改為絕對時間並疊加活動標記 |
+| `<basename>_joint_mi_<pair>_summary.csv` | （`--joint-mi`）單列摘要：通道、`fs`、`mi_bins`、`mi_binning`、有效 bin 數、樣本數、plug-in / Miller–Madow / 正規化 MI、各熵、surrogate 平均 / 標準差 / p-value / z；`<pair>` 為 `denoised_ch1_ch2` 或 `ch<X>_ch<Y>` |
+| `<basename>_joint_mi_<pair>_timeseries.csv` / `.png` | （`--joint-mi`）滑動視窗零時滯 MI 時序（`time_s`、`joint_mi`、`joint_mi_norm`）及其圖 |
+| `<basename>_joint_mi_<pair>_distribution.png` | （`--joint-mi`）聯合機率分布 `P(X,Y)` 熱圖（bin-index / copula 空間）＋邊際分布＋MI / 顯著性標註 |
+| `<basename>_joint_mi_<pair>_events.csv` / `.png` | （`--joint-mi --ibrain-events`）每個活動「事件前 vs 起始」的聯合 MI（plug-in / Miller–Madow / 正規化）、樣本數與 `ΔMI`，及其成對長條圖 |
 
 ---
 
