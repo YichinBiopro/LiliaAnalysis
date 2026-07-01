@@ -90,6 +90,17 @@ from scipy import signal
 
 from eeg_utils import bandpass_filter, load_merged_csv
 
+# ── qEEG Focus/Relax indices (optional import) ────────────────────────────────
+# The per-window (p_θ, p_α, p_β) proportions this module already computes are
+# *exactly* the relative band powers qeeg_indices.compute_relative_powers feeds
+# the wellness indices, so we can derive Focus/Relax per window with no extra
+# PSD work — just the closed-form index formulas.
+try:
+    from qeeg_indices import focus_index, relaxation_index
+    _QEEG_AVAILABLE = True
+except ImportError:
+    _QEEG_AVAILABLE = False
+
 # ── iBrainCenter event definitions (optional import) ──────────────────────────
 try:
     from plot_event_markers import (
@@ -182,12 +193,29 @@ BAND_DEFINITIONS = (
 DEFAULT_TAU_MS = (5.0, 10.0, 15.0, 20.0)
 DEFAULT_MI_BINS = 16
 
+# Centred moving-average length (in windows) for every smoothed trace. Module-
+# level so the CLI ``--smooth`` flag can retune it once, globally, rather than
+# threading a parameter through every plotting helper.
+DEFAULT_SMOOTH_WINDOW = 5
+SMOOTH_WINDOW = DEFAULT_SMOOTH_WINDOW
 
-def _smooth_series(values: np.ndarray, window: int = 5) -> np.ndarray:
+# Colour-blind-safe qualitative palette (Wong, 2011, *Nature Methods*) for the
+# θ/α/β bands, replacing the purple/green/orange triple that is not safe under
+# deuteranopia/protanopia. Reused for the stacked-area and ternary views so the
+# band identity is consistent across every figure.
+BAND_COLORS = {
+    'theta': '#0072B2',   # blue
+    'alpha': '#009E73',   # bluish green
+    'beta':  '#D55E00',   # vermillion
+}
+
+
+def _smooth_series(values: np.ndarray, window: int | None = None) -> np.ndarray:
     series = np.asarray(values, dtype=float).reshape(-1)
     if series.size <= 1:
         return series.copy()
 
+    window = SMOOTH_WINDOW if window is None else window
     window = max(1, min(window, series.size))
     if window % 2 == 0 and window > 1:
         window -= 1
@@ -204,6 +232,68 @@ def _smooth_series(values: np.ndarray, window: int = 5) -> np.ndarray:
                 .to_numpy())
     smoothed[np.isnan(series)] = np.nan
     return smoothed
+
+
+def _rolling_std(values: np.ndarray, window: int | None = None) -> np.ndarray:
+    """NaN-aware centred rolling standard deviation, aligned 1:1 with
+    ``_smooth_series``. Used to shade a ±1σ dispersion band around a smoothed
+    trace so a reader can tell a real excursion from window-to-window estimator
+    jitter. Masked (NaN) positions are restored to NaN, never interpolated."""
+    series = np.asarray(values, dtype=float).reshape(-1)
+    if series.size <= 1:
+        return np.zeros_like(series)
+    window = SMOOTH_WINDOW if window is None else window
+    window = max(1, min(window, series.size))
+    if window % 2 == 0 and window > 1:
+        window -= 1
+    if window <= 1:
+        return np.zeros_like(series)
+    std = (pd.Series(series)
+           .rolling(window, center=True, min_periods=2)
+           .std()
+           .to_numpy())
+    std[np.isnan(series)] = np.nan
+    return std
+
+
+def _git_commit() -> str:
+    """Short git commit hash of the working tree, or 'unknown' if unavailable.
+    Embedded in figure footers so every PNG is self-documenting / reproducible."""
+    import subprocess
+    try:
+        here = os.path.dirname(os.path.abspath(__file__))
+        out = subprocess.run(
+            ['git', '-C', here, 'rev-parse', '--short', 'HEAD'],
+            capture_output=True, text=True, timeout=5)
+        sha = out.stdout.strip()
+        return sha if sha else 'unknown'
+    except Exception:
+        return 'unknown'
+
+
+def _provenance(fs: float, win_sec: float, step_sec: float | None,
+                extra: str = '') -> str:
+    """One-line provenance string for a figure footer: passband, window grid,
+    sampling rate, smoothing, git commit, timestamp."""
+    bp = ('raw (no bandpass)' if _PROV.get('no_bandpass')
+          else f'BP {DEFAULT_BP_LOW:g}-{DEFAULT_BP_HIGH:g}Hz')
+    step = win_sec if step_sec is None else step_sec
+    stamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+    bits = [bp, f'fs={fs:g}Hz', f'win={win_sec:g}s/step={step:g}s',
+            f'smooth={SMOOTH_WINDOW}w', f'git {_git_commit()}', stamp]
+    if extra:
+        bits.insert(0, extra)
+    return '  |  '.join(bits)
+
+
+def _add_footer(fig: plt.Figure, text: str) -> None:
+    """Stamp a small grey provenance footer along the bottom of *fig*."""
+    fig.text(0.005, 0.002, text, fontsize=6, color='#888888',
+             ha='left', va='bottom', family='monospace')
+
+
+# Lightweight run-context shared with the footer builder (set in main()).
+_PROV: dict[str, object] = {'no_bandpass': False}
 
 
 def _default_welch_params(segment_len: int, fs: float) -> tuple[int, int]:
@@ -1413,7 +1503,8 @@ def compute_joint_mi_significance(
     if n_surrogates <= 0 or n < 16:
         return {'mutual_information': float(observed), 'surrogate_mean': float('nan'),
                 'surrogate_std': float('nan'), 'p_value': float('nan'),
-                'z': float('nan'), 'n_surrogates': 0}
+                'z': float('nan'), 'n_surrogates': 0,
+                'surrogates': np.empty(0, dtype=float)}
 
     rng = np.random.default_rng(seed)
     # Avoid trivial (near-zero) shifts that barely perturb the alignment.
@@ -1429,7 +1520,7 @@ def compute_joint_mi_significance(
     z = float((observed - s_mean) / s_std) if s_std > EPSILON else float('nan')
     return {'mutual_information': float(observed), 'surrogate_mean': s_mean,
             'surrogate_std': s_std, 'p_value': p_value, 'z': z,
-            'n_surrogates': int(surrogate.size)}
+            'n_surrogates': int(surrogate.size), 'surrogates': surrogate}
 
 
 def denoise_channels(
@@ -1479,6 +1570,7 @@ def compute_event_pre_onset_joint_mi(
     onset_sec: float = 30.0,
     bins: int = DEFAULT_MI_BINS,
     binning: str = 'quantile',
+    n_surrogates: int = 100,
 ) -> list[dict]:
     """For each iBrainCenter event, compare the two channels' joint distribution
     *just before* the event with the distribution *at its onset*.
@@ -1515,6 +1607,15 @@ def compute_event_pre_onset_joint_mi(
             sig_x[pre_lo:pre_hi], sig_y[pre_lo:pre_hi], bins=bins, binning=binning)
         onset = compute_joint_probability(
             sig_x[on_lo:on_hi], sig_y[on_lo:on_hi], bins=bins, binning=binning)
+        # Per-interval circular-shift significance, so each bar can carry a
+        # surrogate p/z rather than an un-tested raw MI (plug-in MI is positively
+        # biased; a bare value is not evidence of coupling).
+        pre_sig = compute_joint_mi_significance(
+            sig_x[pre_lo:pre_hi], sig_y[pre_lo:pre_hi], bins=bins,
+            binning=binning, n_surrogates=n_surrogates)
+        onset_sig = compute_joint_mi_significance(
+            sig_x[on_lo:on_hi], sig_y[on_lo:on_hi], bins=bins,
+            binning=binning, n_surrogates=n_surrogates)
         results.append({
             'name': name,
             'onset_rel_s': float(onset_rel_s),
@@ -1523,6 +1624,9 @@ def compute_event_pre_onset_joint_mi(
             'pre_mi': float(pre['mutual_information']),
             'onset_mi': float(onset['mutual_information']),
             'delta_mi': float(onset['mutual_information'] - pre['mutual_information']),
+            'pre_p': float(pre_sig['p_value']), 'pre_z': float(pre_sig['z']),
+            'onset_p': float(onset_sig['p_value']), 'onset_z': float(onset_sig['z']),
+            'pre_n': int(pre['n_samples']), 'onset_n': int(onset['n_samples']),
         })
     return results
 
@@ -1544,20 +1648,109 @@ def plot_event_pre_onset_comparison(
     x = np.arange(len(names))
     w = 0.4
 
-    fig, ax = plt.subplots(figsize=(max(8, 1.6 * len(names)), 4.5))
+    # Surrogate p-values (if present) gate a significance star on each bar, so a
+    # ΔMI within surrogate noise is not over-read.
+    pre_p = [e.get('pre_p', float('nan')) for e in events]
+    onset_p = [e.get('onset_p', float('nan')) for e in events]
+
+    def _star(p):
+        if not np.isfinite(p):
+            return ''
+        return '***' if p < 0.001 else '**' if p < 0.01 else '*' if p < 0.05 else 'ns'
+
+    fig, ax = plt.subplots(figsize=(max(8, 1.7 * len(names)), 5.0))
     ax.bar(x - w / 2, pre_mi, width=w, color='#8c9bb5', label='pre-event')
     ax.bar(x + w / 2, onset_mi, width=w, color='#d62728', label='onset')
-    for xi, (p, o) in enumerate(zip(pre_mi, onset_mi)):
-        ax.annotate(f'{o - p:+.3f}', (xi, max(p, o)), ha='center', va='bottom',
-                    fontsize=8, color='#333333')
+    for xi, (p, o, pp, op) in enumerate(zip(pre_mi, onset_mi, pre_p, onset_p)):
+        ax.annotate(_star(pp), (xi - w / 2, p), ha='center', va='bottom',
+                    fontsize=7, color='#555555')
+        ax.annotate(_star(op), (xi + w / 2, o), ha='center', va='bottom',
+                    fontsize=7, color='#555555')
+        ax.annotate(f'Δ{o - p:+.3f}', (xi, max(p, o)), ha='center', va='bottom',
+                    fontsize=8, color='#333333', xytext=(0, 9),
+                    textcoords='offset points')
+    # Flag unequal N (plug-in MI bias is N-dependent → unequal-N comparisons are
+    # subtly confounded).
+    n_note = ''
+    if events and 'pre_n' in events[0]:
+        ns = {(e['pre_n'], e['onset_n']) for e in events}
+        if any(a != b for a, b in ns):
+            n_note = '  [⚠ unequal pre/onset N — see CSV]'
     ax.set_xticks(x)
     ax.set_xticklabels(names, rotation=30, ha='right', fontsize=8)
     ax.set_ylabel('joint MI (bits)')
+    # Headroom so the ΔMI annotation above the tallest bar is not clipped.
+    top = max([*pre_mi, *onset_mi, 1e-6])
+    ax.set_ylim(0.0, top * 1.18)
     ax.set_title(f'{title}\nPre-event vs onset joint MI — {label_x} vs {label_y} '
-                 f'(ΔMI = onset − pre annotated)')
+                 f'(ΔMI annotated; * = surrogate p<.05){n_note}')
     ax.legend(loc='upper right', fontsize=9)
     ax.grid(True, axis='y', alpha=0.3)
-    fig.tight_layout()
+    _add_footer(fig, _provenance(DEFAULT_FS, DEFAULT_WIN_SEC, None,
+                                 extra='pre/onset MI'))
+    fig.tight_layout(rect=(0, 0.02, 1, 1))
+    fig.savefig(outpath, dpi=150)
+    plt.close(fig)
+    print(f'Saved: {outpath}')
+
+
+def plot_peri_event_mi(
+    win_result: dict[str, np.ndarray],
+    event_onsets: list[tuple[str, float]],
+    title: str,
+    outpath: str,
+    pre_sec: float = 30.0,
+    post_sec: float = 60.0,
+    fs: float = DEFAULT_FS,
+    win_sec: float = DEFAULT_WIN_SEC,
+    step_sec: float | None = None,
+) -> None:
+    """Peri-event MI time course: the zero-lag MI series re-expressed relative to
+    each event onset (t=0) and overlaid, so the *latency and duration* of any
+    coupling change is visible — not just the single pre→onset step the bar chart
+    collapses it to. Reuses the already-computed global ``win_result`` (no extra
+    MI estimation). A bold black line shows the across-event mean ±1σ.
+    """
+    t = np.asarray(win_result['time'], dtype=float)
+    mi = np.asarray(win_result['joint_mi'], dtype=float)
+    if not event_onsets:
+        return
+    # Common relative-time grid for averaging across events.
+    grid = np.arange(-pre_sec, post_sec + 1e-9, step_sec or win_sec)
+    stack = []
+    fig, ax = plt.subplots(figsize=(11, 4.5))
+    cmap = plt.get_cmap('tab10')
+    for i, (name, onset_s) in enumerate(event_onsets):
+        rel = t - onset_s
+        sel = (rel >= -pre_sec) & (rel <= post_sec)
+        if not np.any(sel):
+            continue
+        ax.plot(rel[sel], mi[sel], color=cmap(i % 10), lw=1.0, alpha=0.5,
+                label=name)
+        # Resample onto the common grid for the mean curve (NaN-safe).
+        valid = sel & np.isfinite(mi)
+        if np.count_nonzero(valid) >= 2:
+            stack.append(np.interp(grid, rel[valid], mi[valid],
+                                   left=np.nan, right=np.nan))
+    ax.axvline(0.0, color='k', lw=1.2, ls='--', alpha=0.7)
+    if stack:
+        arr = np.vstack(stack)
+        with np.errstate(invalid='ignore'):
+            allnan = np.all(~np.isfinite(arr), axis=0)
+            mean = np.full(grid.shape, np.nan)
+            sd = np.full(grid.shape, np.nan)
+            mean[~allnan] = np.nanmean(arr[:, ~allnan], axis=0)
+            sd[~allnan] = np.nanstd(arr[:, ~allnan], axis=0)
+        ax.plot(grid, mean, color='#111111', lw=2.5, label='event mean')
+        ax.fill_between(grid, mean - sd, mean + sd, color='#111111', alpha=0.15)
+    ax.set_xlabel('time relative to event onset (s)')
+    ax.set_ylabel('joint MI (bits)')
+    ax.set_ylim(bottom=0.0)
+    ax.set_title(title)
+    ax.legend(loc='upper right', fontsize=7, ncol=2)
+    ax.grid(True, alpha=0.3)
+    _add_footer(fig, _provenance(fs, win_sec, step_sec, extra='peri-event MI'))
+    fig.tight_layout(rect=(0, 0.02, 1, 1))
     fig.savefig(outpath, dpi=150)
     plt.close(fig)
     print(f'Saved: {outpath}')
@@ -1633,7 +1826,77 @@ def plot_joint_distribution(
                 va='top', ha='left', fontsize=9, family='monospace',
                 bbox=dict(boxstyle='round', fc='white', ec='0.7', alpha=0.85))
 
+    # Surrogate-null inset (top-right cell, otherwise empty): the circular-shift
+    # MI null with the observed MI marked, so the reader can *see* whether the
+    # observed value sits in the tail rather than trusting the printed p alone.
+    if sig is not None and sig.get('n_surrogates', 0) and \
+            np.asarray(sig.get('surrogates', [])).size:
+        ax_sig = fig.add_subplot(gs[0, 1])
+        sur = np.asarray(sig['surrogates'], dtype=float)
+        ax_sig.hist(sur, bins=min(30, max(5, sur.size // 5)),
+                    color='#9ecae1', edgecolor='0.5', linewidth=0.4)
+        ax_sig.axvline(float(sig['mutual_information']), color='#d62728', lw=1.6,
+                       label='observed')
+        ax_sig.set_title('surrogate null', fontsize=8)
+        ax_sig.set_xlabel('MI (bits)', fontsize=7)
+        ax_sig.tick_params(labelsize=6)
+        ax_sig.legend(fontsize=6, loc='upper right')
+
     fig.suptitle(title, fontsize=13, fontweight='bold')
+    _add_footer(fig, _provenance(float(joint.get('fs', DEFAULT_FS)),
+                                 DEFAULT_WIN_SEC, None, extra='joint-MI'))
+    fig.savefig(outpath, dpi=150, bbox_inches='tight')
+    plt.close(fig)
+    print(f'Saved: {outpath}')
+
+
+def plot_joint_excess(
+    joint: dict[str, np.ndarray | float],
+    title: str,
+    outpath: str,
+    label_x: str = 'X',
+    label_y: str = 'Y',
+) -> None:
+    """Excess-mass view of the joint distribution: P(X,Y) − P(X)P(Y) in
+    bin-index space, on a zero-centred diverging colourmap.
+
+    MI measures exactly the divergence of P(X,Y) from the independence product
+    P(X)P(Y); plotting that *difference* (rather than the raw mass) makes the
+    dependence structure pop — independence reads as flat mid-grey, positive
+    association as a warm diagonal, negative/non-monotone coupling as cool
+    off-diagonal cells — which the raw-mass magma heatmap cannot show because
+    the marginals are flat by construction under quantile binning.
+    """
+    pxy = np.asarray(joint['pxy'], dtype=float)
+    px = np.asarray(joint['px'], dtype=float)
+    py = np.asarray(joint['py'], dtype=float)
+    x_edges = np.asarray(joint['x_edges'], dtype=float)
+    y_edges = np.asarray(joint['y_edges'], dtype=float)
+    nx, ny = pxy.shape
+    excess = pxy - np.outer(px, py)
+    vmax = float(np.max(np.abs(excess))) or 1e-9
+
+    fig, ax = plt.subplots(figsize=(7.5, 6.5))
+    im = ax.imshow(excess.T, origin='lower', aspect='auto', cmap='RdBu_r',
+                   vmin=-vmax, vmax=vmax, extent=[0, nx, 0, ny])
+
+    def _edge_ticks(edges, n, axis):
+        pos = np.linspace(0, n, min(n + 1, 6))
+        labels = [f'{np.interp(p, np.arange(edges.size), edges):.2f}' for p in pos]
+        (ax.set_xticks if axis == 'x' else ax.set_yticks)(pos)
+        (ax.set_xticklabels if axis == 'x' else ax.set_yticklabels)(labels)
+
+    _edge_ticks(x_edges, nx, 'x')
+    _edge_ticks(y_edges, ny, 'y')
+    ax.set_xlabel(f'{label_x} (z-scored; bin index)')
+    ax.set_ylabel(f'{label_y} (z-scored; bin index)')
+    cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    cb.set_label('P(X,Y) − P(X)P(Y)  (excess over independence)')
+    ax.set_title(f'{title}\nI(X;Y) = {float(joint["mutual_information"]):.4f} bits '
+                 f'(MM {float(joint["mutual_information_mm"]):.4f})', fontsize=11)
+    _add_footer(fig, _provenance(float(joint.get('fs', DEFAULT_FS)),
+                                 DEFAULT_WIN_SEC, None, extra='joint-MI excess'))
+    fig.tight_layout(rect=(0, 0.02, 1, 1))
     fig.savefig(outpath, dpi=150, bbox_inches='tight')
     plt.close(fig)
     print(f'Saved: {outpath}')
@@ -1683,6 +1946,9 @@ def plot_band_entropy(
     sync_result: dict[str, np.ndarray] | None = None,
     time_us_epoch: int | None = None,
     ibrain_events: bool = False,
+    fs: float = DEFAULT_FS,
+    win_sec: float = DEFAULT_WIN_SEC,
+    step_sec: float | None = None,
 ) -> None:
     """Plot each band separately plus BandEn over time.
 
@@ -1703,11 +1969,7 @@ def plot_band_entropy(
     fig, axes = plt.subplots(n_rows, 1, figsize=(14, 2.2 * n_rows), sharex=True)
     fig.suptitle(title, fontsize=14, fontweight='bold')
 
-    colors = {
-        'theta': '#9467bd',
-        'alpha': '#2ca02c',
-        'beta': '#ff7f0e',
-    }
+    colors = BAND_COLORS
     for idx, (name, _) in enumerate(BAND_DEFINITIONS):
         ax = axes[idx]
         values = entropy_result[f'p_{name}']
@@ -1728,6 +1990,16 @@ def plot_band_entropy(
     entropy_bits_smooth = _smooth_series(entropy_bits)
     entropy_norm = entropy_result['band_entropy_norm']
     entropy_norm_smooth = _smooth_series(entropy_norm)
+    # ±1σ dispersion band: a centred rolling std of the per-window BandEn, so a
+    # genuine entropy excursion is visually separable from window-to-window
+    # estimator jitter. NaN-masked (low-quality) windows leave gaps in the band.
+    bits_std = _rolling_std(entropy_bits)
+    t_arr = np.asarray(t)
+    with np.errstate(invalid='ignore'):
+        lo_band = entropy_bits_smooth - bits_std
+        hi_band = entropy_bits_smooth + bits_std
+    ax_entropy.fill_between(t_arr, lo_band, hi_band, color='#111111', alpha=0.12,
+                            linewidth=0, label='BandEn ±1σ')
     ax_entropy.plot(t, entropy_bits, color='#111111', lw=1.1, alpha=0.4, label='BandEn (bits)')
     ax_entropy.plot(t, entropy_bits_smooth, color='#111111', lw=2.0, label='BandEn smooth')
     ax_entropy.plot(t, entropy_norm, color='#d62728', lw=1.0, alpha=0.35, label='BandEn norm')
@@ -1791,6 +2063,18 @@ def plot_band_entropy(
         if ibrain_events and use_abs:
             _overlay_ibrain_events(ax_sync, t_sync[0], t_sync[-1], use_abs)
 
+        # Dominant lag (argmax-τ) on a twin axis: reveals whether the lag that
+        # carries the strongest coupling drifts over time — a phenomenon the
+        # mean/max traces alone hide. Drawn as a faint scatter so it never
+        # competes with the MI curves.
+        if 'lagged_mi_best_tau_ms' in sync_result:
+            ax_tau = ax_sync.twinx()
+            ax_tau.scatter(t_sync, sync_result['lagged_mi_best_tau_ms'],
+                           s=6, color='#7b3294', alpha=0.45, label='best τ')
+            ax_tau.set_ylabel('best τ (ms)', color='#7b3294')
+            ax_tau.tick_params(axis='y', labelcolor='#7b3294')
+            ax_tau.set_ylim(bottom=0.0)
+
     # ── x-axis formatting ──────────────────────────────────────────────────────
     if use_abs:
         fmt = mdates.DateFormatter('%H:%M:%S')
@@ -1799,7 +2083,215 @@ def plot_band_entropy(
         axes[-1].set_xlabel('Time (local, UTC+8)')
         fig.autofmt_xdate(rotation=30, ha='right')
 
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0.015, 1, 1))
+    _add_footer(fig, _provenance(fs, win_sec, step_sec, extra='band-entropy'))
+    fig.savefig(outpath, dpi=150)
+    plt.close(fig)
+    print(f'Saved: {outpath}')
+
+
+def plot_band_composition(
+    entropy_result: dict[str, np.ndarray],
+    title: str,
+    outpath: str,
+    t_offset: float = 0.0,
+    time_us_epoch: int | None = None,
+    ibrain_events: bool = False,
+    fs: float = DEFAULT_FS,
+    win_sec: float = DEFAULT_WIN_SEC,
+    step_sec: float | None = None,
+) -> None:
+    """Stacked-area view of the θ/α/β proportions on a single axis.
+
+    The three proportions sum to 1 at every window, so a stacked area makes the
+    conservation-of-mass structure explicit (which the three separate panels in
+    ``plot_band_entropy`` obscure) and lets a reader read *redistribution*
+    between bands at a glance. Low-quality (NaN) windows are dropped from the
+    stack so masked spans appear as gaps rather than zero-height slabs.
+    """
+    use_abs = time_us_epoch is not None
+    rel_t = np.asarray(entropy_result['time'], dtype=float) + t_offset
+    band_names = [name for name, _ in BAND_DEFINITIONS]
+    stack = np.vstack([np.asarray(entropy_result[f'p_{n}'], dtype=float)
+                       for n in band_names])
+    # Smooth each proportion for a legible band; keep NaN gaps.
+    stack_s = np.vstack([_smooth_series(stack[i]) for i in range(stack.shape[0])])
+    valid = np.all(np.isfinite(stack_s), axis=0)
+
+    t = _rel_times_to_dt(rel_t, time_us_epoch) if use_abs else rel_t
+    t_arr = np.asarray(t, dtype=object if use_abs else float)
+
+    fig, ax = plt.subplots(figsize=(14, 4.0))
+    # stackplot cannot span NaN gaps, so plot contiguous valid runs separately.
+    idx = np.where(valid)[0]
+    if idx.size:
+        splits = np.where(np.diff(idx) > 1)[0] + 1
+        first = True
+        for run in np.split(idx, splits):
+            ax.stackplot(
+                t_arr[run], *[stack_s[i, run] for i in range(stack.shape[0])],
+                labels=band_names if first else ['_nolegend_'] * stack.shape[0],
+                colors=[BAND_COLORS[n] for n in band_names], alpha=0.85)
+            first = False
+    ax.set_ylim(0.0, 1.0)
+    ax.set_ylabel('cumulative proportion')
+    ax.set_title(title)
+    ax.legend(loc='upper right', fontsize=9, ncol=3)
+    ax.grid(True, alpha=0.25)
+    if ibrain_events and use_abs:
+        _overlay_ibrain_events(ax, t_arr[0], t_arr[-1], use_abs)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+        ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+        ax.set_xlabel('Time (local, UTC+8)')
+        fig.autofmt_xdate(rotation=30, ha='right')
+    else:
+        ax.set_xlabel('Time (s)')
+    fig.tight_layout(rect=(0, 0.02, 1, 1))
+    _add_footer(fig, _provenance(fs, win_sec, step_sec, extra='band-composition'))
+    fig.savefig(outpath, dpi=150)
+    plt.close(fig)
+    print(f'Saved: {outpath}')
+
+
+def _simplex_xy(p: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Map rows of a (N,3) probability matrix (θ,α,β) to 2-D barycentric
+    coordinates of an equilateral triangle (θ=bottom-left, α=bottom-right,
+    β=top)."""
+    p = np.asarray(p, dtype=float)
+    x = p[:, 1] + 0.5 * p[:, 2]
+    y = (np.sqrt(3.0) / 2.0) * p[:, 2]
+    return x, y
+
+
+def plot_band_ternary(
+    entropy_result: dict[str, np.ndarray],
+    title: str,
+    outpath: str,
+    fs: float = DEFAULT_FS,
+    win_sec: float = DEFAULT_WIN_SEC,
+    step_sec: float | None = None,
+) -> None:
+    """Ternary (2-simplex) view of the per-window (p_θ, p_α, p_β) trajectory.
+
+    Because the three proportions sum to 1 they live on a 2-simplex; plotting
+    them in the triangle reveals *attractor states* (e.g. an α-corner rest vs. a
+    β-corner task state) and the path between them — structure the time series
+    only hints at, and the geometric intuition behind why BASD (band-aware)
+    carries information BandEn (band-blind) discards. Points are coloured by
+    time; the mean (centroid) is marked.
+    """
+    band_names = [name for name, _ in BAND_DEFINITIONS]
+    P = np.column_stack([np.asarray(entropy_result[f'p_{n}'], dtype=float)
+                         for n in band_names])
+    finite = np.all(np.isfinite(P), axis=0) if P.ndim == 1 else np.all(np.isfinite(P), axis=1)
+    P = P[finite]
+    tvec = np.asarray(entropy_result['time'], dtype=float)[finite]
+    if P.shape[0] == 0:
+        print(f'  [warn] ternary: no clean windows to plot — skipping {outpath}.')
+        return
+
+    x, y = _simplex_xy(P)
+    # Triangle vertices.
+    vx = [0.0, 1.0, 0.5, 0.0]
+    vy = [0.0, 0.0, np.sqrt(3.0) / 2.0, 0.0]
+
+    fig, ax = plt.subplots(figsize=(7.5, 7.0))
+    ax.plot(vx, vy, color='0.4', lw=1.2)
+    # Light iso-proportion grid lines every 0.2 (constant α, constant β, constant θ).
+    h = np.sqrt(3) / 2
+    for f in np.arange(0.2, 1.0, 0.2):
+        # constant α = f
+        ax.plot([f, f + 0.5 * (1 - f)], [0, h * (1 - f)], color='0.85', lw=0.6)
+        # constant β = f (horizontal)
+        ax.plot([0.5 * f, 1 - 0.5 * f], [h * f, h * f], color='0.85', lw=0.6)
+        # constant θ = f
+        ax.plot([0.5 * (1 - f), 1 - f], [h * (1 - f), 0], color='0.85', lw=0.6)
+    sc = ax.scatter(x, y, c=tvec, cmap='viridis', s=10, alpha=0.6, zorder=3)
+    # Centroid.
+    cx, cy = _simplex_xy(P.mean(axis=0)[None, :])
+    ax.scatter(cx, cy, marker='*', s=320, color='#d62728', edgecolor='k',
+               zorder=4, label='mean')
+    ax.annotate('θ', (0, -0.04), ha='center', va='top', fontsize=14, color=BAND_COLORS['theta'])
+    ax.annotate('α', (1, -0.04), ha='center', va='top', fontsize=14, color=BAND_COLORS['alpha'])
+    ax.annotate('β', (0.5, np.sqrt(3) / 2 + 0.03), ha='center', va='bottom', fontsize=14, color=BAND_COLORS['beta'])
+    cb = fig.colorbar(sc, ax=ax, fraction=0.046, pad=0.04)
+    cb.set_label('time (s)')
+    ax.set_aspect('equal')
+    ax.axis('off')
+    ax.set_title(title, fontsize=12, fontweight='bold')
+    ax.legend(loc='upper left', fontsize=9)
+    fig.tight_layout(rect=(0, 0.02, 1, 1))
+    _add_footer(fig, _provenance(fs, win_sec, step_sec, extra='band-ternary'))
+    fig.savefig(outpath, dpi=150)
+    plt.close(fig)
+    print(f'Saved: {outpath}')
+
+
+def plot_focus_relax_scatter(
+    entropy_result: dict[str, np.ndarray],
+    title: str,
+    outpath: str,
+    t_offset: float = 0.0,
+    fs: float = DEFAULT_FS,
+    win_sec: float = DEFAULT_WIN_SEC,
+    step_sec: float | None = None,
+) -> None:
+    """Scatter of per-window Focus vs Relaxation qEEG indices, coloured by time.
+
+    Each point is one analysis window placed at (Focus, Relaxation); colour
+    encodes the window-centre time and a faint line connects consecutive windows,
+    so the figure traces the *trajectory* through Focus–Relax space rather than a
+    static cloud. The two indices are derived from the same per-window
+    (p_θ, p_α, p_β) relative band powers already computed for the band-entropy
+    series — these are exactly the inputs qeeg_indices uses — so no PSDs are
+    recomputed. Both indices live in ≈[−1, 1] (the bounded-ratio range); the grey
+    cross marks the neutral origin.
+    """
+    if not _QEEG_AVAILABLE:
+        print(f'  [warn] focus/relax scatter: qeeg_indices unavailable — '
+              f'skipping {outpath}.')
+        return
+
+    band_names = [name for name, _ in BAND_DEFINITIONS]  # theta, alpha, beta
+    P = np.column_stack([np.asarray(entropy_result[f'p_{n}'], dtype=float)
+                         for n in band_names])
+    finite = np.all(np.isfinite(P), axis=1)
+    P = P[finite]
+    tvec = np.asarray(entropy_result['time'], dtype=float)[finite] + t_offset
+    if P.shape[0] == 0:
+        print(f'  [warn] focus/relax scatter: no clean windows to plot — '
+              f'skipping {outpath}.')
+        return
+
+    focus = np.array([focus_index(th, al, be) for th, al, be in P])
+    relax = np.array([relaxation_index(th, al, be) for th, al, be in P])
+
+    fig, ax = plt.subplots(figsize=(7.5, 7.0))
+    # Neutral-point cross (bounded ratio = 0).
+    ax.axhline(0.0, color='0.85', lw=0.8, zorder=0)
+    ax.axvline(0.0, color='0.85', lw=0.8, zorder=0)
+    # Faint temporal trajectory through the (Focus, Relax) plane.
+    ax.plot(focus, relax, color='0.6', lw=0.5, alpha=0.4, zorder=2)
+    sc = ax.scatter(focus, relax, c=tvec, cmap='viridis', s=18, alpha=0.75,
+                    edgecolor='none', zorder=3)
+    # Start / end markers so the trajectory direction is unambiguous.
+    ax.scatter(focus[0], relax[0], marker='o', s=130, facecolor='none',
+               edgecolor='#2ca02c', lw=2.0, zorder=4, label='start')
+    ax.scatter(focus[-1], relax[-1], marker='s', s=130, facecolor='none',
+               edgecolor='#d62728', lw=2.0, zorder=4, label='end')
+    cb = fig.colorbar(sc, ax=ax, fraction=0.046, pad=0.04)
+    cb.set_label('time (s)')
+
+    lim = max(1.05, float(np.nanmax(np.abs(np.concatenate([focus, relax])))) * 1.05)
+    ax.set_xlim(-lim, lim)
+    ax.set_ylim(-lim, lim)
+    ax.set_aspect('equal')
+    ax.set_xlabel('Focus index')
+    ax.set_ylabel('Relaxation index')
+    ax.set_title(title, fontsize=12, fontweight='bold')
+    ax.legend(loc='upper left', fontsize=9)
+    fig.tight_layout(rect=(0, 0.02, 1, 1))
+    _add_footer(fig, _provenance(fs, win_sec, step_sec, extra='focus-relax'))
     fig.savefig(outpath, dpi=150)
     plt.close(fig)
     print(f'Saved: {outpath}')
@@ -1819,6 +2311,11 @@ def _parse_args() -> argparse.Namespace:
                         help=f'Window length in seconds (default {DEFAULT_WIN_SEC} s).')
     parser.add_argument('--step', type=float, metavar='SEC',
                         help='Step size in seconds (default = window length).')
+    parser.add_argument('--smooth', type=int, default=DEFAULT_SMOOTH_WINDOW,
+                        metavar='N',
+                        help=('Centred moving-average length (in windows) for every '
+                              f'smoothed trace (default {DEFAULT_SMOOTH_WINDOW}). The '
+                              'effective duration is N×step seconds.'))
     parser.add_argument('--no-bandpass', action='store_true', default=False,
                         help=(f'Skip the {DEFAULT_BP_LOW:g}-{DEFAULT_BP_HIGH:g} Hz bandpass '
                               'front-end. By default the same zero-phase Butterworth '
@@ -1947,11 +2444,33 @@ def _run_joint_mi_mode(args: argparse.Namespace,
           f'— {label_x} vs {label_y}, bins={bins} ({binning}), fs={fs_eff:g}Hz')
 
     joint = compute_joint_probability(sig_x, sig_y, bins=bins, binning=binning)
+    joint['fs'] = fs_eff
     sig = compute_joint_mi_significance(
         sig_x, sig_y, bins=bins, binning=binning, n_surrogates=args.mi_surrogates)
     win_result = compute_joint_mi_windowed(
         sig_x, sig_y, fs=fs_eff, win_sec=args.win, step_sec=args.step,
         bins=bins, binning=binning)
+
+    # ── Quality masking of the windowed MI series (non-denoise path only) ────────
+    # Route the same eeg_quality_v2 mask used by the band-entropy series through
+    # the zero-lag MI series so artefactual windows cannot manufacture spurious
+    # MI spikes. Skipped under --denoise (model outputs are not raw device
+    # channels, so the device-tuned quality params do not apply) and when the
+    # caller opts out or the QC modules are unavailable.
+    mi_quality = None
+    if (not args.denoise) and (not args.no_quality_mask) and _QC_AVAILABLE:
+        two_ch = np.column_stack([sig_x, sig_y]).astype(float)
+        mi_quality = compute_quality_windowed_aligned(
+            two_ch, fs=fs_eff, win_sec=args.win, step_sec=args.step)
+        if mi_quality.shape[0] == win_result['time'].shape[0]:
+            mmask = mi_quality < args.quality_threshold
+            _mask_low_quality(win_result, mmask, ['joint_mi', 'joint_mi_norm'])
+            print(f'  Masked {int(mmask.sum())}/{mmask.size} MI windows '
+                  f'({100.0 * mmask.mean():.1f}%) below quality '
+                  f'{args.quality_threshold:g}.')
+        else:
+            print('  [warn] MI quality-window count mismatch — skipping MI masking.')
+            mi_quality = None
 
     basename = os.path.splitext(os.path.basename(args.csv))[0]
     stem = f'{basename}_joint_mi_{pair_suffix}'
@@ -1977,11 +2496,14 @@ def _run_joint_mi_mode(args: argparse.Namespace,
 
     # ── Sliding-window MI series ────────────────────────────────────────────────
     series_csv = os.path.join(outdir, f'{stem}_timeseries.csv')
-    pd.DataFrame({
+    series_df = {
         'time_s': win_result['time'],
         'joint_mi': win_result['joint_mi'],
         'joint_mi_norm': win_result['joint_mi_norm'],
-    }).to_csv(series_csv, index=False)
+    }
+    if mi_quality is not None:
+        series_df['quality'] = mi_quality
+    pd.DataFrame(series_df).to_csv(series_csv, index=False)
     print(f'Saved: {series_csv}')
 
     # ── Plots ───────────────────────────────────────────────────────────────────
@@ -1991,6 +2513,13 @@ def _run_joint_mi_mode(args: argparse.Namespace,
         title=(f'Joint P({label_x}, {label_y}) — {os.path.basename(args.csv)} '
                f'[{binning}, {bins} bins]'),
         outpath=heatmap_png, label_x=label_x, label_y=label_y, sig=sig)
+
+    excess_png = os.path.join(outdir, f'{stem}_excess.png')
+    plot_joint_excess(
+        joint,
+        title=(f'Excess mass P−P·P ({label_x}, {label_y}) — '
+               f'{os.path.basename(args.csv)} [{binning}, {bins} bins]'),
+        outpath=excess_png, label_x=label_x, label_y=label_y)
 
     # iBrainCenter event overlay (absolute local time) on the MI time series.
     use_events = bool(args.ibrain_events)
@@ -2024,7 +2553,9 @@ def _run_joint_mi_mode(args: argparse.Namespace,
     else:
         ax.set_xlabel('Time (s)')
     ax.legend(loc='upper right', fontsize=9)
-    fig.tight_layout()
+    _add_footer(fig, _provenance(fs_eff, args.win, args.step,
+                                 extra=f'joint-MI series ({binning},{bins}b)'))
+    fig.tight_layout(rect=(0, 0.03, 1, 1))
     fig.savefig(series_png, dpi=150)
     plt.close(fig)
     print(f'Saved: {series_png}')
@@ -2032,7 +2563,8 @@ def _run_joint_mi_mode(args: argparse.Namespace,
     # ── Pre-event vs onset joint-distribution comparison (--ibrain-events) ───────
     if use_events:
         events = compute_event_pre_onset_joint_mi(
-            sig_x, sig_y, t0_us, fs=fs_eff, bins=bins, binning=binning)
+            sig_x, sig_y, t0_us, fs=fs_eff, bins=bins, binning=binning,
+            n_surrogates=min(100, args.mi_surrogates) if args.mi_surrogates else 0)
         if not events:
             print('  [warn] no iBrainCenter events fall within this recording — '
                   'skipping pre-event/onset comparison.')
@@ -2043,10 +2575,12 @@ def _run_joint_mi_mode(args: argparse.Namespace,
                 'pre_mi_mm_bits': e['pre']['mutual_information_mm'],
                 'pre_mi_norm': e['pre']['mutual_information_norm'],
                 'pre_n_samples': e['pre']['n_samples'],
+                'pre_surrogate_p': e['pre_p'], 'pre_surrogate_z': e['pre_z'],
                 'onset_mi_bits': e['onset']['mutual_information'],
                 'onset_mi_mm_bits': e['onset']['mutual_information_mm'],
                 'onset_mi_norm': e['onset']['mutual_information_norm'],
                 'onset_n_samples': e['onset']['n_samples'],
+                'onset_surrogate_p': e['onset_p'], 'onset_surrogate_z': e['onset_z'],
                 'delta_mi_bits': e['delta_mi'],
             } for e in events]
             events_csv = os.path.join(outdir, f'{stem}_events.csv')
@@ -2059,10 +2593,20 @@ def _run_joint_mi_mode(args: argparse.Namespace,
                 title=f'{os.path.basename(args.csv)} [{binning}, {bins} bins]',
                 outpath=events_png, label_x=label_x, label_y=label_y)
 
+            # Peri-event MI time course (reuses the global windowed series).
+            peri_png = os.path.join(outdir, f'{stem}_peri_event.png')
+            plot_peri_event_mi(
+                win_result,
+                [(e['name'], e['onset_rel_s']) for e in events],
+                title=(f'Peri-event zero-lag MI — {label_x} vs {label_y} '
+                       f'[{os.path.basename(args.csv)}]'),
+                outpath=peri_png, fs=fs_eff, win_sec=args.win, step_sec=args.step)
+
             print('\nPre-event vs onset joint MI (bits):')
             for e in events:
                 print(f'  {e["name"]:<24s}: pre={e["pre_mi"]:.4f}  '
-                      f'onset={e["onset_mi"]:.4f}  Δ={e["delta_mi"]:+.4f}')
+                      f'onset={e["onset_mi"]:.4f}  Δ={e["delta_mi"]:+.4f}  '
+                      f'(onset surrogate p={e["onset_p"]:.3g})')
 
     # ── Summary to stdout ───────────────────────────────────────────────────────
     print(f'\nJoint MI ({label_x} ↔ {label_y}):')
@@ -2177,9 +2721,15 @@ def _run_baseline_event_mode(args: argparse.Namespace,
 
 
 def main() -> None:
+    global SMOOTH_WINDOW
     args = _parse_args()
     outdir = args.out or os.path.dirname(os.path.abspath(args.csv))
     os.makedirs(outdir, exist_ok=True)
+
+    # Apply global run-context (smoothing length + passband state) so every
+    # smoothed trace and every figure footer reflect the actual CLI settings.
+    SMOOTH_WINDOW = max(1, int(args.smooth))
+    _PROV['no_bandpass'] = bool(args.no_bandpass)
 
     print(f'Loading: {args.csv}')
     time_us, data_raw = load_merged_csv(args.csv)
@@ -2329,7 +2879,30 @@ def main() -> None:
         sync_result=sync_result,
         time_us_epoch=int(time_us[0]) if args.ibrain_events else None,
         ibrain_events=args.ibrain_events,
+        fs=args.fs,
+        win_sec=args.win,
+        step_sec=args.step,
     )
+
+    # ── Compositional views: stacked-area simplex + ternary trajectory ──────────
+    comp_png = os.path.join(outdir, f'{stem}_composition.png')
+    plot_band_composition(
+        entropy_result, title=f'{title} — θ/α/β composition',
+        outpath=comp_png, t_offset=t_offset,
+        time_us_epoch=int(time_us[0]) if args.ibrain_events else None,
+        ibrain_events=args.ibrain_events,
+        fs=args.fs, win_sec=args.win, step_sec=args.step)
+    ternary_png = os.path.join(outdir, f'{stem}_ternary.png')
+    plot_band_ternary(
+        entropy_result, title=f'{title} — θ/α/β simplex trajectory',
+        outpath=ternary_png, fs=args.fs, win_sec=args.win, step_sec=args.step)
+
+    # ── Focus vs Relax scatter (qEEG indices), coloured by time ─────────────────
+    focus_relax_png = os.path.join(outdir, f'{stem}_focus_relax.png')
+    plot_focus_relax_scatter(
+        entropy_result, title=f'{title} — Focus vs Relax trajectory',
+        outpath=focus_relax_png, t_offset=t_offset,
+        fs=args.fs, win_sec=args.win, step_sec=args.step)
 
     # Summary statistics ignore NaN-masked (low-quality) windows.
     def _stats(arr: np.ndarray) -> str:
