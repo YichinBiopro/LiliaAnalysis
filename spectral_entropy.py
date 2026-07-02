@@ -113,6 +113,20 @@ try:
 except ImportError:
     _IBRAIN_AVAILABLE = False
 
+# ── KNN/KSG mutual-information estimators for band-power × event MI (optional) ─
+# The band-power-vs-event joint MI mode (I(θ,α,β power ; pre/post-event)) uses
+# scikit-learn's KNN entropy estimators. sklearn is only needed for that mode,
+# so it is imported defensively — the histogram-based channel-vs-channel MI that
+# the rest of the module uses has no such dependency.
+try:
+    from scipy.special import digamma as _digamma
+    from sklearn.feature_selection import mutual_info_classif as _sk_mutual_info_classif
+    from sklearn.neighbors import KDTree as _SKKDTree, NearestNeighbors as _SKNearestNeighbors
+    from sklearn.preprocessing import scale as _sk_scale
+    _SKLEARN_MI_AVAILABLE = True
+except ImportError:
+    _SKLEARN_MI_AVAILABLE = False
+
 # ── Quality-control machinery for the --clean baseline/event mode (optional) ───
 # Reuse the exact artefact-rejection primitives that build the qEEG baselines in
 # plot_tflite_summary so the "clean" entropy estimates share one definition of
@@ -128,6 +142,16 @@ try:
 except Exception:  # pragma: no cover - defensive fallback
     _QC_AVAILABLE = False
     _QUALITY_THRESHOLD = 0.5
+
+# ── Interactive plotting back-end (optional) ───────────────────────────────────
+# Only the interactive peri-event MI animation (--peri-event-html) needs Plotly;
+# every static figure uses matplotlib, so Plotly is imported defensively and the
+# HTML export is silently skipped (with a hint) when it is unavailable.
+try:
+    import plotly.graph_objects as _go
+    _PLOTLY_AVAILABLE = True
+except ImportError:
+    _PLOTLY_AVAILABLE = False
 
 # ── Time-conversion helpers ────────────────────────────────────────────────────
 _UTC_EPOCH = datetime.datetime(1970, 1, 1)
@@ -1694,6 +1718,328 @@ def plot_event_pre_onset_comparison(
     print(f'Saved: {outpath}')
 
 
+# ═════════════════════════════════════════════════════════════════════════════
+# Band-power × Event joint MI:  I(θ-power, α-power, β-power ; pre/post-event)
+# ═════════════════════════════════════════════════════════════════════════════
+# Ported from the standalone joint_mi_band_analysis.py and adapted to this
+# module's real, *continuous* recordings. Where the standalone script assumed
+# trial-epoched arrays (n_trials samples per pre/post class), a lilia recording
+# is one long signal with event onsets, so samples are drawn by *sub-epoch
+# tiling*: each pre/post window is cut into short (overlapping) sub-epochs and
+# each sub-epoch's mean θ/α/β envelope amplitude is one 3-D feature vector. When
+# --ibrain-events is used the sub-epochs are pooled across every session event,
+# which is the faithful analogue of the standalone script's "trials".
+#
+# Two estimates of I(θ,α,β power ; event) are reported, both in bits:
+#   * sum-of-per-band  -- Σ_j I(X_j ; Y) from sklearn.mutual_info_classif; equals
+#     the joint MI only if the bands are conditionally independent given the
+#     label, so for correlated bands it over-counts shared information.
+#   * true joint KSG   -- I([θ,α,β] ; Y) from compute_mi_cd_multivariate, the
+#     Ross (2014) mixed estimator measuring neighbour radii in the full 3-D
+#     feature space. This is the value to trust; the gap to the sum diagnoses
+#     inter-band redundancy.
+# In keeping with the module's surrogate-gated MI culture, a label-shuffle
+# permutation null can gate the joint estimate (--mi-surrogates).
+
+_NATS_TO_BITS = 1.0 / np.log(2.0)
+
+
+def extract_band_envelopes(sig: np.ndarray, fs: float = DEFAULT_FS) -> dict[str, np.ndarray]:
+    """Instantaneous θ/α/β amplitude envelopes via bandpass + Hilbert transform.
+
+    Each canonical band in ``BAND_DEFINITIONS`` is isolated with the same
+    zero-phase Butterworth bandpass the qEEG pipeline uses (``bandpass_filter``),
+    then the analytic-signal magnitude gives the instantaneous amplitude.
+
+    Returns a dict band-name → envelope (1-D, same length as ``sig``).
+    """
+    x = np.asarray(sig, dtype=float).reshape(-1)
+    envelopes: dict[str, np.ndarray] = {}
+    for name, (lo, hi) in BAND_DEFINITIONS:
+        filtered = np.asarray(bandpass_filter(x, fs=fs, lo=lo, hi=hi), dtype=float)
+        envelopes[name] = np.abs(signal.hilbert(filtered))
+    return envelopes
+
+
+def _subepoch_features(
+    envelopes: dict[str, np.ndarray],
+    lo: int,
+    hi: int,
+    sub_len: int,
+    sub_step: int,
+) -> np.ndarray:
+    """Mean θ/α/β envelope over each overlapping sub-epoch in ``[lo, hi)``.
+
+    Returns an ``(n_subepochs, 3)`` matrix (band columns in BAND_DEFINITIONS
+    order). If the window is shorter than one sub-epoch it degrades gracefully
+    to a single mean over the whole window.
+    """
+    band_names = [name for name, _ in BAND_DEFINITIONS]
+    rows: list[list[float]] = []
+    start = lo
+    while start + sub_len <= hi:
+        rows.append([float(envelopes[n][start:start + sub_len].mean()) for n in band_names])
+        start += sub_step
+    if not rows and hi > lo:
+        rows.append([float(envelopes[n][lo:hi].mean()) for n in band_names])
+    return np.asarray(rows, dtype=float)
+
+
+def _preprocess_continuous_features(X: np.ndarray, rng: np.random.RandomState) -> np.ndarray:
+    """Replicate sklearn's continuous-feature preprocessing (unit-variance scale
+    + tiny tie-breaking noise) so the joint-KSG estimate is directly comparable
+    to ``mutual_info_classif`` and matches it exactly in the 1-D limit."""
+    X = X.astype(np.float64, copy=True)
+    X = _sk_scale(X, with_mean=False, copy=False)
+    means = np.maximum(1.0, np.mean(np.abs(X), axis=0))
+    X += 1e-10 * means * rng.standard_normal(size=X.shape)
+    return X
+
+
+def compute_mi_cd_multivariate(c: np.ndarray, d: np.ndarray, n_neighbors: int = 3) -> float:
+    """True joint MI I(C ; D): multivariate continuous C vs. discrete D, in nats.
+
+    Ross (2014) KSG-style mixed estimator — mathematically identical to
+    scikit-learn's private ``_compute_mi_cd`` but generalised to accept a
+    *multivariate* continuous variable of shape ``(n_samples, n_features)``.
+    sklearn hard-codes ``c.reshape((-1, 1))`` and so only supports one continuous
+    dimension; the sole change here is to keep ``c`` a joint vector, so
+    nearest-neighbour radii are measured in the full 3-D (θ, α, β) space rather
+    than per band.
+
+    Reference: B. C. Ross, "Mutual Information between Discrete and Continuous
+    Data Sets", PLoS ONE 9(2), 2014.
+    """
+    c = np.asarray(c, dtype=np.float64)
+    if c.ndim == 1:
+        c = c.reshape(-1, 1)
+    n_samples = c.shape[0]
+
+    radius = np.empty(n_samples)
+    label_counts = np.empty(n_samples)
+    k_all = np.empty(n_samples)
+
+    nn = _SKNearestNeighbors()
+    for label in np.unique(d):
+        mask = d == label
+        count = int(np.sum(mask))
+        if count > 1:
+            k = min(n_neighbors, count - 1)
+            nn.set_params(n_neighbors=k)
+            nn.fit(c[mask])
+            r = nn.kneighbors()[0]
+            radius[mask] = np.nextafter(r[:, -1], 0)
+            k_all[mask] = k
+        label_counts[mask] = count
+
+    # Ignore points whose label occurs only once (they carry no information).
+    mask = label_counts > 1
+    n_samples = int(np.sum(mask))
+    if n_samples == 0:
+        return 0.0
+    label_counts = label_counts[mask]
+    k_all = k_all[mask]
+    c = c[mask]
+    radius = radius[mask]
+
+    kd = _SKKDTree(c)
+    m_all = kd.query_radius(c, radius, count_only=True, return_distance=False)
+    m_all = np.asarray(m_all)
+
+    mi = (
+        _digamma(n_samples)
+        + np.mean(_digamma(k_all))
+        - np.mean(_digamma(label_counts))
+        - np.mean(_digamma(m_all))
+    )
+    return max(0.0, float(mi))
+
+
+def compute_band_event_joint_mi(
+    envelopes: dict[str, np.ndarray],
+    onset_indices: list[int],
+    window_samples: int,
+    *,
+    fs: float = DEFAULT_FS,
+    sub_sec: float = 1.0,
+    sub_step_sec: float = 0.5,
+    n_neighbors: int = 3,
+    n_surrogates: int = 0,
+    random_state: int = 0,
+) -> dict | None:
+    """Joint MI I(θ,α,β power ; pre/post-event) for one window size.
+
+    For every onset in ``onset_indices`` the pre-event window
+    ``[onset − window_samples, onset)`` (label 0) and post-event window
+    ``[onset, onset + window_samples)`` (label 1) are tiled into sub-epochs; all
+    sub-epochs are pooled across onsets into ``X (n, 3)`` / ``Y (n,)``.
+
+    Returns ``None`` when there are too few usable sub-epochs; otherwise a dict
+    with ``sum_mi_bits`` (Σ per-band), ``joint_mi_bits`` (true KSG), sample
+    counts, and — if ``n_surrogates > 0`` — a label-shuffle permutation null.
+    """
+    if not _SKLEARN_MI_AVAILABLE:
+        raise RuntimeError('scikit-learn is required for band-power × event MI.')
+
+    sub_len = max(1, int(round(sub_sec * fs)))
+    sub_step = max(1, int(round(sub_step_sec * fs)))
+    n_times = len(next(iter(envelopes.values())))
+
+    pre_blocks, post_blocks = [], []
+    for onset in onset_indices:
+        pre_lo, pre_hi = onset - window_samples, onset
+        post_lo, post_hi = onset, onset + window_samples
+        if pre_lo < 0 or post_hi > n_times:
+            continue  # window falls outside the recording → skip this onset
+        pre_blocks.append(_subepoch_features(envelopes, pre_lo, pre_hi, sub_len, sub_step))
+        post_blocks.append(_subepoch_features(envelopes, post_lo, post_hi, sub_len, sub_step))
+
+    pre_blocks = [b for b in pre_blocks if b.size]
+    post_blocks = [b for b in post_blocks if b.size]
+    if not pre_blocks or not post_blocks:
+        return None
+
+    x_pre = np.vstack(pre_blocks)
+    x_post = np.vstack(post_blocks)
+    n_pre, n_post = len(x_pre), len(x_post)
+
+    # KNN estimators need at least n_neighbors+1 points in the smaller class.
+    k = min(n_neighbors, n_pre - 1, n_post - 1)
+    if k < 1:
+        return None
+
+    X = np.vstack([x_pre, x_post])
+    Y = np.concatenate([np.zeros(n_pre), np.ones(n_post)]).astype(int)
+
+    # (a) sklearn per-band MIs, summed (nats → bits).
+    sum_mi = float(
+        _sk_mutual_info_classif(
+            X, Y, discrete_features=False, n_neighbors=k, random_state=random_state
+        ).sum()
+    ) * _NATS_TO_BITS
+
+    # (b) true joint KSG estimate over the full 3-D feature vector (nats → bits).
+    rng = np.random.RandomState(random_state)
+    X_pre = _preprocess_continuous_features(X, rng)
+    joint_mi = compute_mi_cd_multivariate(X_pre, Y, n_neighbors=k) * _NATS_TO_BITS
+
+    out: dict = {
+        'window_samples': int(window_samples),
+        'n_pre': int(n_pre), 'n_post': int(n_post), 'n_neighbors': int(k),
+        'sum_mi_bits': sum_mi, 'joint_mi_bits': joint_mi,
+    }
+
+    # Label-shuffle permutation null for the joint estimate (surrogate-gated MI).
+    if n_surrogates and n_surrogates > 0:
+        null = np.empty(int(n_surrogates))
+        for i in range(int(n_surrogates)):
+            y_shuf = rng.permutation(Y)
+            null[i] = compute_mi_cd_multivariate(X_pre, y_shuf, n_neighbors=k) * _NATS_TO_BITS
+        s_mean = float(null.mean())
+        s_std = float(null.std(ddof=1)) if n_surrogates > 1 else 0.0
+        out.update({
+            'surrogate_n': int(n_surrogates),
+            'surrogate_mean_bits': s_mean,
+            'surrogate_std_bits': s_std,
+            # +1 correction: observed is one draw from the null under H0.
+            'surrogate_p_value': float((np.sum(null >= joint_mi) + 1) / (n_surrogates + 1)),
+            'surrogate_z': float((joint_mi - s_mean) / s_std) if s_std > 0 else float('nan'),
+        })
+    return out
+
+
+def run_band_event_mi_pipeline(
+    signals_by_channel: dict[str, np.ndarray],
+    onset_indices: list[int],
+    *,
+    fs: float = DEFAULT_FS,
+    windows_sec: tuple[float, ...] = (5.0, 10.0, 15.0, 30.0),
+    sub_sec: float = 1.0,
+    sub_step_sec: float = 0.5,
+    n_neighbors: int = 3,
+    n_surrogates: int = 0,
+    random_state: int = 0,
+) -> pd.DataFrame:
+    """Iterate window sizes × channels; return a tidy DataFrame.
+
+    Columns: ``Window_Size``, ``Channel``, ``Joint_MI_Sum_Bits``,
+    ``Joint_MI_KSG_Bits``, ``N_Pre``, ``N_Post``, ``K_Neighbors`` and, when
+    ``n_surrogates > 0``, the surrogate-null columns.
+    """
+    records: list[dict] = []
+    for ch_label, sig in signals_by_channel.items():
+        envelopes = extract_band_envelopes(sig, fs=fs)
+        for w_sec in windows_sec:
+            w_samp = int(round(w_sec * fs))
+            res = compute_band_event_joint_mi(
+                envelopes, onset_indices, w_samp, fs=fs,
+                sub_sec=sub_sec, sub_step_sec=sub_step_sec,
+                n_neighbors=n_neighbors, n_surrogates=n_surrogates,
+                random_state=random_state,
+            )
+            if res is None:
+                print(f'  [skip] {ch_label} @ {w_sec:g}s — too few usable sub-epochs.')
+                continue
+            rec = {
+                'Window_Size': float(w_sec), 'Channel': ch_label,
+                'Joint_MI_Sum_Bits': res['sum_mi_bits'],
+                'Joint_MI_KSG_Bits': res['joint_mi_bits'],
+                'N_Pre': res['n_pre'], 'N_Post': res['n_post'],
+                'K_Neighbors': res['n_neighbors'],
+            }
+            for key in ('surrogate_mean_bits', 'surrogate_std_bits',
+                        'surrogate_p_value', 'surrogate_z'):
+                if key in res:
+                    rec[key] = res[key]
+            records.append(rec)
+    return pd.DataFrame.from_records(records)
+
+
+def plot_band_event_mi(df: pd.DataFrame, title: str, outpath: str) -> None:
+    """Line plot of joint MI (bits) vs. window size, per channel.
+
+    Solid = true multivariate KSG joint MI; dashed = summed per-band MI, so the
+    over-counting gap between the estimators is visible. A distinct colour per
+    channel. If a surrogate p-value column is present, KSG points that clear
+    p<.05 are ring-marked so a value within surrogate noise is not over-read.
+    """
+    if df.empty:
+        print('  [warn] band-event MI DataFrame is empty — nothing to plot.')
+        return
+    fig, ax = plt.subplots(figsize=(8.5, 5.5))
+
+    palette = ['#0072B2', '#D55E00', '#009E73', '#CC79A7']
+    has_p = 'surrogate_p_value' in df.columns
+    for ci, (ch_label, sub) in enumerate(df.groupby('Channel')):
+        sub = sub.sort_values('Window_Size')
+        color = palette[ci % len(palette)]
+        ax.plot(sub['Window_Size'], sub['Joint_MI_KSG_Bits'], linestyle='-',
+                marker='o', linewidth=2, color=color, label=f'{ch_label} (joint KSG)')
+        ax.plot(sub['Window_Size'], sub['Joint_MI_Sum_Bits'], linestyle='--',
+                marker='s', linewidth=1.6, color=color, alpha=0.8,
+                label=f'{ch_label} (Σ per-band)')
+        if has_p:
+            sig_pts = sub[sub['surrogate_p_value'] < 0.05]
+            if not sig_pts.empty:
+                ax.scatter(sig_pts['Window_Size'], sig_pts['Joint_MI_KSG_Bits'],
+                           s=140, facecolors='none', edgecolors=color, linewidths=1.8,
+                           zorder=5)
+
+    ax.set_xlabel('Window Size (s)')
+    ax.set_ylabel('Joint MI  I(θ, α, β power ; Event)  [bits]')
+    star_note = '  (ringed = surrogate p<.05)' if has_p else ''
+    ax.set_title(f'{title}\nJoint band-power mutual information vs. window size{star_note}')
+    ax.set_xticks(sorted(df['Window_Size'].unique()))
+    ax.grid(True, alpha=0.3)
+    ax.legend(title='Channel / estimator', fontsize=8)
+    _add_footer(fig, _provenance(DEFAULT_FS, DEFAULT_WIN_SEC, None,
+                                 extra='band-power × event joint MI'))
+    fig.tight_layout(rect=(0, 0.02, 1, 1))
+    fig.savefig(outpath, dpi=150)
+    plt.close(fig)
+    print(f'Saved: {outpath}')
+
+
 def plot_peri_event_mi(
     win_result: dict[str, np.ndarray],
     event_onsets: list[tuple[str, float]],
@@ -1754,6 +2100,160 @@ def plot_peri_event_mi(
     fig.savefig(outpath, dpi=150)
     plt.close(fig)
     print(f'Saved: {outpath}')
+
+
+# Colour-blind-friendly qualitative palette for the interactive per-event traces.
+_PERI_EVENT_COLORS = (
+    '#0072B2', '#E69F00', '#009E73', '#D55E00', '#CC79A7',
+    '#56B4E9', '#F0E442', '#999999', '#8C564B', '#17BECF',
+)
+
+
+def _peri_event_series_on_grid(
+    win_result: dict[str, np.ndarray],
+    event_onsets: list[tuple[str, float]],
+    grid: np.ndarray,
+    pre_sec: float,
+    post_sec: float,
+) -> tuple[list[tuple[str, np.ndarray]], np.ndarray, np.ndarray]:
+    """Resample every event's zero-lag MI trace onto the shared relative-time
+    ``grid`` (NaN outside coverage) and return ``[(name, series), …]`` plus the
+    across-event mean and ±1σ. The mean/σ replicate the static view's
+    computation, so the interactive figure plots the *same* real data."""
+    t = np.asarray(win_result['time'], dtype=float)
+    mi = np.asarray(win_result['joint_mi'], dtype=float)
+    per_event: list[tuple[str, np.ndarray]] = []
+    stack: list[np.ndarray] = []
+    for name, onset_s in event_onsets:
+        rel = t - onset_s
+        sel = (rel >= -pre_sec) & (rel <= post_sec) & np.isfinite(mi)
+        if np.count_nonzero(sel) < 2:
+            continue
+        series = np.interp(grid, rel[sel], mi[sel], left=np.nan, right=np.nan)
+        per_event.append((name, series))
+        stack.append(series)
+    if stack:
+        arr = np.vstack(stack)
+        with np.errstate(invalid='ignore'):
+            allnan = np.all(~np.isfinite(arr), axis=0)
+            mean = np.full(grid.shape, np.nan)
+            sd = np.full(grid.shape, np.nan)
+            mean[~allnan] = np.nanmean(arr[:, ~allnan], axis=0)
+            sd[~allnan] = np.nanstd(arr[:, ~allnan], axis=0)
+    else:
+        mean = np.full(grid.shape, np.nan)
+        sd = np.full(grid.shape, np.nan)
+    return per_event, mean, sd
+
+
+def plot_peri_event_mi_interactive(
+    win_result: dict[str, np.ndarray],
+    event_onsets: list[tuple[str, float]],
+    title: str,
+    outpath: str,
+    pre_sec: float = 30.0,
+    post_sec: float = 60.0,
+    fs: float = DEFAULT_FS,
+    win_sec: float = DEFAULT_WIN_SEC,
+    step_sec: float | None = None,
+) -> bool:
+    """Interactive (Plotly) counterpart of :func:`plot_peri_event_mi`.
+
+    Renders the same real per-event zero-lag MI traces — resampled onto a shared
+    relative-time grid — as an animated HTML figure: a Play button + slider grow
+    every line left→right in time, a dashed "Event Onset" marker sits at t=0, and
+    the legend toggles individual events. The across-event mean is drawn as a bold
+    black line. No new MI is estimated; the global ``win_result`` is reused.
+
+    Returns ``True`` if the HTML was written, ``False`` if Plotly is unavailable
+    or there is nothing to plot (callers keep the static PNG regardless).
+    """
+    if not _PLOTLY_AVAILABLE:
+        print('  [warn] --peri-event-html needs Plotly (pip install plotly) — '
+              'skipping interactive export; the static PNG was still written.')
+        return False
+    if not event_onsets:
+        return False
+
+    grid = np.arange(-pre_sec, post_sec + 1e-9, step_sec or win_sec)
+    per_event, mean, sd = _peri_event_series_on_grid(
+        win_result, event_onsets, grid, pre_sec, post_sec)
+    if not per_event:
+        print('  [warn] no event has ≥2 in-window MI samples — no interactive plot.')
+        return False
+
+    # Traces: one per event, then the across-event mean (drawn last / on top).
+    traces = list(per_event) + [('event mean', mean)]
+
+    def _scatter(idx: int, name: str, y: np.ndarray, upto: int) -> '_go.Scatter':
+        is_mean = name == 'event mean'
+        color = '#111111' if is_mean else _PERI_EVENT_COLORS[idx % len(_PERI_EVENT_COLORS)]
+        return _go.Scatter(
+            x=grid[:upto], y=y[:upto], mode='lines', name=name,
+            legendgroup=name,
+            line=dict(color=color, width=3.0 if is_mean else 1.8,
+                      dash='solid'),
+            opacity=1.0 if is_mean else 0.75,
+            hovertemplate=f'{name}<br>t=%{{x:.1f}}s<br>MI=%{{y:.3f}} bits<extra></extra>',
+        )
+
+    base = [_scatter(i, name, y, 1) for i, (name, y) in enumerate(traces)]
+    frames = [
+        _go.Frame(name=f'{grid[k]:.1f}',
+                  data=[_go.Scatter(x=grid[:k + 1], y=y[:k + 1])
+                        for _, y in traces])
+        for k in range(grid.size)
+    ]
+
+    # Y-range from the real data (headroom above the largest finite value).
+    finite_vals = np.concatenate([y[np.isfinite(y)] for _, y in traces
+                                  if np.any(np.isfinite(y))] or [np.array([0.0])])
+    ymax = float(np.nanmax(finite_vals)) if finite_vals.size else 1.0
+    y_top = max(0.1, ymax * 1.15)
+
+    play_args = dict(frame=dict(duration=90, redraw=True),
+                     transition=dict(duration=0), fromcurrent=True, mode='immediate')
+    slider_steps = [
+        dict(method='animate', label=f'{grid[k]:.0f}',
+             args=[[f'{grid[k]:.1f}'],
+                   dict(mode='immediate', frame=dict(duration=0, redraw=True),
+                        transition=dict(duration=0))])
+        for k in range(grid.size)
+    ]
+
+    fig = _go.Figure(data=base, frames=frames)
+    fig.update_layout(
+        title=title,
+        template='plotly_white',
+        xaxis=dict(title='time relative to event onset (s)',
+                   range=[-pre_sec, post_sec], zeroline=False),
+        yaxis=dict(title='joint MI (bits)', range=[0.0, y_top]),
+        legend=dict(title='event  (click to toggle)', x=1.02, y=1.0),
+        hovermode='x unified',
+        updatemenus=[dict(
+            type='buttons', direction='left', showactive=False,
+            x=0.0, y=1.14, xanchor='left', yanchor='top',
+            buttons=[
+                dict(label='▶ Play', method='animate', args=[None, play_args]),
+                dict(label='⏸ Pause', method='animate',
+                     args=[[None], dict(mode='immediate',
+                                        frame=dict(duration=0, redraw=False),
+                                        transition=dict(duration=0))]),
+            ])],
+        sliders=[dict(active=0, x=0.08, len=0.92, y=0.0, xanchor='left',
+                      currentvalue=dict(prefix='t = ', suffix=' s'),
+                      pad=dict(t=40), steps=slider_steps)],
+        margin=dict(t=95, r=180),
+    )
+    fig.add_vline(x=0.0, line=dict(color='crimson', width=2, dash='dash'),
+                  annotation_text='Event Onset', annotation_position='top',
+                  annotation=dict(font=dict(color='crimson')))
+    fig.add_annotation(text=_provenance(fs, win_sec, step_sec, extra='peri-event MI'),
+                       xref='paper', yref='paper', x=0.0, y=-0.16, showarrow=False,
+                       font=dict(size=9, color='#666666'), align='left')
+    fig.write_html(outpath, include_plotlyjs='cdn', auto_open=False)
+    print(f'Saved: {outpath}')
+    return True
 
 
 def plot_joint_distribution(
@@ -2381,6 +2881,38 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument('--ibrain-events', action='store_true', default=False,
                         help=('Overlay iBrainCenter session event markers and '
                               'convert x-axis to absolute local time (UTC+8).'))
+    parser.add_argument('--peri-event-html', action='store_true', default=False,
+                        help=('--joint-mi with --ibrain-events: also write an '
+                              'interactive Plotly peri-event MI animation '
+                              '(*_peri_event.html) alongside the static PNG — a '
+                              'Play button/slider grows each event\'s real MI '
+                              'trace left→right around onset. Requires plotly.'))
+    parser.add_argument('--band-event-mi', action='store_true', default=False,
+                        help=('Band-power × event mode: estimate the joint MI '
+                              'I(θ,α,β power ; pre/post-event) across window sizes '
+                              '(--mi-windows) for two channels (--band-mi-channels). '
+                              'Reports both the summed per-band and the true '
+                              'multivariate KSG estimate (bits). Onsets come from '
+                              '--event-onset or, with --ibrain-events, every session '
+                              'event pooled together. Requires scikit-learn.'))
+    parser.add_argument('--event-onset', type=float, metavar='SEC',
+                        help=('--band-event-mi: single event onset, in seconds from '
+                              'recording start. Ignored when --ibrain-events pools '
+                              'onsets over all session events.'))
+    parser.add_argument('--mi-windows', type=float, nargs='+',
+                        default=[5.0, 10.0, 15.0, 30.0], metavar='SEC',
+                        help=('--band-event-mi: pre/post window sizes in seconds '
+                              '(default: 5 10 15 30).'))
+    parser.add_argument('--band-mi-channels', type=int, nargs='+', default=[1, 2],
+                        metavar='N',
+                        help=('--band-event-mi: 1-based channels to analyse '
+                              '(default: 1 2).'))
+    parser.add_argument('--mi-sub-sec', type=float, default=1.0, metavar='SEC',
+                        help=('--band-event-mi: sub-epoch length in seconds used to '
+                              'draw feature samples inside each window (default 1.0).'))
+    parser.add_argument('--mi-sub-step', type=float, default=0.5, metavar='SEC',
+                        help=('--band-event-mi: sub-epoch step in seconds; < --mi-sub-sec '
+                              'means overlapping sub-epochs → more samples (default 0.5).'))
     return parser.parse_args()
 
 
@@ -2594,13 +3126,21 @@ def _run_joint_mi_mode(args: argparse.Namespace,
                 outpath=events_png, label_x=label_x, label_y=label_y)
 
             # Peri-event MI time course (reuses the global windowed series).
+            peri_onsets = [(e['name'], e['onset_rel_s']) for e in events]
+            peri_title = (f'Peri-event zero-lag MI — {label_x} vs {label_y} '
+                          f'[{os.path.basename(args.csv)}]')
             peri_png = os.path.join(outdir, f'{stem}_peri_event.png')
             plot_peri_event_mi(
-                win_result,
-                [(e['name'], e['onset_rel_s']) for e in events],
-                title=(f'Peri-event zero-lag MI — {label_x} vs {label_y} '
-                       f'[{os.path.basename(args.csv)}]'),
+                win_result, peri_onsets, title=peri_title,
                 outpath=peri_png, fs=fs_eff, win_sec=args.win, step_sec=args.step)
+
+            # Optional interactive (Plotly) animation of the same real traces.
+            if args.peri_event_html:
+                peri_html = os.path.join(outdir, f'{stem}_peri_event.html')
+                plot_peri_event_mi_interactive(
+                    win_result, peri_onsets, title=peri_title,
+                    outpath=peri_html, fs=fs_eff, win_sec=args.win,
+                    step_sec=args.step)
 
             print('\nPre-event vs onset joint MI (bits):')
             for e in events:
@@ -2720,6 +3260,88 @@ def _run_baseline_event_mode(args: argparse.Namespace,
           f'U={result["mannwhitneyu_u"]:.1f}, p={result["mannwhitneyu_p"]:.4g}')
 
 
+def _resolve_event_onsets(args: argparse.Namespace, time_us: np.ndarray,
+                          n_times: int) -> list[int]:
+    """Resolve pre/post-event onset sample indices for --band-event-mi.
+
+    With --ibrain-events every session event onset (converted from its HH:MM to
+    a sample index relative to the recording's epoch) is pooled. Otherwise a
+    single --event-onset (seconds from recording start) is used.
+    """
+    if args.ibrain_events:
+        if not _IBRAIN_AVAILABLE:
+            sys.exit('Error: --ibrain-events needs plot_event_markers (unavailable).')
+        epoch_us = int(time_us[0])
+        onsets = []
+        for name, start_hhmm, *_rest in _IBRAIN_EVENTS:
+            idx = int(round((_hhmm_to_us(start_hhmm) - epoch_us) / 1e6 * args.fs))
+            if 0 <= idx < n_times:
+                onsets.append(idx)
+        if not onsets:
+            sys.exit('Error: no iBrainCenter event onset falls within the recording.')
+        print(f'  Pooling {len(onsets)} iBrainCenter event onset(s).')
+        return onsets
+    if args.event_onset is None:
+        sys.exit('Error: --band-event-mi needs --event-onset SEC (or --ibrain-events).')
+    idx = int(round(args.event_onset * args.fs))
+    if not (0 <= idx < n_times):
+        sys.exit(f'Error: --event-onset {args.event_onset:g}s is outside the recording.')
+    return [idx]
+
+
+def _run_band_event_mi_mode(args: argparse.Namespace,
+                            time_us: np.ndarray,
+                            data: np.ndarray,
+                            outdir: str) -> None:
+    """Estimate I(θ,α,β power ; pre/post-event) across window sizes for the
+    requested channels, write the results CSV, and plot MI vs. window size.
+
+    See the "Band-power × Event joint MI" section for the method: sub-epoch
+    tiling of each pre/post window (pooled across onsets) feeds both the summed
+    per-band and the true multivariate KSG estimator, reported in bits.
+    """
+    if not _SKLEARN_MI_AVAILABLE:
+        sys.exit('Error: --band-event-mi requires scikit-learn (import failed).')
+
+    n_times = data.shape[0]
+    onsets = _resolve_event_onsets(args, time_us, n_times)
+
+    signals: dict[str, np.ndarray] = {}
+    for ch in args.band_mi_channels:
+        idx = ch - 1
+        if idx < 0 or idx >= data.shape[1]:
+            sys.exit(f'Error: --band-mi-channels {ch} not found '
+                     f'(file has {data.shape[1]} channels).')
+        signals[f'ch{ch}'] = data[:, idx]
+
+    print(f'Band-power × event joint MI — channels={list(signals)}, '
+          f'windows={[f"{w:g}s" for w in args.mi_windows]}, '
+          f'sub={args.mi_sub_sec:g}s/step={args.mi_sub_step:g}s, '
+          f'surrogates={args.mi_surrogates}, fs={args.fs:g}Hz')
+
+    df = run_band_event_mi_pipeline(
+        signals, onsets, fs=args.fs,
+        windows_sec=tuple(args.mi_windows),
+        sub_sec=args.mi_sub_sec, sub_step_sec=args.mi_sub_step,
+        n_neighbors=3,   # KSG/KNN k; auto-capped to the smaller class per window
+        n_surrogates=args.mi_surrogates,
+    )
+    if df.empty:
+        sys.exit('Error: no window/channel produced enough sub-epochs for an MI '
+                 'estimate — try larger --mi-windows or a smaller --mi-sub-sec.')
+
+    print('\n=== Joint MI results (bits) ===')
+    print(df.to_string(index=False))
+
+    basename = os.path.splitext(os.path.basename(args.csv))[0]
+    csv_out = os.path.join(outdir, f'{basename}_band_event_mi.csv')
+    df.to_csv(csv_out, index=False)
+    print(f'\nSaved: {csv_out}')
+
+    png_out = os.path.join(outdir, f'{basename}_band_event_mi.png')
+    plot_band_event_mi(df, title=os.path.basename(args.csv), outpath=png_out)
+
+
 def main() -> None:
     global SMOOTH_WINDOW
     args = _parse_args()
@@ -2755,6 +3377,11 @@ def main() -> None:
     # ── Joint-distribution / mutual-information mode ─────────────────────────────
     if args.joint_mi:
         _run_joint_mi_mode(args, time_us, data, data_raw, outdir)
+        return
+
+    # ── Band-power × event joint-MI mode ─────────────────────────────────────────
+    if args.band_event_mi:
+        _run_band_event_mi_mode(args, time_us, data, outdir)
         return
 
     # ── Baseline-vs-event entropy mode ──────────────────────────────────────────
