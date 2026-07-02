@@ -49,7 +49,7 @@ from scipy.signal import resample_poly, welch, stft
 # ── 重用既有模組（單一事實來源）─────────────────────────────────────────────────
 from eeg_utils import bandpass_filter
 from plot_event_markers import (
-    FS, TFLITE_FS, TFLITE_WIN, TFLITE_MODEL_PATH,
+    FS, TFLITE_FS, TFLITE_WIN,
     BP_LOW, BP_HIGH,
     apply_tflite_windowed,
 )
@@ -263,7 +263,6 @@ def _plot_stft(ax_before: plt.Axes, ax_after: plt.Axes,
     # placed side-by-side — colour maps cannot be meaningfully overlaid.
     pre  = result["pre_data_200"]
     tfl  = result["tfl_data_200"]
-    t200 = _time_axis_sec(result["time_us_200"])
 
     ch_pre = min(ch, pre.shape[1] - 1)
     ch_tfl = min(ch, tfl.shape[1] - 1)

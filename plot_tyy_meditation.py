@@ -30,7 +30,6 @@ import matplotlib.gridspec as gridspec
 import matplotlib.dates as mdates
 import matplotlib.patches as mpatches
 import numpy as np
-import pandas as pd
 
 # ── Locate project root and import shared utilities ───────────────────────────
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -314,7 +313,7 @@ def plot_tyy_meditation(outdir: str, ds: int = 500, use_tflite: bool = True):
             N_tfl    = len(tfl_raw)
             tfl_time = tfl_time[:N_tfl]
             print(f'  TFLite: {N_tfl} samples ({N_tfl / TFLITE_FS:.0f}s)')
-            print(f'  Computing TFLite qEEG…')
+            print('  Computing TFLite qEEG…')
             tfl_qeeg_dt, tfl_qeeg = _compute_qeeg_windowed(
                 tfl_time, tfl_raw, fs=TFLITE_FS)
             print(f'  {len(tfl_qeeg_dt)} windows')

@@ -16,7 +16,6 @@ import argparse
 import os
 
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 import numpy as np
 
 from eeg_utils import load_merged_csv
@@ -60,7 +59,7 @@ def plot_subject(path: str, group: str, subject: str, outdir: str,
 
     starts = pick_segments(n_total, seg_len, N_SEGS, rng)
     if not starts:
-        print(f'    WARNING: not enough data for even 1 segment, skipping')
+        print('    WARNING: not enough data for even 1 segment, skipping')
         return
 
     t_rel = np.arange(seg_len) / FS  # 0 … seg_sec

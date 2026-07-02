@@ -22,7 +22,6 @@ from __future__ import annotations
 import argparse
 import datetime
 import os
-import sys
 from math import gcd
 
 import matplotlib.pyplot as plt
@@ -31,13 +30,12 @@ import numpy as np
 from scipy.signal import resample_poly
 
 from eeg_utils import load_merged_csv, bandpass_filter
-from qeeg_indices import compute_qeeg_indices
 from plot_event_markers import (
     SUBJECTS, YOGA_SUBJECTS, EVENTS, EVT_COLORS,
     IBRAIN_DIR, YOGA_DIR,
-    FS, TFLITE_FS, TFLITE_WIN, TFLITE_MODEL_PATH,
-    QEEG_WIN_SEC, QUALITY_WIN_SEC, QUALITY_THRESHOLD,
-    us_to_local_dt, hhmm_to_dt,
+    FS, TFLITE_FS, TFLITE_MODEL_PATH,
+    QUALITY_WIN_SEC, QUALITY_THRESHOLD,
+    hhmm_to_dt,
     compute_quality_windowed, compute_qeeg_windowed,
     apply_tflite_windowed,
 )

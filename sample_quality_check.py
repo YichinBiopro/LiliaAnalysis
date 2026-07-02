@@ -19,7 +19,6 @@ import warnings
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import numpy as np
-import pandas as pd
 from scipy.signal import welch
 
 from eeg_quality_v2 import (
@@ -203,12 +202,12 @@ def plot_segments(path: str, group: str, subject: str, outdir: str,
         ax_q = fig.add_subplot(inner[n_ch])   # independent x-axis
         bar_x     = np.arange(n_ch)
         bar_w     = 0.35
-        bars_raw  = ax_q.bar(bar_x - bar_w/2, overall_raw, width=bar_w,
-                             color=[CH_COLORS[i % len(CH_COLORS)] for i in range(n_ch)],
-                             alpha=0.40, hatch='//', label='raw', zorder=3)
-        bars_filt = ax_q.bar(bar_x + bar_w/2, overall, width=bar_w,
-                             color=[CH_COLORS[i % len(CH_COLORS)] for i in range(n_ch)],
-                             alpha=0.85, label=f'BP {BP_LOW}–{BP_HIGH}Hz', zorder=3)
+        ax_q.bar(bar_x - bar_w/2, overall_raw, width=bar_w,
+                 color=[CH_COLORS[i % len(CH_COLORS)] for i in range(n_ch)],
+                 alpha=0.40, hatch='//', label='raw', zorder=3)
+        ax_q.bar(bar_x + bar_w/2, overall, width=bar_w,
+                 color=[CH_COLORS[i % len(CH_COLORS)] for i in range(n_ch)],
+                 alpha=0.85, label=f'BP {BP_LOW}–{BP_HIGH}Hz', zorder=3)
         ax_q.axhline(QUALITY_THRESHOLD, color='red', lw=1.2, ls='--',
                      label=f'threshold {QUALITY_THRESHOLD:.2f}')
         for i in range(n_ch):

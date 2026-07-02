@@ -52,13 +52,13 @@ from eeg_quality_v2 import get_eeg_quality_index_v2_parametric
 
 # 直接沿用 plot_event_markers 的常數與工具函式（單一事實來源 single source of truth）
 from plot_event_markers import (
-    FS, TFLITE_FS, TFLITE_WIN, TFLITE_MODEL_PATH,
+    FS, TFLITE_FS,
     BP_LOW, BP_HIGH, QEEG_WIN_SEC, QUALITY_WIN_SEC,
     QUALITY_PARAMS, QUALITY_THRESHOLD,
     EVENTS, CONE_STAGES, SUBJECTS, IBRAIN_DIR,
     hhmm_to_us, hhmm_to_dt, us_to_local_dt,
     apply_tflite_windowed, compute_qeeg_windowed,
-    _overlay_events, _style_presentation_axis, _series_with_gaps,
+    _overlay_events, _series_with_gaps,
 )
 
 # ── 本腳本專屬設定 ──────────────────────────────────────────────────────────────
@@ -440,7 +440,6 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
         participates = (participants is None) or (name in participants)
         start_dt = hhmm_to_dt(start_hhmm)
         end_dt   = start_dt + datetime.timedelta(minutes=dur_min)
-        color    = SUMMARY_COLORS['focus']  # 事件底色僅用於 overlay，統一灰階即可
         evt_list.append((start_dt, end_dt, label, '#888888', participates))
         if participates:
             participating_events.append((label, start_hhmm, start_dt, end_dt))

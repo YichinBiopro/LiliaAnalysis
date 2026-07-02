@@ -211,9 +211,6 @@ def plot_index_vs_raw(
     if not win:
         sys.exit(f'Error: no EVENTS apply to subject {subject!r}.')
 
-    # Global first-part baseline window (seconds from sample 0).
-    fp_lo, fp_hi = 0.0, baseline_sec
-
     sc = 1.0 / 60.0 if use_minutes else 1.0
     xlabel = 'Time (min)' if use_minutes else 'Time (s)'
 
