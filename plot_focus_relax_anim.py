@@ -33,7 +33,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from qeeg_indices import focus_index, relaxation_index
+from lilia.qeeg import focus_index, relaxation_index
 
 
 def _load_focus_relax(csv_path: str) -> tuple[np.ndarray, np.ndarray, np.ndarray]:

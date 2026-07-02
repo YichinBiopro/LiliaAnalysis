@@ -35,8 +35,8 @@ import numpy as np
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE_DIR)
 
-from eeg_utils import load_merged_csv, bandpass_filter          # noqa: E402
-from qeeg_indices import compute_qeeg_indices                   # noqa: E402
+from lilia.io import load_merged_csv, bandpass_filter          # noqa: E402
+from lilia.qeeg import compute_qeeg_indices                   # noqa: E402
 
 # ── Session / subject constants ────────────────────────────────────────────────
 SESSION_DATE   = datetime.date(2026, 5, 12)

@@ -47,7 +47,7 @@ import numpy as np
 from scipy.signal import resample_poly, welch, stft
 
 # ── 重用既有模組（單一事實來源）─────────────────────────────────────────────────
-from eeg_utils import bandpass_filter
+from lilia.io import bandpass_filter
 from plot_event_markers import (
     FS, TFLITE_FS, TFLITE_WIN,
     BP_LOW, BP_HIGH,

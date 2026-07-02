@@ -18,7 +18,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-from eeg_utils import load_merged_csv
+from lilia.io import load_merged_csv
 
 # ── Constants ──────────────────────────────────────────────────────────────────
 FS       = 500          # Hz

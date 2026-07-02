@@ -88,7 +88,7 @@ import numpy as np
 import pandas as pd
 from scipy import signal
 
-from eeg_utils import bandpass_filter, load_merged_csv
+from lilia.io import bandpass_filter, load_merged_csv
 
 # ── qEEG Focus/Relax indices (optional import) ────────────────────────────────
 # The per-window (p_θ, p_α, p_β) proportions this module already computes are
@@ -96,7 +96,7 @@ from eeg_utils import bandpass_filter, load_merged_csv
 # the wellness indices, so we can derive Focus/Relax per window with no extra
 # PSD work — just the closed-form index formulas.
 try:
-    from qeeg_indices import focus_index, relaxation_index
+    from lilia.qeeg import focus_index, relaxation_index
     _QEEG_AVAILABLE = True
 except ImportError:
     _QEEG_AVAILABLE = False
@@ -135,7 +135,7 @@ except ImportError:
 try:
     from plot_event_markers import QUALITY_PARAMS as _QUALITY_PARAMS, \
         QUALITY_THRESHOLD as _QUALITY_THRESHOLD
-    from eeg_quality_v2 import get_eeg_quality_index_v2_parametric \
+    from lilia.quality import get_eeg_quality_index_v2_parametric \
         as _eeg_quality_v2
     from plot_tflite_summary import _saturation_frac, SAT_FRAC_MAX as _SAT_FRAC_MAX
     _QC_AVAILABLE = True

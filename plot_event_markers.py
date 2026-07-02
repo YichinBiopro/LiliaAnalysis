@@ -33,12 +33,12 @@ import matplotlib.ticker as mticker
 import numpy as np
 import pandas as pd
 from scipy import signal
-from eeg_quality_v2 import (
+from lilia.quality import (
     get_eeg_quality_index_v2_parametric,
     get_ibrain_device_eeg_quality_v2_params,
 )
-from qeeg_indices import compute_qeeg_indices
-from eeg_utils import load_merged_csv, bandpass_filter
+from lilia.qeeg import compute_qeeg_indices
+from lilia.io import load_merged_csv, bandpass_filter
 
 # ── Session metadata ───────────────────────────────────────────────────────────
 SESSION_DATE = datetime.date(2026, 5, 12)

@@ -26,7 +26,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from eeg_utils import bandpass_filter, load_merged_csv
+from lilia.io import bandpass_filter, load_merged_csv
 from spectral_entropy import (
     DEFAULT_FS, DEFAULT_BP_LOW, DEFAULT_BP_HIGH,
     extract_band_envelopes, compute_band_event_joint_mi,

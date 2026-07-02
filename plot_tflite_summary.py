@@ -46,9 +46,9 @@ from matplotlib.colors import LinearSegmentedColormap
 from scipy.signal import resample_poly
 
 # ── 重用既有模組 ────────────────────────────────────────────────────────────────
-from eeg_utils import load_merged_csv, bandpass_filter
-from qeeg_indices import compute_qeeg_indices
-from eeg_quality_v2 import get_eeg_quality_index_v2_parametric
+from lilia.io import load_merged_csv, bandpass_filter
+from lilia.qeeg import compute_qeeg_indices
+from lilia.quality import get_eeg_quality_index_v2_parametric
 
 # 直接沿用 plot_event_markers 的常數與工具函式（單一事實來源 single source of truth）
 from plot_event_markers import (

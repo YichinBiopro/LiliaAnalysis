@@ -30,12 +30,12 @@ import matplotlib.dates as mdates
 import numpy as np
 from scipy.signal import welch
 
-from eeg_utils import load_merged_csv, bandpass_filter
-from eeg_quality_v2 import (
+from lilia.io import load_merged_csv, bandpass_filter
+from lilia.quality import (
     get_eeg_quality_index_v2_parametric,
     get_best_eeg_quality_v2_flat_spectrum_only_params,
 )
-from qeeg_indices import compute_qeeg_indices
+from lilia.qeeg import compute_qeeg_indices
 from plot_event_markers import (
     QUALITY_WIN_SEC, QUALITY_PARAMS, SUBJECTS, IBRAIN_DIR,
     us_to_local_dt, _series_with_gaps,

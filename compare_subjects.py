@@ -29,7 +29,7 @@ import matplotlib.patches as mpatches
 import numpy as np
 from scipy.signal import resample_poly
 
-from eeg_utils import load_merged_csv, bandpass_filter
+from lilia.io import load_merged_csv, bandpass_filter
 from plot_event_markers import (
     SUBJECTS, YOGA_SUBJECTS, EVENTS, EVT_COLORS,
     IBRAIN_DIR, YOGA_DIR,

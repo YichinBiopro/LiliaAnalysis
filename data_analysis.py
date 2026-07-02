@@ -373,7 +373,7 @@ def plot_stft_comparison(time_a, sig_a, time_b, sig_b, n_ch, title, outpath,
     print(f'Saved: {os.path.basename(outpath)}')
 
 
-from qeeg_indices import (          # noqa: E402  (after sys.path setup)
+from lilia.qeeg import (          # noqa: E402  (after sys.path setup)
     compute_qeeg_indices_windowed,
     plot_qeeg_indices,
 )

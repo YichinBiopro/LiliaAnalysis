@@ -41,7 +41,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from qeeg_indices import (
+from lilia.qeeg import (
     focus_index, flow_index, calm_index, relaxation_index)
 import plot_event_markers as pem
 
