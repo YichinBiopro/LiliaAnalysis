@@ -31,3 +31,12 @@ YoGa/
 # Large model artifacts
 *.pth
 *.tflite
+
+# Generated graphs / figures (matplotlib PNGs, Plotly HTML, animations, etc.)
+report_figures/
+*.png
+*.svg
+*.jpg
+*.jpeg
+*.gif
+*.html
