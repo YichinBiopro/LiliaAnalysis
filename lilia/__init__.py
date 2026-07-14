@@ -17,10 +17,11 @@ from lilia.qeeg import (
     focus_index, flow_index, calm_index, relaxation_index,
 )
 from lilia.quality import get_eeg_quality_index_v2_parametric
+from lilia.goertzel import goertzel_power
 
 __all__ = [
     "load_merged_csv", "bandpass_filter",
     "compute_qeeg_indices", "compute_qeeg_indices_windowed",
     "focus_index", "flow_index", "calm_index", "relaxation_index",
-    "get_eeg_quality_index_v2_parametric",
+    "get_eeg_quality_index_v2_parametric", "goertzel_power",
 ]
