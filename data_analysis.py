@@ -1,9 +1,5 @@
 import sys
 
-# ── External dependency from tommy ──────────────────────────────────────────────
-sys.path.insert(0, '/home/bps-yichin/tommy')
-from eeg_denoise.tiny_model_v4 import TinyUNetV4
-
 import argparse
 import glob
 import os
@@ -14,16 +10,18 @@ import pandas as pd
 import torch
 from scipy import signal
 
+from lilia.pathing import get_project_root, import_tinyunetv4
+from lilia.signal import (
+    apply_filters as _apply_filters_shared,
+    resample_with_time as _resample_with_time_shared,
+)
+
 # ── Constants ──────────────────────────────────────────────────────────────────
-BASE_DIR       = '/home/bps-yichin/lilia_analysis'
-FS             = 500
-DOWNSAMPLED_FS = 200
-BANDPASS_LOW   = 0.5
-BANDPASS_HIGH  = 45.0
+from lilia.constants import FS, DOWNSAMPLED_FS, BP_LOW as BANDPASS_LOW, BP_HIGH as BANDPASS_HIGH, N_CH, N_CH_OUT
+
+BASE_DIR       = get_project_root()
 NOTCH_FREQ     = 60.0
 NOTCH_Q        = 30.0
-N_CH           = 4
-N_CH_OUT       = 2
 
 ARTIFACT_PEAK_HZ  = 33.25
 ARTIFACT_PEAK_BW  = 1.0
@@ -97,58 +95,43 @@ def load_file(path: str) -> tuple[np.ndarray, np.ndarray, str, float]:
     return time_s, data, os.path.basename(path), gain
 
 
-# ── Filters ────────────────────────────────────────────────────────────────────
 def bandpass(data: np.ndarray, fs: float = FS,
              low: float = BANDPASS_LOW, high: float = BANDPASS_HIGH,
              order: int = 4) -> np.ndarray:
-    """Apply zero-phase Butterworth bandpass filter column-wise."""
-    sos = signal.butter(order, [low, high], btype='bandpass', fs=fs, output='sos')
-    return signal.sosfiltfilt(sos, data, axis=0)
+    """Wrapper around shared lilia.signal.bandpass for backward compatibility."""
+    from lilia.signal import bandpass as _bandpass_shared
+    return _bandpass_shared(data, fs=fs, low=low, high=high, order=order)
 
 
 def notch(data: np.ndarray, fs: float = FS,
           freq: float = NOTCH_FREQ, q: float = NOTCH_Q) -> np.ndarray:
-    """Apply zero-phase IIR notch filter column-wise."""
-    b, a = signal.iirnotch(freq, q, fs=fs)
-    return signal.filtfilt(b, a, data, axis=0)
+    """Wrapper around shared lilia.signal.notch for backward compatibility."""
+    from lilia.signal import notch as _notch_shared
+    return _notch_shared(data, fs=fs, freq=freq, q=q)
 
 
 def bandstop(data: np.ndarray, fs: float = FS,
              center: float = ARTIFACT_PEAK_HZ, bw: float = ARTIFACT_PEAK_BW,
              order: int = 4) -> np.ndarray:
-    """Apply zero-phase Butterworth bandstop filter column-wise."""
-    sos = signal.butter(order, [center - bw/2, center + bw/2],
-                        btype='bandstop', fs=fs, output='sos')
-    return signal.sosfiltfilt(sos, data, axis=0)
+    """Wrapper around shared lilia.signal.bandstop for backward compatibility."""
+    from lilia.signal import bandstop as _bandstop_shared
+    return _bandstop_shared(data, fs=fs, center=center, bw=bw, order=order)
 
 
 def apply_filters(data: np.ndarray) -> np.ndarray:
-    """Apply bandpass → notch → bandstop filters sequentially."""
-    data = bandpass(data)
-    data = notch(data)
-    data = bandstop(data)
-    return data
+    """Wrapper around shared lilia.signal.apply_filters for backward compatibility."""
+    return _apply_filters_shared(data, fs=FS, bandpass_low=BANDPASS_LOW,
+                                 bandpass_high=BANDPASS_HIGH, notch_freq=NOTCH_FREQ,
+                                 notch_q=NOTCH_Q, bandstop_center=ARTIFACT_PEAK_HZ,
+                                 bandstop_bw=ARTIFACT_PEAK_BW)
 
 
 def downsample_data(time_s: np.ndarray, data: np.ndarray,
                     fs_in: float = FS,
                     fs_out: float = DOWNSAMPLED_FS,
                     ) -> tuple[np.ndarray, np.ndarray]:
-    """Resample time and data together from fs_in to fs_out."""
-    if fs_in == fs_out:
-        return time_s, data
-
-    up = int(fs_out)
-    dn = int(fs_in)
-    gcd = np.gcd(up, dn)
-    up //= gcd
-    dn //= gcd
-
-    data_ds = signal.resample_poly(data, up, dn, axis=0).astype(np.float32)
-    t_orig = np.arange(len(data), dtype=np.float64)
-    t_new = np.arange(len(data_ds), dtype=np.float64) * (dn / up)
-    time_ds = np.interp(t_new, t_orig, time_s).astype(np.float64)
-    return time_ds, data_ds
+    """Wrapper around shared lilia.signal.resample_with_time for backward compatibility."""
+    return _resample_with_time_shared(time_s, data, fs_in, fs_out)
 
 
 # ── Artifact removal ───────────────────────────────────────────────────────────
@@ -196,6 +179,7 @@ def remove_artifacts(data: np.ndarray, label: str = '',
 # ── Model inference ─────────────────────────────────────────────────────────────
 def load_model(path: str = MODEL_PATH, device: str = 'cpu') -> torch.nn.Module:
     """Load TinyUNetV4 from a PyTorch checkpoint."""
+    TinyUNetV4 = import_tinyunetv4()
     model = TinyUNetV4(in_channels=N_CH, out_channels=N_CH_OUT)
     ckpt  = torch.load(path, map_location=device, weights_only=False)
     model.load_state_dict(ckpt['state_dict'])

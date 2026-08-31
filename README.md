@@ -14,10 +14,12 @@
 | `merge_subject_csvs.py` | 將 `iBrainCenter/` 與 `YoGa/` 底下各 subject 的多個 CSV 合併為單一 `merged.csv` |
 | `plot_event_markers.py` | 將 evt_time.docx 的活動時間點疊加至 iBrainCenter 各 subject 的 merged.csv，輸出驗證圖（含 EEG quality、qEEG heatmap、30s smooth summary、event-level delta，以及 TFLite 模型對照組） |
 | `plot_tflite_summary.py` | 以 `plot_event_markers.py` 的 Summary 風格產生 TFLite 專屬分析圖：原始 Relax / Calm / Flow / Focus 趨勢、TFLite 前後品質比較、qEEG Δ heatmap，並採「緩衝區 + 1s 微分段 + 盲抽樣（固定種子）」建構事件前基線 |
-| `check_quality_anomalies.py` | 診斷 EEG Quality 曲線上的異常線段：逐視窗偵測資料斷點 / ADC 削波 / 平線 / 低品質 / 驟跳，並與原始時域波形對照，分辨「連線假影」與「真實壞訊號」 |
+| `quality_check.py` | EEG 品質檢查工具：`samples`（隨機取樣品質檢查）與 `anomalies`（異常線段診斷：斷點/削波/平線/低品質/驟跳 + 原始波形對照） |
 | `plot_tyy_meditation.py` | 針對 TYY (SN041) 的 Mindfulness Meditation 區段，輸出 Ch1 / Ch2 波形與 BP / TFLite qEEG Δ heatmap 的聚焦圖（PNG + SVG） |
 | `compare_subjects.py` | 跨受試者比較 BP 與 TFLite qEEG delta index（iBrainCenter 以 event block、YoGa 以整段 session 計算） |
-| `sample_quality_check.py` | 從每份 merged.csv 隨機取樣 2 個 30 秒片段，計算 EEG quality 與 qEEG indices，輸出品質檢查圖 |
+| `sample_segments_by_goertzel_db.py` | Goertzel 取樣主工具：`--mode global`（跨受試者 pooled 抽樣）與 `--mode per-subject`（各受試者重抽樣 + gallery） |
+| `resample_clean_goertzel_samples.py` | 舊版 per-subject 抽樣相容包裝器（內部改呼叫 `sample_segments_by_goertzel_db.py --mode per-subject`） |
+| `plot_index_vs_raw_session.py` | `plot_index_vs_raw.py` 的 session-baseline 相容包裝器（主實作已整合到 `plot_index_vs_raw.py --session-baseline`） |
 | `plot_raw_eeg.py` | 從每份 iBrainCenter merged.csv 隨機取樣 N 個 30 秒非重疊片段，繪製未濾波、未下採樣的 4-ch 原始 EEG 波形 |
 | `convert_to_tflite.py` | 將 PyTorch checkpoint (`tiny_v4_optimized.pth`) 轉換成 float32 TFLite 模型 |
 
@@ -33,10 +35,12 @@ lilia_analysis/
 ├── merge_subject_csvs.py      # 合併各 subject 的多個 CSV
 ├── plot_event_markers.py      # 活動時間標記驗證圖（含 quality / qEEG / TFLite 對照面板）
 ├── plot_tflite_summary.py     # TFLite Summary 分析圖（raw 趨勢 + 品質前後比較 + Δ heatmap + 微分段基線）
-├── check_quality_anomalies.py # EEG Quality 異常線段診斷（斷點/削波/平線 vs 原始時域對照）
+├── quality_check.py          # EEG 品質檢查（samples / anomalies）
 ├── plot_tyy_meditation.py     # TYY 冥想區段聚焦圖（Ch1/Ch2 + BP/TFLite qEEG Δ heatmap）
 ├── compare_subjects.py        # 跨受試者 BP / TFLite qEEG delta 比較
-├── sample_quality_check.py    # 隨機取樣品質檢查圖
+├── sample_segments_by_goertzel_db.py # Goertzel 取樣主工具（global / per-subject）
+├── resample_clean_goertzel_samples.py # 舊版 per-subject 抽樣相容包裝器
+├── plot_index_vs_raw_session.py # session-baseline 相容包裝器
 ├── plot_raw_eeg.py            # 隨機取樣原始 EEG 波形圖（未濾波、未下採樣）
 ├── convert_to_tflite.py       # PyTorch → TFLite 轉換
 ├── Appendix_J_qEEG_Description.pdf
@@ -68,7 +72,7 @@ lilia_analysis/
 │   ├── TYY(SN041)/   ...
 │   ├── event_verification/    # plot_event_markers.py 輸出的驗證圖
 │   ├── tflite_summary/        # plot_tflite_summary.py 輸出的 TFLite Summary 圖
-│   ├── quality_anomalies/     # check_quality_anomalies.py 輸出的品質異常診斷圖
+│   ├── quality_anomalies/     # quality_check.py anomalies 輸出的品質異常診斷圖
 │   ├── comparison/            # compare_subjects.py 輸出（iBrainCenter group）
 │   └── TYY_meditation/        # plot_tyy_meditation.py 輸出（PNG + SVG）
 ├── sample_quality/            # plot_raw_eeg.py 輸出的原始波形圖
@@ -90,11 +94,68 @@ lilia_analysis/
 `data_analysis.py` 與 `convert_to_tflite.py` 從下列路徑匯入 `TinyUNetV4`：
 
 ```python
-sys.path.insert(0, '/home/bps-yichin/tommy')
+from lilia.pathing import import_tinyunetv4
+TinyUNetV4 = import_tinyunetv4()
 from eeg_denoise.tiny_model_v4 import TinyUNetV4
 ```
 
 若移至其他機器，需修改上述路徑。
+
+---
+
+## 時間基準與時區轉換
+
+### 基本規範
+
+所有時間戳記均遵循以下規範：
+
+- **基準時區**：UTC+8（Asia/Taipei）
+- **時間單位**：Unix 微秒（μs），即自 1970-01-01 00:00:00 UTC 迄今的微秒數
+- **Session Date**：2026-05-12（在 `plot_event_markers.py`、`plot_tyy_meditation.py` 等腳本中）
+
+### 共用時間轉換工具
+
+所有 `HH:MM` ↔ UTC µs 的轉換統一透過 `lilia/time_utils.py` 進行，避免時區換算錯誤：
+
+```python
+from lilia.time_utils import (
+    hhmm_to_local_dt,      # 'HH:MM' → 在 session_date 上的 naive 本地 datetime
+    hhmm_to_utc_us,        # 'HH:MM' → UTC Unix 微秒
+    utc_us_to_local_dt,    # UTC Unix 微秒 → 本地 datetime（UTC+8）
+    local_dt_to_utc_us,    # 本地 datetime → UTC Unix 微秒
+)
+```
+
+#### 範例
+
+```python
+import datetime
+from lilia.time_utils import hhmm_to_utc_us, utc_us_to_local_dt
+
+session_date = datetime.date(2026, 5, 12)
+tz_offset_h = 8
+
+# 'HH:MM' → UTC µs
+start_us = hhmm_to_utc_us('14:13', session_date, tz_offset_h=8)
+
+# UTC µs → 本地 datetime (顯示用)
+dt_local = utc_us_to_local_dt(start_us, tz_offset_h=8)
+print(dt_local)  # 2026-05-12 14:13:00
+```
+
+### CSV 時間戳記格式
+
+每份 merged.csv 都包含 4 列標題行：
+
+| 行號 | 內容 |
+| --- | --- |
+| 0 | 訊號頻率 (Hz) |
+| 1 | `Abs Time Offset[us]` — 第一筆樣本的 UTC Unix 微秒 |
+| 2 | 通道標籤（e.g. `Ch1, Ch2, Ch3, Ch4`） |
+| 3 | 空行（資料前的最後一列標題） |
+| 4+ | `Time[us],Ch1,Ch2,Ch3,Ch4` — 絕對時間 + 4 通道取樣 |
+
+`Abs Time Offset[us]` 可由 `plot_event_markers.read_abs_time_offset()` 讀取，用作所有時間對齐的基準。
 
 ---
 
@@ -119,7 +180,8 @@ from eeg_denoise.tiny_model_v4 import TinyUNetV4
 ### 重要參數
 
 ```python
-BASE_DIR     = '/home/bps-yichin/lilia_analysis'
+from lilia.pathing import get_project_root
+BASE_DIR     = get_project_root()
 FS           = 500       # Hz
 DOWNSAMPLED_FS = 200     # Hz, artifact removal 後供模型與後續分析使用
 N_CH         = 4         # 模型輸入 channels
@@ -568,11 +630,11 @@ iBrainCenter/tflite_summary/
 └── Hardy_SN036_tflite_summary_pre_event.png    # --heatmap-baseline pre-event
 ```
 
-> **品質面板的斜向長直線是什麼？** `merged.csv` 由多個錄製檔串接，檔間可能有數十~數百秒的時間斷點；繪圖時若直接連線，會在斷點兩端畫出「斜向長直線」假影。本腳本的品質面板已改用 `_series_with_gaps()` 在大缺口插入 NaN 自動斷開。若要進一步診斷這些異常線段的成因（連線假影 vs 真實壞訊號），請見下方 `check_quality_anomalies.py`。
+> **品質面板的斜向長直線是什麼？** `merged.csv` 由多個錄製檔串接，檔間可能有數十~數百秒的時間斷點；繪圖時若直接連線，會在斷點兩端畫出「斜向長直線」假影。本腳本的品質面板已改用 `_series_with_gaps()` 在大缺口插入 NaN 自動斷開。若要進一步診斷這些異常線段的成因（連線假影 vs 真實壞訊號），請見下方 `quality_check.py anomalies`。
 
 ---
 
-## check_quality_anomalies.py
+## quality_check.py
 
 診斷工具：找出 EEG Quality 曲線上的「異常線段」，逐視窗分類並與**原始時域波形**對照，判別每段異常的真正成因。異常主要分兩類：
 
@@ -597,11 +659,14 @@ iBrainCenter/tflite_summary/
 ### 執行方式
 
 ```bash
+# 隨機片段品質檢查
+python quality_check.py samples
+
 # 預設檢查 Hardy（其 merged.csv 含 5 個時間斷點，最具代表性）
-python check_quality_anomalies.py --subject Hardy
+python quality_check.py anomalies --subject Hardy
 
 # 檢查全部 iBrainCenter 受試者
-python check_quality_anomalies.py --all
+python quality_check.py anomalies --all
 ```
 
 | 參數 | 預設 | 說明 |
@@ -709,5 +774,6 @@ python convert_to_tflite.py
 ## 注意事項
 
 - 所有 script 均使用 500 Hz 取樣率的 lilia EEG CSV 格式（4-row header，時間欄位單位為 microseconds）。
-- `data_analysis.py` 與 `convert_to_tflite.py` 依賴絕對路徑 `/home/bps-yichin/tommy`，移機時需修改。
+- `data_analysis.py` 與 `convert_to_tflite.py` 會透過 `lilia.pathing.import_tinyunetv4()` 尋找外部 `eeg_denoise` 套件。
+- 可用 `TOMMY_REPO`（單一路徑）或 `LILIA_EXTRA_PYTHONPATH`（多路徑，使用 `:` 分隔）指定匯入來源。
 - `convert_to_tflite.py` 匯出的是 float32 TFLite，尚未做 int8 quantization。

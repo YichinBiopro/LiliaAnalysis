@@ -19,34 +19,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from lilia.io import load_merged_csv
+from lilia.segment_sampling import pick_non_overlapping_segments
+from lilia.subject_paths import iter_group_merged_csvs
+from lilia.pathing import get_project_root
+from lilia.constants import FS, CH_COLORS
 
 # ── Constants ──────────────────────────────────────────────────────────────────
-FS       = 500          # Hz
 SEG_SEC  = 30.0
 N_SEGS   = 2
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CH_COLORS = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
-
-SUBJECTS = {
-    'iBrainCenter': [
-        d for d in sorted(os.listdir(os.path.join(BASE_DIR, 'iBrainCenter')))
-        if os.path.isfile(os.path.join(BASE_DIR, 'iBrainCenter', d, 'merged.csv'))
-    ]
-}
-
-
-def pick_segments(n_total: int, seg_len: int, n_segs: int, rng: np.random.Generator):
-    starts, attempts = [], 0
-    max_start = n_total - seg_len
-    if max_start < 0:          # recording shorter than one segment
-        return []
-    while len(starts) < n_segs and attempts < 10_000:
-        attempts += 1
-        s = int(rng.integers(0, max_start + 1))
-        if all(abs(s - p) >= seg_len for p in starts):
-            starts.append(s)
-    return sorted(starts)
-
+BASE_DIR = get_project_root()
 
 def plot_subject(path: str, group: str, subject: str, outdir: str,
                  rng: np.random.Generator, seg_sec: float = SEG_SEC):
@@ -57,7 +38,7 @@ def plot_subject(path: str, group: str, subject: str, outdir: str,
     duration_min = n_total / FS / 60
     print(f'{n_total} pts ({duration_min:.1f} min), {n_ch} ch')
 
-    starts = pick_segments(n_total, seg_len, N_SEGS, rng)
+    starts = pick_non_overlapping_segments(n_total, seg_len, N_SEGS, rng)
     if not starts:
         print('    WARNING: not enough data for even 1 segment, skipping')
         return
@@ -97,6 +78,7 @@ def plot_subject(path: str, group: str, subject: str, outdir: str,
     fname = f'raw_{group}_{subject}.png'
     out_path = os.path.join(outdir, fname)
     fig.savefig(out_path, dpi=150)
+    fig.savefig(os.path.splitext(out_path)[0] + '.svg')
     plt.close(fig)
     print(f'    → saved {out_path}')
 
@@ -111,11 +93,12 @@ def main():
     os.makedirs(args.outdir, exist_ok=True)
     rng = np.random.default_rng(args.seed)
 
-    for group, subjects in SUBJECTS.items():
-        print(f'\n=== {group} ===')
-        for subj in subjects:
-            path = os.path.join(BASE_DIR, group, subj, 'merged.csv')
-            plot_subject(path, group, subj, args.outdir, rng, seg_sec=args.seg_sec)
+    prev_group = None
+    for group, subject, path in iter_group_merged_csvs(BASE_DIR, groups=('iBrainCenter',)):
+        if group != prev_group:
+            print(f'\n=== {group} ===')
+            prev_group = group
+        plot_subject(path, group, subject, args.outdir, rng, seg_sec=args.seg_sec)
 
     print('\nDone.')
 

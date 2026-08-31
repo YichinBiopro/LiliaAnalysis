@@ -17,19 +17,8 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
-
-def _iter_subject_dirs(root: str):
-    for name in sorted(os.listdir(root)):
-        p = os.path.join(root, name)
-        if os.path.isdir(p) and os.path.isfile(os.path.join(p, 'merged.csv')):
-            yield name
-
-
-def _build_csv_path(root: str, subject_dir: str, stem: str, ch: int, target_freq: float) -> str:
-    hz_txt = f"{target_freq:g}Hz"
-    return os.path.join(root, subject_dir, f"{stem}_ch{ch}_{hz_txt}.csv")
+from lilia.goertzel_distribution import collect_group_data, with_aggregates
 
 
 def _hist_y_at_x(edges: np.ndarray, counts: np.ndarray, x: float) -> float:
@@ -52,6 +41,7 @@ def _plot_hist(values_db: np.ndarray, title: str, out_png: str, bins: int) -> No
         ax.grid(True, alpha=0.25)
         fig.tight_layout()
         fig.savefig(out_png, dpi=160)
+        fig.savefig(os.path.splitext(out_png)[0] + '.svg')
         plt.close(fig)
         return
 
@@ -82,6 +72,7 @@ def _plot_hist(values_db: np.ndarray, title: str, out_png: str, bins: int) -> No
 
     fig.tight_layout()
     fig.savefig(out_png, dpi=160)
+    fig.savefig(os.path.splitext(out_png)[0] + '.svg')
     plt.close(fig)
 
 
@@ -114,54 +105,38 @@ def main() -> None:
     args = _parse_args()
     os.makedirs(args.outdir, exist_ok=True)
 
-    groups: dict[tuple[str, int], np.ndarray] = {}
+    try:
+        base_groups, missing = collect_group_data(
+            root=args.root,
+            channels=args.channels,
+            stem=args.stem,
+            target_freq=args.target_freq,
+            threshold=args.threshold,
+            exclude_hard_artifact=args.exclude_hard_artifact,
+            require_power=False,
+        )
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
 
-    for sub in _iter_subject_dirs(args.root):
-        for ch in args.channels:
-            csv_path = _build_csv_path(args.root, sub, args.stem, ch, args.target_freq)
-            if not os.path.isfile(csv_path):
-                print(f'Skip missing file: {csv_path}')
-                continue
+    if missing:
+        for path in missing:
+            print(f'Skip missing file: {path}')
 
-            df = pd.read_csv(csv_path)
-            if not {'goertzel_db', 'quality'}.issubset(df.columns):
-                print(f'Skip invalid columns: {csv_path}')
-                continue
-
-            quality_col = 'quality_final' if 'quality_final' in df.columns else 'quality'
-            q = df[quality_col].to_numpy(dtype=float)
-            keep = np.isfinite(q) & (q > args.threshold)
-            if args.exclude_hard_artifact and 'artifact_hard_clip' in df.columns:
-                keep &= (df['artifact_hard_clip'].to_numpy(dtype=float) < 0.5)
-            db = df['goertzel_db'].to_numpy(dtype=float)[keep]
-            groups[(sub, ch)] = db
-
-    if not groups:
+    if not base_groups:
         raise SystemExit('No valid subject/channel data found.')
 
+    groups = with_aggregates(base_groups, args.channels)
+
     # Per-subject, per-channel histograms.
-    for (sub, ch), db in groups.items():
-        title = f'{sub}  ch{ch}  |  Goertzel {args.target_freq:g}Hz (quality>{args.threshold:g})'
-        out_png = os.path.join(args.outdir, f'{sub}_ch{ch}_{args.target_freq:g}Hz_thr_{args.threshold:g}.png')
-        _plot_hist(db, title, out_png, bins=args.bins)
+    for g in groups:
+        if g.subject == 'ALL_SUBJECTS' and g.channel == 'ALL_CHANNELS':
+            name = f'ALL_SUBJECTS_ALL_CHANNELS_{args.target_freq:g}Hz_thr_{args.threshold:g}.png'
+        else:
+            name = f'{g.subject}_{g.channel}_{args.target_freq:g}Hz_thr_{args.threshold:g}.png'
+        title = f'{g.subject}  {g.channel}  |  Goertzel {args.target_freq:g}Hz (quality>{args.threshold:g})'
+        out_png = os.path.join(args.outdir, name)
+        _plot_hist(g.power_db, title, out_png, bins=args.bins)
         print(f'Saved: {out_png}')
-
-    # Overall by channel.
-    for ch in args.channels:
-        collect = [v for (s, c), v in groups.items() if c == ch and v.size > 0]
-        overall = np.concatenate(collect) if collect else np.array([], dtype=float)
-        title = f'ALL_SUBJECTS  ch{ch}  |  Goertzel {args.target_freq:g}Hz (quality>{args.threshold:g})'
-        out_png = os.path.join(args.outdir, f'ALL_SUBJECTS_ch{ch}_{args.target_freq:g}Hz_thr_{args.threshold:g}.png')
-        _plot_hist(overall, title, out_png, bins=args.bins)
-        print(f'Saved: {out_png}')
-
-    # Overall all channels.
-    all_values = [v for v in groups.values() if v.size > 0]
-    overall_all = np.concatenate(all_values) if all_values else np.array([], dtype=float)
-    title = f'ALL_SUBJECTS  ALL_CHANNELS  |  Goertzel {args.target_freq:g}Hz (quality>{args.threshold:g})'
-    out_png = os.path.join(args.outdir, f'ALL_SUBJECTS_ALL_CHANNELS_{args.target_freq:g}Hz_thr_{args.threshold:g}.png')
-    _plot_hist(overall_all, title, out_png, bins=args.bins)
-    print(f'Saved: {out_png}')
 
 
 if __name__ == '__main__':

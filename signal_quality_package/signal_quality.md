@@ -1,0 +1,80 @@
+# EEG Signal Quality Calculation
+
+`eeg_quality_v2.py` is a deprecated backward-compat shim — it re-exports everything from
+[`lilia/quality.py`](lilia/quality.py) with no logic of its own. So there is one algorithm
+to describe: `get_eeg_quality_index_v2_parametric()` in
+[`lilia/quality.py:230-461`](lilia/quality.py#L230-L461).
+
+## Overall approach
+
+For an EEG segment of shape `(n_channels, n_samples)`, up to 4 independent component scores
+are computed per channel, each in `[0, 1]`, then combined into an overall score via a
+**weighted geometric mean** (`_weighted_geometric_quality`, `lilia/quality.py:210-227`):
+
+```
+overall = exp( Σ (weight_i / Σweight) * log(score_i) )
+```
+
+Because it's geometric (not arithmetic), one badly-scoring component drags the whole score
+down hard — a channel can't hide a severe artifact behind otherwise-good scores. Only
+components with `weight > 0` in the active parameter preset are computed at all (so e.g. the
+iBrainCenter preset only computes `flat` + `spectrum`, skipping `kurtosis`/`corr`).
+
+## The four components
+
+### 1. `flat` — flatness / saturation / spikes / clipping / range
+(`check_flat_and_sat_v2`, `lilia/quality.py:262-353`)
+
+- Slides a 0.5 s window (50% overlap) across the channel, takes the std-dev per window,
+  normalizes each against the *median* window std → an "activity ratio."
+- Converts that ratio to a score via `1 - exp(-ratio / activity_k)` (a saturating
+  exponential — near 0 for dead/flat windows, near 1 for active ones), averaged across
+  windows, plus a small 10th-percentile-based term for extra sensitivity to intermittent
+  flat patches.
+- Then multiplies in four independent penalty factors (each a linear falloff between a
+  "start" and "end" threshold down to a floor):
+  - **flat_ratio** — fraction of "inactive" signal
+  - **spike_ratio** — fraction of samples beyond 8×MAD-based robust sigma
+  - **clip_ratio** — fraction of samples near the max absolute value (saturation/clipping)
+  - **normalized_range** — peak-to-peak range relative to robust sigma (catches DC jumps /
+    large excursions)
+
+### 2. `spectrum` — 1/f slope check
+(`check_spectrum_v2`, `lilia/quality.py:355-393`)
+
+- Computes the Welch PSD, fits a line to `log(PSD)` vs `log(freq)` over a configurable band
+  (1 Hz to `spectrum_fit_hi`).
+- Scores the fitted slope against a "good" range (`slope_good_low`..`slope_good_high`,
+  centered on `slope_center`, representing plausible physiological 1/f decay). Slopes inside
+  the good range score near 1.0; slopes outside decay toward a floor. This catches signals
+  that are too flat spectrally (e.g. white noise) or too steep (e.g. over-filtered).
+
+### 3. `kurtosis` — statistical shape check
+(`check_kurt_v2`, `lilia/quality.py:395-426`)
+
+- Computes Pearson kurtosis of the raw signal. A "good" band (2–8) scores highest;
+  too-low kurtosis (unnaturally uniform/flat distribution) or too-high kurtosis (heavy tails
+  from spikes/artifacts, up to a `kurtosis_bad_high` cutoff) is penalized down toward a floor.
+
+### 4. `corr` — inter-channel correlation check
+(`check_corr_v2`, `lilia/quality.py:428-438`)
+
+- Computes the absolute correlation matrix across channels, averages each channel's
+  correlation with all others, then maps that mean via a **piecewise-linear** score
+  (`_piecewise_linear_correlation_score`, `lilia/quality.py:180-207`) with 4 breakpoints
+  (`corr_low`, `corr_mid`, `corr_high`) — too little correlation (channel disconnected/noisy)
+  or too much (e.g. shorted electrodes) is penalized; moderate correlation scores highest.
+
+## Presets
+
+The module ships several parameter presets (all overriding `DEFAULT_EEG_QUALITY_V2_PARAMS`):
+
+- **`BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS`** — uses all 4 components with tuned weights.
+- **`get_best_eeg_quality_v2_flat_spectrum_only_params()`** — same, but zeroes out
+  kurtosis/corr weights.
+- **`IBRAIN_DEVICE_EEG_QUALITY_V2_PARAMS`** — empirically recalibrated for the iBrainCenter
+  4-channel headset (lower `flat_activity_k` so stationary data isn't over-penalized, and the
+  spectrum slope band re-centered on that device's measured ~-0.9 1/f slope instead of -2.0),
+  with kurtosis/corr disabled. The comment block at `lilia/quality.py:126-135` explains why:
+  the original preset scored ~40-60% of clean recordings below the 0.5 quality threshold on
+  this device.

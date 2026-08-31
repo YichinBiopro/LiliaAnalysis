@@ -16,16 +16,13 @@ import numpy as np
 import torch
 import tensorflow as tf
 
-sys.path.insert(0, '/home/bps-yichin/tommy')
-from eeg_denoise.tiny_model_v4 import TinyUNetV4
+from lilia.pathing import get_project_root, import_tinyunetv4
 
-BASE_DIR    = '/home/bps-yichin/lilia_analysis'
+from lilia.constants import N_CH, N_CH_OUT, TFLITE_WIN as MODEL_WIN
+
+BASE_DIR    = get_project_root()
 MODEL_PATH  = os.path.join(BASE_DIR, 'tiny_v4_optimized.pth')
 TFLITE_PATH = os.path.join(BASE_DIR, 'tiny_v4_optimized.tflite')
-
-N_CH      = 4
-N_CH_OUT  = 2
-MODEL_WIN = 400
 BASE_CH   = 16
 
 
@@ -192,6 +189,7 @@ def copy_weights(tf_model, pt_sd):
 
 def main():
     # Load PyTorch model
+    TinyUNetV4 = import_tinyunetv4()
     pt_model = TinyUNetV4(in_channels=N_CH, out_channels=N_CH_OUT)
     ckpt = torch.load(MODEL_PATH, map_location='cpu', weights_only=False)
     pt_model.load_state_dict(ckpt['state_dict'])

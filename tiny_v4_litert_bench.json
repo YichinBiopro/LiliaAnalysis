@@ -1,0 +1,25 @@
+{
+  "model": "tiny_v4_optimized.tflite",
+  "model_size_mb": 0.12,
+  "accelerators": [
+    "CPU"
+  ],
+  "signature": "<placeholder signature>",
+  "fully_accelerated": false,
+  "num_threads": 1,
+  "latency": {
+    "init_ms": 1.44,
+    "warmup_first_ms": 0.26,
+    "warmup_avg_ms": 0.16,
+    "num_warmup_runs": 5,
+    "avg_ms": 0.13,
+    "min_ms": 0.13,
+    "max_ms": 0.13,
+    "median_ms": 0.13,
+    "std_ms": 0.0,
+    "p5_ms": 0.13,
+    "p95_ms": 0.13,
+    "num_runs": 30
+  },
+  "throughput_mb_s": 46.56
+}

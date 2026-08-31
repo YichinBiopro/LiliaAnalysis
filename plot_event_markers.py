@@ -38,18 +38,23 @@ from lilia.quality import (
     get_ibrain_device_eeg_quality_v2_params,
 )
 from lilia.qeeg import compute_qeeg_indices
-from lilia.io import load_merged_csv, bandpass_filter
+from lilia.io import load_merged_csv, bandpass_filter, read_abs_time_offset as _read_abs_time_offset_shared
+from lilia.time_utils import hhmm_to_local_dt, hhmm_to_utc_us, utc_us_to_local_dt
+from lilia.pathing import get_project_root
+from lilia.tflite import apply_tflite_windowed as _apply_tflite_shared
 
 # ── Session metadata ───────────────────────────────────────────────────────────
 SESSION_DATE = datetime.date(2026, 5, 12)
 TZ_OFFSET_H  = 8          # Asia/Taipei = UTC+8
 EPOCH        = datetime.datetime(1970, 1, 1)
 
-BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR     = get_project_root()
 IBRAIN_DIR   = os.path.join(BASE_DIR, 'iBrainCenter')
 YOGA_DIR     = os.path.join(BASE_DIR, 'YoGa')
 
-FS               = 500          # Hz
+# Import shared constants; override only those specific to this module
+from lilia.constants import FS, QUALITY_THRESHOLD, TFLITE_FS, TFLITE_WIN
+
 QUALITY_WIN_SEC  = 5.0          # window length for quality scorer (5 s)
 QUALITY_STEP_SEC = 5.0          # non-overlapping windows (matches app refresh)
 QUALITY_WIN_SEC_LONG  = 30.0   # second quality scorer window (30 s)
@@ -59,11 +64,8 @@ QUALITY_WIN_SEC_LONG  = 30.0   # second quality scorer window (30 s)
 # preset puts clean data at ~0.7-0.9 so the 0.5 threshold separates clean from
 # artefact rather than bisecting the clean distribution. See eeg_quality_v2.py.
 QUALITY_PARAMS    = get_ibrain_device_eeg_quality_v2_params()
-QUALITY_THRESHOLD = 0.5
 
 TFLITE_MODEL_PATH = os.path.join(BASE_DIR, 'tiny_v4_optimized.tflite')
-TFLITE_FS         = 200   # model sample rate (Hz)
-TFLITE_WIN        = 400   # model input window size at TFLITE_FS (400 samples = 2 s)
 
 BP_LOW       = 0.5    # Hz — bandpass lower cutoff
 BP_HIGH      = 45.0   # Hz — bandpass upper cutoff
@@ -153,35 +155,24 @@ HARDY2_INDEX_COLORS = {
 
 def hhmm_to_us(hhmm: str) -> int:
     """Convert 'HH:MM' on SESSION_DATE (local TZ) to UTC Unix microseconds."""
-    h, m = map(int, hhmm.split(':'))
-    local_dt = datetime.datetime(
-        SESSION_DATE.year, SESSION_DATE.month, SESSION_DATE.day, h, m,
-        tzinfo=datetime.timezone(datetime.timedelta(hours=TZ_OFFSET_H)))
-    utc_dt = local_dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
-    return int((utc_dt - EPOCH).total_seconds() * 1_000_000)
+    return hhmm_to_utc_us(hhmm, SESSION_DATE, TZ_OFFSET_H)
 
 
 def us_to_local_dt(us: int) -> datetime.datetime:
     """Convert UTC Unix µs → local datetime (UTC+8, naive for matplotlib)."""
-    utc_dt = EPOCH + datetime.timedelta(microseconds=int(us))
-    return utc_dt + datetime.timedelta(hours=TZ_OFFSET_H)
+    return utc_us_to_local_dt(us, TZ_OFFSET_H)
 
 
 def hhmm_to_dt(hhmm: str) -> datetime.datetime:
     """'HH:MM' on SESSION_DATE (local) → naive local datetime."""
-    h, m = map(int, hhmm.split(':'))
-    return datetime.datetime(SESSION_DATE.year, SESSION_DATE.month,
-                             SESSION_DATE.day, h, m)
+    return hhmm_to_local_dt(hhmm, SESSION_DATE)
 
 
 # ── CSV loading ────────────────────────────────────────────────────────────────
 
 def read_abs_time_offset(path: str) -> int:
-    with open(path, encoding='utf-8') as f:
-        for i, line in enumerate(f):
-            if i == 1:
-                return int(line.strip().split(',')[3])
-    raise ValueError(f'Cannot read offset from {path}')
+    """Wrapper around shared lilia.io.read_abs_time_offset for backward compatibility."""
+    return _read_abs_time_offset_shared(path)
 
 
 # ── EEG quality (windowed) ─────────────────────────────────────────────────────
@@ -266,34 +257,8 @@ def compute_qeeg_windowed(time_us: np.ndarray, data: np.ndarray,
 
 def apply_tflite_windowed(data: np.ndarray,
                           tflite_path: str = TFLITE_MODEL_PATH) -> np.ndarray:
-    """Run tiny_v4_optimized.tflite on (N, 4) data in non-overlapping windows.
-
-    Parameters
-    ----------
-    data        : (N, 4) float32 bandpass-filtered EEG
-    tflite_path : path to the .tflite model file
-
-    Returns
-    -------
-    out : (M, 2) float32, M = (N // TFLITE_WIN) * TFLITE_WIN
-    """
-    import tensorflow as tf
-    interp = tf.lite.Interpreter(model_path=tflite_path)
-    interp.allocate_tensors()
-    inp_det = interp.get_input_details()[0]
-    out_det = interp.get_output_details()[0]
-
-    n_win  = len(data) // TFLITE_WIN
-    chunks = []
-    for i in range(n_win):
-        seg = data[i * TFLITE_WIN : (i + 1) * TFLITE_WIN][np.newaxis].astype(np.float32)
-        seg_rms = np.sqrt(np.mean(seg.astype(np.float64) ** 2)) + 1e-8
-        seg_norm = (seg / np.float32(seg_rms)).astype(np.float32, copy=False)
-        interp.set_tensor(inp_det['index'], seg_norm)
-        interp.invoke()
-        pred = interp.get_tensor(out_det['index'])[0] * np.float32(seg_rms)
-        chunks.append(pred.astype(np.float32, copy=False))   # (400, 2)
-    return np.concatenate(chunks, axis=0) if chunks else np.zeros((0, 2), np.float32)
+    """Wrapper around shared lilia.tflite.apply_tflite_windowed for backward compatibility."""
+    return _apply_tflite_shared(data, tflite_path, tflite_win=TFLITE_WIN)
 
 
 # ── Event overlay helper ───────────────────────────────────────────────────────
@@ -602,6 +567,7 @@ def plot_hardy2_band_and_indices(outdir: str,
         out_band = os.path.join(
             outdir, f'Hardy_2_SN036_{band_key}_band_ratio_vs_time.png')
         fig1.savefig(out_band, dpi=180)
+        fig1.savefig(os.path.splitext(out_band)[0] + '.svg')
         plt.close(fig1)
         print(f'[Hardy_2] saved: {out_band}')
 
@@ -639,6 +605,7 @@ def plot_hardy2_band_and_indices(outdir: str,
     fig2.tight_layout(rect=[0, 0.05, 1, 1])
     out_idx = os.path.join(outdir, 'Hardy_2_SN036_focus_flow_calm_relax_vs_time.png')
     fig2.savefig(out_idx, dpi=180)
+    fig2.savefig(os.path.splitext(out_idx)[0] + '.svg')
     plt.close(fig2)
     print(f'[Hardy_2] saved: {out_idx}')
 
@@ -1205,6 +1172,7 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
     outpath = os.path.join(
         outdir, f'{name}_{info["sn"]}_eeg{suffix}_{baseline_tag}.png')
     fig.savefig(outpath, dpi=150, bbox_inches='tight')
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'       → {outpath}')
 

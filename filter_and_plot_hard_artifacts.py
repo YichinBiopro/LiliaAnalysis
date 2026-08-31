@@ -22,14 +22,8 @@ import numpy as np
 import pandas as pd
 
 from lilia.io import bandpass_filter, load_merged_csv
+from lilia.subject_paths import iter_subject_dirs
 import plot_event_markers as pem
-
-
-def _iter_subject_dirs(root: str):
-    for name in sorted(os.listdir(root)):
-        p = os.path.join(root, name)
-        if os.path.isdir(p) and os.path.isfile(os.path.join(p, 'merged.csv')):
-            yield name
 
 
 def _load_decimated(time_us: np.ndarray, y: np.ndarray, max_points: int = 16000):
@@ -103,6 +97,7 @@ def _plot_timeline(
     fig.tight_layout(rect=(0, 0, 1, 0.97))
     os.makedirs(os.path.dirname(out_png), exist_ok=True)
     fig.savefig(out_png, dpi=150)
+    fig.savefig(os.path.splitext(out_png)[0] + '.svg')
     plt.close(fig)
 
 
@@ -169,6 +164,7 @@ def _plot_hard_gallery(
     fig.tight_layout(rect=(0, 0, 1, 0.95))
     os.makedirs(os.path.dirname(out_png), exist_ok=True)
     fig.savefig(out_png, dpi=160)
+    fig.savefig(os.path.splitext(out_png)[0] + '.svg')
     plt.close(fig)
 
 
@@ -193,7 +189,7 @@ def main() -> None:
 
     report_rows = []
 
-    for subject in _iter_subject_dirs(args.root):
+    for subject in iter_subject_dirs(args.root):
         merged = os.path.join(args.root, subject, 'merged.csv')
         time_us, data = load_merged_csv(merged)
         bp = bandpass_filter(data, fs=args.fs, lo=pem.BP_LOW, hi=pem.BP_HIGH)

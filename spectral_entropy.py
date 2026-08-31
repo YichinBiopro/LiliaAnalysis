@@ -89,6 +89,7 @@ import pandas as pd
 from scipy import signal
 
 from lilia.io import bandpass_filter, load_merged_csv
+from lilia.time_utils import utc_us_to_local_dt
 
 # ── qEEG Focus/Relax indices (optional import) ────────────────────────────────
 # The per-window (p_θ, p_α, p_β) proportions this module already computes are
@@ -154,13 +155,12 @@ except ImportError:
     _PLOTLY_AVAILABLE = False
 
 # ── Time-conversion helpers ────────────────────────────────────────────────────
-_UTC_EPOCH = datetime.datetime(1970, 1, 1)
 _TZ_LOCAL_H = 8   # UTC+8 (Asia/Taipei)
 
 
 def _us_to_local_dt(us: int) -> datetime.datetime:
     """UTC Unix µs → naive local datetime (UTC+8)."""
-    return _UTC_EPOCH + datetime.timedelta(microseconds=int(us)) + datetime.timedelta(hours=_TZ_LOCAL_H)
+    return utc_us_to_local_dt(us, _TZ_LOCAL_H)
 
 
 def _rel_times_to_dt(
@@ -1714,6 +1714,7 @@ def plot_event_pre_onset_comparison(
                                  extra='pre/onset MI'))
     fig.tight_layout(rect=(0, 0.02, 1, 1))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
 
@@ -2036,6 +2037,7 @@ def plot_band_event_mi(df: pd.DataFrame, title: str, outpath: str) -> None:
                                  extra='band-power × event joint MI'))
     fig.tight_layout(rect=(0, 0.02, 1, 1))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
 
@@ -2098,6 +2100,7 @@ def plot_peri_event_mi(
     _add_footer(fig, _provenance(fs, win_sec, step_sec, extra='peri-event MI'))
     fig.tight_layout(rect=(0, 0.02, 1, 1))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
 
@@ -2346,6 +2349,7 @@ def plot_joint_distribution(
     _add_footer(fig, _provenance(float(joint.get('fs', DEFAULT_FS)),
                                  DEFAULT_WIN_SEC, None, extra='joint-MI'))
     fig.savefig(outpath, dpi=150, bbox_inches='tight')
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
 
@@ -2398,6 +2402,7 @@ def plot_joint_excess(
                                  DEFAULT_WIN_SEC, None, extra='joint-MI excess'))
     fig.tight_layout(rect=(0, 0.02, 1, 1))
     fig.savefig(outpath, dpi=150, bbox_inches='tight')
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
 
@@ -2586,6 +2591,7 @@ def plot_band_entropy(
     fig.tight_layout(rect=(0, 0.015, 1, 1))
     _add_footer(fig, _provenance(fs, win_sec, step_sec, extra='band-entropy'))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
 
@@ -2649,6 +2655,7 @@ def plot_band_composition(
     fig.tight_layout(rect=(0, 0.02, 1, 1))
     _add_footer(fig, _provenance(fs, win_sec, step_sec, extra='band-composition'))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
 
@@ -2723,6 +2730,7 @@ def plot_band_ternary(
     fig.tight_layout(rect=(0, 0.02, 1, 1))
     _add_footer(fig, _provenance(fs, win_sec, step_sec, extra='band-ternary'))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
 
@@ -2793,6 +2801,7 @@ def plot_focus_relax_scatter(
     fig.tight_layout(rect=(0, 0.02, 1, 1))
     _add_footer(fig, _provenance(fs, win_sec, step_sec, extra='focus-relax'))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
 
@@ -3089,6 +3098,7 @@ def _run_joint_mi_mode(args: argparse.Namespace,
                                  extra=f'joint-MI series ({binning},{bins}b)'))
     fig.tight_layout(rect=(0, 0.03, 1, 1))
     fig.savefig(series_png, dpi=150)
+    fig.savefig(os.path.splitext(series_png)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {series_png}')
 

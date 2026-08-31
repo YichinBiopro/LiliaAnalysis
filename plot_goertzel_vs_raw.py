@@ -26,6 +26,7 @@ from lilia.quality import (
     get_eeg_quality_index_v2_parametric,
     get_ibrain_device_eeg_quality_v2_params,
 )
+from lilia.subject_paths import iter_subject_dirs
 import plot_event_markers as pem
 
 
@@ -205,6 +206,9 @@ def _plot_subject(
     step_ptp_threshold: float,
     bp_shift_sec: float,
     bp_shift_threshold: float,
+    use_db: bool = True,
+    ref_lines: list[tuple[float, str]] | None = None,
+    power_ylim: tuple[float, float] | None = None,
 ) -> None:
     time_us, data = load_merged_csv(merged_csv)
     if ch < 1 or ch > data.shape[1]:
@@ -247,19 +251,126 @@ def _plot_subject(
         }
     ).to_csv(out_csv, index=False)
 
-    if exclude_hard_artifact:
-        good = np.isfinite(result.quality_final) & (result.quality_final >= quality_threshold)
-    else:
-        good = np.isfinite(result.quality) & (result.quality >= quality_threshold)
-    masked_db = np.where(good, result.goertzel_db, np.nan)
-    smooth_db = np.where(good, _rolling_median(masked_db, smooth_win), np.nan)
+    sub_dirname = os.path.basename(os.path.dirname(merged_csv))
+    subject_key = _subject_key_from_dir(sub_dirname)
+    events = _subject_events(subject_key, int(time_us[0]))
 
     t_raw, y_raw = _load_raw_decimated(time_us, data[:, ch - 1])
     t_bp, y_bp = _load_raw_decimated(time_us, data_bp[:, ch - 1])
 
+    _render_plot(
+        out_png=out_png,
+        result=result,
+        t_raw=t_raw, y_raw=y_raw,
+        t_bp=t_bp, y_bp=y_bp,
+        sub_dirname=sub_dirname,
+        ch=ch,
+        target_freq=target_freq,
+        smooth_win=smooth_win,
+        quality_threshold=quality_threshold,
+        raw_ylim=raw_ylim,
+        exclude_hard_artifact=exclude_hard_artifact,
+        events=events,
+        use_db=use_db,
+        ref_lines=ref_lines,
+        power_ylim=power_ylim,
+    )
+
+
+def _plot_subject_from_csv(
+    merged_csv: str,
+    in_csv: str,
+    out_png: str,
+    ch: int,
+    fs: float,
+    target_freq: float,
+    smooth_win: int,
+    quality_threshold: float,
+    raw_ylim: tuple[float, float],
+    exclude_hard_artifact: bool,
+    use_db: bool,
+    ref_lines: list[tuple[float, str]] | None = None,
+    power_ylim: tuple[float, float] | None = None,
+) -> None:
+    """Re-render the 4-panel figure from an already-computed per-window CSV
+    (as saved by _plot_subject), skipping the expensive Goertzel/quality
+    recomputation. Only the raw/bandpass EEG traces are reloaded."""
+    time_us, data = load_merged_csv(merged_csv)
+    if ch < 1 or ch > data.shape[1]:
+        raise ValueError(f'channel {ch} out of range for {merged_csv}')
+    data_bp = bandpass_filter(data, fs=fs, lo=pem.BP_LOW, hi=pem.BP_HIGH)
+
+    df = pd.read_csv(in_csv)
+    result = WindowResult(
+        window_start_idx=df['window_start_idx'].to_numpy(),
+        window_end_idx=df['window_end_idx'].to_numpy(),
+        time_s=df['time_s'].to_numpy(),
+        goertzel_power=df['goertzel_power'].to_numpy(),
+        goertzel_db=df['goertzel_db'].to_numpy(),
+        quality=df['quality'].to_numpy(),
+        quality_final=df['quality_final'].to_numpy(),
+        sat_frac_1950=df['sat_frac_1950'].to_numpy(),
+        peak_to_peak_uv=df['peak_to_peak_uv'].to_numpy(),
+        max_abs_diff_uv=df['max_abs_diff_uv'].to_numpy(),
+        bp_edge_shift_uv=df['bp_edge_shift_uv'].to_numpy(),
+        hard_artifact=df['artifact_hard_clip'].to_numpy().astype(bool),
+    )
+
     sub_dirname = os.path.basename(os.path.dirname(merged_csv))
     subject_key = _subject_key_from_dir(sub_dirname)
     events = _subject_events(subject_key, int(time_us[0]))
+
+    t_raw, y_raw = _load_raw_decimated(time_us, data[:, ch - 1])
+    t_bp, y_bp = _load_raw_decimated(time_us, data_bp[:, ch - 1])
+
+    _render_plot(
+        out_png=out_png,
+        result=result,
+        t_raw=t_raw, y_raw=y_raw,
+        t_bp=t_bp, y_bp=y_bp,
+        sub_dirname=sub_dirname,
+        ch=ch,
+        target_freq=target_freq,
+        smooth_win=smooth_win,
+        quality_threshold=quality_threshold,
+        raw_ylim=raw_ylim,
+        exclude_hard_artifact=exclude_hard_artifact,
+        events=events,
+        use_db=use_db,
+        ref_lines=ref_lines,
+        power_ylim=power_ylim,
+    )
+
+
+def _render_plot(
+    out_png: str,
+    result: WindowResult,
+    t_raw: np.ndarray, y_raw: np.ndarray,
+    t_bp: np.ndarray, y_bp: np.ndarray,
+    sub_dirname: str,
+    ch: int,
+    target_freq: float,
+    smooth_win: int,
+    quality_threshold: float,
+    raw_ylim: tuple[float, float],
+    exclude_hard_artifact: bool,
+    events: list,
+    use_db: bool = True,
+    ref_lines: list[tuple[float, str]] | None = None,
+    power_ylim: tuple[float, float] | None = None,
+) -> None:
+    if exclude_hard_artifact:
+        good = np.isfinite(result.quality_final) & (result.quality_final >= quality_threshold)
+    else:
+        good = np.isfinite(result.quality) & (result.quality >= quality_threshold)
+
+    series = result.goertzel_db if use_db else result.goertzel_power
+    masked_series = np.where(good, series, np.nan)
+    smooth_series = np.where(good, _rolling_median(masked_series, smooth_win), np.nan)
+    unit_label = 'Power (dB)' if use_db else 'Power (linear, a.u.)'
+    raw_label = 'absolute (raw dB)' if use_db else 'absolute (raw, linear)'
+    smooth_label = ('quality-masked + smoothed dB' if use_db
+                     else 'quality-masked + smoothed (linear)')
 
     bad_pct = 100.0 * int((~good).sum()) / max(len(good), 1)
     fig, axes = plt.subplots(
@@ -277,13 +388,30 @@ def _plot_subject(
         fontweight='bold',
     )
 
-    # Panel 1: Goertzel power (dB)
+    # Panel 1: Goertzel power (dB or linear)
     ax0 = axes[0]
-    ax0.plot(result.time_s / 60.0, result.goertzel_db, color='0.82', lw=0.8,
-             label='absolute (raw dB)')
-    ax0.plot(result.time_s / 60.0, smooth_db, color='#1f77b4', lw=1.8,
-             label='quality-masked + smoothed dB')
-    ax0.set_ylabel(f'Goertzel {target_freq:g} Hz\nPower (dB)')
+    ax0.plot(result.time_s / 60.0, series, color='0.82', lw=0.8,
+             label=raw_label)
+    ax0.plot(result.time_s / 60.0, smooth_series, color='#1f77b4', lw=1.8,
+             label=smooth_label)
+    ax0.set_ylabel(f'Goertzel {target_freq:g} Hz\n{unit_label}')
+    if not use_db:
+        ax0.ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
+    for ref_val, ref_label in (ref_lines or []):
+        ax0.axhline(ref_val, color='#d62728', ls='--', lw=1.0, alpha=0.8)
+        ax0.annotate(
+            f'{ref_label} ({ref_val:g})',
+            xy=(1.0, ref_val),
+            xycoords=('axes fraction', 'data'),
+            xytext=(-4, 4),
+            textcoords='offset points',
+            ha='right',
+            va='bottom',
+            fontsize=8,
+            color='#d62728',
+        )
+    if power_ylim is not None:
+        ax0.set_ylim(power_ylim)
     ax0.grid(True, alpha=0.3)
     ax0.legend(loc='upper right', fontsize=8)
 
@@ -344,17 +472,13 @@ def _plot_subject(
     fig.tight_layout(rect=(0, 0, 1, 0.97))
     os.makedirs(os.path.dirname(out_png), exist_ok=True)
     fig.savefig(out_png, dpi=150)
+    fig.savefig(os.path.splitext(out_png)[0] + '.svg')
     plt.close(fig)
 
 
 def _iter_merged_csvs(root: str):
-    for name in sorted(os.listdir(root)):
-        p = os.path.join(root, name)
-        if not os.path.isdir(p):
-            continue
-        merged = os.path.join(p, 'merged.csv')
-        if os.path.isfile(merged):
-            yield name, merged
+    for name in iter_subject_dirs(root):
+        yield name, os.path.join(root, name, 'merged.csv')
 
 
 def _parse_args() -> argparse.Namespace:

@@ -57,3 +57,30 @@ def bandpass_filter(data: np.ndarray,
     """
     sos = butter(order, [lo, hi], btype='bandpass', fs=fs, output='sos')
     return sosfiltfilt(sos, data, axis=0).astype(np.float32)
+
+
+def read_abs_time_offset(path: str) -> int:
+    """Read the Abs Time Offset[us] value from row 1 of a merged CSV.
+
+    Parses the header row 1 (format: Amp Gain, 500, Abs Time Offset[us], <value>, ...)
+    Tolerates float / quoted / whitespace-padded values.
+
+    Parameters
+    ----------
+    path : path to the merged.csv file
+
+    Returns
+    -------
+    int – the Abs Time Offset[us] value (UTC Unix microseconds of first sample)
+
+    Raises
+    ------
+    ValueError if the offset cannot be read
+    """
+    with open(path, encoding='utf-8') as f:
+        for i, line in enumerate(f):
+            if i == 1:
+                parts = line.strip().split(',')
+                # Tolerate float / quoted / whitespace-padded values.
+                return int(float(parts[3].strip().strip('"').strip("'")))
+    raise ValueError(f'Cannot read offset from {path}')

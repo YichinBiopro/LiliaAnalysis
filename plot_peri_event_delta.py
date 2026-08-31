@@ -88,6 +88,7 @@ def plot_peri_event_delta(ch: int, outpath: str) -> None:
 
     fig.tight_layout(rect=(0, 0, 1, 0.95))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
 

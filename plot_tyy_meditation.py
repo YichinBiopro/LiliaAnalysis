@@ -32,16 +32,18 @@ import matplotlib.patches as mpatches
 import numpy as np
 
 # ── Locate project root and import shared utilities ───────────────────────────
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+from lilia.pathing import get_project_root
+BASE_DIR = get_project_root()
 sys.path.insert(0, BASE_DIR)
 
 from lilia.io import load_merged_csv, bandpass_filter          # noqa: E402
 from lilia.qeeg import compute_qeeg_indices                   # noqa: E402
+from lilia.time_utils import hhmm_to_local_dt, local_dt_to_utc_us, utc_us_to_local_dt  # noqa: E402
+from lilia.tflite import apply_tflite_windowed as _apply_tflite_shared  # noqa: E402
 
 # ── Session / subject constants ────────────────────────────────────────────────
 SESSION_DATE   = datetime.date(2026, 5, 12)
 TZ_OFFSET_H    = 8                        # Asia/Taipei = UTC+8
-EPOCH          = datetime.datetime(1970, 1, 1)
 
 SUBJECT_NAME   = 'TYY'
 SUBJECT_SN     = 'SN041'
@@ -51,9 +53,8 @@ MERGED_CSV     = os.path.join(SUBJECT_DIR, 'merged.csv')
 DEFAULT_OUTDIR = os.path.join(BASE_DIR, 'iBrainCenter', 'TYY_meditation')
 
 # ── Signal parameters ─────────────────────────────────────────────────────────
-FS             = 500      # Hz
-TFLITE_FS      = 200      # model input sample rate
-TFLITE_WIN     = 400      # model input window samples (= 2 s @ 200 Hz)
+from lilia.constants import FS, TFLITE_FS, TFLITE_WIN
+
 TFLITE_PATH    = os.path.join(BASE_DIR, 'tiny_v4_optimized.tflite')
 
 QEEG_WIN_SEC   = 5.0      # non-overlapping qEEG window length
@@ -86,14 +87,11 @@ MEDITATION_COLOR = '#911eb4'
 # ── Time helpers ──────────────────────────────────────────────────────────────
 
 def hhmm_to_dt(hhmm: str) -> datetime.datetime:
-    h, m = map(int, hhmm.split(':'))
-    return datetime.datetime(SESSION_DATE.year, SESSION_DATE.month,
-                             SESSION_DATE.day, h, m)
+    return hhmm_to_local_dt(hhmm, SESSION_DATE)
 
 
 def us_to_local_dt(us: int) -> datetime.datetime:
-    utc_dt = EPOCH + datetime.timedelta(microseconds=int(us))
-    return utc_dt + datetime.timedelta(hours=TZ_OFFSET_H)
+    return utc_us_to_local_dt(us, TZ_OFFSET_H)
 
 
 # ── qEEG windowed (multi-channel) ─────────────────────────────────────────────
@@ -125,24 +123,8 @@ def _compute_qeeg_windowed(time_us: np.ndarray, data: np.ndarray,
 # ── TFLite inference ──────────────────────────────────────────────────────────
 
 def _apply_tflite(data: np.ndarray) -> np.ndarray:
-    """Run TFLite model on (N, 4) float32 data; returns (M, 2)."""
-    import tensorflow as tf
-    interp = tf.lite.Interpreter(model_path=TFLITE_PATH)
-    interp.allocate_tensors()
-    inp = interp.get_input_details()[0]
-    out = interp.get_output_details()[0]
-    n_win  = len(data) // TFLITE_WIN
-    chunks = []
-    for i in range(n_win):
-        seg = data[i * TFLITE_WIN : (i + 1) * TFLITE_WIN][np.newaxis].astype(np.float32)
-        # Per-window RMS normalization matching the training convention
-        # (same as plot_event_markers.apply_tflite_windowed / data_analysis.run_model).
-        seg_rms  = np.sqrt(np.mean(seg.astype(np.float64) ** 2)) + 1e-8
-        seg_norm = (seg / np.float32(seg_rms)).astype(np.float32, copy=False)
-        interp.set_tensor(inp['index'], seg_norm)
-        interp.invoke()
-        chunks.append(interp.get_tensor(out['index'])[0] * np.float32(seg_rms))
-    return np.concatenate(chunks, axis=0) if chunks else np.zeros((0, 2), np.float32)
+    """Wrapper around shared lilia.tflite.apply_tflite_windowed."""
+    return _apply_tflite_shared(data, TFLITE_PATH, tflite_win=TFLITE_WIN)
 
 
 # ── Heatmap builder ───────────────────────────────────────────────────────────
@@ -277,8 +259,7 @@ def plot_tyy_meditation(outdir: str, ds: int = 500, use_tflite: bool = True):
 
     # ── Restrict full-res data to window for efficiency ───────────────────────
     def _dt_to_us(dt):
-        delta = dt - EPOCH
-        return int(delta.total_seconds() * 1e6) - TZ_OFFSET_H * 3600 * int(1e6)
+        return local_dt_to_utc_us(dt, TZ_OFFSET_H)
 
     win_start_us = _dt_to_us(win_start_dt)
     win_end_us   = _dt_to_us(win_end_dt)

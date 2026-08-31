@@ -347,6 +347,7 @@ def plot_single_signal_comparison(
 
     fig.tight_layout(rect=[0, 0.05, 1, 1])
     fig.savefig(outpath, dpi=150, bbox_inches='tight')
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'  Saved: {outpath}')
 
@@ -449,6 +450,7 @@ def plot_combined_comparison(
 
     fig.tight_layout(rect=[0, 0.06, 1, 1])
     fig.savefig(outpath, dpi=150, bbox_inches='tight')
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'  Saved: {outpath}')
 

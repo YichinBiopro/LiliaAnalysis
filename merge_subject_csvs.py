@@ -30,20 +30,13 @@ import os
 
 import pandas as pd
 
+from lilia.io import read_abs_time_offset
+from lilia.pathing import get_project_root
+
+BASE_DIR = get_project_root()
+
 
 N_HEADER_ROWS = 4   # rows before the column-name row
-
-
-def read_abs_time_offset(path):
-    """Return the Abs Time Offset[us] value from row 1 of the CSV."""
-    with open(path, encoding='utf-8') as f:
-        for i, line in enumerate(f):
-            if i == 1:
-                parts = line.strip().split(',')
-                # format: Amp Gain, 500, Abs Time Offset[us], <value>, ...
-                # Tolerate float / quoted / whitespace-padded values.
-                return int(float(parts[3].strip().strip('"').strip("'")))
-    raise ValueError(f'Could not read Abs Time Offset from {path}')
 
 
 def read_header_lines(path):

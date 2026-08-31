@@ -1,0 +1,39 @@
+test_collect_group_data_filters_rows (test_goertzel_distribution_regression.GoertzelDistributionRegressionTests) ... ok
+test_common_db_edges_shape (test_goertzel_distribution_regression.GoertzelDistributionRegressionTests) ... ok
+test_with_aggregates_adds_channel_and_all_channels (test_goertzel_distribution_regression.GoertzelDistributionRegressionTests) ... ok
+test_collect_candidates_per_subject_prefers_quality_final_and_excludes_hard_clip (test_goertzel_sampling_regression.GoertzelSamplingRegressionTests) ... ok
+test_collect_matches_global_filters_by_tolerance_and_quality (test_goertzel_sampling_regression.GoertzelSamplingRegressionTests) ... ok
+test_sample_rows_is_reproducible (test_goertzel_sampling_regression.GoertzelSamplingRegressionTests) ... ok
+test_core_quality_imports (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_data_analysis (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_filter_hard_artifacts (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_goertzel_histograms (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_goertzel_resample_wrapper (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_goertzel_sampling (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_goertzel_summary (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_plot_goertzel_vs_raw (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_plot_raw_eeg (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_plot_tyy_meditation (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_quality_check (test_phase_smoke.PhaseSmokeTests) ... ok
+test_import_convert_to_tflite (test_phase_smoke.PhaseSmokeTests) ... WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1788166471.836124 2784798 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1788166471.866401 2784798 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1788166472.600090 2784798 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+ok
+test_project_root_exists (test_phase_smoke.PhaseSmokeTests) ... ok
+test_signal_quality_package_imports (test_phase_smoke.PhaseSmokeTests) ... ok
+test_non_overlapping_property (test_segment_sampling_regression.SegmentSamplingRegressionTests) ... ok
+test_reproducible_with_seed (test_segment_sampling_regression.SegmentSamplingRegressionTests) ... ok
+test_short_recording_returns_empty (test_segment_sampling_regression.SegmentSamplingRegressionTests) ... ok
+test_iter_group_merged_csvs_returns_group_subject_path (test_subject_discovery_regression.SubjectDiscoveryRegressionTests) ... ok
+test_iter_subject_dirs_filters_missing_merged (test_subject_discovery_regression.SubjectDiscoveryRegressionTests) ... ok
+test_hhmm_to_local_dt (test_time_utils_regression.TimeUtilsRegressionTests) ... ok
+test_hhmm_to_utc_us_matches_expected (test_time_utils_regression.TimeUtilsRegressionTests) ... ok
+test_round_trip_local_dt_and_utc_us (test_time_utils_regression.TimeUtilsRegressionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 9.378s
+
+OK

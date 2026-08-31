@@ -36,16 +36,17 @@ from lilia.quality import (
     get_best_eeg_quality_v2_flat_spectrum_only_params,
 )
 from lilia.qeeg import compute_qeeg_indices
+from lilia.segment_sampling import pick_non_overlapping_segments
+from lilia.subject_paths import iter_group_merged_csvs
+from lilia.pathing import get_project_root
+from lilia.constants import FS, QUALITY_THRESHOLD, CH_COLORS
 from plot_event_markers import (
     QUALITY_WIN_SEC, QUALITY_PARAMS, SUBJECTS, IBRAIN_DIR,
     us_to_local_dt, _series_with_gaps,
 )
 
 # ── Shared constants (identical for both subcommands) ────────────────────────────
-FS = 500                    # Hz
-QUALITY_THRESHOLD = 0.5
-CH_COLORS = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = get_project_root()
 
 
 # ═════════════════════════════════════════════════════════════════════════════
@@ -63,25 +64,6 @@ BP_HIGH = 45.0             # Hz — bandpass upper cutoff
 
 QEEG_WIN_SEC = 5.0          # qEEG index window length (seconds)
 QEEG_INDICES = ['focus', 'flow', 'calm', 'relaxation']
-
-
-def pick_segments(n_total: int, seg_len: int, n_segs: int, rng: np.random.Generator):
-    """
-    Pick *n_segs* non-overlapping start indices uniformly at random from
-    [0, n_total - seg_len].  Returns sorted list of start indices.
-    """
-    starts = []
-    max_start = n_total - seg_len
-    attempts = 0
-    while len(starts) < n_segs and attempts < 10_000:
-        attempts += 1
-        s = int(rng.integers(0, max_start + 1))
-        # check non-overlapping with already chosen segments
-        if all(abs(s - prev) >= seg_len for prev in starts):
-            starts.append(s)
-    starts.sort()
-    return starts
-
 
 def compute_qeeg_windowed_seg(seg: np.ndarray, fs: float = FS,
                               win_sec: float = QEEG_WIN_SEC):
@@ -117,7 +99,7 @@ def plot_segments(path: str, group: str, subject: str, outdir: str,
     n_total, n_ch = data.shape
     print(f'{n_total} pts, {n_ch} ch')
 
-    starts = pick_segments(n_total, SEG_SAMPLES, N_SEGS, rng)
+    starts = pick_non_overlapping_segments(n_total, SEG_SAMPLES, N_SEGS, rng)
     if len(starts) < N_SEGS:
         print(f'    WARNING: only {len(starts)} segment(s) found, skipping')
         return
@@ -320,20 +302,14 @@ def plot_segments(path: str, group: str, subject: str, outdir: str,
     fname = f'{group}_{subject}_sample_quality.png'
     outpath = os.path.join(outdir, fname)
     fig.savefig(outpath, dpi=150, bbox_inches='tight')
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'       → {outpath}')
 
 
 def discover_merged_csvs():
     """Yield (group, subject, path) for every merged.csv found."""
-    for group_dir in ['iBrainCenter', 'YoGa']:
-        root = os.path.join(BASE_DIR, group_dir)
-        if not os.path.isdir(root):
-            continue
-        for subj_dir in sorted(os.listdir(root)):
-            csv_path = os.path.join(root, subj_dir, 'merged.csv')
-            if os.path.isfile(csv_path):
-                yield group_dir, subj_dir, csv_path
+    yield from iter_group_merged_csvs(BASE_DIR, groups=('iBrainCenter', 'YoGa'))
 
 
 def run_samples(args: argparse.Namespace) -> None:
@@ -532,6 +508,7 @@ def plot_quality_anomaly_report(name: str, info: dict, outdir: str,
     os.makedirs(outdir, exist_ok=True)
     outpath = os.path.join(outdir, f"{name}_{info['sn']}_quality_anomalies.png")
     fig.savefig(outpath, dpi=150, bbox_inches="tight")
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f"       → {outpath}")
     return outpath

@@ -1,0 +1,5 @@
+1. need to check different baseline mode ( event EEG referred to period before event start )
+2. need to check raw data with no downsampling ( why data quality is low )
+3. need to check spectral entropy
+
+need to add Joint spectral entropy 

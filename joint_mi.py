@@ -168,6 +168,7 @@ def plot_subject(df: pd.DataFrame, label: str, outpath: str) -> None:
                  fontsize=13)
     fig.tight_layout(rect=(0, 0, 1, 0.95))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f"  Saved: {outpath}")
 
@@ -203,6 +204,7 @@ def plot_cross_subject(df: pd.DataFrame, outpath: str) -> None:
                  "(shaded = ±1σ)", fontsize=12)
     fig.tight_layout(rect=(0, 0, 1, 0.95))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f"Saved: {outpath}")
 
@@ -303,6 +305,7 @@ def plot_gap(df: pd.DataFrame, outpath: str) -> None:
                  fontsize=12)
     fig.tight_layout(rect=(0, 0, 1, 0.95))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f"Saved: {outpath}")
 

@@ -11,32 +11,16 @@ from __future__ import annotations
 
 import argparse
 import os
-from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
 
-
-@dataclass
-class GroupData:
-    subject: str
-    channel: str
-    power: np.ndarray
-    power_db: np.ndarray
-    n_total: int
-    n_kept: int
-
-
-def _build_csv_path(root: str, subject_dir: str, stem: str, ch: int, target_freq: float) -> str:
-    hz_txt = f"{target_freq:g}Hz"
-    return os.path.join(root, subject_dir, f"{stem}_ch{ch}_{hz_txt}.csv")
-
-
-def _iter_subject_dirs(root: str):
-    for name in sorted(os.listdir(root)):
-        p = os.path.join(root, name)
-        if os.path.isdir(p) and os.path.isfile(os.path.join(p, 'merged.csv')):
-            yield name
+from lilia.goertzel_distribution import (
+    GroupData,
+    collect_group_data,
+    common_db_edges,
+    with_aggregates,
+)
 
 
 def _safe_quantile(arr: np.ndarray, q: float) -> float:
@@ -107,21 +91,6 @@ def _hist_rows(g: GroupData, edges: np.ndarray) -> list[dict[str, object]]:
     return rows
 
 
-def _combine_groups(groups: list[GroupData], subject: str, channel: str) -> GroupData:
-    if not groups:
-        return GroupData(subject=subject, channel=channel,
-                         power=np.array([], dtype=float), power_db=np.array([], dtype=float),
-                         n_total=0, n_kept=0)
-    return GroupData(
-        subject=subject,
-        channel=channel,
-        power=np.concatenate([g.power for g in groups]) if any(g.power.size for g in groups) else np.array([], dtype=float),
-        power_db=np.concatenate([g.power_db for g in groups]) if any(g.power_db.size for g in groups) else np.array([], dtype=float),
-        n_total=int(sum(g.n_total for g in groups)),
-        n_kept=int(sum(g.n_kept for g in groups)),
-    )
-
-
 def _parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
         description='Summarize quality-filtered Goertzel power distribution per subject/channel and overall.'
@@ -151,70 +120,32 @@ def main() -> None:
     args = _parse_args()
     os.makedirs(args.outdir, exist_ok=True)
 
-    group_rows: list[GroupData] = []
-    missing_files: list[str] = []
-
-    for sub in _iter_subject_dirs(args.root):
-        for ch in args.channels:
-            csv_path = _build_csv_path(args.root, sub, args.stem, ch, args.target_freq)
-            if not os.path.isfile(csv_path):
-                missing_files.append(csv_path)
-                continue
-            df = pd.read_csv(csv_path)
-            required = {'goertzel_power', 'goertzel_db', 'quality'}
-            if not required.issubset(df.columns):
-                raise SystemExit(f'Input CSV missing required columns: {csv_path}')
-
-            quality_col = 'quality_final' if 'quality_final' in df.columns else 'quality'
-            q = df[quality_col].to_numpy(dtype=float)
-            keep = np.isfinite(q) & (q > args.threshold)
-            if args.exclude_hard_artifact and 'artifact_hard_clip' in df.columns:
-                keep &= (df['artifact_hard_clip'].to_numpy(dtype=float) < 0.5)
-
-            pwr = df['goertzel_power'].to_numpy(dtype=float)[keep]
-            db = df['goertzel_db'].to_numpy(dtype=float)[keep]
-
-            group_rows.append(
-                GroupData(
-                    subject=sub,
-                    channel=f'ch{ch}',
-                    power=pwr,
-                    power_db=db,
-                    n_total=int(len(df)),
-                    n_kept=int(np.sum(keep)),
-                )
-            )
+    try:
+        base_groups, missing_files = collect_group_data(
+            root=args.root,
+            channels=args.channels,
+            stem=args.stem,
+            target_freq=args.target_freq,
+            threshold=args.threshold,
+            exclude_hard_artifact=args.exclude_hard_artifact,
+            require_power=True,
+        )
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
 
     if missing_files:
         print('Warning: some input CSV files were not found and were skipped:')
         for p in missing_files:
             print(f'  - {p}')
 
-    if not group_rows:
+    if not base_groups:
         raise SystemExit('No input data found to summarize.')
 
-    # Add channel-wise and all-channel overall aggregates across subjects.
-    base_groups = list(group_rows)
-    aggregate_per_channel = []
-    for ch in args.channels:
-        subset = [g for g in base_groups if g.channel == f'ch{ch}']
-        agg = _combine_groups(subset, subject='ALL_SUBJECTS', channel=f'ch{ch}')
-        aggregate_per_channel.append(agg)
-        group_rows.append(agg)
-    group_rows.append(_combine_groups(aggregate_per_channel, subject='ALL_SUBJECTS', channel='ALL_CHANNELS'))
+    group_rows = with_aggregates(base_groups, args.channels)
 
     summary_df = pd.DataFrame([_group_stats(g) for g in group_rows])
 
-    # Use common db edges for all groups so histograms are comparable.
-    db_all = np.concatenate([g.power_db for g in group_rows if g.power_db.size])
-    if db_all.size == 0:
-        edges = np.linspace(-120.0, 0.0, args.bins + 1)
-    else:
-        lo, hi = float(np.min(db_all)), float(np.max(db_all))
-        if np.isclose(lo, hi):
-            lo -= 1.0
-            hi += 1.0
-        edges = np.linspace(lo, hi, args.bins + 1)
+    edges = common_db_edges(group_rows, args.bins)
 
     hist_rows = []
     for g in group_rows:

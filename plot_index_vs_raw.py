@@ -296,6 +296,7 @@ def plot_index_vs_raw(
 
     fig.tight_layout(rect=(0, 0, 1, 0.97))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
     print(f'  events          : {len(win)} '
@@ -313,6 +314,122 @@ def _raw_epoch_us(raw_csv: str) -> int:
     """
     row = pd.read_csv(raw_csv, skiprows=5, nrows=1, header=None)
     return int(row.iloc[0, 0])
+
+
+def _real_window_times(
+    n_windows: int,
+    raw_csv: str,
+    win_sec: float,
+    step_sec: float,
+    fs: float,
+    gap_factor: float = 3.0,
+) -> np.ndarray:
+    """Map analysis windows to true elapsed time from raw CSV timestamps."""
+    time_us = pd.read_csv(raw_csv, skiprows=5, header=None,
+                          usecols=[0]).iloc[:, 0].to_numpy(dtype=np.int64)
+    epoch_us = int(time_us[0])
+    win_samp = int(round(win_sec * fs))
+    step_samp = int(round(step_sec * fs))
+    centres = np.arange(n_windows) * step_samp + win_samp // 2
+    centres = np.clip(centres, 0, time_us.size - 1)
+    real_t = (time_us[centres].astype(np.float64) - epoch_us) / 1e6
+
+    gaps = np.diff(real_t)
+    jump = np.flatnonzero(gaps > gap_factor * step_sec)
+    for i in jump:
+        real_t[i + 1] = np.nan
+    return real_t
+
+
+def plot_index_vs_raw_session(
+    be_csv: str,
+    raw_csv: str,
+    label: str,
+    ch: int,
+    outpath: str,
+    use_minutes: bool = True,
+    smooth_win: int = 5,
+    raw_ylim: tuple[float, float] = (-150.0, 150.0),
+    quality_threshold: float = pem.QUALITY_THRESHOLD,
+    win_sec: float = 2.0,
+    step_sec: float = 2.0,
+    fs: float = 500.0,
+) -> None:
+    """Session-baseline variant for data without event timelines."""
+    t, signals, q = _load_signals(be_csv)
+    if t.size == 0:
+        raise SystemExit(f'Error: no finite windows in {be_csv}.')
+    t_raw, amp, _epoch_us = _load_raw(raw_csv, ch)
+
+    t_real = _real_window_times(t.size, raw_csv, win_sec, step_sec, fs)
+    gap_mask = np.isnan(t_real)
+    if gap_mask.any():
+        print(f'  time-gap correction: {int(gap_mask.sum())} window(s) '
+              f'follow a gap > {3 * step_sec:g}s — line broken there.')
+
+    good = np.isfinite(q) & (q >= quality_threshold)
+    n_bad = int((~good).sum())
+    bad_pct = 100.0 * n_bad / t.size if t.size else 0.0
+
+    sc = 1.0 / 60.0 if use_minutes else 1.0
+    xlabel = 'Time (min)' if use_minutes else 'Time (s)'
+
+    n_sig = len(SIGNAL_SPECS)
+    n_rows = n_sig + 1
+    fig, axes = plt.subplots(
+        n_rows, 1, figsize=(14, 2.2 * n_rows + 1), sharex=True,
+        gridspec_kw={'height_ratios': [1.6] * n_sig + [1.4]})
+    fig.suptitle(
+        f'{label} ch{ch} — qEEG indices + band entropy vs raw EEG  '
+        f'(Δ vs whole-session baseline, no activity timeline;  '
+        f'quality≥{quality_threshold:g}, {bad_pct:.0f}% windows masked)',
+        fontsize=12, fontweight='bold')
+
+    baseline_rows = []
+    for ax, (key, sig_label, color) in zip(axes[:n_sig], SIGNAL_SPECS):
+        y = np.where(good, signals[key], np.nan)
+        ys = _rolling_median(y, smooth_win)
+        ys = np.where(good, ys, np.nan)
+
+        baseline = float(np.nanmean(y)) if np.any(np.isfinite(y)) else np.nan
+        delta = ys - baseline
+
+        ax.plot(t_real * sc, y, color='0.8', lw=0.6, alpha=0.5,
+                label='absolute (raw)', zorder=1)
+        ax.plot(t_real * sc, delta, color=color, lw=1.8, alpha=0.95,
+                label='Δ vs session baseline', zorder=4)
+        ax.axhline(0.0, color='k', lw=0.8, ls=':', alpha=0.5)
+        ax.set_ylabel(f'{sig_label}\n(value / Δ)')
+        ax.legend(loc='upper right', fontsize=7, ncol=2)
+        ax.grid(True, alpha=0.3)
+        baseline_rows.append((key, baseline))
+
+    axr = axes[n_sig]
+    axr.plot(t_raw * sc, amp, color='#444444', lw=0.4, alpha=0.8)
+    axr.set_ylabel(f'Raw EEG ch{ch}\n(µV)')
+    axr.set_xlabel(xlabel)
+    axr.set_ylim(raw_ylim)
+    axr.grid(True, alpha=0.3)
+
+    half = step_sec / 2.0
+    for tb in t_real[~good & ~gap_mask]:
+        axr.axvspan((tb - half) * sc, (tb + half) * sc,
+                    color='0.5', alpha=0.18, lw=0, zorder=0)
+
+    fig.tight_layout(rect=(0, 0, 1, 0.96))
+    fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
+    plt.close(fig)
+    print(f'Saved: {outpath}')
+    valid_t = t_real[~gap_mask]
+    print(f'  windows       : {t.size}  over real elapsed '
+          f'{np.nanmin(valid_t):.0f}–{np.nanmax(valid_t):.0f}s '
+          f'(sample-count time would read 0–{t[-1]:.0f}s, compressing out gaps)')
+    print(f'  quality mask  : {n_bad}/{t.size} masked '
+          f'({bad_pct:.1f}%, threshold {quality_threshold:g})')
+    print('  session baseline (quality-masked whole-recording mean):')
+    for key, baseline in baseline_rows:
+        print(f'    {key:<11s}: {baseline:.4f}')
 
 
 def plot_absolute_waves(
@@ -418,6 +535,7 @@ def plot_absolute_waves(
 
     fig.tight_layout(rect=(0, 0, 1, 0.96))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
 
@@ -511,6 +629,7 @@ def plot_single_signal(
 
     fig.tight_layout(rect=(0, 0, 1, 0.96))
     fig.savefig(outpath, dpi=150)
+    fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
 
@@ -520,7 +639,7 @@ def plot_single_signal(
 def _parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
         description='Focus/Relax index (two baselines) vs raw EEG.')
-    p.add_argument('--subject', required=True,
+    p.add_argument('--subject', required=False,
                    help=f'Subject key, one of {list(pem.SUBJECTS)}.')
     p.add_argument('--ch', type=int, default=1, help='1-based channel (default 1).')
     p.add_argument('--baseline-sec', type=float, default=30.0,
@@ -546,6 +665,18 @@ def _parse_args() -> argparse.Namespace:
                    default=pem.QUALITY_THRESHOLD,
                    help='Mask windows with quality below this '
                         f'(default {pem.QUALITY_THRESHOLD}); use -1 to disable.')
+    p.add_argument('--session-baseline', action='store_true',
+                   help='Use one whole-session baseline (no event timeline).')
+    p.add_argument('--label', default=None,
+                   help='Label for titles in --session-baseline mode.')
+    p.add_argument('--win-sec', type=float, default=2.0,
+                   help='Analysis window length used to build band-entropy CSV '
+                        '(session mode; default 2.0).')
+    p.add_argument('--step-sec', type=float, default=2.0,
+                   help='Analysis step used to build band-entropy CSV '
+                        '(session mode; default 2.0).')
+    p.add_argument('--fs', type=float, default=500.0,
+                   help='Sampling rate in Hz (session mode; default 500).')
     p.add_argument('--pre-sec', type=float, default=30.0,
                    help='Per-event pre-onset window length in seconds (default 30).')
     p.add_argument('--post-sec', type=float, default=30.0,
@@ -558,6 +689,23 @@ def _parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = _parse_args()
+    if args.session_baseline:
+        if not args.be_csv or not args.raw_csv:
+            sys.exit('Error: --session-baseline requires both --be-csv and --raw-csv.')
+        for f in (args.be_csv, args.raw_csv):
+            if not os.path.isfile(f):
+                sys.exit(f'Error: file not found: {f}')
+        out = args.out or args.be_csv.replace('.csv', '_session_index_vs_raw.png')
+        label = args.label or args.subject or os.path.splitext(os.path.basename(args.be_csv))[0]
+        plot_index_vs_raw_session(
+            args.be_csv, args.raw_csv, label, args.ch, out,
+            win_sec=args.win_sec, step_sec=args.step_sec, fs=args.fs,
+            use_minutes=not args.seconds, smooth_win=args.smooth_win,
+            raw_ylim=tuple(args.raw_ylim),
+            quality_threshold=args.quality_threshold,
+        )
+        return
+
     if args.subject not in pem.SUBJECTS:
         sys.exit(f'Error: unknown subject {args.subject!r}. '
                  f'Choose from {list(pem.SUBJECTS)}.')
@@ -576,7 +724,6 @@ def main() -> None:
         smooth_win=args.smooth_win, raw_ylim=tuple(args.raw_ylim),
         quality_threshold=args.quality_threshold)
 
-    # Companion figure: absolute (un-baselined) signal waves through time.
     abs_out = out.replace('.png', '_absolute.png')
     if abs_out == out:
         abs_out = out + '_absolute.png'

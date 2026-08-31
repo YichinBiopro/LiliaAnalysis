@@ -107,15 +107,8 @@ def _saturation_frac(seg_raw: np.ndarray) -> float:
 # ── 訊號處理小工具 ──────────────────────────────────────────────────────────────
 
 def _resample_500_to_200(data: np.ndarray) -> np.ndarray:
-    """將 (N, n_ch) 由 FS(500Hz) 多相位重採樣到 TFLITE_FS(200Hz)。
-
-    TFLite 模型在 200 Hz 下訓練/部署，故推論前必須先降採樣，且使用
-    ``resample_poly``（多相位濾波）以避免單純抽取造成的混疊 (aliasing)。
-    """
-    g  = gcd(int(TFLITE_FS), int(FS))
-    up = int(TFLITE_FS) // g
-    dn = int(FS) // g
-    return resample_poly(data, up, dn, axis=0).astype(np.float32)
+    """Wrapper around shared lilia.signal.resample_polyphase for backward compatibility."""
+    return resample_polyphase(data, FS, TFLITE_FS)
 
 
 def _session_tflite(time_us_full: np.ndarray,
@@ -752,6 +745,7 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
         outpath = os.path.join(
             outdir, f'{name}_{info["sn"]}_tflite_summary_{baseline_tag}.png')
         fig.savefig(outpath, dpi=150, bbox_inches='tight')
+        fig.savefig(os.path.splitext(outpath)[0] + '.svg')
         plt.close(fig)
         print(f'       → {outpath}')
         outpaths.append(outpath)
