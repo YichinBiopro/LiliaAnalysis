@@ -10,6 +10,8 @@ writes both summary stats and histogram tables.
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import os
 
 import numpy as np
@@ -152,7 +154,17 @@ def main() -> None:
         hist_rows.extend(_hist_rows(g, edges))
     hist_df = pd.DataFrame(hist_rows)
 
-    tag = f"thr_{args.threshold:g}".replace('.', 'p')
+    settings = {key: getattr(args, key) for key in
+                ('root', 'channels', 'stem', 'target_freq', 'threshold', 'bins', 'exclude_hard_artifact')}
+    config_id = hashlib.sha256(json.dumps(settings, sort_keys=True).encode()).hexdigest()[:12]
+    tag = f"{args.target_freq:g}Hz_thr_{args.threshold:g}_{config_id}".replace('.', 'p')
+    for frame in (summary_df, hist_df):
+        frame['target_freq_hz'] = args.target_freq
+        frame['quality_threshold'] = args.threshold
+        frame['exclude_hard_artifact'] = args.exclude_hard_artifact
+        frame['config_id'] = config_id
+    with open(os.path.join(args.outdir, f'goertzel_distribution_{tag}.json'), 'w', encoding='utf-8') as handle:
+        json.dump(settings, handle, indent=2)
     summary_path = os.path.join(args.outdir, f'goertzel_distribution_summary_{tag}.csv')
     hist_path = os.path.join(args.outdir, f'goertzel_distribution_hist_{tag}.csv')
 

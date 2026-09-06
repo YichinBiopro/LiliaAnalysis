@@ -29,6 +29,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.dates as mdates
 import matplotlib.patches as mpatches
+from lilia.windowing import require_continuous
 import numpy as np
 
 # ── Locate project root and import shared utilities ───────────────────────────
@@ -246,6 +247,7 @@ def plot_tyy_meditation(outdir: str, ds: int = 500, use_tflite: bool = True):
     time_us_ds,   data_ds   = load_merged_csv(MERGED_CSV, downsample=ds)
     time_us_full, data_full = load_merged_csv(MERGED_CSV)
 
+    require_continuous(time_us_full, FS, 'plot_tyy_meditation.py')
     # ── Time window ──────────────────────────────────────────────────────────
     med_start_dt  = hhmm_to_dt(MEDITATION_START_HHMM)
     med_end_dt    = med_start_dt + datetime.timedelta(minutes=MEDITATION_DUR_MIN)

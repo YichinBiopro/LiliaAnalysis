@@ -67,7 +67,10 @@ class GoertzelSamplingRegressionTests(unittest.TestCase):
             tol_db=0.25,
             quality_threshold=0.5,
         )
-        self.assertEqual(len(out), 3)
+        self.assertEqual(len(out), 2)
+        self.assertNotIn(3.0, out["time_s"].tolist())
+        self.assertIn("window_start_idx", out.columns)
+        self.assertEqual(out.loc[out["channel"] == 1, "quality"].iloc[0], 0.85)
         self.assertTrue(set(out["channel"].tolist()).issubset({1, 2}))
 
     def test_collect_candidates_per_subject_prefers_quality_final_and_excludes_hard_clip(self):

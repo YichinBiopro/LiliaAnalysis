@@ -21,6 +21,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from lilia.windowing import time_slice, require_continuous
+from lilia.quality_policy import valid_goertzel_rows
 from lilia.io import bandpass_filter, load_merged_csv
 from lilia.subject_paths import iter_subject_dirs
 import plot_event_markers as pem
@@ -44,9 +46,9 @@ def _plot_timeline(
 ) -> None:
     t = df['time_s'].to_numpy(dtype=float)
     db = df['goertzel_db'].to_numpy(dtype=float)
-    q = df['quality'].to_numpy(dtype=float)
+    q = df['quality_final' if 'quality_final' in df else 'quality'].to_numpy(dtype=float)
     hard = df['artifact_hard_clip'].to_numpy(dtype=float) > 0.5
-    keep = (q > quality_threshold) & (~hard)
+    keep = valid_goertzel_rows(df, quality_threshold)
 
     fig, axes = plt.subplots(
         3, 1, figsize=(13.8, 8.0), sharex=True,
@@ -125,7 +127,6 @@ def _plot_hard_gallery(
         axes = np.array([axes])
     axes = axes.reshape(-1)
 
-    total_s = (len(raw_ch) - 1) / fs
     half = seg_sec / 2.0
 
     for i, ax in enumerate(axes):
@@ -135,14 +136,14 @@ def _plot_hard_gallery(
 
         r = rows.iloc[i]
         center = float(r['time_s'])
-        start = max(0.0, center - half)
-        end = min(total_s, center + half)
-        i0 = int(round(start * fs))
-        i1 = max(i0 + 1, int(round(end * fs)))
-        i0 = max(0, min(i0, len(raw_ch) - 1))
-        i1 = max(i0 + 1, min(i1, len(raw_ch)))
-
-        x = np.arange(i0, i1) / fs - center
+        sl = time_slice(time_us, time_us[0] + (center - half) * 1e6,
+                        time_us[0] + (center + half) * 1e6)
+        i0, i1 = sl.start, sl.stop
+        if i1 <= i0:
+            ax.axis('off')
+            continue
+        require_continuous(time_us[i0:i1], fs, 'hard artifact gallery')
+        x = (time_us[i0:i1] - time_us[0]) / 1e6 - center
         yr = raw_ch[i0:i1]
         yb = bp_ch[i0:i1]
         if yr.size == 0 or yb.size == 0:
@@ -192,7 +193,7 @@ def main() -> None:
     for subject in iter_subject_dirs(args.root):
         merged = os.path.join(args.root, subject, 'merged.csv')
         time_us, data = load_merged_csv(merged)
-        bp = bandpass_filter(data, fs=args.fs, lo=pem.BP_LOW, hi=pem.BP_HIGH)
+        bp = bandpass_filter(data, fs=args.fs, lo=pem.BP_LOW, hi=pem.BP_HIGH, time_us=time_us)
 
         for ch in args.channels:
             in_csv = os.path.join(
@@ -210,9 +211,7 @@ def main() -> None:
                 continue
 
             hard = df['artifact_hard_clip'].to_numpy(dtype=float) > 0.5
-            quality_col = 'quality_final' if 'quality_final' in df.columns else 'quality'
-            q = df[quality_col].to_numpy(dtype=float)
-            keep = (q > args.quality_threshold) & (~hard)
+            keep = valid_goertzel_rows(df, args.quality_threshold)
 
             filtered = df.loc[keep].reset_index(drop=True)
             hard_df = df.loc[hard].reset_index(drop=True)

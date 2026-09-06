@@ -10,7 +10,6 @@ TFLite model I/O  (float32):
   output: (1, 400, 2)
 """
 
-import sys
 import os
 import numpy as np
 import torch

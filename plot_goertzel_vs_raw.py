@@ -20,7 +20,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from lilia.windowing import window_starts
 from lilia.goertzel import goertzel_power
+from lilia.provenance import write_goertzel_metadata, validate_goertzel_cache
+from lilia.quality_policy import valid_goertzel_rows
 from lilia.io import bandpass_filter, load_merged_csv
 from lilia.quality import (
     get_eeg_quality_index_v2_parametric,
@@ -85,7 +88,7 @@ def _compute_window_metrics(
     bp_edge_shift = []
     hard = []
 
-    for start in range(0, data_bp.shape[0] - win + 1, step):
+    for start in window_starts(len(data_bp), win, step, time_us, fs):
         end = start + win
         seg = data_bp[start:start + win]
         seg_raw = data_raw[start:start + win]
@@ -214,7 +217,7 @@ def _plot_subject(
     if ch < 1 or ch > data.shape[1]:
         raise ValueError(f'channel {ch} out of range for {merged_csv}')
 
-    data_bp = bandpass_filter(data, fs=fs, lo=pem.BP_LOW, hi=pem.BP_HIGH)
+    data_bp = bandpass_filter(data, fs=fs, lo=pem.BP_LOW, hi=pem.BP_HIGH, time_us=time_us)
     quality_params = get_ibrain_device_eeg_quality_v2_params()
     result = _compute_window_metrics(
         time_us=time_us,
@@ -239,6 +242,9 @@ def _plot_subject(
             'window_start_idx': result.window_start_idx,
             'window_end_idx': result.window_end_idx,
             'time_s': result.time_s,
+            'window_start_us': time_us[result.window_start_idx],
+            'window_end_us': time_us[result.window_end_idx - 1] + int(round(1e6 / fs)),
+            'window_center_us': time_us[(result.window_start_idx + result.window_end_idx) // 2],
             'goertzel_power': result.goertzel_power,
             'goertzel_db': result.goertzel_db,
             'quality': result.quality,
@@ -250,6 +256,15 @@ def _plot_subject(
             'artifact_hard_clip': result.hard_artifact.astype(int),
         }
     ).to_csv(out_csv, index=False)
+    write_goertzel_metadata(out_csv, merged_csv, {
+        'ch': ch, 'fs': fs, 'target_freq': target_freq,
+        'win_sec': win_sec, 'step_sec': step_sec,
+        'sat_uv': sat_uv, 'sat_frac_threshold': sat_frac_threshold,
+        'step_ptp_threshold': step_ptp_threshold,
+        'bp_shift_sec': bp_shift_sec, 'bp_shift_threshold': bp_shift_threshold,
+        'bp_low': pem.BP_LOW, 'bp_high': pem.BP_HIGH,
+        'quality_params': quality_params,
+    })
 
     sub_dirname = os.path.basename(os.path.dirname(merged_csv))
     subject_key = _subject_key_from_dir(sub_dirname)
@@ -295,10 +310,11 @@ def _plot_subject_from_csv(
     """Re-render the 4-panel figure from an already-computed per-window CSV
     (as saved by _plot_subject), skipping the expensive Goertzel/quality
     recomputation. Only the raw/bandpass EEG traces are reloaded."""
+    validate_goertzel_cache(in_csv, merged_csv, {'ch': ch, 'fs': fs, 'target_freq': target_freq})
     time_us, data = load_merged_csv(merged_csv)
     if ch < 1 or ch > data.shape[1]:
         raise ValueError(f'channel {ch} out of range for {merged_csv}')
-    data_bp = bandpass_filter(data, fs=fs, lo=pem.BP_LOW, hi=pem.BP_HIGH)
+    data_bp = bandpass_filter(data, fs=fs, lo=pem.BP_LOW, hi=pem.BP_HIGH, time_us=time_us)
 
     df = pd.read_csv(in_csv)
     result = WindowResult(
@@ -359,10 +375,11 @@ def _render_plot(
     ref_lines: list[tuple[float, str]] | None = None,
     power_ylim: tuple[float, float] | None = None,
 ) -> None:
-    if exclude_hard_artifact:
-        good = np.isfinite(result.quality_final) & (result.quality_final >= quality_threshold)
-    else:
-        good = np.isfinite(result.quality) & (result.quality >= quality_threshold)
+    good = valid_goertzel_rows(pd.DataFrame({
+        'quality': result.quality, 'quality_final': result.quality_final,
+        'goertzel_db': result.goertzel_db, 'time_s': result.time_s,
+        'artifact_hard_clip': result.hard_artifact,
+    }), quality_threshold, exclude_hard=exclude_hard_artifact)
 
     series = result.goertzel_db if use_db else result.goertzel_power
     masked_series = np.where(good, series, np.nan)
@@ -383,7 +400,7 @@ def _render_plot(
     hard_n = int(result.hard_artifact.sum())
     fig.suptitle(
         f'{sub_dirname} ch{ch}  |  Goertzel {target_freq:g} Hz + quality + BP(0.5-45Hz)/raw '
-        f'(quality≥{quality_threshold:g}, {bad_pct:.0f}% masked; hard-artifact={hard_n})',
+        f'(quality>{quality_threshold:g}, {bad_pct:.0f}% masked; hard-artifact={hard_n})',
         fontsize=12,
         fontweight='bold',
     )

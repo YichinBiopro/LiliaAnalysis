@@ -214,6 +214,107 @@ python data_analysis.py \
 | APP | `*compare_<LABEL>.csv` | `20260424_compare_10Hz.csv` |
 | NUC | `*_<LABEL>.csv`（排除含 `compare`） | `20260424_10Hz.csv` |
 
+---
+
+## 台股大盤追蹤模型（LSTM / RNN）
+
+新增腳本：`twse_index_lstm_rnn.py`
+
+用途：
+
+- 以台股加權指數（預設 `^TWII`）做多步（multi-step）收盤價預測
+- 可切換 `--model-type lstm` 或 `--model-type rnn`
+- 可啟用 `--grid-search` 自動挑選較佳超參數組合
+- 產出基準模型（persistence、MA5）比較報表
+- 輸出 `metrics.json`、`predictions.csv`、`baseline_comparison.csv`、`model.keras`（可選 `prediction_plot.png`、`integrated_comparison_plot.png`）
+
+### 套件需求
+
+本腳本使用：`numpy`、`pandas`、`tensorflow`
+
+若要直接線上抓資料，需額外安裝：`yfinance`
+
+```bash
+pip install yfinance
+```
+
+### 快速開始
+
+```bash
+# LSTM（預設，5-step 預測）
+python twse_index_lstm_rnn.py --horizon 5 --plot
+
+# RNN
+python twse_index_lstm_rnn.py --model-type rnn --horizon 5 --plot
+```
+
+### 1) 多步預測（Multi-step）
+
+`--horizon` 指定預測步數，例如預測未來 5 個交易日收盤價：
+
+```bash
+python twse_index_lstm_rnn.py --model-type lstm --lookback 30 --horizon 5 --plot
+```
+
+輸出 `predictions.csv` 會包含：
+
+- `TrueClose_t+1 ... TrueClose_t+H`
+- `PredClose_t+1 ... PredClose_t+H`
+- 各步絕對誤差欄位
+
+### 2) 自動網格搜尋（Grid Search）
+
+```bash
+python twse_index_lstm_rnn.py \
+    --grid-search \
+    --horizon 5 \
+    --epochs 40 \
+    --grid-model-types lstm,rnn \
+    --grid-lookbacks 20,30,60 \
+    --grid-hiddens 32,64 \
+    --grid-lrs 0.001,0.0005 \
+    --grid-dropouts 0.0,0.1
+```
+
+輸出 `grid_search_results.csv`，並在 `metrics.json` 記錄 `selected_params`（被選中的最佳參數）。
+
+### 3) 基準模型比較報表
+
+腳本會自動與兩個 baseline 比較：
+
+- `persistence`：未來值都等於前一日收盤價
+- `ma5`：未來值都等於最近 5 日平均收盤價
+
+比較結果輸出為：`baseline_comparison.csv`，含 `rmse_all`、`mae_all`、`rmse_h1`、`mae_h1`、`direction_accuracy_h1`。
+
+### 4) 整合比較圖
+
+加入 `--plot` 後，會額外輸出：`integrated_comparison_plot.png`
+
+- 上半部：`True t+1` 與 `模型 / persistence / MA5` 的 t+1 追蹤曲線
+- 下半部：三種方法的 `RMSE h1`、`MAE h1` 長條圖與 `Direction Accuracy h1` 折線
+
+### 常用參數
+
+```bash
+python twse_index_lstm_rnn.py \
+    --symbol ^TWII \
+    --start 2015-01-01 \
+    --lookback 30 \
+    --horizon 5 \
+    --epochs 60 \
+    --batch-size 32 \
+    --outdir twse_tracker_output
+```
+
+### 使用本地 CSV
+
+CSV 需含欄位：`Date, Open, High, Low, Close, Volume`
+
+```bash
+python twse_index_lstm_rnn.py --csv /path/to/your_twse.csv --model-type lstm --plot
+```
+
 ### 輸出檔案
 
 | 檔名 | 說明 |

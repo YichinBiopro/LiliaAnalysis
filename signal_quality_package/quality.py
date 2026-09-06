@@ -5,6 +5,10 @@ Standalone EEG quality v2 scorer extracted from SleepStage.
 This module centers on `get_eeg_quality_index_v2_parametric()` and the
 parameter presets / helpers it depends on, so it can be reused directly from
 this repository without importing the original SleepStage codebase.
+
+The keys in DEPRECATED_QUALITY_PARAMETERS are compatibility metadata only.
+They do not influence scoring; the spectrum component currently measures PSD
+slope, not separate alpha-DPR, line-noise or low-frequency penalties.
 """
 
 from __future__ import annotations
@@ -14,6 +18,14 @@ from typing import Dict, Mapping, Optional
 import numpy as np
 from scipy import signal as sp_signal
 from scipy.stats import kurtosis
+
+
+DEPRECATED_QUALITY_PARAMETERS = frozenset({
+    'target_score', 'alpha_dpr_good', 'alpha_dpr_bad', 'alpha_artifact_floor',
+    'nonalpha_dpr_good', 'nonalpha_dpr_bad', 'nonalpha_artifact_floor',
+    'low_freq_penalty_floor', 'low_freq_penalty_ceiling',
+    'line_noise_penalty_floor', 'line_noise_penalty_ceiling',
+})
 
 
 DEFAULT_EEG_QUALITY_V2_PARAMS = {
@@ -108,6 +120,7 @@ BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS = {
 
 
 def get_default_eeg_quality_v2_params(target_score: float = 0.8) -> Dict[str, float]:
+    """Return a preset; deprecated target_score is retained but has no effect."""
     params = dict(DEFAULT_EEG_QUALITY_V2_PARAMS)
     params["target_score"] = float(target_score)
     return params

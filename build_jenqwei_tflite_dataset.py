@@ -17,16 +17,18 @@ are excluded (case-insensitive).
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import glob
-import math
 import os
 from dataclasses import dataclass
-from math import gcd
 from pathlib import Path
 
+from lilia.windowing import require_continuous
 import numpy as np
 import pandas as pd
-from scipy.signal import resample_poly
+from lilia.signal import resample_with_time
+from lilia.provenance import file_sha256
 
 from lilia.io import bandpass_filter, load_merged_csv
 
@@ -120,25 +122,8 @@ def downsample_with_time(
     fs_in: float,
     fs_out: float,
 ) -> tuple[np.ndarray, np.ndarray]:
-    if fs_in == fs_out:
-        return time_us.astype(np.int64), data.astype(np.float32)
-
-    up = int(round(fs_out))
-    dn = int(round(fs_in))
-    if not math.isclose(fs_in, float(dn), rel_tol=0.0, abs_tol=1e-9):
-        raise ValueError(f"fs_in must be integer-like. Got {fs_in}")
-    if not math.isclose(fs_out, float(up), rel_tol=0.0, abs_tol=1e-9):
-        raise ValueError(f"fs_out must be integer-like. Got {fs_out}")
-
-    g = gcd(up, dn)
-    up //= g
-    dn //= g
-
-    data_ds = resample_poly(data, up, dn, axis=0).astype(np.float32)
-    t_orig = np.arange(len(data), dtype=np.float64)
-    t_new = np.arange(len(data_ds), dtype=np.float64) * (dn / up)
-    time_ds = np.interp(t_new, t_orig, time_us.astype(np.float64)).astype(np.int64)
-    return time_ds, data_ds
+    """Compatibility wrapper for the shared microsecond resampler."""
+    return resample_with_time(time_us, data, fs_in, fs_out)
 
 
 def split_bounds(n_samples: int, n_splits: int) -> list[tuple[int, int]]:
@@ -177,6 +162,7 @@ def process_one_csv(
     one_window_per_file: bool,
 ) -> list[SegmentMeta]:
     time_us, data = load_merged_csv(csv_path)
+    require_continuous(time_us, fs_in, 'build_jenqwei_tflite_dataset.py')
     if data.shape[1] < n_ch:
         raise ValueError(
             f"{csv_path} has {data.shape[1]} channels, but --n-ch={n_ch} is required"
@@ -186,7 +172,15 @@ def process_one_csv(
     data_bp = bandpass_filter(data, fs=fs_in, lo=bp_low, hi=bp_high)
     time_200, data_200 = downsample_with_time(time_us, data_bp, fs_in=fs_in, fs_out=fs_out)
 
-    sess_name = Path(csv_path).stem
+    identity = json.dumps({
+        'source': str(Path(csv_path).resolve()), 'source_sha256': file_sha256(csv_path),
+        'fs_in': fs_in, 'fs_out': fs_out,
+        'bp_low': bp_low, 'bp_high': bp_high, 'n_ch': n_ch,
+        'n_splits': n_splits, 'tflite_win': tflite_win,
+        'one_window_per_file': one_window_per_file,
+    }, sort_keys=True)
+    suffix = hashlib.sha256(identity.encode()).hexdigest()[:12]
+    sess_name = f'{Path(csv_path).stem}_{suffix}'
     sess_outdir = os.path.join(out_root, sess_name)
     os.makedirs(sess_outdir, exist_ok=True)
 

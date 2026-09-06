@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import os
 
+from lilia.windowing import require_continuous
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -73,12 +74,14 @@ EVENT_ABBR = {
 
 
 def resolve_events(time_us: np.ndarray, n_times: int, fs: float,
-                   window_max_samp: int) -> list[tuple[str, int]]:
+                   window_max_samp: int, subject: str | None = None) -> list[tuple[str, int]]:
     """In-range session events as (name, onset_sample), keeping only onsets with
     room for the *largest* pre- and post-event window on both sides."""
     epoch = int(time_us[0])
     out: list[tuple[str, int]] = []
     for name, hhmm, _dur, _part in EVENTS:
+        if _part is not None and (subject is None or subject not in _part):
+            continue
         idx = int(round((hhmm_to_us(hhmm) - epoch) / 1e6 * fs))
         if idx - window_max_samp >= 0 and idx + window_max_samp <= n_times:
             out.append((name, idx))
@@ -88,10 +91,12 @@ def resolve_events(time_us: np.ndarray, n_times: int, fs: float,
 def analyze_subject(path: str, label: str) -> pd.DataFrame:
     time_us, data_raw = load_merged_csv(path)
     # Same 0.5–45 Hz front-end the CLI applies before per-band Hilbert envelopes.
+    require_continuous(time_us, DEFAULT_FS, 'joint_mi.py')
     data = bandpass_filter(data_raw, fs=DEFAULT_FS, lo=DEFAULT_BP_LOW, hi=DEFAULT_BP_HIGH)
     n_times = data.shape[0]
     w_max = int(round(max(WINDOWS_SEC) * DEFAULT_FS))
-    events = resolve_events(time_us, n_times, DEFAULT_FS, w_max)
+    subject = os.path.basename(os.path.dirname(path)).split('(')[0].strip()
+    events = resolve_events(time_us, n_times, DEFAULT_FS, w_max, subject=subject)
     print(f"  {label}: {len(events)} in-range events "
           f"({', '.join(n for n, _ in events)})")
 

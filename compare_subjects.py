@@ -26,6 +26,7 @@ from math import gcd
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from lilia.windowing import require_continuous
 import numpy as np
 from scipy.signal import resample_poly
 
@@ -179,6 +180,7 @@ def extract_subject_deltas(
     time_us, data = load_merged_csv(merged)
     print(f'{len(time_us)} samples ({(time_us[-1]-time_us[0])/1e6:.0f} s)')
 
+    require_continuous(time_us, FS, 'compare_subjects.py')
     data_filt = bandpass_filter(data)
 
     # Quality mask

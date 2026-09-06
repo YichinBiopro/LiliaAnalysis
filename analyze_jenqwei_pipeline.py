@@ -38,16 +38,17 @@ from __future__ import annotations
 import argparse
 import os
 import textwrap
-from math import gcd
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+from lilia.windowing import require_continuous
 import numpy as np
-from scipy.signal import resample_poly, welch, stft
+from scipy.signal import welch, stft
+from lilia.signal import resample_with_time
 
 # ── 重用既有模組（單一事實來源）─────────────────────────────────────────────────
-from lilia.io import bandpass_filter
+from lilia.io import bandpass_filter, read_lilia_frame
 from plot_event_markers import (
     FS, TFLITE_FS, TFLITE_WIN,
     BP_LOW, BP_HIGH,
@@ -109,10 +110,9 @@ def load_raw_csv(path: str) -> tuple[np.ndarray, np.ndarray]:
     time_us : (N,) int64  — 絕對 UTC µs 時間戳
     data    : (N, min(n_ch, N_TFLITE_CH)) float32  — 前 N_TFLITE_CH 通道
     """
-    import pandas as pd
 
     # ── Step 1 ────────────────────────────────────────────────────────────────
-    df = pd.read_csv(path, skiprows=4, header=0)
+    df = read_lilia_frame(path)
     time_us = df.iloc[:, 0].values.astype(np.int64)
     data_all = df.iloc[:, 1:].values.astype(np.float32)
 
@@ -144,6 +144,7 @@ def run_pipeline(time_us: np.ndarray,
     """
 
     # ── Step 2 : Bandpass filter 0.5–45 Hz ───────────────────────────────────
+    require_continuous(time_us, FS, 'analyze_jenqwei_pipeline.py')
     data_filt_500 = bandpass_filter(data_raw, fs=FS, lo=BP_LOW, hi=BP_HIGH)
 
     # Optional truncation to limit memory usage for long sessions
@@ -154,15 +155,8 @@ def run_pipeline(time_us: np.ndarray,
         data_raw = data_raw[:n]
 
     # ── Step 3 : Resample 500 Hz → 200 Hz ────────────────────────────────────
-    _g  = gcd(int(TFLITE_FS), int(FS))
-    _up = int(TFLITE_FS) // _g   # up-factor   (2)
-    _dn = int(FS) // _g          # down-factor  (5)
-    pre_data_200 = resample_poly(data_filt_500, _up, _dn, axis=0).astype(np.float32)
-
-    # Interpolated 200 Hz timestamp axis
-    t_orig = np.arange(len(data_filt_500), dtype=np.float64)
-    t_new  = np.arange(len(pre_data_200),  dtype=np.float64) * (_dn / _up)
-    time_us_200 = np.interp(t_new, t_orig, time_us[:len(data_filt_500)]).astype(np.int64)
+    time_us_200, pre_data_200 = resample_with_time(
+        time_us[:len(data_filt_500)], data_filt_500, FS, TFLITE_FS)
 
     # ── Step 4 : TFLite reconstruction (RMS-normalise → inference → de-normalise)
     # apply_tflite_windowed already performs all three sub-steps internally:

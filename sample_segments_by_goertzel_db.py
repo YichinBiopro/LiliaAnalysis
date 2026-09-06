@@ -24,6 +24,7 @@ from lilia.goertzel_sampling import (
     collect_matches_global,
     sample_rows,
 )
+from lilia.windowing import time_slice, require_continuous
 from lilia.io import bandpass_filter, load_merged_csv
 from lilia.subject_paths import iter_subject_dirs
 import plot_event_markers as pem
@@ -39,31 +40,32 @@ def _plot_one_segment(
     fs: float,
     seg_sec: float,
     out_png: str,
+    start_idx: int | None = None, end_idx: int | None = None,
+    target_freq: float = 60.0,
 ) -> None:
     merged_csv = os.path.join(root, subject, 'merged.csv')
     t_us, data = load_merged_csv(merged_csv)
-    bp = bandpass_filter(data, fs=fs, lo=pem.BP_LOW, hi=pem.BP_HIGH)
+    bp = bandpass_filter(data, fs=fs, lo=pem.BP_LOW, hi=pem.BP_HIGH, time_us=t_us)
 
     ch_idx = ch - 1
     n = data.shape[0]
 
-    half = seg_sec / 2.0
-    start_s = max(0.0, center_s - half)
-    end_s = min((n - 1) / fs, center_s + half)
-
-    i0 = int(round(start_s * fs))
-    i1 = int(round(end_s * fs))
-    if i1 <= i0:
-        i1 = min(i0 + 1, n)
-
-    x = np.arange(i0, i1) / fs
-    x_rel = x - center_s
+    if start_idx is not None and end_idx is not None:
+        i0, i1 = start_idx, end_idx
+    else:
+        sl = time_slice(t_us, t_us[0] + (center_s - seg_sec / 2) * 1e6,
+                        t_us[0] + (center_s + seg_sec / 2) * 1e6)
+        i0, i1 = sl.start, sl.stop
+    if not 0 <= i0 < i1 <= n:
+        raise ValueError('Selected window is outside the recording')
+    require_continuous(t_us[i0:i1], fs, 'sample gallery')
+    x_rel = (t_us[i0:i1] - t_us[0]) / 1e6 - center_s
     raw = data[i0:i1, ch_idx]
     bps = bp[i0:i1, ch_idx]
 
     fig, axes = plt.subplots(2, 1, figsize=(10.5, 5.6), sharex=True)
     fig.suptitle(
-        f'{subject} ch{ch} | center={center_s:.2f}s | 60Hz={db:.2f} dB | quality={quality:.3f}',
+        f'{subject} ch{ch} | center={center_s:.2f}s | {target_freq:g}Hz={db:.2f} dB | quality={quality:.3f}',
         fontsize=11,
         fontweight='bold',
     )
@@ -99,7 +101,7 @@ def _plot_subject_gallery(
 
     merged_csv = os.path.join(root, subject, 'merged.csv')
     time_us, data = load_merged_csv(merged_csv)
-    bp = bandpass_filter(data, fs=fs, lo=pem.BP_LOW, hi=pem.BP_HIGH)
+    bp = bandpass_filter(data, fs=fs, lo=pem.BP_LOW, hi=pem.BP_HIGH, time_us=time_us)
 
     n = len(sampled)
     ncol = 5
@@ -107,7 +109,6 @@ def _plot_subject_gallery(
     fig, axes = plt.subplots(nrow, ncol, figsize=(7.2 * ncol, 2.8 * nrow), sharex=False)
     axes = np.atleast_1d(axes).reshape(-1)
 
-    total_s = (len(time_us) - 1) / fs
     half = seg_sec / 2.0
     for i, ax in enumerate(axes):
         if i >= n:
@@ -117,21 +118,19 @@ def _plot_subject_gallery(
         r = sampled.iloc[i]
         ch = int(r['channel'])
         center_label = float(r['time_s'])
-        if 'window_start_idx' in sampled.columns and 'window_end_idx' in sampled.columns:
+        if ('window_start_idx' in sampled.columns and 'window_end_idx' in sampled.columns
+                and pd.notna(r['window_start_idx']) and pd.notna(r['window_end_idx'])):
             i0 = int(r['window_start_idx'])
             i1 = int(r['window_end_idx'])
-            center_idx = 0.5 * (i0 + i1)
         else:
             center = float(r['window_center_s']) if 'window_center_s' in sampled.columns else float(r['time_s'])
-            start = max(0.0, center - half)
-            end = min(total_s, center + half)
-            i0 = int(round(start * fs))
-            i1 = max(i0 + 1, int(round(end * fs)))
-            center_idx = center * fs
-        i0 = max(0, min(i0, len(time_us) - 1))
-        i1 = max(i0 + 1, min(i1, len(time_us)))
-
-        x = (np.arange(i0, i1) - center_idx) / fs
+            sl = time_slice(time_us, time_us[0] + (center - half) * 1e6,
+                            time_us[0] + (center + half) * 1e6)
+            i0, i1 = sl.start, sl.stop
+        if not 0 <= i0 < i1 <= len(time_us):
+            raise ValueError('Selected window is outside the recording')
+        require_continuous(time_us[i0:i1], fs, 'sample gallery')
+        x = (time_us[i0:i1] - time_us[0]) / 1e6 - center_label
         raw = data[i0:i1, ch - 1]
         bps = bp[i0:i1, ch - 1]
 
@@ -197,6 +196,9 @@ def run_global_sampling(args: argparse.Namespace) -> None:
             fs=args.fs,
             seg_sec=args.segment_sec,
             out_png=out_png,
+            start_idx=int(r['window_start_idx']) if 'window_start_idx' in r and pd.notna(r['window_start_idx']) else None,
+            end_idx=int(r['window_end_idx']) if 'window_end_idx' in r and pd.notna(r['window_end_idx']) else None,
+            target_freq=args.target_freq,
         )
         print(f'Saved: {out_png}')
 

@@ -1,19 +1,18 @@
-import sys
 
 import argparse
 import glob
 import os
 
 import matplotlib.pyplot as plt
+from lilia.windowing import require_continuous
 import numpy as np
-import pandas as pd
 import torch
 from scipy import signal
 
 from lilia.pathing import get_project_root, import_tinyunetv4
 from lilia.signal import (
     apply_filters as _apply_filters_shared,
-    resample_with_time as _resample_with_time_shared,
+    resample_seconds as _resample_with_time_shared,
 )
 
 # ── Constants ──────────────────────────────────────────────────────────────────
@@ -89,9 +88,11 @@ def load_file(path: str) -> tuple[np.ndarray, np.ndarray, str, float]:
     with open(path) as f:
         lines = [f.readline() for _ in range(5)]
     gain = float(lines[1].split(',')[1])
-    df   = pd.read_csv(path, skiprows=4)
+    from lilia.io import read_lilia_frame
+    df = read_lilia_frame(path)
     time_s = df.iloc[:, 0].values.astype(float) / 1e6
     data = df.iloc[:, 1 : N_CH + 1].values.astype(float)
+    require_continuous(time_s * 1e6, FS, 'data_analysis.py')
     return time_s, data, os.path.basename(path), gain
 
 
@@ -130,7 +131,7 @@ def downsample_data(time_s: np.ndarray, data: np.ndarray,
                     fs_in: float = FS,
                     fs_out: float = DOWNSAMPLED_FS,
                     ) -> tuple[np.ndarray, np.ndarray]:
-    """Wrapper around shared lilia.signal.resample_with_time for backward compatibility."""
+    """Resample using the shared seconds adapter, preserving sub-second time."""
     return _resample_with_time_shared(time_s, data, fs_in, fs_out)
 
 

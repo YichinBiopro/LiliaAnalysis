@@ -13,6 +13,7 @@ import argparse
 import os
 
 import plot_goertzel_vs_raw as pgv
+from lilia.provenance import validate_goertzel_cache
 
 
 def main() -> None:
@@ -56,7 +57,7 @@ def main() -> None:
     ref_lines = ([(float(v), lbl) for v, lbl in args.ref_line]
                  if args.ref_line else None)
     power_ylim = None
-    if args.power_ymax is not None:
+    if args.power_ymax is not None or args.power_ymin is not None:
         power_ylim = (args.power_ymin if args.power_ymin is not None else 0.0,
                       args.power_ymax)
 
@@ -72,6 +73,15 @@ def main() -> None:
         out_csv = os.path.join(outdir, f'{stem}_goertzel_{suffix}.csv')
 
         if args.reuse_csv and os.path.isfile(out_csv):
+            validate_goertzel_cache(out_csv, csv_path, {
+                'ch': ch, 'fs': args.fs, 'target_freq': args.target_freq,
+                'win_sec': args.win_sec, 'step_sec': args.step_sec,
+                'sat_uv': 1950.0, 'sat_frac_threshold': 0.12,
+                'step_ptp_threshold': 1000.0, 'bp_shift_sec': 1.0,
+                'bp_shift_threshold': 80.0,
+                'bp_low': pgv.pem.BP_LOW, 'bp_high': pgv.pem.BP_HIGH,
+                'quality_params': pgv.get_ibrain_device_eeg_quality_v2_params(),
+            })
             print(f'Re-rendering from existing CSV: {out_csv} (ch{ch})')
             pgv._plot_subject_from_csv(
                 merged_csv=csv_path,

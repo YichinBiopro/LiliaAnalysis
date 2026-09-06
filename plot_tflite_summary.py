@@ -39,6 +39,7 @@ import warnings
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.gridspec as gridspec
+from lilia.windowing import require_continuous
 import numpy as np
 import pandas as pd
 from math import gcd
@@ -46,6 +47,7 @@ from matplotlib.colors import LinearSegmentedColormap
 from scipy.signal import resample_poly
 
 # ── 重用既有模組 ────────────────────────────────────────────────────────────────
+from lilia.signal import resample_polyphase
 from lilia.io import load_merged_csv, bandpass_filter
 from lilia.qeeg import compute_qeeg_indices
 from lilia.quality import get_eeg_quality_index_v2_parametric
@@ -396,6 +398,7 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
 
     print(f'  [{name}] loading…', flush=True)
     time_us_full, data_full = load_merged_csv(merged)
+    require_continuous(time_us_full, FS, 'plot_tflite_summary.py')
     data_filt = bandpass_filter(data_full, fs=FS, lo=BP_LOW, hi=BP_HIGH)
 
     # ── TFLite 處理（整段）→ 同時取得「前(僅降採樣)」與「後(TFLite 重建)」 ────────

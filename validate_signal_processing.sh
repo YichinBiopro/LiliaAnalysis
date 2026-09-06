@@ -1,4 +1,7 @@
 #!/bin/bash
+set -o pipefail
+cd "$(dirname "$0")" || exit 1
+export MPLCONFIGDIR="${MPLCONFIGDIR:-/tmp/lilia-matplotlib}"
 
 echo "====== VALIDATION: Signal Processing Consolidation ======"
 echo ""
@@ -44,12 +47,11 @@ echo ""
 # 3. Unit tests
 echo "3) UNIT TESTS"
 echo "============="
-python -m unittest discover -s tests -p "test_*.py" -v 2>&1 | tee test_output.txt
+python -m unittest discover -s tests -p "test_*.py" -v 2>&1 | tee "${LILIA_TEST_LOG:-/tmp/lilia-test-output.txt}"
 test_exit_code=$?
 
 # Count test results
-test_passed=$(grep -c "^test.*\.\.\. ok$" test_output.txt 2>/dev/null || echo "0")
-test_failed=$(grep -c "FAILED\|ERROR" test_output.txt 2>/dev/null || echo "0")
+test_passed=$(grep -c "^test.*\.\.\. ok$" "${LILIA_TEST_LOG:-/tmp/lilia-test-output.txt}" 2>/dev/null || true)
 
 echo ""
 echo "====== SUMMARY ======"
@@ -58,4 +60,7 @@ echo "help smoke: $help_passed passed, $help_failed failed"
 echo "unit tests: ~$test_passed passed"
 echo "test exit code: $test_exit_code"
 
-exit $test_exit_code
+if (( py_compile_failed > 0 || help_failed > 0 || test_exit_code != 0 )); then
+    exit 1
+fi
+exit 0

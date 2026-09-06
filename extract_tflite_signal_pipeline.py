@@ -22,17 +22,17 @@ from __future__ import annotations
 import argparse
 import json
 import os
-from math import gcd
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from lilia.io import read_lilia_frame
 
 from lilia.constants import BP_HIGH, BP_LOW, FS, N_CH, TFLITE_FS, TFLITE_WIN
 from lilia.io import bandpass_filter
 from lilia.pathing import get_project_root
-from lilia.signal import resample_polyphase, resample_with_time
-from lilia.tflite import apply_tflite_windowed
+from lilia.signal import resample_with_time
+from lilia.tflite import apply_tflite_with_time
 
 
 CSV_STAGE_KEYS = [
@@ -45,13 +45,15 @@ CSV_STAGE_KEYS = [
 
 def load_lilia_csv_first4(csv_path: str) -> tuple[np.ndarray, np.ndarray]:
     """Load 4-row-header EEG CSV and return (time_us, first_4_channels)."""
-    df = pd.read_csv(csv_path, skiprows=4, header=0)
+    df = read_lilia_frame(csv_path)
     if df.shape[1] < 2:
         raise ValueError("CSV has no EEG channels after Time[us] column.")
 
     time_us = df.iloc[:, 0].values.astype(np.int64)
     data_all = df.iloc[:, 1:].values.astype(np.float32)
-    n_ch = min(data_all.shape[1], N_CH)
+    if data_all.shape[1] < N_CH:
+        raise ValueError(f"Model requires {N_CH} input channels")
+    n_ch = N_CH
     data = data_all[:, :n_ch]
     return time_us, data
 
@@ -66,18 +68,17 @@ def run_pipeline(csv_path: str, model_path: str, max_sec: float | None = None) -
         data_raw_500 = data_raw_500[:max_n]
 
     # Step 2: bandpass (0.5-45 Hz)
-    data_bp_500 = bandpass_filter(data_raw_500, fs=FS, lo=BP_LOW, hi=BP_HIGH)
+    data_bp_500 = bandpass_filter(data_raw_500, fs=FS, lo=BP_LOW, hi=BP_HIGH, time_us=time_us_500)
 
     # Step 3: 500 -> 200 Hz
     time_us_200, data_bp_200 = resample_with_time(time_us_500, data_bp_500, FS, TFLITE_FS)
 
     # Step 4: TFLite inference (RMS normalize -> infer -> de-normalize)
-    data_tfl_200 = apply_tflite_windowed(
-        data_bp_200,
+    time_us_tfl, data_tfl_200 = apply_tflite_with_time(
+        time_us_200, data_bp_200,
         tflite_path=model_path,
         tflite_win=TFLITE_WIN,
     )
-    time_us_tfl = time_us_200[: len(data_tfl_200)]
 
     duration_500 = float((time_us_500[-1] - time_us_500[0]) / 1e6) if len(time_us_500) > 1 else 0.0
     duration_200 = float((time_us_200[-1] - time_us_200[0]) / 1e6) if len(time_us_200) > 1 else 0.0
@@ -125,8 +126,9 @@ def run_pipeline(csv_path: str, model_path: str, max_sec: float | None = None) -
                 "notes": {
                     "window_samples": TFLITE_WIN,
                     "window_sec": float(TFLITE_WIN / TFLITE_FS),
-                    "n_windows_used": int(len(data_bp_200) // TFLITE_WIN),
-                    "n_samples_discarded_tail": int(len(data_bp_200) % TFLITE_WIN),
+                    "n_windows_used": int(len(data_tfl_200) // TFLITE_WIN),
+                    "tail_policy": "discard incomplete window at each timestamp segment",
+                    "n_samples_discarded_tail": int(len(data_bp_200) - len(data_tfl_200)),
                 },
             },
         ],

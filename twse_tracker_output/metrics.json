@@ -1,0 +1,36 @@
+{
+  "selected_params": {
+    "model_type": "lstm",
+    "lookback": 30,
+    "hidden": 64,
+    "dropout": 0.1,
+    "lr": 0.001
+  },
+  "grid_search": false,
+  "symbol": "^TWII",
+  "start": "2015-01-01",
+  "end": null,
+  "horizon": 5,
+  "n_train": 1936,
+  "n_val": 422,
+  "n_test": 418,
+  "test_rmse_all": NaN,
+  "test_mae_all": NaN,
+  "test_rmse_by_horizon": [
+    NaN,
+    NaN,
+    NaN,
+    NaN,
+    NaN
+  ],
+  "test_mae_by_horizon": [
+    NaN,
+    NaN,
+    NaN,
+    NaN,
+    NaN
+  ],
+  "test_direction_accuracy_h1": 0.0,
+  "best_val_loss": NaN,
+  "baseline_comparison_csv": "/home/bps-yichin/lilia_analysis/twse_tracker_output/baseline_comparison.csv"
+}

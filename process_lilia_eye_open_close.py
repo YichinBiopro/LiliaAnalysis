@@ -30,8 +30,9 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
+from lilia.windowing import require_continuous
 import numpy as np
-import pandas as pd
+from lilia.io import read_lilia_frame
 from scipy.signal import stft
 
 from lilia.io import bandpass_filter
@@ -72,18 +73,19 @@ def parse_args() -> argparse.Namespace:
         "--fmax",
         type=float,
         default=STFT_FMAX,
-        help="Maximum frequency shown in the STFT plot (default: 100 Hz)",
+        help="Maximum frequency shown in the STFT plot (default: 50 Hz)",
     )
     return parser.parse_args()
 
 
 def load_lilia_csv(path: str) -> tuple[np.ndarray, np.ndarray]:
-    df = pd.read_csv(path, skiprows=4)
+    df = read_lilia_frame(path)
     if df.shape[1] < 9:
         raise ValueError(f"Expected at least 8 channels in {path}, got {df.shape[1] - 1}")
 
     time_us = df.iloc[:, 0].to_numpy(dtype=np.int64)
     data = df.iloc[:, 1:9].to_numpy(dtype=np.float32)
+    require_continuous(time_us, FS, 'process_lilia_eye_open_close.py')
     return time_us, data
 
 
@@ -273,11 +275,14 @@ def main() -> None:
     stem = csv_path.stem
     out_csv = os.path.join(args.outdir, f"{stem}_tinyv4_output.csv")
     header_lines = read_lilia_header_lines(str(csv_path))
+    header_lines[2] = 'Channels,1,2,5,6'
+    header_lines[3] = 'Sample Rate (per channel),' + ','.join([str(DOWNSAMPLED_FS)] * 4)
+    header_lines[0] += ',Processing,TinyUNetV4,Output source channels,1/2/5/6'
     with open(out_csv, "w", encoding="utf-8", newline="") as handle:
         for line in header_lines:
             handle.write(f"{line}\n")
         writer = csv.writer(handle)
-        writer.writerow(["Time[us]", "value", "value", "value", "value"])
+        writer.writerow(["Time[us]", "ch1", "ch2", "ch5", "ch6"])
         out_time_us = np.round(time_200[: len(processed)] * 1e6).astype(np.int64)
         for time_us_row, row in zip(out_time_us, processed):
             writer.writerow([int(time_us_row), *[float(v) for v in row]])

@@ -89,6 +89,7 @@ import pandas as pd
 from scipy import signal
 
 from lilia.io import bandpass_filter, load_merged_csv
+from lilia.windowing import require_continuous
 from lilia.time_utils import utc_us_to_local_dt
 
 # ── qEEG Focus/Relax indices (optional import) ────────────────────────────────
@@ -1595,6 +1596,7 @@ def compute_event_pre_onset_joint_mi(
     bins: int = DEFAULT_MI_BINS,
     binning: str = 'quantile',
     n_surrogates: int = 100,
+    subject: str | None = None,
 ) -> list[dict]:
     """For each iBrainCenter event, compare the two channels' joint distribution
     *just before* the event with the distribution *at its onset*.
@@ -1607,6 +1609,7 @@ def compute_event_pre_onset_joint_mi(
     shift in interhemispheric coupling around the event onset is directly
     visible (ΔMI = onset − pre).
 
+    If subject is omitted, only events open to all participants are used.
     Events whose pre- or onset-window falls outside the recording (fewer than
     ~1 s of data) are skipped. Returns one dict per usable event with the two
     ``compute_joint_probability`` results and the headline MI values.
@@ -1618,6 +1621,8 @@ def compute_event_pre_onset_joint_mi(
     min_n = max(8, int(round(fs)))            # need ≳ 1 s per window
     results: list[dict] = []
     for name, start_hhmm, _dur_min, _participants in _IBRAIN_EVENTS:
+        if _participants is not None and (subject is None or subject not in _participants):
+            continue
         onset_rel_s = (_hhmm_to_us(start_hhmm) - int(time_us_epoch)) / 1e6
         onset_idx = int(round(onset_rel_s * fs))
         pre_lo = max(0, onset_idx - int(round(pre_sec * fs)))
@@ -2887,6 +2892,7 @@ def _parse_args() -> argparse.Namespace:
                               'MI significance test (0 disables; default 200).'))
     parser.add_argument('--out', metavar='DIR',
                         help='Output directory (default: same dir as CSV).')
+    parser.add_argument('--subject', default=None, help='Participant key for iBrainCenter event analysis')
     parser.add_argument('--ibrain-events', action='store_true', default=False,
                         help=('Overlay iBrainCenter session event markers and '
                               'convert x-axis to absolute local time (UTC+8).'))
@@ -3105,7 +3111,7 @@ def _run_joint_mi_mode(args: argparse.Namespace,
     # ── Pre-event vs onset joint-distribution comparison (--ibrain-events) ───────
     if use_events:
         events = compute_event_pre_onset_joint_mi(
-            sig_x, sig_y, t0_us, fs=fs_eff, bins=bins, binning=binning,
+            sig_x, sig_y, t0_us, fs=fs_eff, bins=bins, binning=binning, subject=args.subject,
             n_surrogates=min(100, args.mi_surrogates) if args.mi_surrogates else 0)
         if not events:
             print('  [warn] no iBrainCenter events fall within this recording — '
@@ -3283,7 +3289,12 @@ def _resolve_event_onsets(args: argparse.Namespace, time_us: np.ndarray,
             sys.exit('Error: --ibrain-events needs plot_event_markers (unavailable).')
         epoch_us = int(time_us[0])
         onsets = []
-        for name, start_hhmm, *_rest in _IBRAIN_EVENTS:
+        subject = getattr(args, 'subject', None)
+        if not subject:
+            raise ValueError('Participant subject is required for pooled iBrainCenter events')
+        for name, start_hhmm, _duration, participants in _IBRAIN_EVENTS:
+            if participants is not None and subject not in participants:
+                continue
             idx = int(round((_hhmm_to_us(start_hhmm) - epoch_us) / 1e6 * args.fs))
             if 0 <= idx < n_times:
                 onsets.append(idx)
@@ -3365,6 +3376,12 @@ def main() -> None:
 
     print(f'Loading: {args.csv}')
     time_us, data_raw = load_merged_csv(args.csv)
+    require_continuous(time_us, args.fs, 'spectral_entropy.py')
+    if args.ibrain_events:
+        args.subject = args.subject or os.path.basename(os.path.dirname(os.path.abspath(args.csv))).split('(')[0].strip()
+        from plot_event_markers import SUBJECTS
+        if args.subject not in SUBJECTS:
+            raise ValueError('--ibrain-events requires --subject for unrecognized recording paths')
 
     # ── Bandpass front-end (same step as plot_tflite_summary / qEEG pipeline) ───
     # All downstream measures (band entropy AND lagged-MI synchrony) run on the

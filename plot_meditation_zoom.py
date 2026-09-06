@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.gridspec as gridspec
 from matplotlib.colors import LinearSegmentedColormap
+from lilia.windowing import require_continuous
 import numpy as np
 
 import plot_event_markers as pem
@@ -63,6 +64,7 @@ def main():
     print(f'[{name}] loading merged.csv…')
     time_us_ds, data_ds = pem.load_merged_csv(merged, downsample=args.ds)
     time_us_full, data_full = pem.load_merged_csv(merged)
+    require_continuous(time_us_full, pem.FS, 'plot_meditation_zoom.py')
     t_dt = np.array([pem.us_to_local_dt(u) for u in time_us_ds])
     n_ch = data_ds.shape[1]
 
