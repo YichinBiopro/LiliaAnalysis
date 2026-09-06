@@ -1,72 +1,95 @@
 # Python 修正接手狀態
 
-更新日期：2026-09-06。**狀態：第一階段已完成修改、驗證與報告；完整分段分析及大型架構重構待續。**
+更新日期：2026-09-07。**狀態：第二階段普通 entropy 分段分析、窗口 metadata 與下游繪圖已完成驗證；獨立 MI／baseline 模式及大型架構重構待續。**
 
-## 先讀這三份文件
+## 先讀文件
 
-1. [PYTHON_FIX_REPORT_2026-09-06.md](PYTHON_FIX_REPORT_2026-09-06.md)：本輪修改原因、方法、成果、相容性變更與剩餘工作。
-2. [PYTHON_FIX_VALIDATION_2026-09-06.json](PYTHON_FIX_VALIDATION_2026-09-06.json)：測試摘要、整合驗證數字與 Python 檔案指紋。
-3. [PYTHON_REVIEW_2026-09-06.md](PYTHON_REVIEW_2026-09-06.md)：修正前全部 72 個 Python 檔案盤點、F01–F19 證據與研究方法風險；行號是歷史版本。
+1. [PYTHON_FIX_REPORT_2026-09-07.md](PYTHON_FIX_REPORT_2026-09-07.md)：本輪原因、方法、成果與限制。
+2. [PYTHON_FIX_VALIDATION_2026-09-07.json](PYTHON_FIX_VALIDATION_2026-09-07.json)：目前版本驗證摘要及 Python 檔案指紋。
+3. [PYTHON_FIX_REPORT_2026-09-06.md](PYTHON_FIX_REPORT_2026-09-06.md)：第一階段修正歷史。
+4. [PYTHON_REVIEW_2026-09-06.md](PYTHON_REVIEW_2026-09-06.md)：原始 72 個 Python 檔案完整盤點、F01–F19 及研究方法風險；行號是歷史版本。
 
-## 使用者意圖與授權
+2026-09-06 的驗證 JSON 是舊版本基準；不可拿其 SHA-256 宣稱目前所有 Python 檔案仍相同。
 
-使用者要求全面檢查共用程式、過時程式、邏輯問題與重構可能性，已授權直接進行修正並撰寫詳細報告；也要求若本輪未完成，先留下狀態供下一個工作時段接手。可在現有授權範圍繼續程式修正與測試，不需要再次詢問是否開始。
+## 授權與 Git 狀態
 
-沒有建立自動續跑排程；目前不能保證五小時後自動啟動下一個工作時段。此文件是持久的手動接手紀錄，不代表背景仍有 agent 運行。
+使用者已授權全面分析與直接修正 Python scripts，要求記錄原因、方法、成果，並留下後續接手狀態。可繼續既有範圍內的程式修正與測試，不需再次確認是否開始。
 
-## 已完成、不要重做的工作
+第一階段已建立 commit `8c07401`；開始第二階段時工作區乾淨，分支為 `spectral-entropy-flow-rework`，比 origin 同名分支領先 1 個 commit。前一版文件「尚未 commit」的描述已過時。本輪第二階段修改尚未 commit。
 
-- 共用秒／微秒契約與分段濾波、重取樣、TFLite extraction、Goertzel window metadata。
-- CSV 宣告欄位解析、合併輸入篩選與原子輸出、短 Welch、眼開閉輸出 header。
-- Goertzel 品質政策、抽樣容量、MI 參與者篩選、負 delta 圖軸與 CLI 選項。
-- TWSE 完整 target horizon 切分、零 Volume 特徵、scaler／模型匯出與 selected-trial counts。
-- dataset／summary 檔名識別、Goertzel 快取內容／設定／程式指紋檢查。
-- bundle custom marker 功能回收至根目錄 canonical source；build_bundles.py 產生副本，--check 檢查差異。
-- 54 個測試通過；84 個 Python 編譯、35 個 help 入口、Pyflakes、diff whitespace、bundle 檢查通過。
-- 真實 Hardy 前 10 秒模型結果與修正前完全一致；合成缺口推論時間正確；本機兩組 RNN 小型訓練及模型/scaler reload 通過。
+先前 push 被自動審核拒絕：要求明確授權把包含程式、報告、TWSE 模型的 payload 推送至 `https://github.com/YichinBiopro/LiliaAnalysis.git` 的 `spectral-entropy-flow-rework`。使用者這輪要求的是繼續修正，沒有確認那個 push 問題，因此本輪沒有重試；不要繞過審核。
 
-## 下一階段第一個具體任務
+沒有自動續跑排程，也不能保證五小時後自動啟動下一個工作時段。此文件供手動接手。
 
-**先完成 F03/F04 的真正分段支援，不要直接移除 require_continuous。**
+## 已完成，避免重做
 
-目前 spectral_entropy、特殊 baseline/event 流程及舊 entropy CSV 繪圖遇到缺口會明確報錯。下一步從 spectral_entropy 的普通 band-entropy 路徑開始：
+第一階段：時間單位與分段 core、CSV schema／merge、短 Welch、眼開閉 header、Goertzel 品質與抽樣政策、TWSE label 切分與 scaler 匯出、已知 CLI／圖表錯誤、快取／產物識別、bundle canonical 建置，54 個測試通過。
 
-1. 使用 lilia.windowing.window_starts 產生合法窗口，所有指標與 quality 共用同一組起點。
-2. 每筆結果保存 start/end index、start/end/center timestamp、source/config 身分；time_s 一律是真實 elapsed time。
-3. renderer 從 metadata 對齊資料，不再猜測 CSV 第幾列對應第幾個原始窗口，也不能把缺口窗口刪除後壓縮時間。
-4. 以連續資料數值基準，加上缺口、jitter、無效品質、短 segment 案例驗證，通過後才解除該路徑的 guard。
-5. 再遷移 MI/event 和 baseline；其中 baseline 不能把不相鄰 1 秒 epochs 拼成 2 秒模型窗。
+第二階段：
 
-接續工作依修正報告第 7 節：品質無效狀態與短窗邊界、拆分大型模組、批次錯誤退出／artifact schema、PSD 與 MI 方法一致性。F19 只明示棄用，公開參數尚未刪除。
+- `lilia.windowing.WindowGrid`／`build_window_grid`：共同原始樣本格點、排除跨缺口窗口、保留真實中心 timestamps。
+- 普通 spectral_entropy、`--sync-pair` 與 quality 使用同一個 grid；先逐段濾波，沒有合法窗口的短段不參與運算。
+- `lilia.entropy_io`：輸出及驗證 CSV + `.csv.meta.json`，逐列記錄原始索引／時間／segment/source/config；讀取時核對 raw 內容與重建窗口。
+- NaN 品質明確遮罩數值但不刪窗口列；未評分狀態明示，metadata 指標圖要明確 `--quality-threshold -1` 才跳過品質遮罩。
+- entropy、sync、composition、focus/relax 以及 session/event/absolute/split 指標圖不跨缺口連線、平滑；保留缺口後首個有效窗口。raw 顯示降採樣也保留各段首尾。
+- 新版 entropy CSV 支援有缺口的 raw；沒有 metadata 的舊 CSV 仍保留 continuity guard，不猜測對齊。
+- 66 個測試通過（本輪新增 12 個），87 個 Python 編譯、Pyflakes、diff whitespace、bundle 一致性通過。
+- 完整 Hardy：2,126,712 樣本、6 段，2,121 個合法窗口，1,944 個品質合格；最後中心真實時間 4791.920551 秒，樣本計數時間只有 4251 秒，相差 540.920551 秒。
+- 完整 Hardy 的四種 entropy 圖與指定活動的下游圖／summary 已執行；合成缺口案例完成 entropy+sync、主版／bundle session 繪圖。
 
-## 工作區保護
+## 下一個具體任務
 
-本輪開始前已存在 README.md、merge_subject_csvs.py 的修改，以及未追蹤的 plot_index_vs_raw_bundle/、requirement.txt、twse_index_lstm_rnn.py、twse_tracker_output/。README.md 保持原狀；merge 的整列去重與衝突樣本保留語義必須保留。不要用整體 reset/checkout 清除差異，也不要把所有未追蹤內容都當作本輪新增。
+**遷移尚未支援分段的獨立 MI／事件與 baseline 流程；不要直接移除 guard。**
 
-尚未 commit；先看 git status/diff，再讀新增檔案。bundle 是生成副本，請改根目錄／lilia 的主版本後執行建置；不要分別手改兩套程式。不要為了測試覆寫原始錄製或正式研究產物。
+優先閱讀：
 
-## 接手檢查命令
+- `spectral_entropy.py`：`_run_joint_mi_mode`、`compute_joint_mi_windowed`、`compute_event_pre_onset_joint_mi`、`_resolve_event_onsets`、`_run_band_event_mi_mode`、`_run_baseline_event_mode`。
+- `joint_mi.py`：`resolve_events`、`analyze_subject`。
+- `plot_tflite_summary.py`：隨機 baseline epochs 的拼接／推論。
+
+建議順序與驗收：
+
+1. 先遷移不需神經網路的 event onset 定位：以真實 timestamps 定位半開事件區間，不能用 elapsed_seconds × fs。每個候選 pre/post 區間要確認完整落在連續段內；不足或跨缺口則明示排除原因。
+2. 頻帶包絡與 Hilbert/filter 運算也要逐段；不能先跨缺口濾波，再只修事件索引。
+3. 獨立 joint-MI 時序可延用 WindowGrid，所有 channels、quality、metadata 同一組窗口；推論型路徑要使用實際保留的 TFLite 時間軸。
+4. baseline 不可把不相鄰的 1 秒 epochs 拼成 2 秒模型窗口。優先考慮先在原連續段推論，再選完整輸出窗口；這會改變統計單位，須記錄與比較。
+5. 加入連續資料基準、缺口位於 onset/pre/post 的案例、區間不足、未參與活動與品質無效案例；通過後只解除該已遷移模式的 guard。
+
+普通 band-entropy 已完成上述分段視窗遷移，不要從頭重寫。主版／bundle renderer 使用 `lilia.entropy_io.load_entropy_table`；新 CSV 的來源與窗口核對不可為方便而移除。
+
+其後仍需：品質 scorer 短窗末端／失敗 fallback 的語義、拆分 spectral_entropy/plot_event_markers、大型批次錯誤退出與 artifact 原子發佈、PSD/Goertzel/MI 方法一致性。F19 公開參數僅標記棄用，尚未移除。
+
+## 工作區與相容性保護
+
+先看 git status/diff，保留使用者及前輪修改。第一階段 commit 已含既有 README、TWSE 腳本／輸出與 bundle；不要把它們當作本輪生成的可刪除檔案。
+
+bundle 是生成副本：改根目錄主程式／lilia 後跑 `python build_bundles.py`，不要分別手改兩份 Python。README 與資料不會被建置工具覆蓋。不要為測試覆寫正式錄製、舊研究圖表或模型。
+
+新版 CSV 與 `.csv.meta.json` 必須一起保存。模型／分析方法的改變要另留數值對照，不能只用 help／編譯通過宣稱正確。降低繪圖 threshold 也不能恢復上游已設為 NaN 的指標；需要重新分析才能重新取得那些數值。
+
+## 接手檢查
 
 ```bash
 cd /home/bps-yichin/lilia_analysis
-git status --short
+git status --short --branch
 python build_bundles.py --check
 MPLCONFIGDIR=/tmp/lilia-audit-mpl MPLBACKEND=Agg python -m unittest discover -s tests -v
 python -m pyflakes lilia *.py tests plot_index_vs_raw_bundle signal_quality_package
 git diff --check
 ```
 
-依實際下一階段修改選擇測試；沒有新修改或失敗，不需要反覆重跑全部驗證。套件 CLI 使用 `python -m lilia.qeeg`，舊 root 入口 `python qeeg_indices.py` 也保留。
+依下一階段實際修改選測試；沒有新修改或失敗，不需要反覆重跑全部驗證。套件 qEEG CLI 用 `python -m lilia.qeeg` 或根目錄相容入口 `qeeg_indices.py`。
 
-## 暫存資源（不保證跨環境存在）
+## 暫存與持久資源
 
-- `/tmp/lilia-fix-backup/`：開始修正時的來源快照；windowing.py 在快照建立前已新增，因此它並非原始 72 檔的一部分。
-- `/tmp/lilia-fix-integration/`：Hardy／缺口 TFLite 輸出、小型市場訓練、模型重新載入、Goertzel 重算／重畫、驗證 log。
-- `/tmp/lilia-fix-tests.log`：單獨執行 unittest 的記錄。
-- `/tmp/lilia_python_audit_pipeline/`：審查階段的 Hardy 前 10 秒模型輸出，可與修正後比較。
+- `/tmp/lilia-stage2/`：完整 Hardy、合成缺口、主版與 bundle 繪圖結果。
+- `/tmp/lilia-stage2-all-tests.log`、`/tmp/lilia-stage2-tests.log`：全套與新增測試記錄。
+- `/tmp/lilia-stage2-hardy.log`、`/tmp/lilia-stage2-hardy-event.log`：真實資料 CLI 記錄。
+- `tests/fixtures/entropy_continuous_reference.json`：持久保存的第一階段連續資料數值基準，包含 seed、shape 與 reference commit。
+- 第一階段 `/tmp/lilia-fix-backup/`、`/tmp/lilia-fix-integration/`、`/tmp/lilia_python_audit_pipeline/` 若尚存在，可用於額外追查；不保證跨環境保留。
 
-若上述暫存已消失，持久報告與測試程式仍足以繼續，不需要依賴上一輪的聊天內容。
+重要驗證數字已記錄在本輪報告與 JSON；即使暫存消失，仍可依測試與持久文件接手。
 
-## 下一時段可以使用的接手指令
+## 下一時段接手指令
 
-> 請讀取 REFACTOR_HANDOFF.md、PYTHON_FIX_REPORT_2026-09-06.md 與目前 git diff，延續已授權的 Python 修正工作。優先完成 spectral_entropy 的分段時間與窗口 metadata，驗證後才解除該路徑的 continuity guard。保留既有工作區修改、同步 bundle，並更新修正報告與接手狀態。
+> 請讀 REFACTOR_HANDOFF.md 與第二階段修正報告，保留現有工作區。普通 entropy 的 WindowGrid／metadata 遷移已完成；接著處理獨立 MI/event 的真實時間區間、逐段頻帶處理及排除原因。以連續資料基準與缺口案例驗證後才移除對應 guard，更新報告並同步 bundle。尚未取得先前 push 審核要求的明確確認，不要自行重試。

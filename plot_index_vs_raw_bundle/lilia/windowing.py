@@ -2,6 +2,99 @@
 from __future__ import annotations
 
 import numpy as np
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class WindowGrid:
+    """One sample grid shared by metrics, quality, and exported timestamps.
+
+    End indexes and end timestamps are exclusive. The last sample's nominal
+    period defines an end timestamp; centres use the actual centre sample.
+    """
+    n_samples: int
+    fs: float
+    win: int
+    step: int
+    columns: dict
+
+    @property
+    def starts(self):
+        return self.columns['window_start_idx']
+
+    @property
+    def time_s(self):
+        return self.columns['time_s']
+
+    def validate(self, n_samples, fs, win, step):
+        if (n_samples, fs, win, step) != (self.n_samples, self.fs, self.win, self.step):
+            raise ValueError('Window grid does not match signal length or analysis settings')
+
+
+def build_window_grid(time_us, fs, win_sec, step_sec=None):
+    """Create complete windows on the original grid, skipping timestamp gaps."""
+    step_sec = win_sec if step_sec is None else step_sec
+    if not all(np.isfinite(v) and v > 0 for v in (fs, win_sec, step_sec)):
+        raise ValueError('fs, window and step must be finite and positive')
+    t = np.asarray(time_us)
+    if t.dtype.kind not in 'iu':
+        raise ValueError('Window timestamps must be integer microseconds')
+    win, step = int(round(win_sec * fs)), int(round(step_sec * fs))
+    if win < 8 or step < 1:
+        raise ValueError('Analysis needs at least 8 samples per window and a positive step')
+    segments = continuous_slices(t, fs)
+    starts = np.asarray(list(window_starts(len(t), win, step, t, fs)), dtype=np.int64)
+    if not len(starts):
+        raise ValueError('No complete analysis window within any continuous segment')
+    ends = starts + win
+    centres = starts + win // 2
+    segment_ids = np.searchsorted([s.stop for s in segments], starts, side='right')
+    columns = {
+        'window_start_idx': starts, 'window_end_idx': ends,
+        'window_start_us': t[starts],
+        'window_end_us': t[ends - 1] + int(round(1e6 / fs)),
+        'window_center_us': t[centres], 'segment_id': segment_ids,
+        'time_s': (t[centres] - t[0]) / 1e6,
+    }
+    for values in columns.values():
+        values.flags.writeable = False
+    return WindowGrid(len(t), fs, win, step, columns)
+
+
+def finite_runs(values, segment_ids=None):
+    """Return index runs separated by invalid samples or a recording gap."""
+    values = np.asarray(values)
+    valid = np.isfinite(values)
+    if values.ndim > 1:
+        valid = valid.all(axis=tuple(range(1, values.ndim)))
+    idx = np.flatnonzero(valid)
+    if not len(idx):
+        return []
+    split = np.diff(idx) != 1
+    if segment_ids is not None:
+        groups = np.asarray(segment_ids)
+        if len(groups) != len(values):
+            raise ValueError('Segment IDs and plotted values differ in length')
+        split |= groups[idx[1:]] != groups[idx[:-1]]
+    return np.split(idx, np.flatnonzero(split) + 1)
+
+
+def transform_runs(values, transform, segment_ids=None):
+    """Smooth each valid run without borrowing samples across a gap."""
+    out = np.full(np.shape(values), np.nan, dtype=float)
+    for run in finite_runs(values, segment_ids):
+        out[run] = transform(np.asarray(values)[run])
+    return out
+
+
+def plot_breaks(x, y, segment_ids=None):
+    """Insert plotting-only NaNs between segments, retaining every real point."""
+    x, y = np.asarray(x), np.asarray(y, dtype=float)
+    if segment_ids is None or len(x) < 2:
+        return x, y
+    cuts = np.flatnonzero(np.diff(segment_ids) != 0) + 1
+    # Repeating the next timestamp works for both numeric and datetime axes.
+    return np.insert(x, cuts, x[cuts]), np.insert(y, cuts, np.nan, axis=0)
 
 
 def continuous_slices(time_us, fs, gap_factor=3.0):

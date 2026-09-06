@@ -46,7 +46,8 @@ from lilia.qeeg import (
     focus_index, flow_index, calm_index, relaxation_index,
     compute_qeeg_indices)
 from lilia.io import bandpass_filter, load_merged_csv, read_lilia_frame
-from lilia.windowing import continuous_slices, require_continuous
+from lilia.windowing import continuous_slices, require_continuous, transform_runs, plot_breaks
+from lilia.entropy_io import load_entropy_table
 import plot_event_markers as pem
 
 
@@ -62,13 +63,13 @@ SIGNAL_SPECS = [
 
 # ── Data loading ──────────────────────────────────────────────────────────────
 
-def _load_signals(csv_path: str):
+def _load_signals(csv_path: str, raw_csv: str | None = None, ch: int | None = None):
     """Read a band-entropy CSV → (time_s, signals dict, quality) for finite rows.
 
     *signals* holds the four qEEG wellness indices (computed in closed form from
     the stored relative band powers) plus the normalised band entropy.
     """
-    df = pd.read_csv(csv_path)
+    df, metadata = load_entropy_table(csv_path, raw_csv, ch)
     required = {'time_s', 'p_theta', 'p_alpha', 'p_beta'}
     missing = required - set(df.columns)
     if missing:
@@ -97,10 +98,16 @@ def _load_signals(csv_path: str):
         'relaxation': np.array([relaxation_index(th, al, be) for th, al, be in P]),
         'entropy':    ent,
     }
+    if metadata is not None:
+        signals['_metadata'] = metadata
+        signals['_segment_id'] = df['segment_id'].to_numpy()[keep][order]
+        epoch = metadata['source_epoch_us']
+        signals['_window_start_s'] = (df['window_start_us'].to_numpy()[keep][order] - epoch) / 1e6
+        signals['_window_end_s'] = (df['window_end_us'].to_numpy()[keep][order] - epoch) / 1e6
     return t, signals, q
 
 
-def _load_raw(csv_path: str, ch: int, max_points: int = 15000, fs: float = 500.0):
+def _load_raw(csv_path: str, ch: int, max_points: int = 15000, fs: float = 500.0, allow_gaps: bool = False):
     """Read merged.csv (lilia format) and return decimated (time_s, amplitude).
 
     time_s is relative to sample 0 so it shares the band-entropy time frame.
@@ -108,7 +115,8 @@ def _load_raw(csv_path: str, ch: int, max_points: int = 15000, fs: float = 500.0
     """
     df = read_lilia_frame(csv_path)
     t_us = df.iloc[:, 0].to_numpy(dtype=np.int64)
-    require_continuous(t_us, fs, 'Legacy entropy-CSV plotting')
+    if not allow_gaps:
+        require_continuous(t_us, fs, 'Legacy entropy-CSV plotting')
     if ch < 1 or ch >= df.shape[1]:
         sys.exit(f'Error: channel {ch} not in {csv_path} '
                  f'(file has {df.shape[1] - 1} channels).')
@@ -116,7 +124,13 @@ def _load_raw(csv_path: str, ch: int, max_points: int = 15000, fs: float = 500.0
     epoch_us = int(t_us[0])
     t_s = (t_us - epoch_us) / 1e6
     stride = max(1, len(t_s) // max_points)
-    return t_s[::stride], amp[::stride], epoch_us
+    segments = continuous_slices(t_us, fs)
+    # Keep both ends of each segment even under display decimation.
+    indices = np.unique(np.r_[np.arange(0, len(t_us), stride),
+                              [sl.start for sl in segments], [sl.stop - 1 for sl in segments]])
+    groups = np.searchsorted([sl.stop for sl in segments], indices, side='right')
+    tx, values = plot_breaks(t_s[indices], amp[indices], groups)
+    return tx, values, epoch_us
 
 
 # ── Event onsets ──────────────────────────────────────────────────────────────
@@ -183,12 +197,37 @@ def _baseline_mean(t, y, lo, hi):
     return float(np.nanmean(y[m])) if m.any() else np.nan
 
 
-def _rolling_median(y, win):
+def _rolling_median(y, win, segment_ids=None):
     """Light centred rolling-median smoothing; win<=1 returns y unchanged."""
     if win <= 1:
         return y
-    return (pd.Series(y).rolling(int(win), center=True, min_periods=1)
-            .median().to_numpy())
+    transform = lambda values: pd.Series(values).rolling(int(win), center=True, min_periods=1).median().to_numpy()
+    return transform_runs(y, transform, segment_ids) if segment_ids is not None else transform(y)
+
+
+def _plot_series(ax, t, values, signals, **kwargs):
+    x, y = plot_breaks(t, values, signals.get('_segment_id'))
+    return ax.plot(x, y, **kwargs)
+
+
+def _quality_good(q, signals, threshold):
+    if threshold < 0:
+        return np.ones(q.shape, dtype=bool)
+    metadata = signals.get('_metadata')
+    if metadata and not metadata['parameters']['quality_enabled']:
+        raise ValueError('CSV quality scoring was disabled; use --quality-threshold -1 to plot without a quality mask')
+    return np.isfinite(q) & (q >= threshold)
+
+
+def _quality_caption(threshold):
+    return 'quality mask disabled' if threshold < 0 else f'quality≥{threshold:g}'
+
+
+def _bad_spans(t, good, signals):
+    if '_window_start_s' in signals:
+        return zip(signals['_window_start_s'][~good], signals['_window_end_s'][~good])
+    half = float(np.median(np.diff(t))) / 2 if len(t) > 1 else 1.0
+    return ((tb - half, tb + half) for tb in t[~good])
 
 
 # ── Plotting ──────────────────────────────────────────────────────────────────
@@ -206,14 +245,15 @@ def plot_index_vs_raw(
     raw_ylim: tuple[float, float] = (-150.0, 150.0),
     quality_threshold: float = pem.QUALITY_THRESHOLD,
 ) -> None:
-    t, signals, q = _load_signals(be_csv)
+    t, signals, q = _load_signals(be_csv, raw_csv, ch)
     if t.size == 0:
         sys.exit(f'Error: no finite windows in {be_csv}.')
-    t_raw, amp, epoch_us = _load_raw(raw_csv, ch)
+    t_raw, amp, epoch_us = _load_raw(raw_csv, ch, fs=signals.get('_metadata', {}).get('parameters', {}).get('fs', 500),
+                                          allow_gaps='_metadata' in signals)
 
     # Quality mask: windows with quality < threshold are dropped (→ NaN gaps)
     # from every signal panel and excluded from the baseline means.
-    good = np.isfinite(q) & (q >= quality_threshold)
+    good = _quality_good(q, signals, quality_threshold)
     n_bad = int((~good).sum())
     bad_pct = 100.0 * n_bad / t.size if t.size else 0.0
 
@@ -233,13 +273,13 @@ def plot_index_vs_raw(
         f'{subject} ch{ch} — qEEG indices + band entropy vs raw EEG  '
         f'(each event period Δ vs its OWN pre-{baseline_sec:g}s [solid] / '
         f'post-{baseline_sec:g}s [dotted];  '
-        f'quality≥{quality_threshold:g}, {bad_pct:.0f}% windows masked)',
+        f'{_quality_caption(quality_threshold)}, {bad_pct:.0f}% windows masked)',
         fontsize=12, fontweight='bold')
 
     for ax, (key, label, color) in zip(axes[:n_sig], SIGNAL_SPECS):
         # Apply the quality mask: bad windows become NaN gaps everywhere.
         y = np.where(good, signals[key], np.nan)
-        ys = _rolling_median(y, smooth_win)        # light-smoothed signal
+        ys = _rolling_median(y, smooth_win, signals.get('_segment_id'))        # light-smoothed signal
         ys = np.where(good, ys, np.nan)            # keep gaps after smoothing
 
         # Per-event Δ curves: over each event's period [onset, end] reference the
@@ -257,12 +297,12 @@ def plot_index_vs_raw(
             dpost[seg] = ys[seg] - post_m
 
         # Faint raw (unsmoothed) absolute signal as a scatter-like background.
-        ax.plot(t * sc, y, color='0.8', lw=0.6, alpha=0.5,
+        _plot_series(ax, t * sc, y, signals, color='0.8', lw=0.6, alpha=0.5,
                 label='absolute (raw)', zorder=1)
         # Per-event Δ vs own pre (solid) / own post (dotted).
-        ax.plot(t * sc, dpre, color=color, lw=1.8, ls='-', alpha=0.95,
+        _plot_series(ax, t * sc, dpre, signals, color=color, lw=1.8, ls='-', alpha=0.95,
                 label='Δ vs own pre-event (per event)', zorder=4)
-        ax.plot(t * sc, dpost, color=color, lw=1.5, ls=':', alpha=0.95,
+        _plot_series(ax, t * sc, dpost, signals, color=color, lw=1.5, ls=':', alpha=0.95,
                 label='Δ vs own post-event (per event)', zorder=4)
         ax.axhline(0.0, color='k', lw=0.8, ls=':', alpha=0.5)
         # Shade each event's pre (red) and post (orange) windows.
@@ -285,9 +325,8 @@ def plot_index_vs_raw(
 
     # Shade quality-masked windows on the raw panel so the dropped (noisy)
     # segments are visible alongside the gaps in the signal panels above.
-    half = float(np.median(np.diff(t))) / 2.0 if t.size > 1 else 1.0
-    for tb in t[~good]:
-        axr.axvspan((tb - half) * sc, (tb + half) * sc,
+    for lo, hi in _bad_spans(t, good, signals):
+        axr.axvspan(lo * sc, hi * sc,
                     color='0.5', alpha=0.18, lw=0, zorder=0)
 
     # Event onset lines + labels across all panels (mark continuous events whose
@@ -316,14 +355,15 @@ def plot_index_vs_raw(
           f'({bad_pct:.1f}%, threshold {quality_threshold:g})')
 
 
-def _raw_epoch_us(raw_csv: str) -> int:
+def _raw_epoch_us(raw_csv: str, allow_gaps=False, fs=500) -> int:
     """Read the epoch after validating legacy CSV plotting continuity.
 
     Rows 0–3 are the lilia header, row 4 is the column-name row (Time[us],…),
     so the first data sample is row 5.
     """
     frame = read_lilia_frame(raw_csv)
-    require_continuous(frame.iloc[:, 0].to_numpy(dtype=np.int64), 500, 'Legacy entropy-CSV plotting')
+    if not allow_gaps:
+        require_continuous(frame.iloc[:, 0].to_numpy(dtype=np.int64), fs, 'Legacy entropy-CSV plotting')
     return int(frame.iloc[0, 0])
 
 
@@ -577,18 +617,18 @@ def plot_index_vs_raw_session(
     fs: float = 500.0,
 ) -> None:
     """Session-baseline variant for data without event timelines."""
-    t, signals, q = _load_signals(be_csv)
+    t, signals, q = _load_signals(be_csv, raw_csv, ch)
     if t.size == 0:
         raise SystemExit(f'Error: no finite windows in {be_csv}.')
-    t_raw, amp, _epoch_us = _load_raw(raw_csv, ch, fs=fs)
+    t_raw, amp, _epoch_us = _load_raw(raw_csv, ch, fs=signals.get('_metadata', {}).get('parameters', {}).get('fs', fs),
+                                            allow_gaps='_metadata' in signals)
 
-    t_real = _real_window_times(t.size, raw_csv, win_sec, step_sec, fs)
-    gap_mask = np.isnan(t_real)
-    if gap_mask.any():
-        print(f'  time-gap correction: {int(gap_mask.sum())} window(s) '
-              f'follow a gap > {3 * step_sec:g}s — line broken there.')
+    t_real = (t if '_metadata' in signals else
+              _real_window_times(t.size, raw_csv, win_sec, step_sec, fs))
+    if '_metadata' in signals:
+        print('  time alignment: verified source/window metadata; CSV timestamps are authoritative')
 
-    good = np.isfinite(q) & (q >= quality_threshold)
+    good = _quality_good(q, signals, quality_threshold)
     n_bad = int((~good).sum())
     bad_pct = 100.0 * n_bad / t.size if t.size else 0.0
 
@@ -603,21 +643,21 @@ def plot_index_vs_raw_session(
     fig.suptitle(
         f'{label} ch{ch} — qEEG indices + band entropy vs raw EEG  '
         f'(Δ vs whole-session baseline, no activity timeline;  '
-        f'quality≥{quality_threshold:g}, {bad_pct:.0f}% windows masked)',
+        f'{_quality_caption(quality_threshold)}, {bad_pct:.0f}% windows masked)',
         fontsize=12, fontweight='bold')
 
     baseline_rows = []
     for ax, (key, sig_label, color) in zip(axes[:n_sig], SIGNAL_SPECS):
         y = np.where(good, signals[key], np.nan)
-        ys = _rolling_median(y, smooth_win)
+        ys = _rolling_median(y, smooth_win, signals.get('_segment_id'))
         ys = np.where(good, ys, np.nan)
 
         baseline = float(np.nanmean(y)) if np.any(np.isfinite(y)) else np.nan
         delta = ys - baseline
 
-        ax.plot(t_real * sc, y, color='0.8', lw=0.6, alpha=0.5,
+        _plot_series(ax, t_real * sc, y, signals, color='0.8', lw=0.6, alpha=0.5,
                 label='absolute (raw)', zorder=1)
-        ax.plot(t_real * sc, delta, color=color, lw=1.8, alpha=0.95,
+        _plot_series(ax, t_real * sc, delta, signals, color=color, lw=1.8, alpha=0.95,
                 label='Δ vs session baseline', zorder=4)
         ax.axhline(0.0, color='k', lw=0.8, ls=':', alpha=0.5)
         ax.set_ylabel(f'{sig_label}\n(value / Δ)')
@@ -632,9 +672,8 @@ def plot_index_vs_raw_session(
     axr.set_ylim(raw_ylim)
     axr.grid(True, alpha=0.3)
 
-    half = step_sec / 2.0
-    for tb in t_real[~good & ~gap_mask]:
-        axr.axvspan((tb - half) * sc, (tb + half) * sc,
+    for lo, hi in _bad_spans(t_real, good, signals):
+        axr.axvspan(lo * sc, hi * sc,
                     color='0.5', alpha=0.18, lw=0, zorder=0)
 
     fig.tight_layout(rect=(0, 0, 1, 0.96))
@@ -642,10 +681,10 @@ def plot_index_vs_raw_session(
     fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {outpath}')
-    valid_t = t_real[~gap_mask]
+    valid_t = t_real[np.isfinite(t_real)]
     print(f'  windows       : {t.size}  over real elapsed '
           f'{np.nanmin(valid_t):.0f}–{np.nanmax(valid_t):.0f}s '
-          f'(sample-count time would read 0–{t[-1]:.0f}s, compressing out gaps)')
+          f'(windows retain their original sample/time positions)')
     print(f'  quality mask  : {n_bad}/{t.size} masked '
           f'({bad_pct:.1f}%, threshold {quality_threshold:g})')
     print('  session baseline (quality-masked whole-recording mean):')
@@ -672,12 +711,12 @@ def plot_absolute_waves(
 
     Every event flag gets a shaded pre-onset (green) and post-onset (orange)
     window; per-event pre/post/Δ means are written to *summary_csv*."""
-    t, signals, q = _load_signals(be_csv)
+    t, signals, q = _load_signals(be_csv, raw_csv, ch)
     if t.size == 0:
         sys.exit(f'Error: no finite windows in {be_csv}.')
-    good = np.isfinite(q) & (q >= quality_threshold)
+    good = _quality_good(q, signals, quality_threshold)
     bad_pct = 100.0 * int((~good).sum()) / t.size if t.size else 0.0
-    epoch_us = _raw_epoch_us(raw_csv)
+    epoch_us = _raw_epoch_us(raw_csv, allow_gaps='_metadata' in signals)
     win = _event_windows(subject, epoch_us, pre_sec, post_sec, event_name)
 
     sc = 1.0 / 60.0 if use_minutes else 1.0
@@ -692,20 +731,19 @@ def plot_absolute_waves(
                              sharex=True)
     fig.suptitle(
         f'{subject} ch{ch} — absolute qEEG indices + band entropy through time '
-        f'(quality≥{quality_threshold:g}, {bad_pct:.0f}% masked;  '
+        f'({_quality_caption(quality_threshold)}, {bad_pct:.0f}% masked;  '
         f'per-event pre={pre_sec:g}s / post={post_sec:g}s)',
         fontsize=13, fontweight='bold')
 
-    half = float(np.median(np.diff(t))) / 2.0 if t.size > 1 else 1.0
     for ax, (key, label, color) in zip(axes, SIGNAL_SPECS):
-        ys = np.where(good, _rolling_median(masked[key], smooth_win), np.nan)
-        ax.plot(t * sc, ys, color=color, lw=1.6, alpha=0.95, zorder=4)
+        ys = np.where(good, _rolling_median(masked[key], smooth_win, signals.get('_segment_id')), np.nan)
+        _plot_series(ax, t * sc, ys, signals, color=color, lw=1.6, alpha=0.95, zorder=4)
         ax.axhline(0.0, color='k', lw=0.8, ls=':', alpha=0.5)
         ax.set_ylabel(label)
         ax.grid(True, alpha=0.3)
         # Quality-masked windows.
-        for tb in t[~good]:
-            ax.axvspan((tb - half) * sc, (tb + half) * sc,
+        for lo, hi in _bad_spans(t, good, signals):
+            ax.axvspan(lo * sc, hi * sc,
                        color='0.5', alpha=0.15, lw=0, zorder=0)
         # Per-event pre (green) / post (orange) windows.
         for w in win:
@@ -777,9 +815,10 @@ def plot_single_signal(
     event_name: str | None = None,
 ) -> None:
     """Two-panel figure for one signal: Δ vs own pre/post per event (top) + raw EEG."""
-    t, signals, q = _load_signals(be_csv)
-    t_raw, amp, epoch_us = _load_raw(raw_csv, ch)
-    good = np.isfinite(q) & (q >= quality_threshold)
+    t, signals, q = _load_signals(be_csv, raw_csv, ch)
+    t_raw, amp, epoch_us = _load_raw(raw_csv, ch, fs=signals.get('_metadata', {}).get('parameters', {}).get('fs', 500),
+                                          allow_gaps='_metadata' in signals)
+    good = _quality_good(q, signals, quality_threshold)
     n_bad = int((~good).sum())
     bad_pct = 100.0 * n_bad / t.size if t.size else 0.0
     win = _event_windows(subject, epoch_us, baseline_sec, baseline_sec, event_name)
@@ -793,11 +832,11 @@ def plot_single_signal(
         f'{subject} ch{ch} — {label}  '
         f'(each event: Δ vs own pre-{baseline_sec:g}s [solid] / '
         f'post-{baseline_sec:g}s [dotted];  '
-        f'quality≥{quality_threshold:g}, {bad_pct:.0f}% masked)',
+        f'{_quality_caption(quality_threshold)}, {bad_pct:.0f}% masked)',
         fontsize=12, fontweight='bold')
 
     y = np.where(good, signals[key], np.nan)
-    ys = np.where(good, _rolling_median(y, smooth_win), np.nan)
+    ys = np.where(good, _rolling_median(y, smooth_win, signals.get('_segment_id')), np.nan)
     dpre = np.full(t.shape, np.nan)
     dpost = np.full(t.shape, np.nan)
     for w in win:
@@ -807,11 +846,11 @@ def plot_single_signal(
         dpre[seg] = ys[seg] - _baseline_mean(t, y, w['pre_lo'], w['pre_hi'])
         dpost[seg] = ys[seg] - _baseline_mean(t, y, w['post_lo'], w['post_hi'])
 
-    ax.plot(t * sc, y, color='0.8', lw=0.6, alpha=0.5, label='absolute (raw)',
+    _plot_series(ax, t * sc, y, signals, color='0.8', lw=0.6, alpha=0.5, label='absolute (raw)',
             zorder=1)
-    ax.plot(t * sc, dpre, color=color, lw=1.8, ls='-', alpha=0.95,
+    _plot_series(ax, t * sc, dpre, signals, color=color, lw=1.8, ls='-', alpha=0.95,
             label=f'Δ vs own pre-{baseline_sec:g}s', zorder=4)
-    ax.plot(t * sc, dpost, color=color, lw=1.5, ls=':', alpha=0.95,
+    _plot_series(ax, t * sc, dpost, signals, color=color, lw=1.5, ls=':', alpha=0.95,
             label=f'Δ vs own post-{baseline_sec:g}s', zorder=4)
     ax.axhline(0.0, color='k', lw=0.8, ls=':', alpha=0.5)
     ax.set_ylabel(f'{label}\n(Δ)')
@@ -824,14 +863,13 @@ def plot_single_signal(
                    color='#ff7f0e', alpha=0.15, lw=0, zorder=0)
 
     # Raw EEG.
-    half = float(np.median(np.diff(t))) / 2.0 if t.size > 1 else 1.0
     axr.plot(t_raw * sc, amp, color='#444444', lw=0.4, alpha=0.8)
     axr.set_ylim(raw_ylim)
     axr.set_ylabel(f'Raw EEG ch{ch}\n(µV)')
     axr.set_xlabel(xlabel)
     axr.grid(True, alpha=0.3)
-    for tb in t[~good]:
-        axr.axvspan((tb - half) * sc, (tb + half) * sc,
+    for lo, hi in _bad_spans(t, good, signals):
+        axr.axvspan(lo * sc, hi * sc,
                     color='0.5', alpha=0.18, lw=0, zorder=0)
 
     # Event lines + labels on both panels.
@@ -865,7 +903,7 @@ def _parse_args() -> argparse.Namespace:
                    help='Baseline window length in seconds (default 30).')
     p.add_argument('--event', default=None,
                    help='Event name for the pre-event baseline '
-                        '(default: first event applicable to the subject).')
+                        '(default: all events applicable to the subject).')
     p.add_argument('--be-csv', default=None,
                    help='Band-entropy CSV (default: '
                         '<subject dir>/merged_band_entropy_ch<ch>.csv).')

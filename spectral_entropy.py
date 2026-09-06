@@ -89,7 +89,11 @@ import pandas as pd
 from scipy import signal
 
 from lilia.io import bandpass_filter, load_merged_csv
-from lilia.windowing import require_continuous
+from lilia.windowing import (require_continuous, continuous_slices, WindowGrid,
+                             build_window_grid, transform_runs, plot_breaks)
+from lilia.entropy_io import write_entropy_table
+from lilia.provenance import file_sha256
+import hashlib
 from lilia.time_utils import utc_us_to_local_dt
 
 # ── qEEG Focus/Relax indices (optional import) ────────────────────────────────
@@ -496,6 +500,7 @@ def compute_band_entropy_windowed(
     step_sec: float | None = None,
     nperseg: int | None = None,
     noverlap: int | None = None,
+    windows: WindowGrid | None = None,
 ) -> dict[str, np.ndarray]:
     """Compute band energies, proportions, and BandEn over sliding windows."""
     if win_sec <= 0:
@@ -523,7 +528,10 @@ def compute_band_entropy_windowed(
     energies_by_band = {name: [] for name, _ in BAND_DEFINITIONS}
     proportions_by_band = {name: [] for name, _ in BAND_DEFINITIONS}
 
-    for start in range(0, signal_1d.size - win + 1, step):
+    if windows is not None:
+        windows.validate(signal_1d.size, fs, win, step)
+    starts = windows.starts if windows is not None else range(0, signal_1d.size - win + 1, step)
+    for start in starts:
         segment = signal_1d[start:start + win]
         result = compute_band_entropy(
             segment,
@@ -549,6 +557,9 @@ def compute_band_entropy_windowed(
     for name, _ in BAND_DEFINITIONS:
         output[f'E_{name}'] = np.asarray(energies_by_band[name], dtype=float)
         output[f'p_{name}'] = np.asarray(proportions_by_band[name], dtype=float)
+    if windows is not None:
+        output['time'] = windows.time_s.copy()
+        output['segment_id'] = windows.columns['segment_id'].copy()
     return output
 
 
@@ -776,6 +787,7 @@ def compute_quality_windowed_aligned(
     fs: float = DEFAULT_FS,
     win_sec: float = DEFAULT_WIN_SEC,
     step_sec: float | None = None,
+    windows: WindowGrid | None = None,
 ) -> np.ndarray:
     """Channel-median EEG quality for each analysis window, aligned 1:1 with
     ``compute_band_entropy_windowed`` (and the lagged-MI sync windows).
@@ -804,8 +816,13 @@ def compute_quality_windowed_aligned(
         data2d = data2d[:, None]
     n = data2d.shape[0]
 
+    if win < 8 or step < 1:
+        raise ValueError('Invalid quality window or step')
     quality: list[float] = []
-    for start in range(0, n - win + 1, step):
+    if windows is not None:
+        windows.validate(n, fs, win, step)
+    starts = windows.starts if windows is not None else range(0, n - win + 1, step)
+    for start in starts:
         seg = data2d[start:start + win]                       # (win, n_ch)
         res = _eeg_quality_v2(seg.T, fs=fs, params=_QUALITY_PARAMS)
         quality.append(float(np.median(res['overall'])))
@@ -1348,6 +1365,7 @@ def compute_lagged_interhemispheric_sync_windowed(
     tau_ms_list: tuple[float, ...] | list[float] = DEFAULT_TAU_MS,
     bins: int = DEFAULT_MI_BINS,
     apply_bandpass: bool = True,
+    windows: WindowGrid | None = None,
 ) -> dict[str, np.ndarray]:
     """
     Compute non-zero-lag left-right synchrony from bidirectional lagged MI.
@@ -1373,6 +1391,8 @@ def compute_lagged_interhemispheric_sync_windowed(
 
     left = np.asarray(left_col, dtype=float).reshape(-1)
     right = np.asarray(right_col, dtype=float).reshape(-1)
+    if windows is not None and left.size != right.size:
+        raise ValueError('Synchronized channels must have the same sample count')
     n = min(left.size, right.size)
     if n == 0:
         raise ValueError('Input signals must not be empty.')
@@ -1381,7 +1401,10 @@ def compute_lagged_interhemispheric_sync_windowed(
     right = right[:n]
     if apply_bandpass:
         stacked = np.column_stack([left, right])
-        filtered = bandpass_filter(stacked, fs=fs)
+        if windows is None:
+            filtered = bandpass_filter(stacked, fs=fs)
+        else:
+            raise ValueError('With an explicit window grid, filter by timestamps first and use apply_bandpass=False')
         left = filtered[:, 0].astype(float)
         right = filtered[:, 1].astype(float)
 
@@ -1408,7 +1431,10 @@ def compute_lagged_interhemispheric_sync_windowed(
         f'lagged_mi_tau_{tau:g}ms': [] for tau in tau_values
     }
 
-    for start in range(0, n - win + 1, step):
+    if windows is not None:
+        windows.validate(n, fs, win, step)
+    starts = windows.starts if windows is not None else range(0, n - win + 1, step)
+    for start in starts:
         left_seg = left[start:start + win]
         right_seg = right[start:start + win]
         times.append((start + win // 2) / fs)
@@ -1434,6 +1460,9 @@ def compute_lagged_interhemispheric_sync_windowed(
     }
     for key, values in sync_by_tau.items():
         result[key] = np.asarray(values, dtype=float)
+    if windows is not None:
+        result['time'] = windows.time_s.copy()
+        result['segment_id'] = windows.columns['segment_id'].copy()
     return result
 
 
@@ -2448,6 +2477,15 @@ def _overlay_ibrain_events(ax: plt.Axes, t_min, t_max, use_abs: bool) -> None:
         )
 
 
+def _window_smooth(result, values, transform=_smooth_series):
+    return transform_runs(values, transform, result.get('segment_id'))
+
+
+def _plot_windows(ax, t, values, result, **kwargs):
+    x, y = plot_breaks(t, values, result.get('segment_id'))
+    return ax.plot(x, y, **kwargs)
+
+
 def plot_band_entropy(
     entropy_result: dict[str, np.ndarray],
     title: str,
@@ -2483,9 +2521,9 @@ def plot_band_entropy(
     for idx, (name, _) in enumerate(BAND_DEFINITIONS):
         ax = axes[idx]
         values = entropy_result[f'p_{name}']
-        smooth = _smooth_series(values)
-        ax.plot(t, values, color=colors[name], lw=1.1, alpha=0.4, label=f'{name} raw')
-        ax.plot(t, smooth, color=colors[name], lw=2.0, label=f'{name} smooth')
+        smooth = _window_smooth(entropy_result, values)
+        _plot_windows(ax, t, values, entropy_result, color=colors[name], lw=1.1, alpha=0.4, label=f'{name} raw')
+        _plot_windows(ax, t, smooth, entropy_result, color=colors[name], lw=2.0, label=f'{name} smooth')
         ax.set_ylabel(name)
         ax.set_ylim(0.0, 1.0)
         ax.set_title(f'{name.capitalize()} Band Proportion')
@@ -2497,23 +2535,25 @@ def plot_band_entropy(
     entropy_axis_idx = -2 if has_sync else -1
     ax_entropy = axes[entropy_axis_idx]
     entropy_bits = entropy_result['band_entropy']
-    entropy_bits_smooth = _smooth_series(entropy_bits)
+    entropy_bits_smooth = _window_smooth(entropy_result, entropy_bits)
     entropy_norm = entropy_result['band_entropy_norm']
-    entropy_norm_smooth = _smooth_series(entropy_norm)
+    entropy_norm_smooth = _window_smooth(entropy_result, entropy_norm)
     # ±1σ dispersion band: a centred rolling std of the per-window BandEn, so a
     # genuine entropy excursion is visually separable from window-to-window
     # estimator jitter. NaN-masked (low-quality) windows leave gaps in the band.
-    bits_std = _rolling_std(entropy_bits)
+    bits_std = _window_smooth(entropy_result, entropy_bits, _rolling_std)
     t_arr = np.asarray(t)
     with np.errstate(invalid='ignore'):
         lo_band = entropy_bits_smooth - bits_std
         hi_band = entropy_bits_smooth + bits_std
-    ax_entropy.fill_between(t_arr, lo_band, hi_band, color='#111111', alpha=0.12,
+    t_fill, lo_fill = plot_breaks(t_arr, lo_band, entropy_result.get('segment_id'))
+    _, hi_fill = plot_breaks(t_arr, hi_band, entropy_result.get('segment_id'))
+    ax_entropy.fill_between(t_fill, lo_fill, hi_fill, color='#111111', alpha=0.12,
                             linewidth=0, label='BandEn ±1σ')
-    ax_entropy.plot(t, entropy_bits, color='#111111', lw=1.1, alpha=0.4, label='BandEn (bits)')
-    ax_entropy.plot(t, entropy_bits_smooth, color='#111111', lw=2.0, label='BandEn smooth')
-    ax_entropy.plot(t, entropy_norm, color='#d62728', lw=1.0, alpha=0.35, label='BandEn norm')
-    ax_entropy.plot(t, entropy_norm_smooth, color='#d62728', lw=1.8, label='BandEn norm smooth')
+    _plot_windows(ax_entropy, t, entropy_bits, entropy_result, color='#111111', lw=1.1, alpha=0.4, label='BandEn (bits)')
+    _plot_windows(ax_entropy, t, entropy_bits_smooth, entropy_result, color='#111111', lw=2.0, label='BandEn smooth')
+    _plot_windows(ax_entropy, t, entropy_norm, entropy_result, color='#d62728', lw=1.0, alpha=0.35, label='BandEn norm')
+    _plot_windows(ax_entropy, t, entropy_norm_smooth, entropy_result, color='#d62728', lw=1.8, label='BandEn norm smooth')
     ax_entropy.set_ylabel('Entropy')
     if not has_sync and not use_abs:
         ax_entropy.set_xlabel('Time (s)')
@@ -2537,9 +2577,9 @@ def plot_band_entropy(
         tau_colors = ['#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#084594']
         for idx, key in enumerate(tau_keys):
             tau_label = key.split('_tau_')[1]
-            ax_sync.plot(
+            _plot_windows(ax_sync,
                 t_sync,
-                sync_result[key],
+                sync_result[key], sync_result,
                 color=tau_colors[idx % len(tau_colors)],
                 lw=1.0,
                 alpha=0.35,
@@ -2548,16 +2588,16 @@ def plot_band_entropy(
 
         sync_mean = sync_result['lagged_mi_mean']
         sync_max = sync_result['lagged_mi_max']
-        ax_sync.plot(
+        _plot_windows(ax_sync,
             t_sync,
-            _smooth_series(sync_mean),
+            _window_smooth(sync_result, sync_mean), sync_result,
             color='#111111',
             lw=2.0,
             label='Lagged MI mean smooth',
         )
-        ax_sync.plot(
+        _plot_windows(ax_sync,
             t_sync,
-            _smooth_series(sync_max),
+            _window_smooth(sync_result, sync_max), sync_result,
             color='#d62728',
             lw=1.8,
             ls='--',
@@ -2626,7 +2666,7 @@ def plot_band_composition(
     stack = np.vstack([np.asarray(entropy_result[f'p_{n}'], dtype=float)
                        for n in band_names])
     # Smooth each proportion for a legible band; keep NaN gaps.
-    stack_s = np.vstack([_smooth_series(stack[i]) for i in range(stack.shape[0])])
+    stack_s = np.vstack([_window_smooth(entropy_result, stack[i]) for i in range(stack.shape[0])])
     valid = np.all(np.isfinite(stack_s), axis=0)
 
     t = _rel_times_to_dt(rel_t, time_us_epoch) if use_abs else rel_t
@@ -2636,7 +2676,11 @@ def plot_band_composition(
     # stackplot cannot span NaN gaps, so plot contiguous valid runs separately.
     idx = np.where(valid)[0]
     if idx.size:
-        splits = np.where(np.diff(idx) > 1)[0] + 1
+        breaks = np.diff(idx) > 1
+        if 'segment_id' in entropy_result:
+            groups = entropy_result['segment_id'][idx]
+            breaks |= np.diff(groups) != 0
+        splits = np.where(breaks)[0] + 1
         first = True
         for run in np.split(idx, splits):
             ax.stackplot(
@@ -2784,7 +2828,11 @@ def plot_focus_relax_scatter(
     ax.axhline(0.0, color='0.85', lw=0.8, zorder=0)
     ax.axvline(0.0, color='0.85', lw=0.8, zorder=0)
     # Faint temporal trajectory through the (Focus, Relax) plane.
-    ax.plot(focus, relax, color='0.6', lw=0.5, alpha=0.4, zorder=2)
+    groups = np.cumsum(np.r_[False, np.diff(np.flatnonzero(finite)) != 1])
+    if 'segment_id' in entropy_result:
+        groups += np.cumsum(np.r_[False, np.diff(entropy_result['segment_id'][finite]) != 0])
+    trace_x, trace_y = plot_breaks(focus, relax, groups)
+    ax.plot(trace_x, trace_y, color='0.6', lw=0.5, alpha=0.4, zorder=2)
     sc = ax.scatter(focus, relax, c=tvec, cmap='viridis', s=18, alpha=0.75,
                     edgecolor='none', zorder=3)
     # Start / end markers so the trajectory direction is unambiguous.
@@ -3376,7 +3424,12 @@ def main() -> None:
 
     print(f'Loading: {args.csv}')
     time_us, data_raw = load_merged_csv(args.csv)
-    require_continuous(time_us, args.fs, 'spectral_entropy.py')
+    legacy_mode = args.joint_mi or args.band_event_mi or args.baseline is not None or args.event is not None
+    if legacy_mode:
+        require_continuous(time_us, args.fs, 'spectral_entropy legacy MI/baseline mode')
+        windows = None
+    else:
+        windows = build_window_grid(time_us, args.fs, args.win, args.step)
     if args.ibrain_events:
         args.subject = args.subject or os.path.basename(os.path.dirname(os.path.abspath(args.csv))).split('(')[0].strip()
         from plot_event_markers import SUBJECTS
@@ -3393,7 +3446,15 @@ def main() -> None:
     else:
         print(f'Bandpass: {DEFAULT_BP_LOW:g}-{DEFAULT_BP_HIGH:g} Hz zero-phase Butterworth '
               f'(fs={args.fs:g}Hz).')
-        data = bandpass_filter(data_raw, fs=args.fs, lo=DEFAULT_BP_LOW, hi=DEFAULT_BP_HIGH)
+        if windows is None:
+            data = bandpass_filter(data_raw, fs=args.fs, lo=DEFAULT_BP_LOW, hi=DEFAULT_BP_HIGH)
+        else:
+            # Segments without a complete grid window cannot contribute metrics.
+            data = np.full(data_raw.shape, np.nan, dtype=np.float32)
+            for segment in continuous_slices(time_us, args.fs):
+                if np.any((windows.starts >= segment.start) & (windows.starts < segment.stop)):
+                    data[segment] = bandpass_filter(data_raw[segment], fs=args.fs,
+                                                   lo=DEFAULT_BP_LOW, hi=DEFAULT_BP_HIGH)
 
     ch_idx = args.ch - 1
     if ch_idx < 0:
@@ -3445,6 +3506,7 @@ def main() -> None:
         fs=args.fs,
         win_sec=args.win,
         step_sec=args.step,
+        windows=windows,
     )
 
     if args.sync_pair is not None:
@@ -3464,6 +3526,7 @@ def main() -> None:
             # data is already bandpassed above (unless --no-bandpass); avoid
             # filtering twice. When --no-bandpass is set, leave the signal raw too.
             apply_bandpass=False,
+            windows=windows,
         )
 
     # ── Quality masking (same scoring method as plot_tflite_summary) ────────────
@@ -3474,22 +3537,21 @@ def main() -> None:
     quality = None
     if not args.no_quality_mask:
         if not _QC_AVAILABLE:
-            print('  [warn] quality modules unavailable — skipping quality masking '
-                  '(pass --no-quality-mask to silence).')
+            raise RuntimeError('Quality modules unavailable; explicitly use --no-quality-mask to disable scoring')
         else:
             print(f'  Scoring window quality (eeg_quality_v2, ch median) and masking '
                   f'< {args.quality_threshold:g}…', flush=True)
             quality = compute_quality_windowed_aligned(
-                data, fs=args.fs, win_sec=args.win, step_sec=args.step)
+                data, fs=args.fs, win_sec=args.win, step_sec=args.step, windows=windows)
             if quality.shape[0] != entropy_result['time'].shape[0]:
                 sys.exit('Error: quality window count does not match band-entropy windows.')
-            mask = quality < args.quality_threshold
+            mask = ~np.isfinite(quality) | (quality < args.quality_threshold)
             entropy_keys = (['band_entropy', 'band_entropy_norm', 'total_energy']
                             + [f'E_{n}' for n, _ in BAND_DEFINITIONS]
                             + [f'p_{n}' for n, _ in BAND_DEFINITIONS])
             _mask_low_quality(entropy_result, mask, entropy_keys)
             if sync_result is not None:
-                sync_keys = [k for k in sync_result if k != 'time']
+                sync_keys = [k for k in sync_result if k.startswith('lagged_mi_')]
                 _mask_low_quality(sync_result, mask, sync_keys)
             print(f'    masked {int(mask.sum())}/{mask.size} windows '
                   f'({100.0 * mask.mean():.1f}%) below quality {args.quality_threshold:g}.')
@@ -3516,10 +3578,29 @@ def main() -> None:
         if not np.allclose(sync_result['time'], entropy_result['time']):
             sys.exit('Error: lagged-MI time axis does not match band-entropy windows.')
         for key, values in sync_result.items():
-            if key != 'time':
+            if key.startswith('lagged_mi_'):
                 csv_data[key] = values
 
-    pd.DataFrame(csv_data).to_csv(csv_out, index=False)
+    code_paths = [__file__, *[os.path.join(os.path.dirname(__file__), 'lilia', name)
+                   for name in ('windowing.py', 'signal.py', 'quality.py', 'entropy_io.py')]]
+    code_id = hashlib.sha256(''.join(file_sha256(path) for path in code_paths).encode()).hexdigest()
+    settings = {
+        'fs': args.fs, 'channel': args.ch, 'win_sec': args.win,
+        'step_sec': args.step if args.step is not None else args.win,
+        'win_samples': windows.win, 'step_samples': windows.step,
+        'bandpass': None if args.no_bandpass else [DEFAULT_BP_LOW, DEFAULT_BP_HIGH],
+        'quality_enabled': not args.no_quality_mask, 'quality_threshold': args.quality_threshold,
+        'quality_params': _QUALITY_PARAMS if not args.no_quality_mask else None,
+        'bands': BAND_DEFINITIONS, 'sync_pair': args.sync_pair,
+        'tau_ms': args.tau_ms if args.sync_pair else None,
+        'mi_bins': args.mi_bins if args.sync_pair else None,
+        'grid_policy': 'original sample grid; complete continuous windows; gap > 3 sample periods',
+        'code_sha256': code_id,
+    }
+    csv_data['quality_valid'] = (np.isfinite(quality) & (quality >= args.quality_threshold)
+                                 if quality is not None else np.ones(len(windows.starts), dtype=bool))
+    csv_data['quality_state'] = ('scored' if quality is not None else 'disabled')
+    write_entropy_table(csv_out, args.csv, pd.DataFrame(csv_data), windows, settings, code_id)
     print(f'Saved: {csv_out}')
 
     title = f'Band Entropy — {os.path.basename(args.csv)} ch{args.ch}'
