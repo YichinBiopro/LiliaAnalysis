@@ -189,8 +189,6 @@ class EntropyWindowTests(unittest.TestCase):
         t = np.r_[np.arange(1000) * 2000, 20000000 + np.arange(1000) * 2000]
         path = self.recording(t)
         with self.assertRaisesRegex(ValueError, 'requires a continuous recording'):
-            self.run_cli(path, '--joint-mi')
-        with self.assertRaisesRegex(ValueError, 'requires a continuous recording'):
             plot._real_window_times(2, str(path), 2, 2, 500)
 
     def test_renderer_smoothing_and_lines_do_not_join_segments(self):

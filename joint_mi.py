@@ -22,15 +22,14 @@ from __future__ import annotations
 import argparse
 import os
 
-from lilia.windowing import require_continuous
+from lilia.event_windows import select_event_windows
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from lilia.io import bandpass_filter, load_merged_csv
+from lilia.io import load_merged_csv
 from spectral_entropy import (
-    DEFAULT_FS, DEFAULT_BP_LOW, DEFAULT_BP_HIGH,
-    extract_band_envelopes, compute_band_event_joint_mi,
+    DEFAULT_FS, run_band_event_mi_pipeline,
 )
 from plot_event_markers import EVENTS, hhmm_to_us
 
@@ -73,62 +72,52 @@ EVENT_ABBR = {
 }
 
 
+def _subject_events(subject, audit):
+    events = []
+    for name, hhmm, _dur, participants in EVENTS:
+        onset = int(hhmm_to_us(hhmm))
+        if participants is not None and (subject is None or subject not in participants):
+            audit.append(dict(Event=name, Onset_US=onset,
+                              Status='excluded', Reason='not_participant'))
+        else:
+            events.append((name, onset))
+    return events
+
+
 def resolve_events(time_us: np.ndarray, n_times: int, fs: float,
-                   window_max_samp: int, subject: str | None = None) -> list[tuple[str, int]]:
-    """In-range session events as (name, onset_sample), keeping only onsets with
-    room for the *largest* pre- and post-event window on both sides."""
-    epoch = int(time_us[0])
-    out: list[tuple[str, int]] = []
-    for name, hhmm, _dur, _part in EVENTS:
-        if _part is not None and (subject is None or subject not in _part):
-            continue
-        idx = int(round((hhmm_to_us(hhmm) - epoch) / 1e6 * fs))
-        if idx - window_max_samp >= 0 and idx + window_max_samp <= n_times:
-            out.append((name, idx))
-    return out
+                   window_max_samp: int, subject: str | None = None,
+                   *, audit=None) -> list[tuple[str, int]]:
+    """Legacy index interface, requiring complete physical pre/post intervals."""
+    if len(time_us) != n_times:
+        raise ValueError('Timestamp and signal lengths differ')
+    audit = [] if audit is None else audit
+    events = _subject_events(subject, audit)
+    windows, rows = select_event_windows(time_us, fs, events, window_max_samp / fs)
+    audit.extend(rows)
+    return [(w.name, w.post.start) for w in windows]
 
 
 def analyze_subject(path: str, label: str) -> pd.DataFrame:
     time_us, data_raw = load_merged_csv(path)
-    # Same 0.5–45 Hz front-end the CLI applies before per-band Hilbert envelopes.
-    require_continuous(time_us, DEFAULT_FS, 'joint_mi.py')
-    data = bandpass_filter(data_raw, fs=DEFAULT_FS, lo=DEFAULT_BP_LOW, hi=DEFAULT_BP_HIGH)
-    n_times = data.shape[0]
-    w_max = int(round(max(WINDOWS_SEC) * DEFAULT_FS))
     subject = os.path.basename(os.path.dirname(path)).split('(')[0].strip()
-    events = resolve_events(time_us, n_times, DEFAULT_FS, w_max, subject=subject)
-    print(f"  {label}: {len(events)} in-range events "
-          f"({', '.join(n for n, _ in events)})")
-
-    records: list[dict] = []
-    for ch in CHANNELS:
-        envelopes = extract_band_envelopes(data[:, ch - 1], fs=DEFAULT_FS)
-        for ev_name, onset in events:
-            for w_sec in WINDOWS_SEC:
-                w_samp = int(round(w_sec * DEFAULT_FS))
-                res = compute_band_event_joint_mi(
-                    envelopes, [onset], w_samp, fs=DEFAULT_FS,
-                    sub_sec=SUB_SEC, sub_step_sec=SUB_STEP_SEC,
-                    n_neighbors=3, n_surrogates=N_SURROGATES, random_state=0,
-                )
-                if res is None:
-                    continue
-                rec = {
-                    "Subject": label, "Event": ev_name,
-                    "Event_Abbr": EVENT_ABBR.get(ev_name, ev_name),
-                    "Channel": f"ch{ch}", "Window_Size": float(w_sec),
-                    "Joint_MI_Sum_Bits": res["sum_mi_bits"],
-                    "Joint_MI_KSG_Bits": res["joint_mi_bits"],
-                    "Gap_Bits": res["sum_mi_bits"] - res["joint_mi_bits"],
-                    "N_Pre": res["n_pre"], "N_Post": res["n_post"],
-                    "K_Neighbors": res["n_neighbors"],
-                }
-                for k in ("surrogate_mean_bits", "surrogate_std_bits",
-                          "surrogate_p_value", "surrogate_z"):
-                    if k in res:
-                        rec[k] = res[k]
-                records.append(rec)
-    return pd.DataFrame.from_records(records)
+    audit = []
+    events = _subject_events(subject, audit)
+    # Evaluate eligibility separately for each duration. A rejected 30-second
+    # interval need not discard the same event's complete 5-second interval.
+    frame = run_band_event_mi_pipeline(
+        {f'ch{ch}': data_raw[:, ch - 1] for ch in CHANNELS}, [],
+        fs=DEFAULT_FS, windows_sec=WINDOWS_SEC, sub_sec=SUB_SEC,
+        sub_step_sec=SUB_STEP_SEC, n_surrogates=N_SURROGATES,
+        time_us=time_us, events=events, front_bandpass=True,
+        audit=audit, pool_events=False,
+    )
+    if not frame.empty:
+        frame.insert(0, 'Subject', label)
+        frame['Event_Abbr'] = frame['Event'].map(lambda name: EVENT_ABBR.get(name, name))
+        frame['Gap_Bits'] = frame['Joint_MI_Sum_Bits'] - frame['Joint_MI_KSG_Bits']
+    frame.attrs['event_audit'] = audit
+    print(f'  {label}: {len(frame)} usable event/channel/window estimates; quality scoring disabled')
+    return frame
 
 
 def plot_subject(df: pd.DataFrame, label: str, outpath: str) -> None:
@@ -223,6 +212,9 @@ def run_per_event(_args: argparse.Namespace) -> None:
             continue
         print(f"Analysing {label} …")
         sdf = analyze_subject(path, label)
+        stem = label.split(" ")[0] + "_" + label.split("(")[1].rstrip(")")
+        pd.DataFrame(sdf.attrs.pop('event_audit')).to_csv(
+            os.path.join(PER_EVENT_OUTBASE, f"{stem}_per_event_mi_events.csv"), index=False)
         if sdf.empty:
             print(f"  [warn] no usable events for {label}")
             continue

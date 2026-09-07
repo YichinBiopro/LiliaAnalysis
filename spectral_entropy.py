@@ -88,10 +88,13 @@ import numpy as np
 import pandas as pd
 from scipy import signal
 
-from lilia.io import bandpass_filter, load_merged_csv
-from lilia.windowing import (require_continuous, continuous_slices, WindowGrid,
-                             build_window_grid, transform_runs, plot_breaks)
-from lilia.entropy_io import write_entropy_table
+from lilia.io import bandpass_filter, load_merged_csv, read_lilia_frame
+from lilia.windowing import (continuous_slices, WindowGrid,
+                             build_window_grid, transform_runs, plot_breaks, finite_runs)
+from lilia.entropy_io import write_entropy_table, write_joint_mi_table
+from lilia.event_windows import select_event_windows
+from lilia.state_windows import select_state_windows, state_bounds
+from lilia.state_entropy_io import write_state_entropy_table
 from lilia.provenance import file_sha256
 import hashlib
 from lilia.time_utils import utc_us_to_local_dt
@@ -707,6 +710,10 @@ def compute_state_entropy_from_epochs(
     """
     if not epochs:
         raise ValueError('No clean epochs were supplied.')
+    size = np.asarray(epochs[0]).size
+    if any(np.asarray(epoch).ndim != 1 or len(epoch) != size or not np.isfinite(epoch).all()
+           for epoch in epochs):
+        raise ValueError('State epochs must be finite, one-dimensional and equal-length')
 
     psd_accum: np.ndarray | None = None
     freqs_ref: np.ndarray | None = None
@@ -758,28 +765,76 @@ def collect_clean_epochs(
             'Quality-control modules unavailable; --clean mode requires '
             'plot_event_markers / eeg_quality_v2 / plot_tflite_summary to import.')
 
-    epoch_n = int(round(epoch_sec * fs))
-    in_win = np.where((time_us_full >= lo_us) & (time_us_full < hi_us))[0]
+    return _collect_state_epochs(
+        time_us_full, data_filt_full, data_raw_full, lo_us, hi_us, ch_idx,
+        fs=fs, win_sec=epoch_sec, step_sec=epoch_sec, clean=True,
+        quality_threshold=quality_threshold)
 
-    clean: list[np.ndarray] = []
-    n_total = n_saturated = n_lowq = 0
-    if in_win.size >= epoch_n:
-        i0, i1 = in_win[0], in_win[-1] + 1
-        for s in range(i0, i1 - epoch_n + 1, epoch_n):
-            seg = data_filt_full[s:s + epoch_n]            # (epoch_n, n_ch)
-            n_total += 1
-            if data_raw_full is not None and \
-                    _saturation_frac(data_raw_full[s:s + epoch_n]) > _SAT_FRAC_MAX:
-                n_saturated += 1
+
+def _collect_state_epochs(time_us, filtered, raw, lo_us, hi_us, ch_idx, *,
+                          fs, win_sec, step_sec=None, clean=False,
+                          quality_threshold=_QUALITY_THRESHOLD, segment_failures=None):
+    """Use one candidate catalog for PSD, quality and inclusion/exclusion audit."""
+    if clean and not _QC_AVAILABLE:
+        raise RuntimeError('Quality-control modules unavailable for --clean')
+    if clean and (not np.isfinite(quality_threshold) or not 0 <= quality_threshold <= 1):
+        raise ValueError('Clean quality threshold must be finite and within [0, 1]')
+    filtered = np.asarray(filtered)
+    if filtered.ndim != 2 or len(filtered) != len(time_us) or not 0 <= ch_idx < filtered.shape[1]:
+        raise ValueError('State data/channel does not match timestamps')
+    if raw is not None and np.shape(raw) != filtered.shape:
+        raise ValueError('Raw and filtered state data shapes differ')
+    if raw is not None:
+        raw = np.asarray(raw)
+    audit = select_state_windows(time_us, fs, lo_us, hi_us, win_sec, step_sec)
+    epochs = []
+    for row in audit['windows']:
+        row.update(quality_state='not_scored' if clean else 'disabled', quality=None,
+                   saturation_fraction=None)
+        if not row['complete']:
+            continue
+        sl = slice(row['window_start_idx'], row['window_end_idx'])
+        seg = filtered[sl]
+        failure = (segment_failures or {}).get(row['segment_id'])
+        check = seg if clean else seg[:, ch_idx]
+        if failure:
+            row['status'] = failure
+        elif not np.isfinite(check).all() or (raw is not None and not np.isfinite(
+                raw[sl] if clean else raw[sl, ch_idx]).all()):
+            row['status'] = 'nonfinite_signal'
+        elif clean:
+            if raw is None:
+                row['status'] = 'raw_unavailable'
                 continue
-            res = _eeg_quality_v2(seg.T.astype(np.float64), fs=fs, params=_QUALITY_PARAMS)
-            if float(np.median(res['overall'])) >= quality_threshold:
-                clean.append(seg[:, ch_idx].astype(float))
-            else:
-                n_lowq += 1
-    meta = {'n_total_epochs': n_total, 'n_saturated_epochs': n_saturated,
-            'n_lowquality_epochs': n_lowq, 'n_clean_epochs': len(clean)}
-    return clean, meta
+            row['saturation_fraction'] = float(_saturation_frac(raw[sl]))
+            if row['saturation_fraction'] > _SAT_FRAC_MAX:
+                row['status'] = 'raw_saturation'
+                continue
+            try:
+                scores = np.asarray(_eeg_quality_v2(seg.T.astype(np.float64), fs=fs,
+                                                   params=_QUALITY_PARAMS)['overall'], dtype=float)
+            except Exception as exc:
+                row.update(status='quality_error', quality_state='error', error=str(exc))
+                continue
+            if (scores.shape != (seg.shape[1],) or not np.isfinite(scores).all()
+                    or np.any((scores < 0) | (scores > 1))):
+                row.update(status='invalid_quality', quality_state='invalid')
+                continue
+            score = float(np.median(scores))
+            row.update(quality=score, quality_state='scored',
+                       status='accepted' if score >= quality_threshold else 'low_quality')
+        else:
+            row['status'] = 'accepted'
+        if row['status'] == 'accepted':
+            epochs.append(seg[:, ch_idx].astype(float))
+    statuses = [row['status'] for row in audit['windows']]
+    audit.update(n_total_epochs=sum(row['complete'] for row in audit['windows']),
+                 n_saturated_epochs=statuses.count('raw_saturation'),
+                 n_lowquality_epochs=statuses.count('low_quality'),
+                 n_nonfinite_epochs=statuses.count('nonfinite_signal'),
+                 n_invalid_quality_epochs=statuses.count('invalid_quality'),
+                 n_clean_epochs=len(epochs), n_accepted_epochs=len(epochs))
+    return epochs, audit
 
 
 def compute_quality_windowed_aligned(
@@ -880,6 +935,7 @@ def compare_baseline_event(
     step_sec: float | None = None,
     nperseg: int | None = None,
     noverlap: int | None = None,
+    *, time_us: np.ndarray | None = None,
 ) -> dict[str, object]:
     """Compute baseline vs event band entropy and test their difference.
 
@@ -892,31 +948,33 @@ def compare_baseline_event(
     * a two-sided Mann–Whitney U test on the per-window entropy distributions
       (non-parametric: window entropies are bounded and not guaranteed normal).
 
+    Supply raw ``time_us`` for recordings with gaps. Without timestamps, a
+    uniform clock is assumed. Half-open timestamp bounds replace nearest-sample
+    rounding; complete windows restart at each interval/segment intersection.
+
     The pooled value is the headline summary; the U test tells you whether the
     window-level distributions actually differ. Reporting both is what makes the
     baseline/event comparison defensible.
     """
     signal_1d = np.asarray(data_col, dtype=float).reshape(-1)
+    if not np.isfinite(fs) or fs <= 0 or not signal_1d.size:
+        raise ValueError('State comparison needs nonempty data and positive finite fs')
 
-    def _slice(rng: tuple[float, float], which: str) -> np.ndarray:
-        lo_s, hi_s = float(rng[0]), float(rng[1])
-        if hi_s <= lo_s:
-            raise ValueError(f'{which} range end must be greater than start.')
-        lo = max(0, int(round(lo_s * fs)))
-        hi = min(signal_1d.size, int(round(hi_s * fs)))
-        seg = signal_1d[lo:hi]
-        if seg.size < int(round(win_sec * fs)):
-            raise ValueError(
-                f'{which} interval [{lo_s:g}, {hi_s:g}]s yields fewer than one '
-                f'{win_sec:g}s window after clipping to the recording.')
-        return seg
+    if time_us is None:
+        time_us = np.rint(np.arange(len(signal_1d)) * 1e6 / fs).astype(np.int64)
 
-    baseline = compute_state_entropy(
-        _slice(baseline_range, 'baseline'), fs=fs, win_sec=win_sec,
-        step_sec=step_sec, nperseg=nperseg, noverlap=noverlap)
-    event = compute_state_entropy(
-        _slice(event_range, 'event'), fs=fs, win_sec=win_sec,
-        step_sec=step_sec, nperseg=nperseg, noverlap=noverlap)
+    def _state(interval):
+        lo_us, hi_us = state_bounds(time_us, interval)
+        epochs, audit = _collect_state_epochs(
+            time_us, signal_1d[:, None], None, lo_us, hi_us, 0,
+            fs=fs, win_sec=win_sec, step_sec=step_sec)
+        if not epochs:
+            raise ValueError('State interval yields no complete finite analysis windows')
+        state = compute_state_entropy_from_epochs(epochs, fs=fs, nperseg=nperseg, noverlap=noverlap)
+        state['audit'] = audit
+        return state
+
+    baseline, event = _state(baseline_range), _state(event_range)
 
     return _finalise_comparison(baseline, event, baseline_range, event_range)
 
@@ -1475,6 +1533,7 @@ def compute_joint_mi_windowed(
     step_sec: float | None = None,
     bins: int = DEFAULT_MI_BINS,
     binning: str = 'uniform',
+    windows: WindowGrid | None = None,
 ) -> dict[str, np.ndarray]:
     """Per-window *zero-lag* mutual information I(X(t); Y(t)) between two channels.
 
@@ -1497,7 +1556,9 @@ def compute_joint_mi_windowed(
 
     x = np.asarray(sig_x, dtype=float).reshape(-1)
     y = np.asarray(sig_y, dtype=float).reshape(-1)
-    n = min(x.size, y.size)
+    if x.size != y.size:
+        raise ValueError('Joint-MI channels must have equal sample counts')
+    n = x.size
     if n == 0:
         raise ValueError('Input signals must not be empty.')
     x, y = x[:n], y[:n]
@@ -1514,18 +1575,31 @@ def compute_joint_mi_windowed(
     times: list[float] = []
     joint_mi: list[float] = []
     joint_mi_norm: list[float] = []
-    for start in range(0, n - win + 1, step):
+    if windows is not None:
+        windows.validate(n, fs, win, step)
+    starts = windows.starts if windows is not None else range(0, n - win + 1, step)
+    for start in starts:
+        if not (np.isfinite(x[start:start + win]).all() and np.isfinite(y[start:start + win]).all()):
+            times.append((start + win // 2) / fs)
+            joint_mi.append(float('nan'))
+            joint_mi_norm.append(float('nan'))
+            continue
         joint = compute_joint_probability(
             x[start:start + win], y[start:start + win], bins=bins, binning=binning)
         times.append((start + win // 2) / fs)
         joint_mi.append(float(joint['mutual_information']))
         joint_mi_norm.append(float(joint['mutual_information_norm']))
 
-    return {
+    result = {
         'time': np.asarray(times, dtype=float),
         'joint_mi': np.asarray(joint_mi, dtype=float),
         'joint_mi_norm': np.asarray(joint_mi_norm, dtype=float),
     }
+
+    if windows is not None:
+        result['time'] = windows.time_s.copy()
+        result['segment_id'] = windows.columns['segment_id'].copy()
+    return result
 
 
 def compute_joint_mi_significance(
@@ -1536,6 +1610,7 @@ def compute_joint_mi_significance(
     binning: str = 'uniform',
     n_surrogates: int = 200,
     seed: int = 0,
+    segment_ids: np.ndarray | None = None,
 ) -> dict[str, float]:
     """Assess whether the observed MI exceeds chance via a circular-shift null.
 
@@ -1547,26 +1622,44 @@ def compute_joint_mi_significance(
     ≥ the observed MI (add-one smoothed), and ``z`` is the standardised excess
     over the surrogate mean.
 
-    Returns the observed MI, surrogate mean/std, ``p_value`` and ``z``.
+    With ``segment_ids``, independently shift within each continuous run and
+    pool the resulting paired samples for the same histogram statistic. This
+    conditions the null on each segment's marginal distribution. A run shorter
+    than 16 samples disables the null explicitly; it is never rolled across a
+    boundary. Returns the observed MI, null metadata, p-value and z.
     """
     x = np.asarray(sig_x, dtype=float).reshape(-1)
     y = np.asarray(sig_y, dtype=float).reshape(-1)
-    n = min(x.size, y.size)
-    x, y = x[:n], y[:n]
+    if x.size != y.size:
+        raise ValueError('Joint-MI channels must have equal sample counts')
+    n = x.size
+    if not (np.isfinite(x).all() and np.isfinite(y).all()):
+        raise ValueError('Surrogate population must contain finite paired samples')
+    if segment_ids is not None and len(segment_ids) != n:
+        raise ValueError('Segment IDs and surrogate population differ in length')
+    runs = finite_runs(x, segment_ids)
+    null_method = 'within_segment_circular_shift' if segment_ids is not None else 'circular_shift'
+    short_run = any(len(run) < 16 for run in runs)
     observed = _histogram_mutual_information(x, y, bins=bins, binning=binning)
-    if n_surrogates <= 0 or n < 16:
+    if n_surrogates <= 0 or short_run:
         return {'mutual_information': float(observed), 'surrogate_mean': float('nan'),
                 'surrogate_std': float('nan'), 'p_value': float('nan'),
                 'z': float('nan'), 'n_surrogates': 0,
-                'surrogates': np.empty(0, dtype=float)}
+                'surrogates': np.empty(0, dtype=float), 'null_method': null_method,
+                'null_state': 'disabled' if n_surrogates <= 0 else 'segment_too_short'}
 
     rng = np.random.default_rng(seed)
     # Avoid trivial (near-zero) shifts that barely perturb the alignment.
-    shifts = rng.integers(low=max(1, n // 100), high=n, size=int(n_surrogates))
+    # Draw each run's shifts independently. A single run preserves the legacy
+    # RNG draws exactly. Samples never move to a different continuous run.
+    shifts = [rng.integers(low=max(1, len(run) // 100), high=len(run),
+                          size=int(n_surrogates)) for run in runs]
     surrogate = np.empty(int(n_surrogates), dtype=float)
-    for i, shift in enumerate(shifts):
-        surrogate[i] = _histogram_mutual_information(
-            x, np.roll(y, int(shift)), bins=bins, binning=binning)
+    shifted = np.empty_like(y)
+    for i in range(int(n_surrogates)):
+        for run, offsets in zip(runs, shifts):
+            shifted[run] = np.roll(y[run], int(offsets[i]))
+        surrogate[i] = _histogram_mutual_information(x, shifted, bins=bins, binning=binning)
 
     s_mean = float(surrogate.mean())
     s_std = float(surrogate.std())
@@ -1574,7 +1667,8 @@ def compute_joint_mi_significance(
     z = float((observed - s_mean) / s_std) if s_std > EPSILON else float('nan')
     return {'mutual_information': float(observed), 'surrogate_mean': s_mean,
             'surrogate_std': s_std, 'p_value': p_value, 'z': z,
-            'n_surrogates': int(surrogate.size), 'surrogates': surrogate}
+            'n_surrogates': int(surrogate.size), 'surrogates': surrogate,
+            'null_method': null_method, 'null_state': 'computed'}
 
 
 def denoise_channels(
@@ -1592,26 +1686,10 @@ def denoise_channels(
     model's output sampling rate (200 Hz). Requires PyTorch and the
     ``eeg_denoise`` model package (imported lazily via ``data_analysis``).
     """
-    try:
-        import data_analysis as da  # noqa: WPS433 (lazy: heavy torch dependency)
-    except Exception as exc:  # pragma: no cover - environment-dependent
-        raise RuntimeError(
-            'Neural denoising requires data_analysis (PyTorch + the eeg_denoise '
-            'TinyUNetV4 package) to be importable.') from exc
-
-    data2d = np.asarray(data_raw, dtype=float)
-    if data2d.ndim == 1:
-        data2d = data2d[:, None]
-    if data2d.shape[1] < da.N_CH:
-        raise ValueError(
-            f'Denoiser expects {da.N_CH} input channels, got {data2d.shape[1]}.')
-
-    filt = da.apply_filters(data2d[:, :da.N_CH])
-    t_idx = np.arange(filt.shape[0], dtype=float)
-    _, filt_ds = da.downsample_data(t_idx, filt, fs_in=fs, fs_out=da.DOWNSAMPLED_FS)
-    model = da.load_model()
-    denoised = da.run_model(model, filt_ds)
-    return np.asarray(denoised, dtype=float), float(da.DOWNSAMPLED_FS)
+    from lilia.neural import denoise_with_time
+    time_us = np.rint(np.arange(len(data_raw)) * 1e6 / fs).astype(np.int64)
+    timeline, denoised = denoise_with_time(time_us, data_raw, fs)
+    return denoised.astype(float), timeline.fs_out
 
 
 def compute_event_pre_onset_joint_mi(
@@ -1626,6 +1704,10 @@ def compute_event_pre_onset_joint_mi(
     binning: str = 'quantile',
     n_surrogates: int = 100,
     subject: str | None = None,
+    time_us: np.ndarray | None = None,
+    audit: list | None = None,
+    segment_ids: np.ndarray | None = None,
+    segment_end_us: dict | None = None,
 ) -> list[dict]:
     """For each iBrainCenter event, compare the two channels' joint distribution
     *just before* the event with the distribution *at its onset*.
@@ -1639,26 +1721,47 @@ def compute_event_pre_onset_joint_mi(
     visible (ΔMI = onset − pre).
 
     If subject is omitted, only events open to all participants are used.
-    Events whose pre- or onset-window falls outside the recording (fewer than
-    ~1 s of data) are skipped. Returns one dict per usable event with the two
+    Both intervals must be complete and within one continuous segment. Supply
+    actual ``time_us`` for recordings with gaps; omitted timestamps describe a
+    uniformly sampled continuous array. Exclusions are appended to ``audit``.
+    Returns one dict per usable event with the two
     ``compute_joint_probability`` results and the headline MI values.
     """
     if not _IBRAIN_AVAILABLE:
         raise RuntimeError('iBrainCenter event definitions are unavailable.')
 
-    n = min(sig_x.size, sig_y.size)
+    if not all(np.isfinite(v) and v > 0 for v in (fs, pre_sec, onset_sec)):
+        raise ValueError('fs and event durations must be finite and positive')
+    sig_x, sig_y = np.asarray(sig_x).reshape(-1), np.asarray(sig_y).reshape(-1)
+    if sig_x.size != sig_y.size:
+        raise ValueError('Event MI channels must have equal sample counts')
+    n = sig_x.size
+    if time_us is None:
+        time_us = int(time_us_epoch) + np.rint(np.arange(n) * 1e6 / fs).astype(np.int64)
+    if len(time_us) != n:
+        raise ValueError('Timestamp and signal lengths differ')
+    audit = [] if audit is None else audit
     min_n = max(8, int(round(fs)))            # need ≳ 1 s per window
     results: list[dict] = []
+    candidates = []
     for name, start_hhmm, _dur_min, _participants in _IBRAIN_EVENTS:
         if _participants is not None and (subject is None or subject not in _participants):
+            audit.append(dict(Event=name, Status='excluded', Reason='not_participant'))
             continue
-        onset_rel_s = (_hhmm_to_us(start_hhmm) - int(time_us_epoch)) / 1e6
-        onset_idx = int(round(onset_rel_s * fs))
-        pre_lo = max(0, onset_idx - int(round(pre_sec * fs)))
-        pre_hi = min(n, onset_idx)
-        on_lo = max(0, onset_idx)
-        on_hi = min(n, onset_idx + int(round(onset_sec * fs)))
+        candidates.append((name, int(_hhmm_to_us(start_hhmm))))
+    windows, rows = select_event_windows(time_us, fs, candidates, pre_sec, onset_sec, segment_ids=segment_ids, segment_end_us=segment_end_us)
+    audit.extend(rows)
+    for window in windows:
+        name = window.name
+        onset_rel_s = (window.onset_us - int(time_us_epoch)) / 1e6
+        pre_lo, pre_hi = window.pre.start, window.pre.stop
+        on_lo, on_hi = window.post.start, window.post.stop
+        row = next(r for r in rows if r['Event'] == name and r['Onset_US'] == window.onset_us)
         if (pre_hi - pre_lo) < min_n or (on_hi - on_lo) < min_n:
+            row.update(Status='excluded', Reason='too_few_samples')
+            continue
+        if not (np.isfinite(sig_x[pre_lo:on_hi]).all() and np.isfinite(sig_y[pre_lo:on_hi]).all()):
+            row.update(Status='excluded', Reason='nonfinite_signal')
             continue
 
         pre = compute_joint_probability(
@@ -1779,7 +1882,9 @@ def plot_event_pre_onset_comparison(
 _NATS_TO_BITS = 1.0 / np.log(2.0)
 
 
-def extract_band_envelopes(sig: np.ndarray, fs: float = DEFAULT_FS) -> dict[str, np.ndarray]:
+def extract_band_envelopes(sig: np.ndarray, fs: float = DEFAULT_FS, *,
+                           time_us=None, segment_ids=None,
+                           front_bandpass=False) -> dict[str, np.ndarray]:
     """Instantaneous θ/α/β amplitude envelopes via bandpass + Hilbert transform.
 
     Each canonical band in ``BAND_DEFINITIONS`` is isolated with the same
@@ -1789,6 +1894,23 @@ def extract_band_envelopes(sig: np.ndarray, fs: float = DEFAULT_FS) -> dict[str,
     Returns a dict band-name → envelope (1-D, same length as ``sig``).
     """
     x = np.asarray(sig, dtype=float).reshape(-1)
+    if time_us is not None:
+        if len(time_us) != len(x):
+            raise ValueError('Timestamp and signal lengths differ')
+        envelopes = {name: np.full(len(x), np.nan) for name, _ in BAND_DEFINITIONS}
+        for sid, sl in enumerate(continuous_slices(time_us, fs)):
+            if segment_ids is not None and sid not in segment_ids:
+                continue
+            # A nonfinite sample contaminates zero-phase filtering/Hilbert of
+            # its whole segment. Leave that segment explicitly invalid.
+            if not np.isfinite(x[sl]).all():
+                continue
+            part = extract_band_envelopes(x[sl], fs, front_bandpass=front_bandpass)
+            for name in envelopes:
+                envelopes[name][sl] = part[name]
+        return envelopes
+    if front_bandpass:
+        x = bandpass_filter(x, fs=fs, lo=DEFAULT_BP_LOW, hi=DEFAULT_BP_HIGH)
     envelopes: dict[str, np.ndarray] = {}
     for name, (lo, hi) in BAND_DEFINITIONS:
         filtered = np.asarray(bandpass_filter(x, fs=fs, lo=lo, hi=hi), dtype=float)
@@ -1901,6 +2023,7 @@ def compute_band_event_joint_mi(
     n_neighbors: int = 3,
     n_surrogates: int = 0,
     random_state: int = 0,
+    event_windows=None,
 ) -> dict | None:
     """Joint MI I(θ,α,β power ; pre/post-event) for one window size.
 
@@ -1921,11 +2044,15 @@ def compute_band_event_joint_mi(
     n_times = len(next(iter(envelopes.values())))
 
     pre_blocks, post_blocks = [], []
-    for onset in onset_indices:
-        pre_lo, pre_hi = onset - window_samples, onset
-        post_lo, post_hi = onset, onset + window_samples
+    intervals = ([(w.pre.start, w.pre.stop, w.post.start, w.post.stop) for w in event_windows]
+                 if event_windows is not None else
+                 [(onset - window_samples, onset, onset, onset + window_samples)
+                  for onset in onset_indices])
+    for pre_lo, pre_hi, post_lo, post_hi in intervals:
         if pre_lo < 0 or post_hi > n_times:
             continue  # window falls outside the recording → skip this onset
+        if not all(np.isfinite(env[pre_lo:post_hi]).all() for env in envelopes.values()):
+            continue
         pre_blocks.append(_subepoch_features(envelopes, pre_lo, pre_hi, sub_len, sub_step))
         post_blocks.append(_subepoch_features(envelopes, post_lo, post_hi, sub_len, sub_step))
 
@@ -1994,39 +2121,105 @@ def run_band_event_mi_pipeline(
     n_neighbors: int = 3,
     n_surrogates: int = 0,
     random_state: int = 0,
+    time_us=None,
+    events=None,
+    front_bandpass=False,
+    audit=None,
+    pool_events=True,
 ) -> pd.DataFrame:
     """Iterate window sizes × channels; return a tidy DataFrame.
 
     Columns: ``Window_Size``, ``Channel``, ``Joint_MI_Sum_Bits``,
     ``Joint_MI_KSG_Bits``, ``N_Pre``, ``N_Post``, ``K_Neighbors`` and, when
     ``n_surrogates > 0``, the surrogate-null columns.
+
+    With ``time_us``, named absolute ``events`` are selected independently for
+    each duration, and filtering/Hilbert never cross a recording gap. ``audit``
+    receives accepted intervals and exclusion reasons per channel. Quality
+    scoring is not applied by this estimator; outputs explicitly say disabled.
+    ``pool_events=False`` computes a separate estimate for each accepted event.
     """
+    if not windows_sec or not all(np.isfinite(v) and v > 0
+                                 for v in (fs, sub_sec, sub_step_sec, *windows_sec)):
+        raise ValueError('fs, windows and sub-epoch settings must be finite and positive')
+    if min(int(round(sub_sec * fs)), int(round(sub_step_sec * fs))) < 1:
+        raise ValueError('Sub-epoch length and step must contain at least one sample')
+    if events is not None and time_us is None:
+        raise ValueError('Absolute events require recording timestamps')
+    if not pool_events and time_us is None:
+        raise ValueError('Per-event estimates require recording timestamps')
     records: list[dict] = []
+    audit = [] if audit is None else audit
+    selected = {}
+    if time_us is not None:
+        if events is None:
+            events = [(str(i), int(time_us[i])) for i in onset_indices]
+        for w_sec in windows_sec:
+            selected[w_sec] = select_event_windows(time_us, fs, events, w_sec)
     for ch_label, sig in signals_by_channel.items():
-        envelopes = extract_band_envelopes(sig, fs=fs)
+        segment_ids = {w.segment_id for windows, _ in selected.values() for w in windows}
+        envelopes = extract_band_envelopes(sig, fs=fs, time_us=time_us,
+                                          segment_ids=segment_ids, front_bandpass=front_bandpass)
         for w_sec in windows_sec:
             w_samp = int(round(w_sec * fs))
-            res = compute_band_event_joint_mi(
-                envelopes, onset_indices, w_samp, fs=fs,
-                sub_sec=sub_sec, sub_step_sec=sub_step_sec,
-                n_neighbors=n_neighbors, n_surrogates=n_surrogates,
-                random_state=random_state,
-            )
-            if res is None:
-                print(f'  [skip] {ch_label} @ {w_sec:g}s — too few usable sub-epochs.')
-                continue
-            rec = {
-                'Window_Size': float(w_sec), 'Channel': ch_label,
-                'Joint_MI_Sum_Bits': res['sum_mi_bits'],
-                'Joint_MI_KSG_Bits': res['joint_mi_bits'],
-                'N_Pre': res['n_pre'], 'N_Post': res['n_post'],
-                'K_Neighbors': res['n_neighbors'],
-            }
-            for key in ('surrogate_mean_bits', 'surrogate_std_bits',
-                        'surrogate_p_value', 'surrogate_z'):
-                if key in res:
-                    rec[key] = res[key]
-            records.append(rec)
+            valid_windows = None
+            if time_us is not None:
+                candidates, rows = selected[w_sec]
+                valid_windows = []
+                rejected = {}
+                sub_len = int(round(sub_sec * fs))
+                for window in candidates:
+                    key = (window.name, window.onset_us)
+                    if min(window.pre.stop - window.pre.start,
+                           window.post.stop - window.post.start) < sub_len:
+                        rejected[key] = 'too_few_subepochs'
+                    elif not all(np.isfinite(env[window.pre.start:window.post.stop]).all()
+                                 for env in envelopes.values()):
+                        rejected[key] = 'nonfinite_signal_or_envelope'
+                    else:
+                        valid_windows.append(window)
+                for row in rows:
+                    entry = dict(row, Channel=ch_label, Quality_State='disabled')
+                    key = (row['Event'], row['Onset_US'])
+                    if row['Status'] == 'accepted' and key in rejected:
+                        entry.update(Status='excluded', Reason=rejected[key])
+                    audit.append(entry)
+            groups = ([valid_windows] if pool_events or valid_windows is None else
+                      [[window] for window in valid_windows])
+            for group in groups:
+                res = compute_band_event_joint_mi(
+                    envelopes, onset_indices, w_samp, fs=fs,
+                    sub_sec=sub_sec, sub_step_sec=sub_step_sec,
+                    n_neighbors=n_neighbors, n_surrogates=n_surrogates,
+                    random_state=random_state, event_windows=group,
+                )
+                if res is None:
+                    for entry in audit:
+                        if (entry.get('Channel') == ch_label and entry.get('Window_Size') == w_sec
+                                and entry['Status'] == 'accepted'
+                                and (pool_events or any(w.name == entry['Event'] and
+                                     w.onset_us == entry['Onset_US'] for w in group))):
+                            entry.update(Status='excluded', Reason='too_few_subepochs')
+                    print(f'  [skip] {ch_label} @ {w_sec:g}s — too few usable sub-epochs.')
+                    continue
+                rec = {
+                    'Window_Size': float(w_sec), 'Channel': ch_label,
+                    'Joint_MI_Sum_Bits': res['sum_mi_bits'],
+                    'Joint_MI_KSG_Bits': res['joint_mi_bits'],
+                    'N_Pre': res['n_pre'], 'N_Post': res['n_post'],
+                    'K_Neighbors': res['n_neighbors'],
+                    'Quality_State': 'disabled',
+                }
+                if group is not None:
+                    rec['N_Events'] = len(group)
+                    if not pool_events:
+                        rec['Event'] = group[0].name
+                        rec['Onset_US'] = group[0].onset_us
+                for key in ('surrogate_mean_bits', 'surrogate_std_bits',
+                            'surrogate_p_value', 'surrogate_z'):
+                    if key in res:
+                        rec[key] = res[key]
+                records.append(rec)
     return pd.DataFrame.from_records(records)
 
 
@@ -2098,8 +2291,8 @@ def plot_peri_event_mi(
     if not event_onsets:
         return
     # Common relative-time grid for averaging across events.
-    grid = np.arange(-pre_sec, post_sec + 1e-9, step_sec or win_sec)
-    stack = []
+    grid = _peri_event_plot_grid(win_result, event_onsets, pre_sec, post_sec, step_sec or win_sec)
+    _, mean, sd = _peri_event_series_on_grid(win_result, event_onsets, grid, pre_sec, post_sec)
     fig, ax = plt.subplots(figsize=(11, 4.5))
     cmap = plt.get_cmap('tab10')
     for i, (name, onset_s) in enumerate(event_onsets):
@@ -2107,22 +2300,12 @@ def plot_peri_event_mi(
         sel = (rel >= -pre_sec) & (rel <= post_sec)
         if not np.any(sel):
             continue
-        ax.plot(rel[sel], mi[sel], color=cmap(i % 10), lw=1.0, alpha=0.5,
-                label=name)
-        # Resample onto the common grid for the mean curve (NaN-safe).
-        valid = sel & np.isfinite(mi)
-        if np.count_nonzero(valid) >= 2:
-            stack.append(np.interp(grid, rel[valid], mi[valid],
-                                   left=np.nan, right=np.nan))
+        groups = win_result.get('segment_id')
+        groups = np.asarray(groups)[sel] if groups is not None else None
+        ax.plot(*plot_breaks(rel[sel], mi[sel], groups), color=cmap(i % 10), lw=1.0,
+                alpha=0.5, label=name)
     ax.axvline(0.0, color='k', lw=1.2, ls='--', alpha=0.7)
-    if stack:
-        arr = np.vstack(stack)
-        with np.errstate(invalid='ignore'):
-            allnan = np.all(~np.isfinite(arr), axis=0)
-            mean = np.full(grid.shape, np.nan)
-            sd = np.full(grid.shape, np.nan)
-            mean[~allnan] = np.nanmean(arr[:, ~allnan], axis=0)
-            sd[~allnan] = np.nanstd(arr[:, ~allnan], axis=0)
+    if np.isfinite(mean).any():
         ax.plot(grid, mean, color='#111111', lw=2.5, label='event mean')
         ax.fill_between(grid, mean - sd, mean + sd, color='#111111', alpha=0.15)
     ax.set_xlabel('time relative to event onset (s)')
@@ -2146,6 +2329,18 @@ _PERI_EVENT_COLORS = (
 )
 
 
+def _peri_event_plot_grid(win_result, event_onsets, pre_sec, post_sec, step_sec):
+    """Include plotting-only gap points even when a gap is shorter than step."""
+    grid = np.arange(-pre_sec, post_sec + 1e-9, step_sec)
+    t = np.asarray(win_result['time'])
+    runs = finite_runs(win_result['joint_mi'], win_result.get('segment_id'))
+    cuts = [(t[left[-1]] + t[right[0]]) / 2 for left, right in zip(runs[:-1], runs[1:])]
+    anchors = cuts + [t[idx] for run in runs for idx in (run[0], run[-1])]
+    extra = [anchor - onset for _, onset in event_onsets for anchor in anchors
+             if -pre_sec <= anchor - onset <= post_sec]
+    return np.unique(np.r_[grid, extra])
+
+
 def _peri_event_series_on_grid(
     win_result: dict[str, np.ndarray],
     event_onsets: list[tuple[str, float]],
@@ -2163,10 +2358,19 @@ def _peri_event_series_on_grid(
     stack: list[np.ndarray] = []
     for name, onset_s in event_onsets:
         rel = t - onset_s
-        sel = (rel >= -pre_sec) & (rel <= post_sec) & np.isfinite(mi)
-        if np.count_nonzero(sel) < 2:
+        sel = (rel >= -pre_sec) & (rel <= post_sec)
+        values = np.where(sel, mi, np.nan)
+        runs = finite_runs(values, win_result.get('segment_id'))
+        if not runs:
             continue
-        series = np.interp(grid, rel[sel], mi[sel], left=np.nan, right=np.nan)
+        series = np.full(grid.shape, np.nan)
+        for run in runs:
+            if len(run) == 1:
+                exact = np.isclose(grid, rel[run[0]], rtol=0, atol=1e-9)
+                series[exact] = mi[run[0]]
+            else:
+                inside = (grid >= rel[run[0]]) & (grid <= rel[run[-1]])
+                series[inside] = np.interp(grid[inside], rel[run], mi[run])
         per_event.append((name, series))
         stack.append(series)
     if stack:
@@ -2212,11 +2416,11 @@ def plot_peri_event_mi_interactive(
     if not event_onsets:
         return False
 
-    grid = np.arange(-pre_sec, post_sec + 1e-9, step_sec or win_sec)
+    grid = _peri_event_plot_grid(win_result, event_onsets, pre_sec, post_sec, step_sec or win_sec)
     per_event, mean, sd = _peri_event_series_on_grid(
         win_result, event_onsets, grid, pre_sec, post_sec)
     if not per_event:
-        print('  [warn] no event has ≥2 in-window MI samples — no interactive plot.')
+        print('  [warn] no event has a finite in-window MI sample — no interactive plot.')
         return False
 
     # Traces: one per event, then the across-event mean (drawn last / on top).
@@ -2226,7 +2430,7 @@ def plot_peri_event_mi_interactive(
         is_mean = name == 'event mean'
         color = '#111111' if is_mean else _PERI_EVENT_COLORS[idx % len(_PERI_EVENT_COLORS)]
         return _go.Scatter(
-            x=grid[:upto], y=y[:upto], mode='lines', name=name,
+            x=grid[:upto], y=y[:upto], mode='lines', name=name, connectgaps=False,
             legendgroup=name,
             line=dict(color=color, width=3.0 if is_mean else 1.8,
                       dash='solid'),
@@ -2236,7 +2440,7 @@ def plot_peri_event_mi_interactive(
 
     base = [_scatter(i, name, y, 1) for i, (name, y) in enumerate(traces)]
     frames = [
-        _go.Frame(name=f'{grid[k]:.1f}',
+        _go.Frame(name=str(k),
                   data=[_go.Scatter(x=grid[:k + 1], y=y[:k + 1])
                         for _, y in traces])
         for k in range(grid.size)
@@ -2252,7 +2456,7 @@ def plot_peri_event_mi_interactive(
                      transition=dict(duration=0), fromcurrent=True, mode='immediate')
     slider_steps = [
         dict(method='animate', label=f'{grid[k]:.0f}',
-             args=[[f'{grid[k]:.1f}'],
+             args=[[str(k)],
                    dict(mode='immediate', frame=dict(duration=0, redraw=True),
                         transition=dict(duration=0))])
         for k in range(grid.size)
@@ -2983,7 +3187,7 @@ def _run_joint_mi_mode(args: argparse.Namespace,
                        time_us: np.ndarray,
                        data_filt: np.ndarray,
                        data_raw: np.ndarray | None,
-                       outdir: str) -> None:
+                       outdir: str, windows: WindowGrid | None = None) -> None:
     """Estimate the joint probability distribution of two channels and the
     mutual information it implies.
 
@@ -3003,6 +3207,8 @@ def _run_joint_mi_mode(args: argparse.Namespace,
     *pre-event vs onset* joint-distribution comparison is produced (CSV + bar
     plot) so the change in coupling at each event onset is quantified.
     """
+    analysis_time = time_us
+    timeline = None
     bins = args.mi_bins
     binning = args.mi_binning
     if args.denoise:
@@ -3012,7 +3218,11 @@ def _run_joint_mi_mode(args: argparse.Namespace,
         print('Denoising channels with TinyUNetV4 '
               '(4 raw ch → 2 denoised ch @200 Hz)…', flush=True)
         try:
-            chans, fs_eff = denoise_channels(data_raw, fs=args.fs)
+            from lilia.neural import denoise_with_time
+            timeline, chans = denoise_with_time(time_us, data_raw, fs=args.fs)
+            analysis_time = timeline.time_us
+            fs_eff = timeline.fs_out
+            windows = timeline.grid(args.win, args.step)
         except (RuntimeError, ValueError) as exc:
             sys.exit(f'Error: {exc}')
         if chans.shape[1] < 2:
@@ -3038,34 +3248,57 @@ def _run_joint_mi_mode(args: argparse.Namespace,
     print(f'Computing joint probability distribution & mutual information '
           f'— {label_x} vs {label_y}, bins={bins} ({binning}), fs={fs_eff:g}Hz')
 
-    joint = compute_joint_probability(sig_x, sig_y, bins=bins, binning=binning)
+    if not args.denoise and windows is None:
+        windows = build_window_grid(time_us, fs_eff, args.win, args.step)
+    if windows is not None:
+        # Summary uses each jointly finite sample once, including segment tails,
+        # in segments contributing at least one grid window. Quality masks the
+        # window series only; this descriptive population remains unmasked.
+        sample_groups = np.full(len(sig_x), -1, dtype=int)
+        contributing = set(windows.columns['segment_id'])
+        original_groups = timeline.segment_ids if timeline is not None else None
+        for sid, sl in enumerate(continuous_slices(analysis_time, fs_eff, segment_ids=original_groups)):
+            sid = int(original_groups[sl.start]) if original_groups is not None else sid
+            if sid in contributing:
+                sample_groups[sl] = sid
+        paired = np.column_stack([sig_x, sig_y]).astype(float)
+        paired[sample_groups < 0] = np.nan
+        runs = finite_runs(paired, sample_groups)
+        if not runs or sum(len(run) for run in runs) < 8:
+            raise ValueError('No finite paired population for joint MI in contributing segments')
+        selected = np.concatenate(runs)
+        pop_x, pop_y = sig_x[selected], sig_y[selected]
+        population_groups = np.concatenate([np.full(len(run), i) for i, run in enumerate(runs)])
+    else:
+        pop_x, pop_y = sig_x, sig_y
+        population_groups = None
+
+    joint = compute_joint_probability(pop_x, pop_y, bins=bins, binning=binning)
     joint['fs'] = fs_eff
     sig = compute_joint_mi_significance(
-        sig_x, sig_y, bins=bins, binning=binning, n_surrogates=args.mi_surrogates)
+        pop_x, pop_y, bins=bins, binning=binning, n_surrogates=args.mi_surrogates,
+        segment_ids=population_groups)
     win_result = compute_joint_mi_windowed(
         sig_x, sig_y, fs=fs_eff, win_sec=args.win, step_sec=args.step,
-        bins=bins, binning=binning)
+        bins=bins, binning=binning, windows=windows)
 
-    # ── Quality masking of the windowed MI series (non-denoise path only) ────────
-    # Route the same eeg_quality_v2 mask used by the band-entropy series through
-    # the zero-lag MI series so artefactual windows cannot manufacture spurious
-    # MI spikes. Skipped under --denoise (model outputs are not raw device
-    # channels, so the device-tuned quality params do not apply) and when the
-    # caller opts out or the QC modules are unavailable.
     mi_quality = None
-    if (not args.denoise) and (not args.no_quality_mask) and _QC_AVAILABLE:
+    quality_valid = np.ones(len(win_result['time']), dtype=bool)
+    signal_valid = np.isfinite(win_result['joint_mi'])
+    if (not args.denoise) and (not args.no_quality_mask):
+        if not _QC_AVAILABLE:
+            raise RuntimeError('Quality modules unavailable; explicitly use --no-quality-mask to disable scoring')
         two_ch = np.column_stack([sig_x, sig_y]).astype(float)
         mi_quality = compute_quality_windowed_aligned(
-            two_ch, fs=fs_eff, win_sec=args.win, step_sec=args.step)
-        if mi_quality.shape[0] == win_result['time'].shape[0]:
-            mmask = mi_quality < args.quality_threshold
-            _mask_low_quality(win_result, mmask, ['joint_mi', 'joint_mi_norm'])
-            print(f'  Masked {int(mmask.sum())}/{mmask.size} MI windows '
-                  f'({100.0 * mmask.mean():.1f}%) below quality '
-                  f'{args.quality_threshold:g}.')
-        else:
-            print('  [warn] MI quality-window count mismatch — skipping MI masking.')
-            mi_quality = None
+            two_ch, fs=fs_eff, win_sec=args.win, step_sec=args.step, windows=windows)
+        if mi_quality.shape != win_result['time'].shape:
+            raise ValueError('Quality window count does not match joint-MI windows')
+        quality_valid = np.isfinite(mi_quality) & (mi_quality >= args.quality_threshold)
+        _mask_low_quality(win_result, ~quality_valid, ['joint_mi', 'joint_mi_norm'])
+        print(f'  Masked {int((~quality_valid).sum())}/{quality_valid.size} MI windows '
+              f'with invalid quality or below {args.quality_threshold:g}.')
+    quality_state = 'scored' if mi_quality is not None else 'disabled'
+    print(f'  Series quality: {quality_state}; population summary and pre/onset histograms are unmasked.')
 
     basename = os.path.splitext(os.path.basename(args.csv))[0]
     stem = f'{basename}_joint_mi_{pair_suffix}'
@@ -3084,6 +3317,11 @@ def _run_joint_mi_mode(args: argparse.Namespace,
         'surrogate_n': sig['n_surrogates'], 'surrogate_mean_bits': sig['surrogate_mean'],
         'surrogate_std_bits': sig['surrogate_std'],
         'surrogate_p_value': sig['p_value'], 'surrogate_z': sig['z'],
+        'surrogate_null_method': sig['null_method'], 'surrogate_null_state': sig['null_state'],
+        'population_scope': 'finite paired samples in grid-contributing segments' if windows is not None else 'denoised samples',
+        'population_quality_state': 'disabled',
+        'population_runs': int(len(np.unique(population_groups))) if population_groups is not None else 1,
+        'excluded_samples': int(len(sig_x) - len(pop_x)),
     }
     summary_csv = os.path.join(outdir, f'{stem}_summary.csv')
     pd.DataFrame([summary]).to_csv(summary_csv, index=False)
@@ -3098,7 +3336,42 @@ def _run_joint_mi_mode(args: argparse.Namespace,
     }
     if mi_quality is not None:
         series_df['quality'] = mi_quality
-    pd.DataFrame(series_df).to_csv(series_csv, index=False)
+    series_df['quality_state'] = quality_state
+    series_df['quality_valid'] = quality_valid
+    series_df['signal_valid'] = signal_valid
+    if windows is not None:
+        code_paths = [__file__, *[os.path.join(os.path.dirname(__file__), 'lilia', name)
+                      for name in ('windowing.py', 'signal.py', 'quality.py', 'entropy_io.py', 'neural.py', 'neural_io.py')]]
+        if args.denoise:
+            code_paths.append(os.path.join(os.path.dirname(__file__), 'data_analysis.py'))
+        code_id = hashlib.sha256(''.join(file_sha256(path) for path in code_paths).encode()).hexdigest()
+        settings = {
+            'fs': fs_eff, 'channels': [1, 2] if args.denoise else list(args.joint_pair), 'win_sec': args.win,
+            'step_sec': args.step if args.step is not None else args.win,
+            'win_samples': windows.win, 'step_samples': windows.step,
+            'bandpass': [DEFAULT_BP_LOW, DEFAULT_BP_HIGH] if args.denoise else (None if args.no_bandpass else [DEFAULT_BP_LOW, DEFAULT_BP_HIGH]),
+            'quality_enabled': mi_quality is not None, 'quality_threshold': args.quality_threshold,
+            'quality_params': _QUALITY_PARAMS if mi_quality is not None else None,
+            'quality_channels': None if args.denoise else list(args.joint_pair), 'quality_reduction': 'channel median',
+            'mi_bins': bins, 'mi_binning': binning, 'denoise': bool(args.denoise),
+            'grid_policy': 'original sample grid; complete continuous windows; gap > 3 sample periods',
+            'code_sha256': code_id,
+        }
+        if timeline is not None:
+            from lilia.neural import model_provenance
+            from lilia.neural_io import write_denoised_joint_mi_table
+            settings.update(input_fs=args.fs, model_window=timeline.model_window,
+                            model_hop=timeline.model_hop, index_space='resampled_model_output',
+                            model=model_provenance(), input_channels=[1, 2, 3, 4],
+                            grid_policy='per-source-segment resampled grid; complete MI windows')
+            write_denoised_joint_mi_table(series_csv, args.csv, pd.DataFrame(series_df), windows,
+                                          settings, code_id, timeline)
+            pd.DataFrame(timeline.segments).to_csv(
+                os.path.join(outdir, f'{stem}_inference_segments.csv'), index=False)
+        else:
+            write_joint_mi_table(series_csv, args.csv, pd.DataFrame(series_df), windows, settings, code_id)
+    else:
+        pd.DataFrame(series_df).to_csv(series_csv, index=False)
     print(f'Saved: {series_csv}')
 
     # ── Plots ───────────────────────────────────────────────────────────────────
@@ -3106,14 +3379,14 @@ def _run_joint_mi_mode(args: argparse.Namespace,
     plot_joint_distribution(
         joint,
         title=(f'Joint P({label_x}, {label_y}) — {os.path.basename(args.csv)} '
-               f'[{binning}, {bins} bins]'),
+               f'[{binning}, {bins} bins; quality unmasked]'),
         outpath=heatmap_png, label_x=label_x, label_y=label_y, sig=sig)
 
     excess_png = os.path.join(outdir, f'{stem}_excess.png')
     plot_joint_excess(
         joint,
         title=(f'Excess mass P−P·P ({label_x}, {label_y}) — '
-               f'{os.path.basename(args.csv)} [{binning}, {bins} bins]'),
+               f'{os.path.basename(args.csv)} [{binning}, {bins} bins; quality unmasked]'),
         outpath=excess_png, label_x=label_x, label_y=label_y)
 
     # iBrainCenter event overlay (absolute local time) on the MI time series.
@@ -3130,14 +3403,16 @@ def _run_joint_mi_mode(args: argparse.Namespace,
         t_axis = _rel_times_to_dt(win_result['time'], t0_us)
     else:
         t_axis = win_result['time']
-    ax.plot(t_axis, win_result['joint_mi'], color='#111111', lw=1.0,
+    groups = win_result.get('segment_id')
+    ax.plot(*plot_breaks(t_axis, win_result['joint_mi'], groups), color='#111111', lw=1.0,
             alpha=0.4, label='joint MI (bits)')
-    ax.plot(t_axis, _smooth_series(win_result['joint_mi']),
+    smoothed = transform_runs(win_result['joint_mi'], _smooth_series, groups)
+    ax.plot(*plot_breaks(t_axis, smoothed, groups),
             color='#111111', lw=2.0, label='joint MI smooth')
     ax.set_ylabel('MI (bits)')
     ax.set_ylim(bottom=0.0)
     ax.set_title(f'Zero-lag mutual information — {label_x} vs {label_y} '
-                 f'(win={args.win:g}s)')
+                 f'(win={args.win:g}s; quality {quality_state})')
     ax.grid(True, alpha=0.3)
     if use_events:
         _overlay_ibrain_events(ax, t_axis[0], t_axis[-1], use_abs=True)
@@ -3158,15 +3433,21 @@ def _run_joint_mi_mode(args: argparse.Namespace,
 
     # ── Pre-event vs onset joint-distribution comparison (--ibrain-events) ───────
     if use_events:
+        event_audit = []
         events = compute_event_pre_onset_joint_mi(
             sig_x, sig_y, t0_us, fs=fs_eff, bins=bins, binning=binning, subject=args.subject,
+            time_us=analysis_time, audit=event_audit,
+            segment_ids=timeline.segment_ids if timeline is not None else None,
+            segment_end_us={r['segment_id']: r['raw_end_us'] for r in timeline.segments} if timeline is not None else None,
             n_surrogates=min(100, args.mi_surrogates) if args.mi_surrogates else 0)
+        pd.DataFrame(event_audit).to_csv(
+            os.path.join(outdir, f'{stem}_events_audit.csv'), index=False)
         if not events:
             print('  [warn] no iBrainCenter events fall within this recording — '
                   'skipping pre-event/onset comparison.')
         else:
             ev_rows = [{
-                'event': e['name'], 'onset_rel_s': e['onset_rel_s'],
+                'event': e['name'], 'onset_rel_s': e['onset_rel_s'], 'quality_state': 'disabled',
                 'pre_mi_bits': e['pre']['mutual_information'],
                 'pre_mi_mm_bits': e['pre']['mutual_information_mm'],
                 'pre_mi_norm': e['pre']['mutual_information_norm'],
@@ -3186,7 +3467,7 @@ def _run_joint_mi_mode(args: argparse.Namespace,
             events_png = os.path.join(outdir, f'{stem}_events.png')
             plot_event_pre_onset_comparison(
                 events,
-                title=f'{os.path.basename(args.csv)} [{binning}, {bins} bins]',
+                title=f'{os.path.basename(args.csv)} [{binning}, {bins} bins; quality unmasked]',
                 outpath=events_png, label_x=label_x, label_y=label_y)
 
             # Peri-event MI time course (reuses the global windowed series).
@@ -3230,85 +3511,89 @@ def _run_joint_mi_mode(args: argparse.Namespace,
 
 def _run_baseline_event_mode(args: argparse.Namespace,
                              time_us: np.ndarray,
-                             data_filt: np.ndarray,
-                             data_raw: np.ndarray | None,
+                             data_raw: np.ndarray,
                              ch_idx: int,
                              outdir: str) -> None:
-    """Run and report the baseline-vs-event band-entropy comparison.
-
-    Two sampling regimes:
-      * default     — contiguous time slices (each interval taken as-is);
-      * ``--clean``  — micro-epoch each interval and keep only artefact-free
-                       epochs (ADC-saturation + eeg_quality_v2), then average
-                       per-epoch PSDs. This is the peer-review-grade path,
-                       sharing the qEEG baseline builder's definition of clean.
-    """
-    band_names = '/'.join(name for name, _ in BAND_DEFINITIONS)
-    mode_desc = 'clean micro-epochs' if args.clean else 'contiguous slices'
-    print(
-        'Baseline-vs-event entropy '
-        f'— ch{args.ch}, win={args.win}s, step={args.step or args.win}s, '
-        f'bands={band_names}, fs={args.fs}Hz, sampling={mode_desc}\n'
-        f'  baseline = [{args.baseline[0]:g}, {args.baseline[1]:g}] s | '
-        f'event = [{args.event[0]:g}, {args.event[1]:g}] s'
-    )
-
-    if args.clean:
-        if not _QC_AVAILABLE:
-            sys.exit('Error: --clean requires plot_event_markers / eeg_quality_v2 / '
-                     'plot_tflite_summary to be importable.')
-        t0 = int(time_us[0])
-
-        def _clean_state(rng, which):
-            lo_us = t0 + int(round(float(rng[0]) * 1e6))
-            hi_us = t0 + int(round(float(rng[1]) * 1e6))
-            epochs, meta = collect_clean_epochs(
-                time_us, data_filt, data_raw, lo_us, hi_us, ch_idx,
-                fs=args.fs, epoch_sec=args.win,
-                quality_threshold=args.quality_threshold)
-            print(f'  [{which}] clean {meta["n_clean_epochs"]}/{meta["n_total_epochs"]} '
-                  f'epochs (rejected: {meta["n_saturated_epochs"]} saturated, '
-                  f'{meta["n_lowquality_epochs"]} low-quality)')
-            if not epochs:
-                sys.exit(f'Error: no clean {args.win:g}s epochs in the {which} interval '
-                         f'(try a longer interval or a lower --quality-threshold).')
-            return compute_state_entropy_from_epochs(epochs, fs=args.fs)
-
-        baseline_state = _clean_state(args.baseline, 'baseline')
-        event_state = _clean_state(args.event, 'event')
-        result = _finalise_comparison(
-            baseline_state, event_state, tuple(args.baseline), tuple(args.event))
-    else:
-        result = compare_baseline_event(
-            data_filt[:, ch_idx],
-            baseline_range=tuple(args.baseline),
-            event_range=tuple(args.event),
-            fs=args.fs,
-            win_sec=args.win,
-            step_sec=args.step,
-        )
-
-    rows = []
-    for label, state in (('baseline', result['baseline']), ('event', result['event'])):
-        row = {
-            'state': label,
-            'sampling': 'clean_epochs' if args.clean else 'contiguous',
-            'range_start_s': result[f'{label}_range'][0],
-            'range_end_s': result[f'{label}_range'][1],
-            'n_windows': state['n_windows'],
-            'pooled_entropy': state['pooled_entropy'],
-            'pooled_entropy_norm': state['pooled_entropy_norm'],
-            'mean_window_entropy': state['mean_window_entropy'],
-            'std_window_entropy': state['std_window_entropy'],
-        }
-        for name, _ in BAND_DEFINITIONS:
-            row[f'p_{name}'] = state['proportions'][name]
+    """Select complete segment-local state windows and persist every exclusion."""
+    if args.clean and args.step is not None and args.step != args.win:
+        raise ValueError('--clean uses non-overlapping epochs; --step must equal --win')
+    step = args.win if args.clean or args.step is None else args.step
+    ranges = {'baseline': list(args.baseline), 'event': list(args.event)}
+    catalogs = {name: select_state_windows(time_us, args.fs, *state_bounds(time_us, rng),
+                                          args.win, step) for name, rng in ranges.items()}
+    needed = {r['segment_id'] for a in catalogs.values() for r in a['windows'] if r['complete']}
+    # Preserve the continuous front-end and its float32 output. Full-segment
+    # zero-phase filtering uses context outside the requested state interval.
+    filtered = np.full(data_raw.shape, np.nan, dtype=np.float32)
+    failures = {}
+    for group, sl in enumerate(continuous_slices(time_us, args.fs)):
+        if group not in needed:
+            continue
+        channels = list(range(data_raw.shape[1])) if args.clean else [ch_idx]
+        values = data_raw[sl][:, channels]
+        if args.no_bandpass:
+            filtered[sl, channels] = values
+        elif not np.isfinite(values).all():
+            failures[group] = 'nonfinite_signal'
+            continue
+        else:
+            try:
+                filtered[sl, channels] = bandpass_filter(values, fs=args.fs,
+                                                        lo=DEFAULT_BP_LOW, hi=DEFAULT_BP_HIGH)
+            except ValueError:
+                failures[group] = 'filter_error'
+    states, audits, rows = {}, {}, []
+    for label, rng in ranges.items():
+        epochs, audit = _collect_state_epochs(
+            time_us, filtered, data_raw, *state_bounds(time_us, rng), ch_idx,
+            fs=args.fs, win_sec=args.win, step_sec=step, clean=args.clean,
+            quality_threshold=args.quality_threshold, segment_failures=failures)
+        audit['per_window_entropy'] = []
+        row = {'state': label, 'sampling': 'clean_epochs' if args.clean else 'segment_windows',
+               'status': 'accepted' if epochs else 'excluded_no_usable_windows',
+               'quality_state': 'enabled' if args.clean else 'disabled',
+               'range_start_s': rng[0], 'range_end_s': rng[1], 'n_windows': len(epochs)}
+        row.update({key: np.nan for key in (
+            'pooled_entropy', 'pooled_entropy_norm', 'mean_window_entropy', 'std_window_entropy',
+            *[f'{prefix}_{name}' for prefix in ('p', 'energy') for name, _ in BAND_DEFINITIONS])})
+        if epochs:
+            state = compute_state_entropy_from_epochs(epochs, fs=args.fs)
+            states[label] = state
+            audit['per_window_entropy'] = state['per_window_entropy'].tolist()
+            audit['per_window_entropy_norm'] = state['per_window_entropy_norm'].tolist()
+            for key in ('pooled_entropy', 'pooled_entropy_norm', 'mean_window_entropy', 'std_window_entropy'):
+                row[key] = state[key]
+            for name, _ in BAND_DEFINITIONS:
+                row[f'p_{name}'] = state['proportions'][name]
+                row[f'energy_{name}'] = state['energies'][name]
+        audits[label] = audit
         rows.append(row)
-
+        print(f'  [{label}] accepted {len(epochs)}/{audit["n_total_epochs"]} complete windows')
     basename = os.path.splitext(os.path.basename(args.csv))[0]
     csv_out = os.path.join(outdir, f'{basename}_baseline_event_entropy_ch{args.ch}.csv')
-    pd.DataFrame(rows).to_csv(csv_out, index=False)
-    print(f'Saved: {csv_out}')
+    parameters = {
+        'fs': args.fs, 'channel': args.ch, 'win_sec': args.win, 'step_sec': step,
+        'ranges': ranges, 'clean': args.clean, 'quality_threshold': args.quality_threshold,
+        'bandpass': None if args.no_bandpass else [DEFAULT_BP_LOW, DEFAULT_BP_HIGH],
+        'quality_channels': list(range(1, data_raw.shape[1]+1)) if args.clean else [],
+        'quality_params': _QUALITY_PARAMS if args.clean else None,
+        'saturation_fraction_max': _SAT_FRAC_MAX if args.clean else None,
+        'window_policy': 'interval_first_sample_reset_per_segment_complete_only',
+        'aggregation': 'equal_window_mean_psd_and_separate_per_window_entropy',
+        'bands': [[name, list(bounds)] for name, bounds in BAND_DEFINITIONS],
+        'welch_nperseg': None, 'welch_noverlap': None,
+    }
+    code_paths = [__file__, *[os.path.join(os.path.dirname(__file__), 'lilia', name)
+                   for name in ('windowing.py', 'state_windows.py', 'state_entropy_io.py',
+                                'signal.py', 'quality.py', 'io.py')],
+                  os.path.join(os.path.dirname(__file__), 'plot_tflite_summary.py'),
+                  os.path.join(os.path.dirname(__file__), 'plot_event_markers.py')]
+    code_id = hashlib.sha256(''.join(file_sha256(path) for path in code_paths).encode()).hexdigest()
+    write_state_entropy_table(csv_out, args.csv, pd.DataFrame(rows), parameters, audits, code_id)
+    print(f'Saved summary and window audit: {csv_out}')
+    if len(states) != 2:
+        raise ValueError('Baseline/event has no usable windows; exclusion audit saved')
+    result = _finalise_comparison(states['baseline'], states['event'], tuple(args.baseline), tuple(args.event))
 
     print('\nSummary (pooled-PSD band entropy, bits; max = log2(3) ≈ 1.585):')
     for label, state in (('baseline', result['baseline']), ('event', result['event'])):
@@ -3325,37 +3610,41 @@ def _run_baseline_event_mode(args: argparse.Namespace,
 
 
 def _resolve_event_onsets(args: argparse.Namespace, time_us: np.ndarray,
-                          n_times: int) -> list[int]:
-    """Resolve pre/post-event onset sample indices for --band-event-mi.
+                          n_times: int, *, absolute=False, audit=None) -> list:
+    """Resolve named absolute onsets, or legacy sample indices via timestamps.
 
-    With --ibrain-events every session event onset (converted from its HH:MM to
-    a sample index relative to the recording's epoch) is pooled. Otherwise a
-    single --event-onset (seconds from recording start) is used.
+    Absolute mode retains out-of-range/gap candidates for interval audit.
     """
+    if len(time_us) != n_times or not n_times:
+        raise ValueError('Timestamp and signal lengths differ or are empty')
+    segments = continuous_slices(time_us, args.fs)
+    events = []
     if args.ibrain_events:
         if not _IBRAIN_AVAILABLE:
             sys.exit('Error: --ibrain-events needs plot_event_markers (unavailable).')
-        epoch_us = int(time_us[0])
-        onsets = []
         subject = getattr(args, 'subject', None)
         if not subject:
             raise ValueError('Participant subject is required for pooled iBrainCenter events')
         for name, start_hhmm, _duration, participants in _IBRAIN_EVENTS:
+            onset_us = int(_hhmm_to_us(start_hhmm))
             if participants is not None and subject not in participants:
+                if audit is not None:
+                    audit.append(dict(Event=name, Onset_US=onset_us,
+                                      Status='excluded', Reason='not_participant'))
                 continue
-            idx = int(round((_hhmm_to_us(start_hhmm) - epoch_us) / 1e6 * args.fs))
-            if 0 <= idx < n_times:
-                onsets.append(idx)
-        if not onsets:
-            sys.exit('Error: no iBrainCenter event onset falls within the recording.')
-        print(f'  Pooling {len(onsets)} iBrainCenter event onset(s).')
-        return onsets
-    if args.event_onset is None:
-        sys.exit('Error: --band-event-mi needs --event-onset SEC (or --ibrain-events).')
-    idx = int(round(args.event_onset * args.fs))
-    if not (0 <= idx < n_times):
-        sys.exit(f'Error: --event-onset {args.event_onset:g}s is outside the recording.')
-    return [idx]
+            events.append((name, onset_us))
+    else:
+        if args.event_onset is None:
+            sys.exit('Error: --band-event-mi needs --event-onset SEC (or --ibrain-events).')
+        if not np.isfinite(args.event_onset):
+            raise ValueError('Event onset must be finite')
+        events = [('manual', int(time_us[0]) + int(round(args.event_onset * 1e6)))]
+    if absolute:
+        return events
+    period = int(round(1e6 / args.fs))
+    return [int(np.searchsorted(time_us, onset)) for _, onset in events
+            if any(int(time_us[sl.start]) <= onset < int(time_us[sl.stop - 1]) + period
+                   for sl in segments)]
 
 
 def _run_band_event_mi_mode(args: argparse.Namespace,
@@ -3373,7 +3662,8 @@ def _run_band_event_mi_mode(args: argparse.Namespace,
         sys.exit('Error: --band-event-mi requires scikit-learn (import failed).')
 
     n_times = data.shape[0]
-    onsets = _resolve_event_onsets(args, time_us, n_times)
+    audit = []
+    events = _resolve_event_onsets(args, time_us, n_times, absolute=True, audit=audit)
 
     signals: dict[str, np.ndarray] = {}
     for ch in args.band_mi_channels:
@@ -3389,12 +3679,18 @@ def _run_band_event_mi_mode(args: argparse.Namespace,
           f'surrogates={args.mi_surrogates}, fs={args.fs:g}Hz')
 
     df = run_band_event_mi_pipeline(
-        signals, onsets, fs=args.fs,
+        signals, [], fs=args.fs, time_us=time_us, events=events,
+        front_bandpass=not args.no_bandpass, audit=audit,
         windows_sec=tuple(args.mi_windows),
         sub_sec=args.mi_sub_sec, sub_step_sec=args.mi_sub_step,
         n_neighbors=3,   # KSG/KNN k; auto-capped to the smaller class per window
         n_surrogates=args.mi_surrogates,
     )
+    basename = os.path.splitext(os.path.basename(args.csv))[0]
+    audit_out = os.path.join(outdir, f'{basename}_band_event_mi_events.csv')
+    pd.DataFrame(audit).to_csv(audit_out, index=False)
+    print(f'Saved event interval audit: {audit_out}')
+    print('Quality scoring: disabled for band-event MI (see Quality_State).')
     if df.empty:
         sys.exit('Error: no window/channel produced enough sub-epochs for an MI '
                  'estimate — try larger --mi-windows or a smaller --mi-sub-sec.')
@@ -3423,10 +3719,21 @@ def main() -> None:
     _PROV['no_bandpass'] = bool(args.no_bandpass)
 
     print(f'Loading: {args.csv}')
+    if (args.baseline is None) != (args.event is None):
+        raise ValueError('--baseline and --event must be supplied together')
+    if args.baseline is not None:
+        # State mode records nonfinite exclusions; other modes retain the strict loader.
+        raw_frame = read_lilia_frame(args.csv)
+        time_us = raw_frame.iloc[:, 0].to_numpy(dtype=np.int64)
+        data_raw = raw_frame.iloc[:, 1:].to_numpy(dtype=np.float32)
+        if args.joint_mi or args.band_event_mi or args.sync_pair or args.denoise:
+            raise ValueError('Baseline/event mode cannot be combined with MI/sync/denoise modes')
+        if not 1 <= args.ch <= data_raw.shape[1]:
+            raise ValueError('Requested channel not found in raw recording')
+        _run_baseline_event_mode(args, time_us, data_raw, args.ch-1, outdir)
+        return
     time_us, data_raw = load_merged_csv(args.csv)
-    legacy_mode = args.joint_mi or args.band_event_mi or args.baseline is not None or args.event is not None
-    if legacy_mode:
-        require_continuous(time_us, args.fs, 'spectral_entropy legacy MI/baseline mode')
+    if args.band_event_mi or (args.joint_mi and args.denoise):
         windows = None
     else:
         windows = build_window_grid(time_us, args.fs, args.win, args.step)
@@ -3435,6 +3742,17 @@ def main() -> None:
         from plot_event_markers import SUBJECTS
         if args.subject not in SUBJECTS:
             raise ValueError('--ibrain-events requires --subject for unrecognized recording paths')
+
+    if args.joint_mi and args.denoise:
+        if args.no_bandpass:
+            raise ValueError('--denoise requires its trained filter pipeline; --no-bandpass is incompatible')
+        _run_joint_mi_mode(args, time_us, data_raw, data_raw, outdir)
+        return
+
+    if args.band_event_mi and not args.joint_mi:
+        # The event pipeline selects contributing segments before filtering.
+        _run_band_event_mi_mode(args, time_us, data_raw, outdir)
+        return
 
     # ── Bandpass front-end (same step as plot_tflite_summary / qEEG pipeline) ───
     # All downstream measures (band entropy AND lagged-MI synchrony) run on the
@@ -3464,19 +3782,7 @@ def main() -> None:
 
     # ── Joint-distribution / mutual-information mode ─────────────────────────────
     if args.joint_mi:
-        _run_joint_mi_mode(args, time_us, data, data_raw, outdir)
-        return
-
-    # ── Band-power × event joint-MI mode ─────────────────────────────────────────
-    if args.band_event_mi:
-        _run_band_event_mi_mode(args, time_us, data, outdir)
-        return
-
-    # ── Baseline-vs-event entropy mode ──────────────────────────────────────────
-    if (args.baseline is None) != (args.event is None):
-        sys.exit('Error: --baseline and --event must be supplied together.')
-    if args.baseline is not None:
-        _run_baseline_event_mode(args, time_us, data, data_raw, ch_idx, outdir)
+        _run_joint_mi_mode(args, time_us, data, data_raw, outdir, windows=windows)
         return
 
     sync_result = None

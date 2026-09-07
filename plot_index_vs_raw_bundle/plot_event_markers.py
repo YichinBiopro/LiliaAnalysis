@@ -24,13 +24,16 @@ import argparse
 import datetime
 import os
 import warnings
+import json
+import hashlib
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import matplotlib.dates as mdates
 import matplotlib.gridspec as gridspec
 import matplotlib.ticker as mticker
-from lilia.windowing import require_continuous
+from lilia.windowing import continuous_slices, plot_breaks, finite_runs
 import numpy as np
 import pandas as pd
 from scipy import signal
@@ -39,7 +42,10 @@ from lilia.quality import (
     get_ibrain_device_eeg_quality_v2_params,
 )
 from lilia.qeeg import compute_qeeg_indices
-from lilia.io import load_merged_csv, bandpass_filter, read_abs_time_offset as _read_abs_time_offset_shared
+from lilia.event_qeeg import analyze_recording, summarize_branch
+from lilia.event_qeeg_io import write_event_qeeg_table, json_safe
+from lilia.provenance import file_sha256
+from lilia.io import read_lilia_frame, load_merged_csv, bandpass_filter, read_abs_time_offset as _read_abs_time_offset_shared
 from lilia.time_utils import hhmm_to_local_dt, hhmm_to_utc_us, utc_us_to_local_dt
 from lilia.pathing import get_project_root
 from lilia.tflite import apply_tflite_windowed as _apply_tflite_shared
@@ -222,7 +228,7 @@ QEEG_COLORS  = ['#e6194b', '#3cb44b', '#4363d8', '#f58231']   # one per index
 
 def compute_qeeg_windowed(time_us: np.ndarray, data: np.ndarray,
                           win_sec: float = QEEG_WIN_SEC,
-                          fs: float = FS):
+                          fs: float = FS, windows=None):
     """
     Slide non-overlapping windows over *data* (N, n_ch) and compute the four
     qEEG wellness indices for each channel.
@@ -239,7 +245,10 @@ def compute_qeeg_windowed(time_us: np.ndarray, data: np.ndarray,
     q_dt   = []
     accum  = {k: [] for k in QEEG_INDICES}
 
-    for start in range(0, n - win + 1, win):
+    if windows is not None:
+        windows.validate(n, fs, win, win)
+    starts = windows.starts if windows is not None else range(0, n - win + 1, win)
+    for start in starts:
         mid_us = int(time_us[start + win // 2])
         q_dt.append(us_to_local_dt(mid_us))
         row = {k: [] for k in QEEG_INDICES}
@@ -621,6 +630,16 @@ def plot_hardy2_band_and_indices(outdir: str,
 
 # ── Plotting ───────────────────────────────────────────────────────────────────
 
+def _draw_segment_heatmap(ax, bins, values, cmap, v_abs):
+    """One physical rectangle per complete bin; recording gaps remain blank."""
+    pcm = None
+    for i, item in enumerate(bins):
+        edges = [us_to_local_dt(item['start_us']), us_to_local_dt(item['end_us'])]
+        pcm = ax.pcolormesh(mdates.date2num(edges), np.arange(5)-.5,
+                            values[:, i:i+1], cmap=cmap, vmin=-v_abs, vmax=v_abs, shading='flat')
+    return pcm
+
+
 def plot_subject(name: str, info: dict, outdir: str, ds: int,
                  base_dir: str = None, with_events: bool = True,
                  group_label: str = 'iBrainCenter',
@@ -636,66 +655,32 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
     group_label : string used in the figure title and output filename prefix
     baseline_mode : 'session-start' or 'pre-event-rest' for delta reference
     """
+    if not isinstance(ds, int) or ds < 1:
+        raise ValueError('Display downsample factor must be a positive integer')
+    if baseline_mode not in ('session-start', 'pre-event-rest'):
+        raise ValueError('Unknown baseline mode')
     if base_dir is None:
         base_dir = IBRAIN_DIR
     merged = os.path.join(base_dir, info['dir'], 'merged.csv')
+    os.makedirs(outdir, exist_ok=True)
     if not os.path.isfile(merged):
-        print(f'  [{name}] merged.csv not found — skipping')
-        return
-
-    print(f'  [{name}] loading…', end=' ', flush=True)
-    time_us_ds, data_ds = load_merged_csv(merged, downsample=ds)
-    time_us_full, data_full = load_merged_csv(merged)
-
-    require_continuous(time_us_full, FS, 'plot_event_markers.py')
+        raise FileNotFoundError(f'[{name}] merged.csv not found: {merged}')
+    print(f'  [{name}] loading and analyzing source segments…', flush=True)
+    raw_frame = read_lilia_frame(merged)
+    time_us_full = raw_frame.iloc[:, 0].to_numpy(dtype=np.int64)
+    data_full = raw_frame.iloc[:, 1:].to_numpy(dtype=np.float32)
+    result = analyze_recording(time_us_full, data_full, fs=FS, win_sec=QEEG_WIN_SEC,
+        low=BP_LOW, high=BP_HIGH, scorer=get_eeg_quality_index_v2_parametric,
+        quality_params=QUALITY_PARAMS, threshold=QUALITY_THRESHOLD,
+        model_path=TFLITE_MODEL_PATH if use_tflite else None,
+        model_fs=TFLITE_FS, model_window=TFLITE_WIN)
+    segments = continuous_slices(time_us_full, FS)
+    ds_idx = np.unique(np.concatenate([np.r_[np.arange(sl.start, sl.stop, ds), sl.stop-1]
+                                      for sl in segments]))
+    time_us_ds, data_ds = time_us_full[ds_idx], data_full[ds_idx]
+    ds_groups = np.searchsorted([sl.stop for sl in segments], ds_idx, side='right')
     t_dt = np.array([us_to_local_dt(u) for u in time_us_ds])
-    n_ch = data_ds.shape[1]
-    dur_s = (time_us_ds[-1] - time_us_ds[0]) / 1e6
-    print(f'{len(t_dt)} ds-pts, {dur_s:.0f} s  '
-          f'({t_dt[0].strftime("%H:%M:%S")} – {t_dt[-1].strftime("%H:%M:%S")})')
-
-    print(f'  [{name}] computing quality ({QUALITY_WIN_SEC:.0f}s windows)…',
-          end=' ', flush=True)
-    q_dt, q_overall = compute_quality_windowed(time_us_full, data_full,
-                                               win_sec=QUALITY_WIN_SEC)
-    print(f'{len(q_dt)} windows')
-
-    print(f'  [{name}] computing qEEG indices (BP {BP_LOW}–{BP_HIGH}Hz, {QEEG_WIN_SEC:.0f}s)…',
-          end=' ', flush=True)
-    data_filt = bandpass_filter(data_full)
-    qeeg_dt, qeeg_filt = compute_qeeg_windowed(time_us_full, data_filt)
-    print(f'{len(qeeg_dt)} windows')
-
-    # ── TFLite processing (optional) ─────────────────────────────────────────────
-    tfl_data, tfl_time_us   = None, None
-    qeeg_tfl_dt, qeeg_tfl  = None, None
-    if use_tflite and os.path.isfile(TFLITE_MODEL_PATH):
-        print(f'  [{name}] applying TFLite model (resample {FS}→{TFLITE_FS}Hz)…',
-              end=' ', flush=True)
-        try:
-            from scipy.signal import resample_poly
-            from math import gcd
-            _g   = gcd(int(TFLITE_FS), int(FS))
-            _up, _dn = int(TFLITE_FS) // _g, int(FS) // _g
-            # Downsample data_filt (N_500, 4) → (N_200, 4)
-            data_filt_200 = resample_poly(data_filt, _up, _dn, axis=0).astype(np.float32)
-            # Build matching time_us at TFLITE_FS by linear interpolation
-            t_orig = np.arange(len(data_filt))
-            t_new  = np.arange(len(data_filt_200)) * (_dn / _up)
-            tfl_time_us_full = np.interp(t_new, t_orig,
-                                         time_us_full[:len(data_filt)]).astype(np.int64)
-            tfl_raw    = apply_tflite_windowed(data_filt_200)
-            N_tfl      = len(tfl_raw)
-            tfl_time_us = tfl_time_us_full[:N_tfl]
-            tfl_data   = tfl_raw
-            print(f'{N_tfl} samples @ {TFLITE_FS}Hz ({N_tfl / TFLITE_FS:.0f}s)')
-            print(f'  [{name}] computing TFLite qEEG…', end=' ', flush=True)
-            qeeg_tfl_dt, qeeg_tfl = compute_qeeg_windowed(tfl_time_us, tfl_data,
-                                                           fs=TFLITE_FS)
-            print(f'{len(qeeg_tfl_dt)} windows')
-        except Exception as _exc:
-            print(f'\n  [{name}] TFLite skipped: {_exc}')
-            tfl_data = None
+    n_ch = data_full.shape[1]
 
     # ── Build event lists ────────────────────────────────────────────────────────
     evt_patches, evt_list, cone_stage_dt = [], [], []
@@ -718,193 +703,73 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
                             if with_events and baseline_mode == 'pre-event-rest'
                             else [])
 
-    # ── Derived data ─────────────────────────────────────────────────────────────
-    # Quality arrays
-    q_arr    = np.array(q_dt) if q_dt else np.array([])
-    q_median = np.median(q_overall, axis=1)
-    q_p25    = np.percentile(q_overall, 25, axis=1)
-    q_p75    = np.percentile(q_overall, 75, axis=1)
-    low_qual = q_median < QUALITY_THRESHOLD
-
-    INDEX_KEYS  = ['focus', 'flow', 'calm', 'relaxation']
-    IDX_LABELS  = ['Focus', 'Flow', 'Calm', 'Relax']
-    IDX_COLORS  = {'focus':       '#e6194b', 'flow':        '#3cb44b',
-                   'calm':        '#4363d8', 'relaxation':  '#f58231',
-                   'restfulness': '#6f42c1', 'engagement':  '#00a6c8'}
-    qeeg_t_arr = np.array(qeeg_dt)
-
-    # quality mask (1-to-1 with 5s qEEG windows): preserve the known overlap,
-    # default any unmatched tail windows to good rather than discarding all flags.
-    n_q, n_hm = len(q_median), qeeg_filt[INDEX_KEYS[0]].shape[0]
-    qual_mask  = np.zeros(n_hm, dtype=bool)
-    qual_mask[:min(n_q, n_hm)] = low_qual[:min(n_q, n_hm)]
-
-    # ── 5s channel-median series (quality-masked) for smooth trend ────────────
-    SMOOTH_WIN = max(1, int(30.0 / QEEG_WIN_SEC))   # 6 × 5s = 30s
-    smooth_trend = {}
-    for k in INDEX_KEYS:
-        series = np.where(qual_mask, np.nan, np.median(qeeg_filt[k], axis=1))
-        smooth_trend[k] = (pd.Series(series)
-                           .rolling(SMOOTH_WIN, center=True, min_periods=1)
-                           .mean().to_numpy())
-    smooth_trend['restfulness'] = (smooth_trend['calm'] + smooth_trend['relaxation']) / 2
-    smooth_trend['engagement']  = smooth_trend['focus'] - smooth_trend['restfulness']
-
-    # ── Heatmap: bin into 30s medians, then Δ vs baseline ────────────────────
-    HEATMAP_BIN_SEC = 30
-    bin_size = max(1, int(HEATMAP_BIN_SEC / QEEG_WIN_SEC))   # = 6 windows
-    n_bins   = n_hm // bin_size
-    bin_t    = []
-    heatmap_abs = np.full((4, n_bins), np.nan)
-    for b in range(n_bins):
-        sl    = slice(b * bin_size, (b + 1) * bin_size)
-        good  = ~qual_mask[sl]
-        mid   = qeeg_t_arr[b * bin_size + bin_size // 2]
-        bin_t.append(mid)
-        for idx_i, k in enumerate(INDEX_KEYS):
-            vals = np.median(qeeg_filt[k][sl], axis=1)   # per-window ch median
-            gv   = vals[good]
-            if gv.size > 0:
-                heatmap_abs[idx_i, b] = float(np.median(gv))
-
-    bin_t_arr = np.array(bin_t)
-    # baseline = session start or each event's immediately preceding rest span
-    if with_events and participating_events and baseline_mode == 'pre-event-rest':
-        heatmap_delta = _piecewise_event_delta(bin_t_arr, heatmap_abs,
-                                              pre_event_rest_specs)
-    else:
-        heatmap_delta = np.full_like(heatmap_abs, np.nan)
-        if with_events and participating_events:
-            first_evt_dt  = min(e[0] for e in participating_events)
-            bl_mask_bin   = bin_t_arr < first_evt_dt
-        else:
-            bl_mask_bin   = np.zeros(n_bins, dtype=bool)
-            bl_mask_bin[:max(1, n_bins // 5)] = True
-        for idx_i in range(4):
-            bl_vals = heatmap_abs[idx_i, bl_mask_bin]
-            bl_ref  = float(np.nanmedian(bl_vals)) if np.any(~np.isnan(bl_vals)) else 0.0
-            heatmap_delta[idx_i] = heatmap_abs[idx_i] - bl_ref
-    if (np.all(np.isnan(heatmap_delta)) and n_bins > 0):
-        bl_mask_bin   = np.zeros(n_bins, dtype=bool)
-        bl_mask_bin[:max(1, n_bins // 5)] = True
-        for idx_i in range(4):
-            bl_vals = heatmap_abs[idx_i, bl_mask_bin]
-            bl_ref  = float(np.nanmedian(bl_vals)) if np.any(~np.isnan(bl_vals)) else 0.0
-            heatmap_delta[idx_i] = heatmap_abs[idx_i] - bl_ref
-    heatmap_delta_ma = np.ma.masked_invalid(heatmap_delta)
-
-    # ── Block-level delta bar chart (quality-masked) ──────────────────────────
-    block_deltas = []
-    if with_events and len(participating_events) > 0 and len(qeeg_t_arr) > 0:
-        good_qual     = ~qual_mask
-        baseline_specs = (pre_event_rest_specs if baseline_mode == 'pre-event-rest'
-                          else [(start_dt, end_dt, label, color, None, start_dt)
-                                for (start_dt, end_dt, label, color) in participating_events])
-        for (start_dt, end_dt, label, color, bl_start, bl_end) in baseline_specs:
-            block_mask = (qeeg_t_arr >= start_dt) & (qeeg_t_arr < end_dt) & good_qual
-            baseline_mask = _time_mask(qeeg_t_arr, bl_start, bl_end) & good_qual
-            if baseline_mode == 'pre-event-rest' and baseline_mask.sum() == 0:
-                baseline_mask = (qeeg_t_arr < start_dt) & good_qual
-            per_index  = {}
-            for k in INDEX_KEYS:
-                scores = qeeg_filt[k]
-                if baseline_mask.sum() > 0 and block_mask.sum() > 0:
-                    bl   = scores[baseline_mask].mean(axis=0)
-                    blk  = scores[block_mask].mean(axis=0)
-                    ch_d = blk - bl
-                    per_index[k] = (float(ch_d.mean()), float(ch_d.std()))
-                else:
-                    per_index[k] = (0.0, 0.0)
-            block_deltas.append((label, color, per_index))
-
-    # ── TFLite derived data ───────────────────────────────────────────────────────
-    has_tflite        = (qeeg_tfl is not None and len(qeeg_tfl_dt) > 0)
-    tfl_t_arr         = np.array(qeeg_tfl_dt) if has_tflite else np.array([])
-    tfl_smooth_trend  = {}
-    tfl_heatmap_delta = None
-    tfl_heatmap_delta_ma = None
-    tfl_bin_t_arr     = np.array([])
-    n_tfl_bins        = 0
-    tfl_block_deltas  = []
-
-    if has_tflite:
-        n_tfl_hm = qeeg_tfl[INDEX_KEYS[0]].shape[0]
-        n_tfl_q  = len(q_median)
-        tfl_qual_mask = np.zeros(n_tfl_hm, dtype=bool)
-        tfl_qual_mask[:min(n_tfl_q, n_tfl_hm)] = low_qual[:min(n_tfl_q, n_tfl_hm)]
-
-        for k in INDEX_KEYS:
-            series = np.where(tfl_qual_mask, np.nan,
-                              np.median(qeeg_tfl[k], axis=1))
-            tfl_smooth_trend[k] = (pd.Series(series)
-                                   .rolling(SMOOTH_WIN, center=True, min_periods=1)
-                                   .mean().to_numpy())
-        tfl_smooth_trend['restfulness'] = (tfl_smooth_trend['calm'] +
-                                           tfl_smooth_trend['relaxation']) / 2
-        tfl_smooth_trend['engagement']  = (tfl_smooth_trend['focus'] -
-                                           tfl_smooth_trend['restfulness'])
-
-        n_tfl_bins    = n_tfl_hm // bin_size
-        tfl_bin_t_list = []
-        tfl_heatmap_abs = np.full((4, n_tfl_bins), np.nan)
-        for b in range(n_tfl_bins):
-            sl   = slice(b * bin_size, (b + 1) * bin_size)
-            good = ~tfl_qual_mask[sl]
-            mid  = tfl_t_arr[b * bin_size + bin_size // 2]
-            tfl_bin_t_list.append(mid)
-            for idx_i, k in enumerate(INDEX_KEYS):
-                vals = np.median(qeeg_tfl[k][sl], axis=1)
-                gv   = vals[good]
-                if gv.size > 0:
-                    tfl_heatmap_abs[idx_i, b] = float(np.median(gv))
-        tfl_bin_t_arr = np.array(tfl_bin_t_list)
-
-        if with_events and participating_events and baseline_mode == 'pre-event-rest':
-            tfl_heatmap_delta = _piecewise_event_delta(tfl_bin_t_arr, tfl_heatmap_abs,
-                                                      pre_event_rest_specs)
-        else:
-            tfl_heatmap_delta = np.full_like(tfl_heatmap_abs, np.nan)
-            if with_events and participating_events:
-                first_evt_dt = min(e[0] for e in participating_events)
-                tfl_bl_mask  = tfl_bin_t_arr < first_evt_dt
-            else:
-                tfl_bl_mask = np.zeros(n_tfl_bins, dtype=bool)
-                tfl_bl_mask[:max(1, n_tfl_bins // 5)] = True
-            for idx_i in range(4):
-                bl_vals = tfl_heatmap_abs[idx_i, tfl_bl_mask]
-                bl_ref  = float(np.nanmedian(bl_vals)) if np.any(~np.isnan(bl_vals)) else 0.0
-                tfl_heatmap_delta[idx_i] = tfl_heatmap_abs[idx_i] - bl_ref
-        if (np.all(np.isnan(tfl_heatmap_delta)) and n_tfl_bins > 0):
-            tfl_bl_mask = np.zeros(n_tfl_bins, dtype=bool)
-            tfl_bl_mask[:max(1, n_tfl_bins // 5)] = True
-            for idx_i in range(4):
-                bl_vals = tfl_heatmap_abs[idx_i, tfl_bl_mask]
-                bl_ref  = float(np.nanmedian(bl_vals)) if np.any(~np.isnan(bl_vals)) else 0.0
-                tfl_heatmap_delta[idx_i] = tfl_heatmap_abs[idx_i] - bl_ref
-        tfl_heatmap_delta_ma = np.ma.masked_invalid(tfl_heatmap_delta)
-
-        if with_events and len(participating_events) > 0:
-            good_qual_tfl     = ~tfl_qual_mask
-            baseline_specs_tfl = (pre_event_rest_specs if baseline_mode == 'pre-event-rest'
-                                  else [(start_dt, end_dt, label, color, None, start_dt)
-                                        for (start_dt, end_dt, label, color) in participating_events])
-            for (start_dt, end_dt, label, color, bl_start, bl_end) in baseline_specs_tfl:
-                block_mask_tfl = ((tfl_t_arr >= start_dt) & (tfl_t_arr < end_dt)
-                                  & good_qual_tfl)
-                baseline_mask_tfl = _time_mask(tfl_t_arr, bl_start, bl_end) & good_qual_tfl
-                if baseline_mode == 'pre-event-rest' and baseline_mask_tfl.sum() == 0:
-                    baseline_mask_tfl = (tfl_t_arr < start_dt) & good_qual_tfl
-                per_index = {}
-                for k in INDEX_KEYS:
-                    scores = qeeg_tfl[k]
-                    if baseline_mask_tfl.sum() > 0 and block_mask_tfl.sum() > 0:
-                        bl   = scores[baseline_mask_tfl].mean(axis=0)
-                        blk  = scores[block_mask_tfl].mean(axis=0)
-                        ch_d = blk - bl
-                        per_index[k] = (float(ch_d.mean()), float(ch_d.std()))
-                    else:
-                        per_index[k] = (0.0, 0.0)
-                tfl_block_deltas.append((label, color, per_index))
+    events = [{'start_us': hhmm_to_us(hhmm), 'end_us': hhmm_to_us(hhmm)+int(dur*60e6),
+               'label': label, 'color': EVT_COLORS[i % len(EVT_COLORS)],
+               'participates': participants is None or name in participants}
+              for i, (label, hhmm, dur, participants) in enumerate(EVENTS)] if with_events else []
+    code_paths = [Path(__file__), *sorted((Path(__file__).parent / 'lilia').glob('*.py'))]
+    code_id = hashlib.sha256(''.join(file_sha256(p) for p in code_paths).encode()).hexdigest()
+    suffix = '_tflite' if use_tflite else '_bp'
+    baseline_tag = baseline_mode.replace('-', '_') if with_events else 'session_start'
+    stem = os.path.join(outdir, f'{name}_{info["sn"]}_eeg{suffix}_{baseline_tag}')
+    analysis = {'source_id': file_sha256(merged), 'code_sha256': code_id,
+                'source_samples': len(time_us_full), 'source_epoch_us': int(time_us_full[0]),
+                'segments': result['segments'], 'errors': result['errors'],
+                'events': events, 'baseline_mode': baseline_mode, 'branches': {}}
+    for branch_name in ('bp', 'tflite'):
+        branch = result[branch_name]
+        if branch is None:
+            continue
+        branch['summary'] = summarize_branch(branch, events, baseline_mode)
+        parameters = {'fs': FS if branch_name == 'bp' else TFLITE_FS,
+            'input_fs': FS, 'win_sec': QEEG_WIN_SEC, 'step_sec': QEEG_WIN_SEC,
+            'index_space': 'raw_samples' if branch_name == 'bp' else 'retained_tflite_output',
+            'bandpass': [BP_LOW, BP_HIGH], 'quality_params': QUALITY_PARAMS,
+            'quality_threshold': QUALITY_THRESHOLD, 'quality_source': 'raw_all_channels_same_physical_interval',
+            'quality_channels': n_ch, 'metric_channels': branch['scores']['focus'].shape[1],
+            'baseline_mode': baseline_mode, 'events': events,
+            'selection_policy': 'complete_containment', 'heatmap_bin_windows': 6,
+            'bar_aggregation': 'mean_per_channel_delta_then_channel_mean_std',
+            'heatmap_aggregation': 'median_window_channel_medians',
+            'model_window': TFLITE_WIN if branch_name == 'tflite' else None,
+            'model_sha256': file_sha256(TFLITE_MODEL_PATH) if branch_name == 'tflite' else None}
+        table = stem + f'_{branch_name}_metrics.csv'
+        write_event_qeeg_table(table, merged, branch, parameters, code_id,
+                              result['timeline'] if branch_name == 'tflite' else None)
+        analysis['branches'][branch_name] = {'table': os.path.basename(table),
+            'table_sha256': file_sha256(table), 'valid_windows': int(branch['valid'].sum()),
+            'total_windows': len(branch['grid'].starts), 'summary': branch['summary']}
+    if result['timeline'] is not None:
+        analysis['inference'] = result['timeline'].metadata()
+    audit_path = stem + '_analysis.json'
+    Path(audit_path).write_text(json.dumps(json_safe(analysis), indent=2, allow_nan=False)+'\n')
+    if result['bp'] is None or not result['bp']['valid'].any():
+        raise ValueError(f'No quality-valid BP qEEG windows; audit saved: {audit_path}')
+    bp = result['bp']
+    q_overall = bp['quality']
+    q_arr = np.array([us_to_local_dt(u) for u in bp['grid'].columns['window_center_us']])
+    q_median, q_p25, q_p75 = np.median(q_overall, axis=1), np.percentile(q_overall,25,axis=1), np.percentile(q_overall,75,axis=1)
+    low_qual = ~bp['valid']
+    bp_groups = bp['grid'].columns['segment_id']
+    INDEX_KEYS = ['focus', 'flow', 'calm', 'relaxation']
+    IDX_LABELS = ['Focus', 'Flow', 'Calm', 'Relax']
+    IDX_COLORS = {'focus': '#e6194b', 'flow': '#3cb44b', 'calm': '#4363d8',
+                  'relaxation': '#f58231', 'restfulness': '#6f42c1', 'engagement': '#00a6c8'}
+    qeeg_t_arr = q_arr
+    smooth_trend = bp['summary']['smooth']
+    heatmap_delta_ma = np.ma.masked_invalid(bp['summary']['heatmap_delta'])
+    n_bins = len(bp['summary']['bins'])
+    block_deltas = bp['summary']['block_deltas']
+    tfl = result['tflite']
+    has_tflite = tfl is not None and tfl['valid'].any()
+    tfl_t_arr = np.array([us_to_local_dt(u) for u in tfl['grid'].columns['window_center_us']]) if has_tflite else np.array([])
+    tfl_smooth_trend = tfl['summary']['smooth'] if has_tflite else {}
+    tfl_heatmap_delta_ma = np.ma.masked_invalid(tfl['summary']['heatmap_delta']) if has_tflite else None
+    n_tfl_bins = len(tfl['summary']['bins']) if has_tflite else 0
+    tfl_block_deltas = tfl['summary']['block_deltas'] if has_tflite else []
+    if use_tflite and not has_tflite and not result['errors']:
+        result['errors'].append('No quality-valid TFLite qEEG windows')
+        Path(audit_path).write_text(json.dumps(json_safe(analysis), indent=2, allow_nan=False)+'\n')
 
     # ── Figure layout (GridSpec) ──────────────────────────────────────────────
     has_bar     = bool(block_deltas)
@@ -920,7 +785,7 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
     n_rows = len(height_ratios)
     fig = plt.figure(figsize=(22, sum(hr * 0.85 for hr in height_ratios) + 1.8))
     gs  = gridspec.GridSpec(n_rows, 1, figure=fig,
-                            height_ratios=height_ratios, hspace=0.32)
+                            height_ratios=height_ratios, hspace=0.65, top=0.95, bottom=0.12)
 
     ax_eeg = []
     for ch_i in range(n_ch):
@@ -947,7 +812,7 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
     evt_note = 'Event Marker Verification' if with_events else 'EEG Overview'
     fig.suptitle(
         f'{group_label} — {info["sn"]}  |  {evt_note}{tflite_note}\n'
-        f'EEG (ds×{ds}=1 pt/s)  |  Quality: flat+spectrum, '
+        f'EEG display: every {ds} samples plus segment endpoints  |  Raw quality: flat+spectrum, '
         f'{QUALITY_WIN_SEC:.0f}s windows @ {FS}Hz  |  '
         f'qEEG: BP {BP_LOW}–{BP_HIGH}Hz, ch median, {QEEG_WIN_SEC:.0f}s windows',
         fontsize=12, fontweight='bold',
@@ -958,13 +823,13 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
         'Indices from relative band powers — Theta 4–8 Hz, Alpha 8–13 Hz, '
         'Beta 13–30 Hz.   Focus: Beta↑ vs Alpha/Theta · Calm/Relax: '
         'Alpha/Theta↑ vs Beta · Flow: Alpha–Theta synchrony.   '
-        'Gray heatmap cells = qEEG not computed (low-quality / artifact windows).',
+        'Gray cells = unavailable delta (quality / missing baseline); blank spans = recording gaps. Bar error bars show channel SD.',
         ha='center', va='bottom', fontsize=7, color='#555555',
     )
 
     # ── EEG panels ───────────────────────────────────────────────────────────────
     for ch_i, ax in enumerate(ax_eeg):
-        ax.plot(t_dt, data_ds[:, ch_i], color='#444444', lw=0.4, alpha=0.8)
+        ax.plot(*plot_breaks(t_dt, data_ds[:, ch_i], ds_groups), color='#444444', lw=0.4, alpha=0.8)
         _overlay_events(ax, evt_list, cone_stage_dt)
         ax.set_ylim(-150, 150)
         ax.set_ylabel(f'ch{ch_i+1}\n(µV)', fontsize=8)
@@ -980,16 +845,13 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
 
     # ── Layer 1: Quality panel ────────────────────────────────────────────────────
     if len(q_arr) > 0:
-        ax_quality.fill_between(q_arr, q_p25, q_p75,
-                                alpha=0.22, color='steelblue',
-                                label='IQR (ch 25–75%)')
-        ax_quality.plot(q_arr, q_median,
-                        color='#1a1a1a', lw=1.5, label='ch median')
-        ax_quality.fill_between(q_arr, 0, 1.05, where=low_qual,
-                                color='red', alpha=0.18,
-                                label='below threshold')
-        ax_quality.axhline(QUALITY_THRESHOLD, color='k', lw=0.8,
-                           ls='--', alpha=0.5,
+        for run in finite_runs(q_overall, bp_groups):
+            ax_quality.fill_between(q_arr[run], q_p25[run], q_p75[run], alpha=0.22, color='steelblue')
+        ax_quality.plot(*plot_breaks(q_arr, q_median, bp_groups), color='#1a1a1a', lw=1.5, label='ch median')
+        for i in np.flatnonzero(low_qual):
+            ax_quality.axvspan(us_to_local_dt(bp['grid'].columns['window_start_us'][i]),
+                               us_to_local_dt(bp['grid'].columns['window_end_us'][i]), color='red', alpha=.18)
+        ax_quality.axhline(QUALITY_THRESHOLD, color='k', lw=.8, ls='--', alpha=.5,
                            label=f'threshold {QUALITY_THRESHOLD:.2f}')
     _overlay_events(ax_quality, evt_list, cone_stage_dt)
     ax_quality.set_ylim(0, 1.05)
@@ -1003,17 +865,8 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
         cmap_hm = LinearSegmentedColormap.from_list(
             'OrgPur', ['#5e3c99', '#f7f7f7', '#e66101'])
         cmap_hm.set_bad(color='#aaaaaa')
-        bin_t_num  = mdates.date2num(bin_t_arr)
-        dt_h       = (float(np.diff(bin_t_num).mean()) / 2) if n_bins > 1 \
-                     else (HEATMAP_BIN_SEC / 86400 / 2)
-        t_edges    = np.concatenate([[bin_t_num[0] - dt_h],
-                                     (bin_t_num[:-1] + bin_t_num[1:]) / 2,
-                                     [bin_t_num[-1] + dt_h]])
-        y_edges    = np.arange(5) - 0.5
-        v_abs      = HEATMAP_DELTA_VABS
-        pcm = ax_heatmap.pcolormesh(t_edges, y_edges, heatmap_delta_ma,
-                                    cmap=cmap_hm, vmin=-v_abs, vmax=v_abs,
-                                    shading='flat')
+        v_abs = HEATMAP_DELTA_VABS
+        pcm = _draw_segment_heatmap(ax_heatmap, bp['summary']['bins'], heatmap_delta_ma, cmap_hm, v_abs)
         cbar = plt.colorbar(pcm, ax=ax_heatmap, pad=0.012, fraction=0.015)
         cbar.set_label(f'Δ Index  (−{v_abs:.1f} → +{v_abs:.1f})', labelpad=12)
         cbar.ax.tick_params(pad=4)
@@ -1039,7 +892,7 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
     TREND_LS     = ['-', '--', ':']
     if len(qeeg_t_arr) > 0:
         for k, lbl, lw, ls in zip(TREND_KEYS, TREND_LABELS, TREND_LW, TREND_LS):
-            ax_trend.plot(qeeg_t_arr, smooth_trend[k],
+            ax_trend.plot(*plot_breaks(qeeg_t_arr, smooth_trend[k], bp_groups),
                           color=IDX_COLORS[k], lw=lw, ls=ls, alpha=0.92,
                           label=lbl)
         ax_trend.axhline(0, color='k', lw=0.5, ls=':')
@@ -1047,7 +900,7 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
             _draw_baseline_spans(ax_trend, qeeg_t_arr, baseline_mode,
                                  participating_events, pre_event_rest_specs)
     _overlay_events(ax_trend, evt_list, cone_stage_dt)
-    ax_trend.set_ylim(-1.1, 1.1)
+    ax_trend.margins(y=.1)
     ax_trend.set_ylabel('Summary\n(30s smooth)', fontsize=8)
     ax_trend.legend(loc='upper right', fontsize=8, ncol=3,
                     framealpha=0.85, handlelength=2.8)
@@ -1060,17 +913,8 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
             cmap_hm2 = LinearSegmentedColormap.from_list(
                 'OrgPur', ['#5e3c99', '#f7f7f7', '#e66101'])
             cmap_hm2.set_bad(color='#aaaaaa')
-            tfl_bin_t_num = mdates.date2num(tfl_bin_t_arr)
-            dt_h2 = (float(np.diff(tfl_bin_t_num).mean()) / 2) if n_tfl_bins > 1 \
-                     else (HEATMAP_BIN_SEC / 86400 / 2)
-            t_edges2 = np.concatenate([[tfl_bin_t_num[0] - dt_h2],
-                                        (tfl_bin_t_num[:-1] + tfl_bin_t_num[1:]) / 2,
-                                        [tfl_bin_t_num[-1] + dt_h2]])
-            y_edges2 = np.arange(5) - 0.5
-            v_abs2   = HEATMAP_DELTA_VABS
-            pcm2 = ax_tfl_heatmap.pcolormesh(t_edges2, y_edges2, tfl_heatmap_delta_ma,
-                                              cmap=cmap_hm2, vmin=-v_abs2, vmax=v_abs2,
-                                              shading='flat')
+            v_abs2 = HEATMAP_DELTA_VABS
+            pcm2 = _draw_segment_heatmap(ax_tfl_heatmap, tfl['summary']['bins'], tfl_heatmap_delta_ma, cmap_hm2, v_abs2)
             cbar2 = plt.colorbar(pcm2, ax=ax_tfl_heatmap, pad=0.012, fraction=0.015)
             cbar2.set_label(f'Δ Index  (−{v_abs2:.1f} → +{v_abs2:.1f})', labelpad=12)
             cbar2.ax.tick_params(pad=4)
@@ -1092,7 +936,7 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
     if ax_tfl_trend is not None:
         if len(tfl_t_arr) > 0:
             for k, lbl, lw, ls in zip(TREND_KEYS, TREND_LABELS, TREND_LW, TREND_LS):
-                ax_tfl_trend.plot(tfl_t_arr, tfl_smooth_trend[k],
+                ax_tfl_trend.plot(*plot_breaks(tfl_t_arr, tfl_smooth_trend[k], tfl['grid'].columns['segment_id']),
                                   color=IDX_COLORS[k], lw=lw, ls=ls, alpha=0.92,
                                   label=lbl)
             ax_tfl_trend.axhline(0, color='k', lw=0.5, ls=':')
@@ -1100,7 +944,7 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
                 _draw_baseline_spans(ax_tfl_trend, tfl_t_arr, baseline_mode,
                                      participating_events, pre_event_rest_specs)
         _overlay_events(ax_tfl_trend, evt_list, cone_stage_dt)
-        ax_tfl_trend.set_ylim(-1.1, 1.1)
+        ax_tfl_trend.margins(y=.1)
         ax_tfl_trend.set_ylabel('TFLite Summary\n(30s smooth)', fontsize=8)
         ax_tfl_trend.legend(loc='upper right', fontsize=8, ncol=3,
                             framealpha=0.85, handlelength=2.8)
@@ -1117,11 +961,12 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
             ax_bar.bar(np.arange(n_evt) + x_off, means, width=bar_w,
                        color=IDX_COLORS[idx_name], alpha=0.82,
                        label=idx_name.capitalize(),
-                       yerr=stds, capsize=3,
+                       yerr=np.nan_to_num(stds, nan=0.0), capsize=3,
                        error_kw={'lw': 1.0}, zorder=3)
         ax_bar.axhline(0, color='k', lw=0.8)
         ax_bar.set_xticks(np.arange(n_evt))
-        ax_bar.set_xticklabels([bd[0] for bd in block_deltas],
+        ax_bar.set_xticklabels([bd[0] + ('\n(no baseline/event)' if not np.isfinite(bd[2]['focus'][0]) else '')
+                                for bd in block_deltas],
                                rotation=25, ha='right', fontsize=8)
         ax_bar.set_ylabel('BP Δ Index\n(vs baseline)', fontsize=8)
         ax_bar.set_xlabel('Event Block', fontsize=9)
@@ -1141,11 +986,12 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
             ax_tfl_bar.bar(np.arange(n_evt_t) + x_off, means, width=bar_w_t,
                            color=IDX_COLORS[idx_name], alpha=0.82,
                            label=idx_name.capitalize(),
-                           yerr=stds, capsize=3,
+                           yerr=np.nan_to_num(stds, nan=0.0), capsize=3,
                            error_kw={'lw': 1.0}, zorder=3)
         ax_tfl_bar.axhline(0, color='k', lw=0.8)
         ax_tfl_bar.set_xticks(np.arange(n_evt_t))
-        ax_tfl_bar.set_xticklabels([bd[0] for bd in tfl_block_deltas],
+        ax_tfl_bar.set_xticklabels([bd[0] + ('\n(no baseline/event)' if not np.isfinite(bd[2]['focus'][0]) else '')
+                                    for bd in tfl_block_deltas],
                                    rotation=25, ha='right', fontsize=8)
         ax_tfl_bar.set_ylabel('TFLite Δ Index\n(vs baseline)', fontsize=8)
         ax_tfl_bar.set_xlabel('Event Block', fontsize=9)
@@ -1177,6 +1023,10 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
     fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
     print(f'       → {outpath}')
+    if result['errors']:
+        raise ValueError('; '.join(result['errors']) + f'; partial outputs and audit saved: {audit_path}')
+    return analysis
+
 
 
 # ── CLI ────────────────────────────────────────────────────────────────────────
@@ -1225,21 +1075,23 @@ def main():
         us = hhmm_to_us(hhmm)
         print(f'  {hhmm}  {label:<26s}  {us}')
 
-    print(f'\n── iBrainCenter → {args.ibrain_outdir}')
-    for name, info in SUBJECTS.items():
-        plot_subject(name, info, args.ibrain_outdir, args.ds,
-                     base_dir=IBRAIN_DIR, with_events=True,
-                     group_label='iBrainCenter',
-                     use_tflite=not args.no_tflite,
-                     baseline_mode=args.ibrain_baseline_mode)
-
-    print(f'\n── YoGa → {args.yoga_outdir}')
-    for name, info in YOGA_SUBJECTS.items():
-        plot_subject(name, info, args.yoga_outdir, args.ds,
-                     base_dir=YOGA_DIR, with_events=False,
-                     group_label='YoGa',
-                     use_tflite=not args.no_tflite,
-                     baseline_mode='session-start')
+    failures = []
+    for registry, base_dir, outdir, with_events, group_label, baseline_mode in (
+        (SUBJECTS, IBRAIN_DIR, args.ibrain_outdir, True, 'iBrainCenter', args.ibrain_baseline_mode),
+        (YOGA_SUBJECTS, YOGA_DIR, args.yoga_outdir, False, 'YoGa', 'session-start')):
+        print(f'\n── {group_label} → {outdir}')
+        for name, info in registry.items():
+            try:
+                plot_subject(name, info, outdir, args.ds, base_dir=base_dir,
+                    with_events=with_events, group_label=group_label,
+                    use_tflite=not args.no_tflite, baseline_mode=baseline_mode)
+            except (ValueError, OSError, RuntimeError) as exc:
+                failures.append({'group': group_label, 'subject': name, 'error': str(exc)})
+                print(f'  FAILED [{group_label}/{name}]: {exc}')
+    failure_path = os.path.join(args.ibrain_outdir, 'event_markers_failures.json')
+    Path(failure_path).write_text(json.dumps(failures, indent=2)+'\n')
+    if failures:
+        raise SystemExit(f'{len(failures)} subject analyses failed; see {failure_path}')
 
     print('\nDone.')
 

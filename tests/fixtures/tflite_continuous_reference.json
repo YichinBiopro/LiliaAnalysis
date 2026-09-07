@@ -1,0 +1,50 @@
+{
+  "seed": 631,
+  "shape": [
+    16000,
+    4
+  ],
+  "fs": 500,
+  "model_sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+  "source_sha256": "47c929d5b89bff7cf73940b75d18bd44c614eb815ba0bdbf9435287b19a5d216",
+  "old_baseline": {
+    "relaxation": [
+      0.25381321833650106,
+      0.1790813995398865
+    ],
+    "calm": [
+      -0.5482080313770522,
+      -0.612297977037521
+    ],
+    "flow": [
+      -0.587792843486194,
+      -0.6537228715226265
+    ],
+    "focus": [
+      0.45821695050467975,
+      0.5196165440901318
+    ]
+  },
+  "old_selection": {
+    "label": "session",
+    "n_total_epochs": 32,
+    "n_saturated_epochs": 0,
+    "n_clean_epochs": 32,
+    "n_selected": 10,
+    "required_sec": 10.0,
+    "selected_starts_us": [
+      2000000,
+      3000000,
+      6000000,
+      11000000,
+      16000000,
+      18000000,
+      20000000,
+      24000000,
+      26000000,
+      28000000
+    ],
+    "random_seed": 42
+  },
+  "quality_fixture": "all four raw channels return quality 1; no saturation"
+}

@@ -1,0 +1,69 @@
+{
+  "reference_commit": "c76bc43",
+  "seed": 314,
+  "shape": [
+    6000,
+    2
+  ],
+  "fs": 200,
+  "onset_sec": 15,
+  "windows_sec": [
+    5,
+    10
+  ],
+  "n_surrogates": 5,
+  "records": [
+    {
+      "Window_Size": 5.0,
+      "Channel": "ch1",
+      "Joint_MI_Sum_Bits": 0.07356925486065204,
+      "Joint_MI_KSG_Bits": 0.04166550089005575,
+      "N_Pre": 9,
+      "N_Post": 9,
+      "K_Neighbors": 3,
+      "surrogate_mean_bits": 0.024707122176877185,
+      "surrogate_std_bits": 0.05524680471588997,
+      "surrogate_p_value": 0.3333333333333333,
+      "surrogate_z": 0.306956733523107
+    },
+    {
+      "Window_Size": 10.0,
+      "Channel": "ch1",
+      "Joint_MI_Sum_Bits": 0.0,
+      "Joint_MI_KSG_Bits": 0.0,
+      "N_Pre": 19,
+      "N_Post": 19,
+      "K_Neighbors": 3,
+      "surrogate_mean_bits": 0.07872203224635464,
+      "surrogate_std_bits": 0.054204682152723394,
+      "surrogate_p_value": 1.0,
+      "surrogate_z": -1.4523105591607908
+    },
+    {
+      "Window_Size": 5.0,
+      "Channel": "ch2",
+      "Joint_MI_Sum_Bits": 0.5613440936807401,
+      "Joint_MI_KSG_Bits": 0.3074954204612627,
+      "N_Pre": 9,
+      "N_Post": 9,
+      "K_Neighbors": 3,
+      "surrogate_mean_bits": 0.05478365522418353,
+      "surrogate_std_bits": 0.06550425061257138,
+      "surrogate_p_value": 0.16666666666666666,
+      "surrogate_z": 3.8579445283903375
+    },
+    {
+      "Window_Size": 10.0,
+      "Channel": "ch2",
+      "Joint_MI_Sum_Bits": 0.2399010446882431,
+      "Joint_MI_KSG_Bits": 0.14754263075644763,
+      "N_Pre": 19,
+      "N_Post": 19,
+      "K_Neighbors": 3,
+      "surrogate_mean_bits": 0.07553768314436962,
+      "surrogate_std_bits": 0.07433565368734911,
+      "surrogate_p_value": 0.3333333333333333,
+      "surrogate_z": 0.9686461884753997
+    }
+  ]
+}

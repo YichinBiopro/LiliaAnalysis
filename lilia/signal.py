@@ -144,7 +144,7 @@ def resample_polyphase(data: np.ndarray, fs_in: float, fs_out: float) -> np.ndar
 
 
 def resample_with_time(time_us: np.ndarray, data: np.ndarray,
-                       fs_in: float, fs_out: float) -> Tuple[np.ndarray, np.ndarray]:
+                       fs_in: float, fs_out: float, *, return_segment_ids=False) -> Tuple[np.ndarray, np.ndarray]:
     """Resample each continuous segment, preserving integer microsecond time.
 
     Relative microseconds and UTC microseconds are both accepted. Floating-point
@@ -157,22 +157,37 @@ def resample_with_time(time_us: np.ndarray, data: np.ndarray,
         raise ValueError('time_us must be integer microseconds; use resample_seconds for seconds')
     if len(t) != len(x):
         raise ValueError('timestamp and signal lengths differ')
-    up, dn = _resampling_ratio(fs_in, fs_out)
+    _resampling_ratio(fs_in, fs_out)
     slices = continuous_slices(t, fs_in)
     if not slices:
-        return t.astype(np.int64), x.astype(np.float32)
-    times, signals = [], []
-    for sl in slices:
+        result = (t.astype(np.int64), x.astype(np.float32))
+        return (*result, np.empty(0, dtype=np.int64)) if return_segment_ids else result
+    times, signals, groups = [], [], []
+    for sid, sl in enumerate(slices):
         part = resample_polyphase(x[sl], fs_in, fs_out)
-        original = t[sl]
-        positions = np.arange(len(part), dtype=float) * dn / up
-        relative = (original - original[0]).astype(float)
-        rel_new = np.interp(positions, np.arange(len(original)), relative)
-        beyond = positions > len(original) - 1
-        rel_new[beyond] = relative[-1] + (positions[beyond] - len(original) + 1) * 1e6 / fs_in
-        times.append(int(original[0]) + np.rint(rel_new).astype(np.int64))
+        times.append(resample_segment_time_us(t[sl], fs_in, fs_out))
         signals.append(part)
-    return np.concatenate(times), np.concatenate(signals, axis=0)
+        groups.append(np.full(len(part), sid, dtype=np.int64))
+    result = (np.concatenate(times), np.concatenate(signals, axis=0))
+    return (*result, np.concatenate(groups)) if return_segment_ids else result
+
+
+def resample_segment_time_us(time_us, fs_in, fs_out):
+    """Reconstruct the same fractional-sample timeline as polyphase resampling."""
+    t = np.asarray(time_us)
+    if t.dtype.kind not in 'iu' or len(continuous_slices(t, fs_in)) != 1:
+        raise ValueError('Resampling timestamps require one nonempty integer-microsecond segment')
+    up, dn = _resampling_ratio(fs_in, fs_out)
+    n = (len(t) * up + dn - 1) // dn
+    positions = np.arange(n, dtype=float) * dn / up
+    relative = (t - t[0]).astype(float)
+    rel_new = np.interp(positions, np.arange(len(t)), relative)
+    beyond = positions > len(t) - 1
+    rel_new[beyond] = relative[-1] + (positions[beyond] - len(t) + 1) * 1e6 / fs_in
+    result = int(t[0]) + np.rint(rel_new).astype(np.int64)
+    if np.any(np.diff(result) <= 0):
+        raise ValueError('Resampling produced non-increasing microsecond timestamps')
+    return result
 
 
 def resample_seconds(time_s, data, fs_in, fs_out):

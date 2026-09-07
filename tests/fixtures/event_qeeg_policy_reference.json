@@ -1,0 +1,253 @@
+{
+  "old_code_sha256": "ba6d6214cbf560e269670b78755f7dc2ad6237ac0e66efca53fe05d47046ed98",
+  "input": "24 consecutive 5s windows; all channels linearly spaced from -0.5 to 0.5; all quality 1",
+  "cases": {
+    "session-start": {
+      "old_second_event_focus_delta": 0.5217391304347826,
+      "new_second_event_focus_delta": 0.7826086956521738,
+      "old_heatmap_delta": [
+        [
+          0.0,
+          0.26086956521739124,
+          0.5217391304347826,
+          0.7826086956521738
+        ],
+        [
+          0.0,
+          0.26086956521739124,
+          0.5217391304347826,
+          0.7826086956521738
+        ],
+        [
+          0.0,
+          0.26086956521739124,
+          0.5217391304347826,
+          0.7826086956521738
+        ],
+        [
+          0.0,
+          0.26086956521739124,
+          0.5217391304347826,
+          0.7826086956521738
+        ]
+      ],
+      "new_heatmap_delta": [
+        [
+          0.0,
+          0.26086956521739124,
+          0.5217391304347826,
+          0.7826086956521738
+        ],
+        [
+          0.0,
+          0.26086956521739124,
+          0.5217391304347826,
+          0.7826086956521738
+        ],
+        [
+          0.0,
+          0.26086956521739124,
+          0.5217391304347826,
+          0.7826086956521738
+        ],
+        [
+          0.0,
+          0.26086956521739124,
+          0.5217391304347826,
+          0.7826086956521738
+        ]
+      ],
+      "new_baseline_audit": [
+        {
+          "event": "first",
+          "start_us": null,
+          "end_us": 1778565630000000,
+          "baseline_metric_rows": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "event_metric_rows": [
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "baseline_bins": [
+            0
+          ],
+          "event_bins": [
+            1
+          ],
+          "heatmap_reference": [
+            -0.3913043478260869,
+            -0.3913043478260869,
+            -0.3913043478260869,
+            -0.3913043478260869
+          ],
+          "bar_status": "accepted",
+          "heatmap_status": "accepted"
+        },
+        {
+          "event": "second",
+          "start_us": null,
+          "end_us": 1778565630000000,
+          "baseline_metric_rows": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "event_metric_rows": [
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "baseline_bins": [
+            0
+          ],
+          "event_bins": [
+            3
+          ],
+          "heatmap_reference": [
+            -0.3913043478260869,
+            -0.3913043478260869,
+            -0.3913043478260869,
+            -0.3913043478260869
+          ],
+          "bar_status": "accepted",
+          "heatmap_status": "accepted"
+        }
+      ]
+    },
+    "pre-event-rest": {
+      "old_second_event_focus_delta": 0.3913043478260869,
+      "new_second_event_focus_delta": null,
+      "old_heatmap_delta": [
+        [
+          0.0,
+          0.26086956521739124,
+          null,
+          null
+        ],
+        [
+          0.0,
+          0.26086956521739124,
+          null,
+          null
+        ],
+        [
+          0.0,
+          0.26086956521739124,
+          null,
+          null
+        ],
+        [
+          0.0,
+          0.26086956521739124,
+          null,
+          null
+        ]
+      ],
+      "new_heatmap_delta": [
+        [
+          0.0,
+          0.26086956521739124,
+          null,
+          null
+        ],
+        [
+          0.0,
+          0.26086956521739124,
+          null,
+          null
+        ],
+        [
+          0.0,
+          0.26086956521739124,
+          null,
+          null
+        ],
+        [
+          0.0,
+          0.26086956521739124,
+          null,
+          null
+        ]
+      ],
+      "new_baseline_audit": [
+        {
+          "event": "first",
+          "start_us": null,
+          "end_us": 1778565630000000,
+          "baseline_metric_rows": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "event_metric_rows": [
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "baseline_bins": [
+            0
+          ],
+          "event_bins": [
+            1
+          ],
+          "heatmap_reference": [
+            -0.3913043478260869,
+            -0.3913043478260869,
+            -0.3913043478260869,
+            -0.3913043478260869
+          ],
+          "bar_status": "accepted",
+          "heatmap_status": "accepted"
+        },
+        {
+          "event": "second",
+          "start_us": 1778565660000000,
+          "end_us": 1778565660000000,
+          "baseline_metric_rows": [],
+          "event_metric_rows": [
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ],
+          "baseline_bins": [],
+          "event_bins": [
+            2
+          ],
+          "heatmap_reference": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "bar_status": "missing_baseline_or_event",
+          "heatmap_status": "missing_baseline"
+        }
+      ]
+    }
+  }
+}

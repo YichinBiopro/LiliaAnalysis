@@ -71,13 +71,14 @@ def run_pipeline(csv_path: str, model_path: str, max_sec: float | None = None) -
     data_bp_500 = bandpass_filter(data_raw_500, fs=FS, lo=BP_LOW, hi=BP_HIGH, time_us=time_us_500)
 
     # Step 3: 500 -> 200 Hz
-    time_us_200, data_bp_200 = resample_with_time(time_us_500, data_bp_500, FS, TFLITE_FS)
+    time_us_200, data_bp_200, segment_ids_200 = resample_with_time(
+        time_us_500, data_bp_500, FS, TFLITE_FS, return_segment_ids=True)
 
     # Step 4: TFLite inference (RMS normalize -> infer -> de-normalize)
     time_us_tfl, data_tfl_200 = apply_tflite_with_time(
         time_us_200, data_bp_200,
         tflite_path=model_path,
-        tflite_win=TFLITE_WIN,
+        tflite_win=TFLITE_WIN, segment_ids=segment_ids_200,
     )
 
     duration_500 = float((time_us_500[-1] - time_us_500[0]) / 1e6) if len(time_us_500) > 1 else 0.0

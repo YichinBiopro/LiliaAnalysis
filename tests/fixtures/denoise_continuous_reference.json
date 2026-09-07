@@ -1,0 +1,30 @@
+{
+  "seed": 531,
+  "shape": [
+    1503,
+    4
+  ],
+  "fs_in": 500,
+  "fs_out": 200.0,
+  "output_shape": [
+    1503,
+    2
+  ],
+  "model_sha256": "8c863e5ba0a32f1170be321bb7166e6aeede2cbeed93f1521d5dd34412cdebae",
+  "architecture_sha256": "2c313d9f378fa434527aea761b44c2da6ba05ee59908afe90548a63af88ed9a9",
+  "source_sha256": {
+    "data_analysis.py": "1b963bf5bf4cee951c1731f26280d3be2d1cb275fa884a3c580d93d018fd748c",
+    "spectral_entropy.py": "317de84312a126d0a979221e0e5f1890afc6c8b3ef26ad0e5649f3f90a54adf4",
+    "lilia/signal.py": "d310e85ff042ae916046aa06483ade36f49044dc52e10694f20ad2da16b20e8c"
+  },
+  "torch_version": "2.11.0+cu130",
+  "threads": 1,
+  "correct_resampling_reference": {
+    "path": "denoise_resampled_reference.npz",
+    "method": "scipy.signal.resample_poly(filtered, 2, 5) then HEAD run_model",
+    "output_shape": [
+      602,
+      2
+    ]
+  }
+}

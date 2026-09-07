@@ -1,31 +1,15 @@
 """
-plot_tflite_summary.py
-======================
-依據 ``plot_event_markers.py`` 中 ``*_session_start.png`` / ``*_pre_event_rest.png``
-「Summary」子圖的呈現風格改寫，產生新的分析圖。本腳本聚焦於：
+TFLite qEEG summary with segment-preserving inference and baseline selection.
 
-  1. **Summary 趨勢圖**：沿用 Summary 子圖的視覺風格，但繪製的指標改為
-     Relax（放鬆）、Calm（平靜）、Flow（心流）、Focus（專注）四項。
-  2. **僅繪製 TFLite 處理後的指標**：趨勢圖的資料來源為 ``tiny_v4_optimized.tflite``
-     重建（降噪 / 去假影）後的訊號所計算之 qEEG 指標。
-  3. **訊號品質前後比較（apples-to-apples）**：TFLite 處理「前」與「後」皆在
-     200 Hz 評分——「前」為僅降採樣（未經 TFLite）的訊號、「後」為 TFLite 重建
-     訊號，使兩者唯一差別是模型重建本身，而非降採樣，檢視模型是否劣化訊號品質。
-  4. **特定模式的基線處理**：在 ``pre_event_rest`` 模式下，「Color Agility Ladder」
-     之前緊接著「Agility Ladder」，沒有獨立的事件前靜息段，會使 delta 失效。
-     因此「Color Agility Ladder」改用與標準「Agility Ladder」完全相同的基線區間。
-  5. **緩衝區 (Buffer Zone)**：以 ``t_buffer = -3.0`` 秒嚴格捨棄觸發點前 3 秒內的資料。
-  6. **微分段 (Micro-epoching)**：將潛在的事件前基線區（-15 ~ -3 秒）切成 1 秒微分段。
-  7. **盲抽樣與可重現性**：從通過假影/雜訊篩選的乾淨微分段中以「固定亂數種子」隨機抽樣。
-  8. **錯誤處理**：若乾淨微分段總時長不足所需基線長度，丟出明確錯誤訊息。
+Raw source segments are filtered and resampled separately. The model receives
+complete nonoverlapping 2-second windows; before/after quality and 5-second
+qEEG share retained timestamps and source segment IDs. Baselines sample complete
+already inferred windows, requiring each raw 1-second sub-epoch to pass quality
+and saturation checks. References are mean per-model-window qEEG indices, so
+neither inference nor Welch sees concatenated nonadjacent epochs.
 
-設計上盡量重用 ``plot_event_markers.py`` 既有的常數與函式，避免邏輯重複。
-
-Usage
------
-    python plot_tflite_summary.py [--outdir <dir>] [--seed 42]
-
-預設對 iBrainCenter 所有受試者各輸出一張 PNG。
+Session and pre-event modes retain the existing event participation/anchor
+rules. Output includes plots, metric CSV/sidecar and baseline selection audit.
 """
 
 from __future__ import annotations
@@ -35,21 +19,24 @@ import datetime
 import math
 import os
 import warnings
+import json
+import hashlib
 
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.gridspec as gridspec
-from lilia.windowing import require_continuous
+from lilia.windowing import require_continuous, transform_runs, plot_breaks
 import numpy as np
 import pandas as pd
-from math import gcd
 from matplotlib.colors import LinearSegmentedColormap
-from scipy.signal import resample_poly
 
 # ── 重用既有模組 ────────────────────────────────────────────────────────────────
 from lilia.signal import resample_polyphase
 from lilia.io import load_merged_csv, bandpass_filter
-from lilia.qeeg import compute_qeeg_indices
+from lilia.tflite import run_tflite_recording, build_tflite_timeline
+from lilia.tflite_baseline import score_baseline_windows, select_tflite_baseline
+from lilia.provenance import file_sha256
+from lilia.tflite_io import write_tflite_table
 from lilia.quality import get_eeg_quality_index_v2_parametric
 
 # 直接沿用 plot_event_markers 的常數與工具函式（單一事實來源 single source of truth）
@@ -59,8 +46,8 @@ from plot_event_markers import (
     QUALITY_PARAMS, QUALITY_THRESHOLD,
     EVENTS, CONE_STAGES, SUBJECTS, IBRAIN_DIR,
     hhmm_to_us, hhmm_to_dt, us_to_local_dt,
-    apply_tflite_windowed, compute_qeeg_windowed,
-    _overlay_events, _series_with_gaps,
+    TFLITE_MODEL_PATH, TFLITE_WIN, compute_qeeg_windowed,
+    _overlay_events,
 )
 
 # ── 本腳本專屬設定 ──────────────────────────────────────────────────────────────
@@ -113,41 +100,18 @@ def _resample_500_to_200(data: np.ndarray) -> np.ndarray:
     return resample_polyphase(data, FS, TFLITE_FS)
 
 
-def _session_tflite(time_us_full: np.ndarray,
-                    data_filt_full: np.ndarray
-                    ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    """對整段資料跑 TFLite。
-
-    流程與 plot_event_markers 一致：先降採樣到 200 Hz，再以非重疊
-    ``TFLITE_WIN`` 視窗逐段推論並還原振幅，同時以線性內插建立對應的
-    絕對時間軸，方便後續對齊事件標記。
-
-    Returns
-    -------
-    tfl_time_us, tfl_data   : TFLite 重建訊號（後）及其時間軸（200Hz）
-    pre200_time_us, pre200  : 僅降採樣、未經 TFLite 的訊號（前）及其時間軸（200Hz）
-        兩者皆在 200Hz，使「前 vs 後」的品質比較只差在 TFLite 重建本身，
-        而非降採樣（apples-to-apples）。
-    """
-    g  = gcd(int(TFLITE_FS), int(FS))
-    up = int(TFLITE_FS) // g
-    dn = int(FS) // g
-    data_200 = resample_poly(data_filt_full, up, dn, axis=0).astype(np.float32)
-
-    # 建立 200Hz 的時間軸（以原始 µs 時間做線性內插）
-    t_orig = np.arange(len(data_filt_full))
-    t_new  = np.arange(len(data_200)) * (dn / up)
-    tfl_time_us_full = np.interp(
-        t_new, t_orig, time_us_full[:len(data_filt_full)]).astype(np.int64)
-
-    tfl_data = apply_tflite_windowed(data_200)          # (M, n_ch)
-    tfl_time_us = tfl_time_us_full[:len(tfl_data)]
-    return tfl_time_us, tfl_data, tfl_time_us_full, data_200
+def _session_tflite(time_us_full, data_filt_full, *, return_timeline=False):
+    """Infer complete windows per raw segment; compare identical before/after positions."""
+    timeline, pre, output = run_tflite_recording(time_us_full, data_filt_full,
+                                               TFLITE_MODEL_PATH, FS, TFLITE_FS, TFLITE_WIN)
+    if return_timeline:
+        return timeline, pre, output
+    return timeline.time_us, output, timeline.time_us, pre
 
 
 def compute_quality_windowed_fs(time_us: np.ndarray, data: np.ndarray,
                                 fs: float,
-                                win_sec: float = QUALITY_WIN_SEC):
+                                win_sec: float = QUALITY_WIN_SEC, windows=None):
     """以非重疊視窗計算 EEG 品質指標（可指定取樣率 *fs*）。
 
     plot_event_markers 內建的 ``compute_quality_windowed`` 將 fs 寫死為 500，
@@ -163,7 +127,10 @@ def compute_quality_windowed_fs(time_us: np.ndarray, data: np.ndarray,
     win = int(win_sec * fs)
     n   = len(data)
     q_dt, q_overall = [], []
-    for start in range(0, n - win + 1, win):
+    if windows is not None:
+        windows.validate(n, fs, win, win)
+    starts = windows.starts if windows is not None else range(0, n - win + 1, win)
+    for start in starts:
         seg = data[start:start + win]
         res = get_eeg_quality_index_v2_parametric(
             seg.T.astype(np.float64), fs=fs, params=QUALITY_PARAMS)
@@ -254,6 +221,7 @@ def _sample_clean_epochs(time_us_full: np.ndarray, data_filt_full: np.ndarray,
     偵測：帶通濾波會把削波平滑掉而低估飽和，故在此用原始訊號把關，飽和視窗
     直接剔除，再進行品質評分。基線是後續所有 delta 的基準，必須最乾淨。
     """
+    require_continuous(time_us_full, fs, 'Legacy raw baseline epoch sampler')
     epoch_n = int(round(epoch_sec * fs))                 # 每個微分段的取樣點數
     need_ep = int(math.ceil(required_sec / epoch_sec))   # 需要的乾淨微分段數
     in_win  = np.where((time_us_full >= lo_us) & (time_us_full < hi_us))[0]
@@ -326,27 +294,10 @@ def build_session_baseline(time_us_full: np.ndarray, data_filt_full: np.ndarray,
         data_raw_full=data_raw_full)
 
 
-def _tflite_qeeg_reference(baseline_500: np.ndarray) -> dict:
-    """將基線資料經 TFLite 處理後，計算每通道的 qEEG 指標基準值。
-
-    為與「TFLite 處理後」的趨勢做公平比較 (apples-to-apples)，基線參考值
-    亦須來自相同的 TFLite 處理鏈：降採樣 → TFLite 重建 → qEEG。
-
-    Returns
-    -------
-    dict : { index_key -> (n_ch,) ndarray }  每通道的基準指標值
-    """
-    b200 = _resample_500_to_200(baseline_500)
-    tfl  = apply_tflite_windowed(b200)                   # (M, n_ch)
-    if len(tfl) == 0:
-        raise ValueError('基線經 TFLite 後長度為 0，請增加 required_sec（需 ≥ 2s）。')
-    n_ch = tfl.shape[1]
-    ref = {k: [] for k in SUMMARY_KEYS}
-    for ch in range(n_ch):
-        r = compute_qeeg_indices(tfl[:, ch].astype(np.float64), fs=TFLITE_FS)
-        for k in SUMMARY_KEYS:
-            ref[k].append(float(r[k]))
-    return {k: np.array(v) for k, v in ref.items()}      # (n_ch,)
+def _tflite_qeeg_reference(baseline_500):
+    """Reject the legacy packed-epoch inference path, whose boundaries are lost."""
+    raise ValueError('Packed raw baseline epochs cannot be inferred safely; '
+                     'use select_tflite_baseline on complete session model outputs')
 
 
 # ── 主繪圖函式 ─────────────────────────────────────────────────────────────────
@@ -364,7 +315,7 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
     """對單一受試者產生 TFLite Summary 分析圖。
 
     圖面（沿用 Summary 子圖風格，但採「小倍數 small multiples」呈現）：
-      1. 訊號品質前後比較（TFLite 前 500Hz vs 後 200Hz）。
+      1. 訊號品質前後比較（TFLite 前後同為 200Hz、同兩 channels、同窗口）。
       2. 每個指標各一條 strip：Relax / Calm / Flow / Focus 的 raw 原始值（填色
          面積 + 基線參考虛線），比「四線疊在一起」更易讀，且各自用滿縱軸。
       3. qEEG Δ heatmap（vs baseline，模式見下）。
@@ -382,53 +333,56 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
         * 'pre-event' — 沿用「每個事件各自的事件前微分段基線」，僅事件視窗內著色，
                         事件之間維持灰色（聚焦於各任務 vs 其事前靜息的變化）。
         * 'both'      — 兩種模式各輸出一張圖，檔名以模式標記區分。
-    on_insufficient : 'raise'（預設，符合嚴格科學要求）→ 基線不足時丟錯並中止；
+    on_insufficient : 'raise'（預設）→ 基線不足時丟錯並中止；
                       'skip' → 僅警告並略過（事件或 session 模式），方便批次掃描。
 
     Returns
     -------
     list[str] : 實際輸出的 PNG 路徑（每個模式一張）。
     """
+    if heatmap_baseline_mode not in ('session', 'pre-event', 'both') or on_insufficient not in ('raise', 'skip'):
+        raise ValueError('Invalid baseline mode or insufficient-data policy')
+    if not (np.isfinite(t_search_start) and np.isfinite(t_buffer) and t_search_start < t_buffer <= 0):
+        raise ValueError('Pre-event search must satisfy t_search_start < t_buffer <= 0')
     if base_dir is None:
         base_dir = IBRAIN_DIR
     merged = os.path.join(base_dir, info['dir'], 'merged.csv')
     if not os.path.isfile(merged):
-        print(f'  [{name}] merged.csv not found — skipping')
-        return ''
+        raise FileNotFoundError(f'[{name}] merged.csv not found: {merged}')
 
     print(f'  [{name}] loading…', flush=True)
     time_us_full, data_full = load_merged_csv(merged)
-    require_continuous(time_us_full, FS, 'plot_tflite_summary.py')
-    data_filt = bandpass_filter(data_full, fs=FS, lo=BP_LOW, hi=BP_HIGH)
-
-    # ── TFLite 處理（整段）→ 同時取得「前(僅降採樣)」與「後(TFLite 重建)」 ────────
+    plan = build_tflite_timeline(time_us_full, FS, TFLITE_FS, TFLITE_WIN)
+    data_filt = np.full(data_full.shape, np.nan, dtype=np.float32)
+    for seg in plan.segments:
+        if seg['status'] == 'retained':
+            a, b = seg['raw_start_idx'], seg['raw_end_idx']
+            data_filt[a:b] = bandpass_filter(data_full[a:b], fs=FS, lo=BP_LOW, hi=BP_HIGH)
     print(f'  [{name}] applying TFLite ({FS}→{TFLITE_FS}Hz)…', flush=True)
-    tfl_time_us, tfl_data, pre_time_us, pre_data = _session_tflite(time_us_full, data_filt)
-
-    # ── 訊號品質：TFLite 前 vs 後（兩者皆 200Hz，apples-to-apples） ───────────────
-    # 公平性：原本「前」在 500Hz、「後」在 200Hz，差異會混入「降採樣」本身的影響。
-    # 改為「前」= 僅降採樣到 200Hz、未經 TFLite 的訊號，使前後唯一差別是 TFLite 重建。
-    print(f'  [{name}] quality before TFLite (200Hz, resampled only)…', flush=True)
-    qb_dt, qb_overall = compute_quality_windowed_fs(pre_time_us, pre_data, fs=TFLITE_FS)
-    qb_dt  = np.array(qb_dt)
-    qb_med = np.median(qb_overall, axis=1) if len(qb_overall) else np.array([])
-
-    print(f'  [{name}] quality after TFLite (200Hz)…', flush=True)
-    qa_dt, qa_overall = compute_quality_windowed_fs(tfl_time_us, tfl_data, fs=TFLITE_FS)
-    qa_dt  = np.array(qa_dt)
-    qa_med = np.median(qa_overall, axis=1) if len(qa_overall) else np.array([])
-
-    print(f'  [{name}] computing TFLite qEEG ({QEEG_WIN_SEC:.0f}s windows)…', flush=True)
-    qeeg_tfl_dt, qeeg_tfl = compute_qeeg_windowed(tfl_time_us, tfl_data, fs=TFLITE_FS)
+    timeline, pre_data, tfl_data = _session_tflite(time_us_full, data_filt, return_timeline=True)
+    tfl_time_us = pre_time_us = timeline.time_us
+    grid = timeline.grid(QEEG_WIN_SEC)
+    # Both channel sets and sample windows are identical in the comparison.
+    qb_dt, qb_overall = compute_quality_windowed_fs(pre_time_us, pre_data[:, :2], fs=TFLITE_FS,
+                                                    win_sec=QEEG_WIN_SEC, windows=grid)
+    qa_dt, qa_overall = compute_quality_windowed_fs(tfl_time_us, tfl_data, fs=TFLITE_FS,
+                                                    win_sec=QEEG_WIN_SEC, windows=grid)
+    qb_dt, qa_dt = np.array(qb_dt), np.array(qa_dt)
+    qb_med, qa_med = np.median(qb_overall, axis=1), np.median(qa_overall, axis=1)
+    qeeg_tfl_dt, qeeg_tfl = compute_qeeg_windowed(tfl_time_us, tfl_data, fs=TFLITE_FS, windows=grid)
     tfl_t_arr = np.array(qeeg_tfl_dt)
-    n_win = qeeg_tfl[SUMMARY_KEYS[0]].shape[0] if len(qeeg_tfl_dt) else 0
-
-    # 品質遮罩：TFLite qEEG 視窗與 TFLite 品質視窗皆為 5s@200Hz，可一對一對齊。
-    # 門檻採 quality_ratio（可由呼叫端控制）。
-    low_after = qa_med < quality_ratio if len(qa_med) else np.zeros(0, bool)
-    qual_mask = np.zeros(n_win, dtype=bool)
-    m = min(len(low_after), n_win)
-    qual_mask[:m] = low_after[:m]
+    n_win = len(grid.starts)
+    if len(qa_med) != n_win or len(qb_med) != n_win:
+        raise ValueError('TFLite quality and qEEG windows differ')
+    qual_mask = ~np.isfinite(qa_med) | (qa_med < quality_ratio)
+    for key in SUMMARY_KEYS:
+        qual_mask |= ~np.isfinite(qeeg_tfl[key]).all(axis=1)
+    groups = grid.columns['segment_id']
+    print(f'  [{name}] screening complete baseline model windows…', flush=True)
+    catalog = score_baseline_windows(time_us_full, data_filt, data_full, timeline,
+                scorer=get_eeg_quality_index_v2_parametric, quality_params=QUALITY_PARAMS,
+                threshold=quality_ratio, epoch_sec=epoch_sec, rail=RAIL_VALUE, max_saturation=SAT_FRAC_MAX)
+    baseline_audit = []
 
     # ── 建立事件清單（沿用 plot_event_markers 的規則） ─────────────────────────
     evt_list, participating_events = [], []
@@ -457,18 +411,14 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
             anchor_hhmm  = next((e[1] for e in EVENTS if e[0] == anchor_label), start_hhmm)
             trigger_us   = hhmm_to_us(anchor_hhmm)
             try:
-                bl_data, meta = build_baseline_epochs(
-                    time_us_full, data_filt, trigger_us,
-                    fs=FS, t_buffer=t_buffer, t_search_start=t_search_start,
-                    epoch_sec=epoch_sec, required_sec=required_sec,
-                    quality_threshold=quality_ratio,
-                    random_seed=random_seed, label=label,
-                    data_raw_full=data_full)
-                event_baseline_ref[label] = _tflite_qeeg_reference(bl_data)
-                tag = f'(anchor={anchor_label})' if anchor_label != label else ''
-                print(f'      {label:<24s}{tag}  clean {meta["n_clean_epochs"]}/'
-                      f'{meta["n_total_epochs"]} ep → sampled {meta["n_selected"]} ep')
+                reference, meta = select_tflite_baseline(tfl_data, timeline, catalog,
+                    trigger_us + int(round(t_search_start * 1e6)), trigger_us + int(round(t_buffer * 1e6)),
+                    required_sec=required_sec, seed=random_seed, label=label)
+                event_baseline_ref[label] = reference
+                baseline_audit.append(meta)
+                print(f'      {label}: {meta["n_selected"]} complete model windows selected')
             except ValueError as exc:
+                baseline_audit.append({'label': label, 'status': 'excluded', 'reason': str(exc)})
                 if on_insufficient == 'skip':
                     print(f'      [WARN] {exc}')
                     continue
@@ -481,14 +431,13 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
               f'(blind-sample {required_sec:.0f}s across whole session, '
               f'seed {random_seed})…', flush=True)
         try:
-            sb_data, sb_meta = build_session_baseline(
-                time_us_full, data_filt, fs=FS, epoch_sec=epoch_sec,
-                required_sec=required_sec, quality_threshold=quality_ratio,
-                random_seed=random_seed, data_raw_full=data_full)
-            session_ref = _tflite_qeeg_reference(sb_data)
-            print(f'      session  clean {sb_meta["n_clean_epochs"]}/'
-                  f'{sb_meta["n_total_epochs"]} ep → sampled {sb_meta["n_selected"]} ep')
+            session_ref, sb_meta = select_tflite_baseline(tfl_data, timeline, catalog,
+                int(time_us_full[0]), int(time_us_full[-1]) + int(round(1e6 / FS)),
+                required_sec=required_sec, seed=random_seed, label='session')
+            baseline_audit.append(sb_meta)
+            print(f'      session: {sb_meta["n_selected"]} complete model windows selected')
         except ValueError as exc:
+            baseline_audit.append({'label': 'session', 'status': 'excluded', 'reason': str(exc)})
             if on_insufficient == 'skip':
                 print(f'      [WARN] {exc}')
             else:
@@ -505,13 +454,8 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
     smooth_abs = {}
     for k in SUMMARY_KEYS:
         series = np.where(qual_mask, np.nan, np.median(qeeg_tfl[k], axis=1))
-        sm = (pd.Series(series)
-              .rolling(SMOOTH_WIN, center=True, min_periods=1)
-              .mean().to_numpy())
-        # 重要：低品質/無訊號視窗一律捨棄。rolling(min_periods=1) 會用鄰近有效點
-        # 把空洞補回，導致「無訊號區段」仍畫出指標值；故平滑後再把這些視窗設回
-        # NaN，確保無效區段不顯示任何指標。
-        sm[qual_mask] = np.nan
+        sm = transform_runs(series, lambda x: pd.Series(x).rolling(
+            SMOOTH_WIN, center=True, min_periods=1).mean().to_numpy(), groups)
         smooth_abs[k] = sm
 
     good_qual = ~qual_mask
@@ -519,22 +463,64 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
     # ── (B) qEEG Δ heatmap 的 30s bin 絕對值（與基線模式無關，先算一次共用） ────
     HEATMAP_BIN_SEC = 30
     bin_size = max(1, int(HEATMAP_BIN_SEC / QEEG_WIN_SEC))   # = 6 windows
-    n_bins = n_win // bin_size
-    bin_t = []
+    bin_rows = []
+    for sid in np.unique(groups):
+        idx = np.flatnonzero(groups == sid)
+        bin_rows.extend([idx[i:i + bin_size] for i in range(0, len(idx) - bin_size + 1, bin_size)])
+    n_bins = len(bin_rows)
+    bin_t, bin_edges, bin_audit = [], [], []
     heatmap_abs = np.full((len(SUMMARY_KEYS), n_bins), np.nan)
-    for b in range(n_bins):
-        sl   = slice(b * bin_size, (b + 1) * bin_size)
-        good = good_qual[sl]
-        bin_t.append(tfl_t_arr[b * bin_size + bin_size // 2])
-        for idx_i, k in enumerate(SUMMARY_KEYS):
-            vals = np.median(qeeg_tfl[k][sl], axis=1)        # per-window ch median
-            gv   = vals[good]
-            if gv.size > 0:
-                heatmap_abs[idx_i, b] = float(np.median(gv))
+    for b, rows in enumerate(bin_rows):
+        good = good_qual[rows]
+        lo = int(grid.columns['window_start_us'][rows[0]])
+        hi = int(grid.columns['window_end_us'][rows[-1]])
+        center = (lo + hi) // 2
+        bin_t.append(us_to_local_dt(center))
+        bin_edges.append([us_to_local_dt(lo), us_to_local_dt(hi)])
+        bin_audit.append({'segment_id': int(groups[rows[0]]), 'window_start_us': lo,
+                          'window_end_us': hi, 'center_us': center,
+                          'metric_rows': rows.tolist()})
+        for idx_i, key in enumerate(SUMMARY_KEYS):
+            vals = np.median(qeeg_tfl[key][rows], axis=1)
+            if good.any():
+                heatmap_abs[idx_i, b] = float(np.median(vals[good]))
     bin_t_arr = np.array(bin_t)
 
     # ── 依模式渲染（'session' / 'pre-event'，'both' 則兩張都出） ────────────────
     os.makedirs(outdir, exist_ok=True)
+    audit_path = os.path.join(outdir, f'{name}_{info["sn"]}_tflite_analysis.json')
+    with open(audit_path, 'w', encoding='utf-8') as handle:
+        json.dump({'source_id': file_sha256(merged), 'model_id': file_sha256(TFLITE_MODEL_PATH),
+                   'source_path': os.path.abspath(merged), 'inference': timeline.metadata(),
+                   'baseline_quality_epoch_sec': epoch_sec, 'quality_threshold': quality_ratio,
+                   'baseline_catalog': catalog, 'baselines': baseline_audit,
+                   'heatmap_bins': bin_audit,
+                   'code_sha256': file_sha256(__file__)}, handle, indent=2, allow_nan=False)
+    metric_frame = pd.DataFrame(dict(grid.columns))
+    metric_frame['quality_before'] = qb_med
+    metric_frame['quality_after'] = qa_med
+    metric_frame['quality_valid'] = ~qual_mask
+    for key in SUMMARY_KEYS:
+        for ch in range(2):
+            metric_frame[f'{key}_ch{ch + 1}'] = np.where(qual_mask, np.nan, qeeg_tfl[key][:, ch])
+    code_paths = [__file__, os.path.join(os.path.dirname(__file__), 'plot_event_markers.py'),
+                  *[os.path.join(os.path.dirname(__file__), 'lilia', filename)
+                  for filename in ('tflite.py', 'tflite_baseline.py', 'tflite_io.py', 'signal.py',
+                                   'windowing.py', 'quality.py', 'qeeg.py', 'entropy_io.py')]]
+    code_id = hashlib.sha256(''.join(file_sha256(p) for p in code_paths).encode()).hexdigest()
+    parameters = {'input_fs': FS, 'fs': TFLITE_FS, 'model_window': TFLITE_WIN,
+                  'win_sec': QEEG_WIN_SEC, 'step_sec': QEEG_WIN_SEC,
+                  'channels': [1, 2], 'input_channels': [1, 2, 3, 4],
+                  'bandpass': [BP_LOW, BP_HIGH], 'quality_threshold': quality_ratio,
+                  'quality_params': QUALITY_PARAMS, 'quality_reduction': 'two-channel median',
+                  'index_space': 'retained_tflite_output', 'model_sha256': file_sha256(TFLITE_MODEL_PATH),
+                  'code_sha256': code_id}
+    write_tflite_table(os.path.join(outdir, f'{name}_{info["sn"]}_tflite_metrics.csv'),
+                      merged, metric_frame, grid, parameters, code_id, timeline)
+    if not event_baseline_ref:
+        modes = [m for m in modes if m != 'pre-event']
+    if not modes:
+        raise ValueError('No usable TFLite baseline reference; see analysis audit')
     outpaths = []
     for mode in modes:
         # 該模式的事件視窗清單與基線取得方式
@@ -587,7 +573,7 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
                     ch_d   = blk_ch - ref_ch[k]
                     per_index[k] = (float(ch_d.mean()), float(ch_d.std()))
                 else:
-                    per_index[k] = (0.0, 0.0)
+                    per_index[k] = (float('nan'), float('nan'))
             block_deltas.append((label, per_index))
 
         # 每個指標的「基線參考水準」(供 strip 的虛線)：session 模式為單一常數；
@@ -628,20 +614,19 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
             f'iBrainCenter — {info["sn"]} ({name})  |  TFLite Summary '
             f'(Relax · Calm · Flow · Focus)\n'
             f'Trend = raw index · Heatmap/Bar = Δ vs {baseline_desc}  |  '
-            f'micro-epoch {epoch_sec:.0f}s @ seed {random_seed}',
+            f'baseline = mean of complete {TFLITE_WIN / TFLITE_FS:g}s model-window indices; quality epochs {epoch_sec:g}s; seed {random_seed}',
             fontsize=13, fontweight='bold')
 
         # 1) 品質前後比較
         # 注意：merged.csv 由多個錄製檔串接而成，檔間可能有數十~數百秒的時間斷點。
         # 直接連線會在斷點兩端畫出「斜向長直線」假影，誤導判讀。故以 _series_with_gaps
         # 在大缺口插入 NaN，讓 matplotlib 自動斷開、不跨缺口連線。
-        gap_break = QUALITY_WIN_SEC * 2.5
         if len(qb_dt):
-            tb, yb = _series_with_gaps(qb_dt, qb_med, gap_sec=gap_break)
+            tb, yb = plot_breaks(qb_dt, qb_med, groups)
             ax_qual.plot(tb, yb, color='#1a1a1a', lw=1.5,
                          label=f'Before TFLite ({TFLITE_FS}Hz resampled, ch median)')
         if len(qa_dt):
-            ta, ya = _series_with_gaps(qa_dt, qa_med, gap_sec=gap_break)
+            ta, ya = plot_breaks(qa_dt, qa_med, groups)
             ax_qual.plot(ta, ya, color='#1f77b4', lw=1.5, ls='--',
                          label=f'After TFLite ({TFLITE_FS}Hz, ch median)')
         ax_qual.axhline(quality_ratio, color='k', lw=0.8, ls=':',
@@ -658,14 +643,13 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
         # 填色面積 = raw 原始指標；黑色虛線 = 基線水準（填色與虛線的落差即 Δ）。
         # 同品質面板：用 _series_with_gaps 在大時間斷點斷開；低品質視窗已於 smooth_abs
         # 設為 NaN 而捨棄，故「無訊號區段」自然留白、不畫出指標。
-        gap_q = QEEG_WIN_SEC * 2.5
         for si, k in enumerate(SUMMARY_KEYS):
             ax = ax_strips[si]
-            tt, yy = _series_with_gaps(tfl_t_arr, smooth_abs[k], gap_sec=gap_q)
+            tt, yy = plot_breaks(tfl_t_arr, smooth_abs[k], groups)
             ax.fill_between(tt, 0.0, yy, color=SUMMARY_COLORS[k], alpha=0.30,
                             linewidth=0)
             ax.plot(tt, yy, color=SUMMARY_COLORS[k], lw=1.7)
-            rt, rv = _series_with_gaps(tfl_t_arr, ref_level[k], gap_sec=gap_q)
+            rt, rv = plot_breaks(tfl_t_arr, ref_level[k], groups)
             ax.plot(rt, rv, color='#222222', lw=1.0, ls='--', alpha=0.7)
             ax.axhline(0, color='k', lw=0.4, ls=':', alpha=0.5)
             _overlay_events(ax, evt_list, cone_stage_dt)
@@ -678,7 +662,7 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
             ax.spines['right'].set_visible(False)
             if si == 0:
                 ax.set_title('Raw qEEG index per metric (filled = raw · '
-                             'dashed = baseline level · gaps = discarded low-quality)',
+                             'dashed = baseline level · gaps = missing or excluded windows)',
                              fontsize=10, loc='left')
             plt.setp(ax.get_xticklabels(), visible=False)
 
@@ -687,17 +671,12 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
             cmap_hm = LinearSegmentedColormap.from_list(
                 'OrgPur', ['#5e3c99', '#f7f7f7', '#e66101'])
             cmap_hm.set_bad(color='#aaaaaa')          # 灰 = 無法計算(低品質/窗外)
-            bin_t_num = mdates.date2num(bin_t_arr)
-            dt_h = (float(np.diff(bin_t_num).mean()) / 2) if n_bins > 1 \
-                   else (HEATMAP_BIN_SEC / 86400 / 2)
-            t_edges = np.concatenate([[bin_t_num[0] - dt_h],
-                                      (bin_t_num[:-1] + bin_t_num[1:]) / 2,
-                                      [bin_t_num[-1] + dt_h]])
             y_edges = np.arange(len(SUMMARY_KEYS) + 1) - 0.5
             v_abs = HEATMAP_DELTA_VABS
-            pcm = ax_hm.pcolormesh(t_edges, y_edges, heatmap_delta_ma,
-                                   cmap=cmap_hm, vmin=-v_abs, vmax=v_abs,
-                                   shading='flat')
+            # Draw physical rectangles; no cell extends through recording gaps.
+            for b, edges in enumerate(bin_edges):
+                pcm = ax_hm.pcolormesh(mdates.date2num(edges), y_edges, heatmap_delta_ma[:, b:b + 1],
+                                       cmap=cmap_hm, vmin=-v_abs, vmax=v_abs, shading='flat')
             cbar = plt.colorbar(pcm, ax=ax_hm, pad=0.012, fraction=0.015)
             cbar.set_label(f'Δ Index  (−{v_abs:.1f} → +{v_abs:.1f})', labelpad=12)
             cbar.ax.tick_params(pad=4)
@@ -787,6 +766,7 @@ def parse_args():
 def main():
     args = parse_args()
     print(f'── TFLite Summary → {args.outdir}')
+    failures = []
     for name, info in SUBJECTS.items():
         try:
             plot_subject_tflite_summary(
@@ -799,8 +779,11 @@ def main():
                 quality_ratio=args.quality_ratio,
                 random_seed=args.seed,
                 on_insufficient=args.on_insufficient)
-        except ValueError as exc:
+        except (ValueError, OSError) as exc:
+            failures.append(name)
             print(f'  [{name}] 中止：{exc}')
+    if failures:
+        raise SystemExit(f'TFLite summary failed for: {", ".join(failures)}')
     print('\nDone.')
 
 

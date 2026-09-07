@@ -31,7 +31,7 @@ class WindowGrid:
             raise ValueError('Window grid does not match signal length or analysis settings')
 
 
-def build_window_grid(time_us, fs, win_sec, step_sec=None):
+def build_window_grid(time_us, fs, win_sec, step_sec=None, *, segment_ids=None, epoch_us=None, reset_per_segment=False):
     """Create complete windows on the original grid, skipping timestamp gaps."""
     step_sec = win_sec if step_sec is None else step_sec
     if not all(np.isfinite(v) and v > 0 for v in (fs, win_sec, step_sec)):
@@ -42,19 +42,22 @@ def build_window_grid(time_us, fs, win_sec, step_sec=None):
     win, step = int(round(win_sec * fs)), int(round(step_sec * fs))
     if win < 8 or step < 1:
         raise ValueError('Analysis needs at least 8 samples per window and a positive step')
-    segments = continuous_slices(t, fs)
-    starts = np.asarray(list(window_starts(len(t), win, step, t, fs)), dtype=np.int64)
+    segments = continuous_slices(t, fs, segment_ids=segment_ids)
+    starts = np.asarray([i for sl in segments
+                         for i in range(sl.start if reset_per_segment else ((sl.start + step - 1) // step) * step,
+                                        sl.stop - win + 1, step)], dtype=np.int64)
     if not len(starts):
         raise ValueError('No complete analysis window within any continuous segment')
     ends = starts + win
     centres = starts + win // 2
-    segment_ids = np.searchsorted([s.stop for s in segments], starts, side='right')
+    groups = (np.searchsorted([s.stop for s in segments], starts, side='right')
+              if segment_ids is None else np.asarray(segment_ids)[starts])
     columns = {
         'window_start_idx': starts, 'window_end_idx': ends,
         'window_start_us': t[starts],
         'window_end_us': t[ends - 1] + int(round(1e6 / fs)),
-        'window_center_us': t[centres], 'segment_id': segment_ids,
-        'time_s': (t[centres] - t[0]) / 1e6,
+        'window_center_us': t[centres], 'segment_id': groups,
+        'time_s': (t[centres] - (t[0] if epoch_us is None else int(epoch_us))) / 1e6,
     }
     for values in columns.values():
         values.flags.writeable = False
@@ -97,7 +100,7 @@ def plot_breaks(x, y, segment_ids=None):
     return np.insert(x, cuts, x[cuts]), np.insert(y, cuts, np.nan, axis=0)
 
 
-def continuous_slices(time_us, fs, gap_factor=3.0):
+def continuous_slices(time_us, fs, gap_factor=3.0, *, segment_ids=None):
     """Split strictly increasing microsecond timestamps at missing samples.
 
     Gaps larger than three nominal sample periods start a new segment. Duplicate
@@ -113,7 +116,13 @@ def continuous_slices(time_us, fs, gap_factor=3.0):
     dt = np.diff(t)
     if np.any(dt <= 0):
         raise ValueError('timestamps must be strictly increasing; resolve collisions first')
-    cuts = np.r_[0, np.flatnonzero(dt > gap_factor * 1e6 / fs) + 1, len(t)]
+    breaks = dt > gap_factor * 1e6 / fs
+    if segment_ids is not None:
+        groups = np.asarray(segment_ids)
+        if groups.shape != t.shape or groups.dtype.kind not in 'iu' or np.any(np.diff(groups) < 0):
+            raise ValueError('Segment IDs must be aligned, integer and nondecreasing')
+        breaks |= groups[1:] != groups[:-1]
+    cuts = np.r_[0, np.flatnonzero(breaks) + 1, len(t)]
     return [slice(int(a), int(b)) for a, b in zip(cuts[:-1], cuts[1:])]
 
 

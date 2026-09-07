@@ -119,9 +119,9 @@ def bandstop(data: np.ndarray, fs: float = FS,
     return _bandstop_shared(data, fs=fs, center=center, bw=bw, order=order)
 
 
-def apply_filters(data: np.ndarray) -> np.ndarray:
+def apply_filters(data: np.ndarray, fs: float = FS) -> np.ndarray:
     """Wrapper around shared lilia.signal.apply_filters for backward compatibility."""
-    return _apply_filters_shared(data, fs=FS, bandpass_low=BANDPASS_LOW,
+    return _apply_filters_shared(data, fs=fs, bandpass_low=BANDPASS_LOW,
                                  bandpass_high=BANDPASS_HIGH, notch_freq=NOTCH_FREQ,
                                  notch_q=NOTCH_Q, bandstop_center=ARTIFACT_PEAK_HZ,
                                  bandstop_bw=ARTIFACT_PEAK_BW)
@@ -196,7 +196,14 @@ def run_model(model, data, window=MODEL_WINDOW, hop=None, device='cpu'):
     if hop is None:
         hop = window // 2
 
+    data = np.asarray(data)
+    if data.ndim != 2 or not np.isfinite(data).all():
+        raise ValueError('Model input must be a finite (samples, channels) array')
+    if not isinstance(window, int) or not isinstance(hop, int) or window < 4 or not 1 <= hop < window:
+        raise ValueError('Model window must be at least 4 samples and 1 <= hop < window')
     N, n_ch_in = data.shape
+    if N < window:
+        raise ValueError('Model input must contain at least one complete model window')
     pad = hop
     data_padded = np.concatenate([
         data[:pad][::-1].copy(),
@@ -225,9 +232,13 @@ def run_model(model, data, window=MODEL_WINDOW, hop=None, device='cpu'):
             inp       = torch.from_numpy(chunk.T).unsqueeze(0).float().to(device)
             x_rms     = torch.sqrt((inp ** 2).mean(dim=(1, 2), keepdim=True)) + 1e-8
             pred      = (model(inp / x_rms) * x_rms).squeeze(0).cpu().numpy().T
+            if pred.shape != (window, N_CH_OUT) or not np.isfinite(pred).all():
+                raise ValueError('Model output has incorrect shape or non-finite samples')
             output[start:end]  += pred * hann[:, None]
             weights[start:end] += hann
 
+    if np.any(weights[pad:pad + N] <= 0):
+        raise ValueError('Overlap-add left uncovered output samples')
     weights = np.maximum(weights, 1e-8)
     return (output / weights[:, None])[pad : pad + N].astype(np.float32)
 
