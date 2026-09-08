@@ -36,7 +36,6 @@ import matplotlib.ticker as mticker
 from lilia.windowing import continuous_slices, plot_breaks, finite_runs
 import numpy as np
 import pandas as pd
-from scipy import signal
 from lilia.quality import (
     get_eeg_quality_index_v2_parametric,
     get_ibrain_device_eeg_quality_v2_params,
@@ -45,7 +44,7 @@ from lilia.qeeg import compute_qeeg_indices
 from lilia.event_qeeg import analyze_recording, summarize_branch
 from lilia.event_qeeg_io import write_event_qeeg_table, json_safe
 from lilia.provenance import file_sha256
-from lilia.io import read_lilia_frame, load_merged_csv, bandpass_filter, read_abs_time_offset as _read_abs_time_offset_shared
+from lilia.io import read_lilia_frame, load_merged_csv as _load_merged_csv_shared, bandpass_filter as _bandpass_filter_shared, read_abs_time_offset as _read_abs_time_offset_shared
 from lilia.time_utils import hhmm_to_local_dt, hhmm_to_utc_us, utc_us_to_local_dt
 from lilia.pathing import get_project_root
 from lilia.tflite import apply_tflite_windowed as _apply_tflite_shared
@@ -127,13 +126,8 @@ HARDY2_EVENTS = [
     ('End', '16:36', '#2ca02c'),
 ]
 
-HARDY2_BANDS = {
-    'delta': (1.0, 4.0),
-    'theta': (4.0, 8.0),
-    'alpha': (8.0, 13.0),
-    'beta':  (13.0, 30.0),
-    'gamma': (30.0, 45.0),
-}
+from lilia.hardy2 import BANDS as HARDY2_BANDS
+
 
 HARDY2_BAND_COLORS = {
     'delta': '#6a3d9a',
@@ -156,6 +150,15 @@ HARDY2_INDEX_COLORS = {
     'calm': '#4363d8',
     'relaxation': '#f58231',
 }
+
+
+# Preserve imports used by external legacy plotting scripts.
+def load_merged_csv(*args, **kwargs):
+    return _load_merged_csv_shared(*args, **kwargs)
+
+
+def bandpass_filter(*args, **kwargs):
+    return _bandpass_filter_shared(*args, **kwargs)
 
 
 # ── Time helpers ───────────────────────────────────────────────────────────────
@@ -375,59 +378,23 @@ def _bandpower_from_psd(freqs: np.ndarray, psd: np.ndarray,
     return float(np.trapezoid(psd[mask], freqs[mask]))
 
 
-def _compute_hardy2_windowed_metrics(time_us: np.ndarray,
-                                     data: np.ndarray,
-                                     win_sec: float = 5.0,
-                                     fs: float = FS):
-    """Compute 5-band relative powers + qEEG indices in non-overlapping windows."""
-    win = int(win_sec * fs)
-    n = len(data)
-    n_ch = data.shape[1]
-
-    time_dt = []
-    band_acc = {k: [] for k in HARDY2_BANDS}
-    idx_acc = {k: [] for k in HARDY2_INDEX_KEYS}
-
-    for start in range(0, n - win + 1, win):
-        seg = data[start:start + win]
-        mid_us = int(time_us[start + win // 2])
-        time_dt.append(us_to_local_dt(mid_us))
-
-        per_ch_band = {k: [] for k in HARDY2_BANDS}
-        per_ch_idx = {k: [] for k in HARDY2_INDEX_KEYS}
-        for ch_i in range(n_ch):
-            x = seg[:, ch_i].astype(np.float64)
-            freqs, psd = signal.welch(
-                x,
-                fs=fs,
-                nperseg=min(len(x), int(fs * 4)),
-                noverlap=min(len(x) // 2, int(fs * 2)),
-                window='hann',
-            )
-            p = {k: _bandpower_from_psd(freqs, psd, *fr)
-                 for k, fr in HARDY2_BANDS.items()}
-            p_sum = sum(p.values()) + 1e-12
-            for k in HARDY2_BANDS:
-                per_ch_band[k].append(p[k] / p_sum)
-
-            idx = compute_qeeg_indices(x, fs=fs)
-            for k in HARDY2_INDEX_KEYS:
-                per_ch_idx[k].append(float(idx[k]))
-
-        for k in HARDY2_BANDS:
-            band_acc[k].append(float(np.median(per_ch_band[k])))
-        for k in HARDY2_INDEX_KEYS:
-            idx_acc[k].append(float(np.median(per_ch_idx[k])))
-
-    return np.array(time_dt), {k: np.array(v) for k, v in band_acc.items()}, \
-        {k: np.array(v) for k, v in idx_acc.items()}
+def _compute_hardy2_windowed_metrics(time_us: np.ndarray, data: np.ndarray,
+                                     win_sec: float = 5.0, fs: float = FS):
+    """Compatibility adapter; supplied data is already filtered by the caller."""
+    from lilia.hardy2 import analyze_hardy2
+    result = analyze_hardy2(time_us, data, fs=fs, win_sec=win_sec, use_bandpass=False)
+    grid = result['grid']
+    times = np.array([]) if grid is None else np.array([us_to_local_dt(t) for t in grid.columns['window_center_us']])
+    return times, {k: result['metrics'][k] for k in HARDY2_BANDS}, {k: result['metrics'][k] for k in HARDY2_INDEX_KEYS}
 
 
-def _annotate_hardy2_events(ax: plt.Axes) -> None:
+def _annotate_hardy2_events(ax: plt.Axes, limits=None) -> None:
     """Add Hardy_2 event lines and labels."""
     y_positions = [0.965, 0.925, 0.965]
     for (label, hhmm, color), ypos in zip(HARDY2_EVENTS, y_positions):
         dt = hhmm_to_dt(hhmm)
+        if limits is not None and not limits[0] <= dt <= limits[1]:
+            continue
         ax.axvline(dt, color=color, ls='--', lw=1.5, alpha=0.9, zorder=4)
         ax.text(dt, ypos, f'{hhmm} {label}', color=color, fontsize=10,
                 fontweight='bold', ha='center', va='top',
@@ -506,127 +473,134 @@ def _style_presentation_axis(ax: plt.Axes) -> None:
     ax.tick_params(labelsize=10)
 
 
-def plot_hardy2_band_and_indices(outdir: str,
-                                 win_sec: float = QEEG_WIN_SEC,
-                                 use_bandpass: bool = True):
-    """Generate Hardy_2 band-power and wellness-index plots with event markers."""
-    merged = os.path.join(IBRAIN_DIR, 'Hardy_2(SN036)', 'merged.csv')
-    if not os.path.isfile(merged):
-        raise FileNotFoundError(f'merged.csv not found: {merged}')
+def _plot_hardy2_result(result, outdir, win_sec):
+    """Plot only source-local runs; period shading follows accepted windows."""
+    from lilia.hardy2 import BANDS, INDEX_KEYS
+    grid = result['grid']
+    times = np.array([us_to_local_dt(t) for t in grid.columns['window_center_us']])
+    groups = grid.columns['segment_id']
+    colors = ['#dddddd', '#d9ecff', '#ffe3d9', '#e6f7e6']
+    artifacts = []
 
-    os.makedirs(outdir, exist_ok=True)
-    print(f'\n[Hardy_2] loading: {merged}')
-    time_us, data = load_merged_csv(merged)
-    if use_bandpass:
-        data = bandpass_filter(data, fs=FS, lo=BP_LOW, hi=BP_HIGH)
+    def shade(ax, key=None):
+        for period, color in zip(result['summary']['periods'], colors):
+            spans = period['spans']
+            for span in spans:
+                ax.axvspan(us_to_local_dt(span['start_us']), us_to_local_dt(span['end_us']),
+                           color=color, alpha=.26, zorder=0)
+            if spans and key is not None:
+                widest = max(spans, key=lambda s: s['end_us']-s['start_us'])
+                center = us_to_local_dt((widest['start_us']+widest['end_us'])//2)
+                ax.text(center, .895, f'{period["name"]}: {period["means"][key]*100:.1f}%',
+                        ha='center', va='top', fontsize=10, transform=ax.get_xaxis_transform(),
+                        bbox=dict(boxstyle='round,pad=0.24', fc='white', ec='none', alpha=.88))
 
-    print(f'[Hardy_2] computing {win_sec:.1f}s windowed metrics...')
-    time_dt, band_power, indices = _compute_hardy2_windowed_metrics(
-        time_us, data, win_sec=win_sec, fs=FS)
+    def finish(fig, ax, title, stem):
+        ax.set_title(title, fontsize=17, fontweight='bold', pad=32)
+        ax.set_xlabel('Local Time (UTC+8, HH:MM)')
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        ax.xaxis.set_major_locator(mdates.MinuteLocator(byminute=range(0, 60, 3)))
+        _style_presentation_axis(ax)
+        limits = [us_to_local_dt(result['segments'][0]['raw_start_us']),
+                  us_to_local_dt(result['segments'][-1]['raw_end_us'])]
+        ax.set_xlim(limits)
+        _annotate_hardy2_events(ax, limits=limits)
+        fig.tight_layout()
+        try:
+            for extension in ('png', 'svg'):
+                path = Path(outdir)/f'{stem}.{extension}'
+                fig.savefig(path, dpi=180)
+                artifacts.append(path)
+        finally:
+            plt.close(fig)
 
-    period_defs = _hardy2_period_masks(time_dt)
-    gap_sec = max(15.0, win_sec * 2.5)
-    for band_key in ['delta', 'theta', 'alpha', 'beta', 'gamma']:
-        fig1, ax1 = plt.subplots(figsize=(16, 6.3))
-        y = band_power[band_key]
-        y_smooth = _smooth_series(y, win_points=5)
-        raw_t, raw_y = _series_with_gaps(time_dt, y, gap_sec=gap_sec)
-        smooth_t, smooth_y = _series_with_gaps(time_dt, y_smooth, gap_sec=gap_sec)
+    channels = result['channels']['delta'].shape[1]
+    for key in BANDS:
+        fig, ax = plt.subplots(figsize=(16, 6.3))
+        shade(ax, key)
+        tx, y = plot_breaks(times, result['metrics'][key], groups)
+        sx, sy = plot_breaks(times, result['smooth'][key], groups)
+        color = HARDY2_BAND_COLORS[key]
+        ax.plot(tx, y, lw=1.1, color=color, alpha=.22, marker='.')
+        ax.plot(sx, sy, lw=3., color=color, marker='.', label=f'{key.capitalize()} ratio (5-window smooth)')
+        ax.fill_between(tx, 0, y, color=color, alpha=.08)
+        ax.text(0, 1.02, f'Median across {channels} channels, {win_sec:g} s windows; quality scoring disabled',
+                transform=ax.transAxes, fontsize=10.5, color='#444444')
+        ax.set_ylabel('Band Ratio (%)')
+        ax.set_ylim(0, 1)
+        ax.yaxis.set_major_formatter(mticker.PercentFormatter(xmax=1.))
+        ax.legend(loc='lower right', frameon=False, fontsize=10)
+        finish(fig, ax, f'Hardy_2(SN036) {key.capitalize()} Band Ratio vs Time',
+               f'Hardy_2_SN036_{key}_band_ratio_vs_time')
 
-        for period_name, mask, shade_color in period_defs:
-            if mask.sum() == 0:
-                continue
-            t0 = time_dt[np.argmax(mask)]
-            t1 = time_dt[len(mask) - 1 - np.argmax(mask[::-1])]
-            ax1.axvspan(t0, t1, color=shade_color, alpha=0.26, zorder=0)
-            mean_ratio = float(np.nanmean(y[mask]))
-            xm = t0 + (t1 - t0) / 2
-            ax1.text(
-                xm, 0.895,
-                f'{period_name}: {mean_ratio * 100:.1f}%',
-                ha='center', va='top', fontsize=10, fontweight='bold',
-                transform=ax1.get_xaxis_transform(),
-                color='#111111',
-                bbox=dict(boxstyle='round,pad=0.24', fc='white', ec='none', alpha=0.88),
-            )
+    fig, ax = plt.subplots(figsize=(16, 6.8))
+    shade(ax)
+    for key in INDEX_KEYS:
+        ax.plot(*plot_breaks(times, result['metrics'][key], groups), lw=1., alpha=.2,
+                color=HARDY2_INDEX_COLORS[key], marker='.')
+        ax.plot(*plot_breaks(times, result['smooth'][key], groups), lw=2.7,
+                color=HARDY2_INDEX_COLORS[key], marker='.', label=HARDY2_INDEX_LABELS[key])
+    ax.axhline(0, color='k', lw=.8, ls='--', alpha=.5)
+    ax.text(0, 1.02, f'Thin: {win_sec:g} s windows; bold: 5-window smooth within valid runs; quality scoring disabled',
+            transform=ax.transAxes, fontsize=10.5, color='#444444')
+    ax.set_ylabel('Index (−1 to +1)')
+    ax.set_ylim(-1.1, 1.1)
+    ax.legend(loc='lower right', ncol=4, frameon=False, fontsize=11)
+    finish(fig, ax, 'Hardy_2(SN036) Focus / Flow / Calm / Relax vs Time',
+           'Hardy_2_SN036_focus_flow_calm_relax_vs_time')
+    return artifacts
 
-        ax1.plot(raw_t, raw_y, lw=1.1,
-                 color=HARDY2_BAND_COLORS[band_key], alpha=0.22)
-        ax1.plot(smooth_t, smooth_y, lw=3.0,
-                 color=HARDY2_BAND_COLORS[band_key],
-                 label=f'{band_key.capitalize()} ratio (25s smooth)')
-        ax1.fill_between(raw_t, 0, raw_y,
-                         color=HARDY2_BAND_COLORS[band_key], alpha=0.08)
 
-        ax1.set_title(
-            f'Hardy_2(SN036) {band_key.capitalize()} Band Ratio vs Time',
-            fontsize=17, fontweight='bold', pad=12)
-        ax1.text(0.0, 1.02,
-                 'Median across 4 channels, 5 s windows, bold line = smoothed trend',
-                 transform=ax1.transAxes, fontsize=10.5, color='#444444')
-        ax1.set_ylabel('Band Ratio (%)')
-        ax1.set_xlabel('Local Time (UTC+8, HH:MM)')
-        ax1.set_ylim(0, 1)
-        ax1.yaxis.set_major_formatter(mticker.PercentFormatter(xmax=1.0))
-        ax1.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-        ax1.xaxis.set_major_locator(mdates.MinuteLocator(byminute=range(0, 60, 3)))
-        _style_presentation_axis(ax1)
-        ax1.legend(loc='lower right', frameon=False, fontsize=10)
-        _annotate_hardy2_events(ax1)
-        fig1.tight_layout()
-        out_band = os.path.join(
-            outdir, f'Hardy_2_SN036_{band_key}_band_ratio_vs_time.png')
-        fig1.savefig(out_band, dpi=180)
-        fig1.savefig(os.path.splitext(out_band)[0] + '.svg')
-        plt.close(fig1)
-        print(f'[Hardy_2] saved: {out_band}')
-
-    fig2, ax2 = plt.subplots(figsize=(16, 6.8))
-    for period_name, mask, shade_color in period_defs:
-        if mask.sum() == 0:
-            continue
-        t0 = time_dt[np.argmax(mask)]
-        t1 = time_dt[len(mask) - 1 - np.argmax(mask[::-1])]
-        ax2.axvspan(t0, t1, color=shade_color, alpha=0.22, zorder=0)
-    for k in HARDY2_INDEX_KEYS:
-        y_raw = indices[k]
-        y_smooth = _smooth_series(y_raw, win_points=5)
-        raw_t, raw_y = _series_with_gaps(time_dt, y_raw, gap_sec=gap_sec)
-        smooth_t, smooth_y = _series_with_gaps(time_dt, y_smooth, gap_sec=gap_sec)
-        ax2.plot(raw_t, raw_y, lw=1.0, alpha=0.20,
-                 color=HARDY2_INDEX_COLORS[k])
-        ax2.plot(smooth_t, smooth_y, lw=2.7,
-                 color=HARDY2_INDEX_COLORS[k], label=HARDY2_INDEX_LABELS[k])
-    ax2.axhline(0, color='k', lw=0.8, ls='--', alpha=0.5)
-    ax2.set_title('Hardy_2(SN036) Focus / Flow / Calm / Relax vs Time',
-                  fontsize=17, fontweight='bold', pad=12)
-    ax2.text(0.0, 1.02,
-             'Thin line = raw 5 s windows, bold line = 25 s smoothed trend',
-             transform=ax2.transAxes, fontsize=10.5, color='#444444')
-    ax2.set_ylabel('Index (−1 to +1)')
-    ax2.set_xlabel('Local Time (UTC+8, HH:MM)')
-    ax2.set_ylim(-1.1, 1.1)
-    ax2.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-    ax2.xaxis.set_major_locator(mdates.MinuteLocator(byminute=range(0, 60, 3)))
-    _style_presentation_axis(ax2)
-    ax2.legend(loc='upper center', bbox_to_anchor=(0.5, -0.14), ncol=4,
-               frameon=False, fontsize=11)
-    _annotate_hardy2_events(ax2)
-    fig2.tight_layout(rect=[0, 0.05, 1, 1])
-    out_idx = os.path.join(outdir, 'Hardy_2_SN036_focus_flow_calm_relax_vs_time.png')
-    fig2.savefig(out_idx, dpi=180)
-    fig2.savefig(os.path.splitext(out_idx)[0] + '.svg')
-    plt.close(fig2)
-    print(f'[Hardy_2] saved: {out_idx}')
-
-    _summarize_hardy2_periods(time_dt, band_power, 'Band Power')
-    _summarize_hardy2_periods(time_dt, {
-        'focus': indices['focus'],
-        'flow': indices['flow'],
-        'calm': indices['calm'],
-        'relax': indices['relaxation'],
-    }, 'Indices')
-
+def plot_hardy2_band_and_indices(outdir: str, win_sec: float = QEEG_WIN_SEC,
+                                 use_bandpass: bool = True, csv_path=None):
+    """Analyze the special five-band branch and persist source/period audits."""
+    from lilia.hardy2 import analyze_hardy2, summarize_periods
+    from lilia.hardy2_io import write_hardy2_table
+    merged = Path(csv_path) if csv_path is not None else Path(IBRAIN_DIR)/'Hardy_2(SN036)'/'merged.csv'
+    Path(outdir).mkdir(parents=True, exist_ok=True)
+    audit_path = Path(outdir)/'Hardy_2_SN036_analysis.json'
+    audit = {'kind': 'hardy2_analysis', 'schema_version': 1, 'source_path': str(merged.resolve()),
+             'status': 'processing', 'quality_state': 'disabled', 'errors': [], 'artifacts': {}}
+    try:
+        audit['source_id'] = file_sha256(merged)
+        source = read_lilia_frame(merged)
+        t = source.iloc[:, 0].to_numpy(dtype=np.int64)
+        raw = source.iloc[:, 1:].to_numpy(dtype=np.float32)
+        params = {'fs': FS, 'win_sec': win_sec, 'step_sec': win_sec, 'index_space': 'raw_samples',
+                  'channels': raw.shape[1], 'bands': HARDY2_BANDS, 'use_bandpass': use_bandpass,
+                  'bandpass': [BP_LOW, BP_HIGH], 'quality_state': 'disabled',
+                  'event_us': [hhmm_to_us(h) for _, h, _ in HARDY2_EVENTS],
+                  'period_policy': 'complete_contained_windows', 'smooth_windows': 5,
+                  'aggregation': 'median across channels per window, then mean of unsmoothed window medians',
+                  'filter_policy': 'source segment; any nonfinite sample rejects filtered segment',
+                  'clock_policy': 'source UTC microseconds; display UTC+8; header offset not added'}
+        paths = [Path(__file__), *sorted((Path(__file__).parent/'lilia').glob('*.py'))]
+        code_id = hashlib.sha256(''.join(file_sha256(p) for p in paths).encode()).hexdigest()
+        audit.update(parameters=params, code_sha256=code_id, source_samples=len(t), source_epoch_us=int(t[0]))
+        result = analyze_hardy2(t, raw, fs=FS, win_sec=win_sec, use_bandpass=use_bandpass, low=BP_LOW, high=BP_HIGH)
+        result['summary'] = summarize_periods(result['grid'], result['metrics'], params['event_us'])
+        audit.update({k: result[k] for k in ('segments', 'window_audit', 'summary')})
+        audit.update(candidate_windows=len(result['valid']), valid_windows=int(result['valid'].sum()))
+        if result['grid'] is not None:
+            path = Path(outdir)/'Hardy_2_SN036_metrics.csv'
+            write_hardy2_table(path, merged, result, params, code_id)
+            for p in (path, Path(str(path)+'.meta.json')):
+                audit['artifacts'][p.name] = file_sha256(p)
+        if not result['valid'].any():
+            raise ValueError('No valid complete Hardy_2 windows; inspect analysis audit')
+        for p in _plot_hardy2_result(result, outdir, win_sec):
+            audit['artifacts'][p.name] = file_sha256(p)
+        for period in result['summary']['periods']:
+            print(f'[Hardy_2] {period["name"]}: {len(period["accepted_rows"])} valid windows ({period["status"]})')
+        audit['status'] = 'complete'
+    except Exception as exc:
+        audit['status'] = 'failed'
+        audit['errors'].append(f'{type(exc).__name__}: {exc}')
+        raise
+    finally:
+        audit_path.write_text(json.dumps(json_safe(audit), indent=2, allow_nan=False)+'\n')
+    print(f'[Hardy_2] outputs and source audit saved: {outdir}')
+    return audit
 
 # ── Plotting ───────────────────────────────────────────────────────────────────
 
@@ -1046,6 +1020,8 @@ def parse_args():
                    help='Skip TFLite model processing and comparison panels.')
     p.add_argument('--hardy2-analysis', action='store_true',
                    help='Only run Hardy_2(SN036) band/index plots with custom event markers.')
+    p.add_argument('--hardy2-csv', metavar='PATH',
+                   help='Hardy_2 source CSV (default: iBrainCenter/Hardy_2(SN036)/merged.csv).')
     p.add_argument('--hardy2-outdir',
                    default=os.path.join(IBRAIN_DIR, 'event_verification'),
                    metavar='DIR', help='Output directory for Hardy_2 analysis figures.')
@@ -1063,7 +1039,7 @@ def main():
     args = parse_args()
 
     if args.hardy2_analysis:
-        plot_hardy2_band_and_indices(args.hardy2_outdir, win_sec=QEEG_WIN_SEC)
+        plot_hardy2_band_and_indices(args.hardy2_outdir, win_sec=QEEG_WIN_SEC, csv_path=args.hardy2_csv)
         print('\nDone.')
         return
 

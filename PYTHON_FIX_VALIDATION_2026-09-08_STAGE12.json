@@ -1,0 +1,1398 @@
+{
+  "date": "2026-09-08",
+  "stage": 12,
+  "scope": "Segmented single-event BP zoom with pre-event-rest baselines, verifiable crops and hash dtype safety",
+  "git_base": "edd119bcb9afb60ba4b3d6b1b8353e3a4bb7f538",
+  "git_state": "Stages 9 through 12 remain in working tree; no commit/push or fetch this stage",
+  "checks": {
+    "tests": 184,
+    "test_skips": 0,
+    "new_zoom_tests": 12,
+    "new_parser_tests": 1,
+    "tests_result": "passed",
+    "python_compile_files": 131,
+    "pyflakes": "passed",
+    "bundle": "passed",
+    "diff_whitespace": "passed",
+    "real_zoom_tables_reloaded": 2,
+    "synthetic_zoom_tables_reloaded": 4,
+    "general_table_reloaded": 1,
+    "zoom_artifact_hashes_checked": 24,
+    "zoom_final_code_fingerprints_checked": 6,
+    "general_full_session_table_and_summary_equal": true,
+    "visual_review": "passed",
+    "visual_cases": [
+      "real",
+      "real_no_baseline",
+      "gapped",
+      "large_gap",
+      "short_event"
+    ]
+  },
+  "environment": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scipy": "1.15.3"
+  },
+  "parser_incident": {
+    "triggering_source_sha256": "68e6869767633b42663ae25cd2d009dec1cf0d89a139e438ea1784b4cd028241",
+    "pre_fix_validation_exit_codes": [
+      139,
+      139
+    ],
+    "isolated_column_process_return_code": -11,
+    "traceback_location": "pandas CSV parser during automatic type inference",
+    "python_parser_engine_also_failed": true,
+    "fix": "Explicit string dtype for source_id and config_id in shared _load_window_table",
+    "post_fix_validation_exit_code": 0,
+    "regression_cases": [
+      "actual exponent-like SHA-256",
+      "64 leading zeros"
+    ],
+    "root_cause_limit": "Input and parser inference trigger localized; pandas native internals not fully diagnosed"
+  },
+  "evidence_note": "Long integer row/index arrays are summarized by count, first/last three and SHA-256 of compact JSON; full mappings remain in sidecars.",
+  "continuous_comparison": {
+    "windows": 24,
+    "quality_max_abs_error": 0.0,
+    "metrics_max_abs_errors": {
+      "focus": 0.0,
+      "flow": 0.0,
+      "calm": 0.0,
+      "relaxation": 0.0
+    },
+    "heatmap_max_abs_errors": {
+      "heatmap_abs": 0.0,
+      "heatmap_delta": 0.0
+    }
+  },
+  "real": {
+    "status": "complete",
+    "source_samples": 1978896,
+    "source_id": "e726ba56cda9e5afaa52a7bd33fe56f166e2bf396b942a8040a6d38f65b7b1e8",
+    "source_segments": 1,
+    "candidate_windows": 791,
+    "accepted_windows": 748,
+    "total_bins": 131,
+    "selection": {
+      "target": {
+        "start_us": 1778569560000000,
+        "end_us": 1778570220000000,
+        "label": "Mindfulness Meditation",
+        "color": "#bfef45",
+        "participates": true
+      },
+      "display_runs": [
+        {
+          "segment_id": 0,
+          "raw_start_idx": 1663216,
+          "raw_end_idx": 1978896,
+          "start_us": 1778569560000554,
+          "end_us": 1778570191360554,
+          "display_raw_indices": {
+            "count": 31569,
+            "first": [
+              1663216,
+              1663226,
+              1663236
+            ],
+            "last": [
+              1978876,
+              1978886,
+              1978895
+            ],
+            "list_sha256": "1a6020f621ff9e4431008a88e25963b90083b47919fec2dbf165b051acf85910"
+          }
+        }
+      ],
+      "missing_raw_intervals": [
+        {
+          "start_us": 1778569560000000,
+          "end_us": 1778569560000554
+        },
+        {
+          "start_us": 1778570191360554,
+          "end_us": 1778570220000000
+        }
+      ],
+      "display_bins": {
+        "count": 21,
+        "first": [
+          110,
+          111,
+          112
+        ],
+        "last": [
+          128,
+          129,
+          130
+        ],
+        "list_sha256": "bae963bb2aab84ceacc1d2db54f5b9bff0f21f67f97b5507abe94449cdf30d94"
+      },
+      "complete_event_bins": [
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130
+      ],
+      "valid_delta_bins": [
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130
+      ],
+      "boundary_bins": [
+        110
+      ],
+      "baseline": {
+        "event": "Mindfulness Meditation",
+        "start_us": 1778569380000000,
+        "end_us": 1778569560000000,
+        "baseline_metric_rows": {
+          "count": 35,
+          "first": [
+            630,
+            631,
+            632
+          ],
+          "last": [
+            662,
+            663,
+            664
+          ],
+          "list_sha256": "2833a78222aefaeee73b2f1979c8d7e2078c6b9a4d58acfde34c97b859d1292e"
+        },
+        "event_metric_rows": {
+          "count": 124,
+          "first": [
+            666,
+            667,
+            668
+          ],
+          "last": [
+            788,
+            789,
+            790
+          ],
+          "list_sha256": "e7e900b0315f357cb2421c4c5d240d973e55e1f5df585be788b6d9390727e726"
+        },
+        "baseline_bins": [
+          105,
+          106,
+          107,
+          108,
+          109
+        ],
+        "event_bins": [
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          127,
+          128,
+          129,
+          130
+        ],
+        "heatmap_reference": [
+          0.5380947369856928,
+          -0.6859824358450448,
+          -0.6505887670930406,
+          0.08118822558054625
+        ],
+        "bar_status": "accepted",
+        "heatmap_status": "accepted"
+      },
+      "baseline_candidate_rows": {
+        "count": 35,
+        "first": [
+          630,
+          631,
+          632
+        ],
+        "last": [
+          662,
+          663,
+          664
+        ],
+        "list_sha256": "2833a78222aefaeee73b2f1979c8d7e2078c6b9a4d58acfde34c97b859d1292e"
+      },
+      "event_candidate_rows": {
+        "count": 125,
+        "first": [
+          666,
+          667,
+          668
+        ],
+        "last": [
+          788,
+          789,
+          790
+        ],
+        "list_sha256": "ed244cb4ba2ae5be5b93f8337fd9db169f3d163c06b138ec85e5f50f512fb523"
+      },
+      "baseline_excluded_rows": [],
+      "event_excluded_rows": [
+        672
+      ],
+      "boundary_metric_rows": [
+        665
+      ],
+      "status": "computed"
+    },
+    "quality_status_counts": {
+      "low_quality": 43,
+      "accepted": 748
+    },
+    "metric_status_counts": {
+      "computed": 791
+    },
+    "artifact_hashes": {
+      "Hsin_SN032_Mindfulness_Meditation_ch1-4_qEEG_delta_bp_metrics.csv": "1edcfc2bb16b9debd0d6dce398cd9392673bfd69f1fdd5cd49f71f809cfd0951",
+      "Hsin_SN032_Mindfulness_Meditation_ch1-4_qEEG_delta_bp_metrics.csv.meta.json": "3aa6910ae62f422058ccbda86a583cd70c7dbd1e1df3ab3af331526551d9d70e",
+      "Hsin_SN032_Mindfulness_Meditation_ch1-4_qEEG_delta.png": "c0b4d277b4c663ebf837f25c7a6486358b49f2d3725f4c11bafcf8029175626c",
+      "Hsin_SN032_Mindfulness_Meditation_ch1-4_qEEG_delta.svg": "af7c248f5a58d45f2c97b69037b43647d6440dd3a1be137e93ac52badc9fbf25"
+    },
+    "legacy_comparison": {
+      "quality_max_abs_error": 1.1102230246251565e-16,
+      "metric_max_abs_errors_on_accepted_rows": {
+        "focus": 1.1102230246251565e-16,
+        "flow": 1.1102230246251565e-16,
+        "calm": 1.1102230246251565e-16,
+        "relaxation": 9.8879238130678e-17
+      },
+      "heatmap_abs_max_abs_error": 0.0,
+      "old_minus_new_bin_center_us": [
+        2500000
+      ],
+      "old_event_selected_bins": [
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130
+      ],
+      "new_complete_event_bins": [
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130
+      ],
+      "full_session_delta_policy_changes": {
+        "focus": {
+          "finite_old_bins": 121,
+          "finite_new_bins": 108,
+          "max_abs_delta_difference_on_common_bins": 0.1617561037488649
+        },
+        "flow": {
+          "finite_old_bins": 121,
+          "finite_new_bins": 108,
+          "max_abs_delta_difference_on_common_bins": 0.14230582017428534
+        },
+        "calm": {
+          "finite_old_bins": 121,
+          "finite_new_bins": 108,
+          "max_abs_delta_difference_on_common_bins": 0.05779717312227306
+        },
+        "relaxation": {
+          "finite_old_bins": 121,
+          "finite_new_bins": 108,
+          "max_abs_delta_difference_on_common_bins": 0.058699153264400075
+        }
+      },
+      "target_new_baseline": {
+        "event": "Mindfulness Meditation",
+        "start_us": 1778569380000000,
+        "end_us": 1778569560000000,
+        "baseline_metric_rows": {
+          "count": 35,
+          "first": [
+            630,
+            631,
+            632
+          ],
+          "last": [
+            662,
+            663,
+            664
+          ],
+          "list_sha256": "2833a78222aefaeee73b2f1979c8d7e2078c6b9a4d58acfde34c97b859d1292e"
+        },
+        "event_metric_rows": {
+          "count": 124,
+          "first": [
+            666,
+            667,
+            668
+          ],
+          "last": [
+            788,
+            789,
+            790
+          ],
+          "list_sha256": "e7e900b0315f357cb2421c4c5d240d973e55e1f5df585be788b6d9390727e726"
+        },
+        "baseline_bins": [
+          105,
+          106,
+          107,
+          108,
+          109
+        ],
+        "event_bins": [
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          127,
+          128,
+          129,
+          130
+        ],
+        "heatmap_reference": [
+          0.5380947369856928,
+          -0.6859824358450448,
+          -0.6505887670930406,
+          0.08118822558054625
+        ],
+        "bar_status": "accepted",
+        "heatmap_status": "accepted"
+      },
+      "target_old_baseline_reference": [
+        0.5636254625969566,
+        -0.7097514545346112,
+        -0.6709133936583964,
+        0.059599308787040034
+      ]
+    }
+  },
+  "synthetic": {
+    "gapped": {
+      "status": "complete",
+      "source_samples": 80100,
+      "source_id": "35c2a9825dee73cc549ae6a99598d68124c4deececdb27c8d93606431b83635a",
+      "source_segments": 3,
+      "candidate_windows": 32,
+      "accepted_windows": 32,
+      "total_bins": 5,
+      "selection": {
+        "target": {
+          "start_us": 1778565660000000,
+          "end_us": 1778565750000000,
+          "label": "Test",
+          "color": "red",
+          "participates": true
+        },
+        "display_runs": [
+          {
+            "segment_id": 1,
+            "raw_start_idx": 25100,
+            "raw_end_idx": 35100,
+            "start_us": 1778565660000000,
+            "end_us": 1778565680000000,
+            "display_raw_indices": {
+              "count": 590,
+              "first": [
+                25100,
+                25117,
+                25134
+              ],
+              "last": [
+                35079,
+                35096,
+                35099
+              ],
+              "list_sha256": "f60fa262eef683fc0d037101557bea92fc539f93f54bcffd2586863b6739764e"
+            }
+          },
+          {
+            "segment_id": 2,
+            "raw_start_idx": 35100,
+            "raw_end_idx": 70096,
+            "start_us": 1778565680008000,
+            "end_us": 1778565750000000,
+            "display_raw_indices": {
+              "count": 2060,
+              "first": [
+                35100,
+                35117,
+                35134
+              ],
+              "last": [
+                70069,
+                70086,
+                70095
+              ],
+              "list_sha256": "fc702890cb7592e558141c12aa2435cec0ef657d8401b2f707d92595972fba23"
+            }
+          }
+        ],
+        "missing_raw_intervals": [
+          {
+            "start_us": 1778565680000000,
+            "end_us": 1778565680008000
+          }
+        ],
+        "display_bins": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "complete_event_bins": [
+          2,
+          3
+        ],
+        "valid_delta_bins": [
+          2,
+          3
+        ],
+        "boundary_bins": [
+          1,
+          4
+        ],
+        "baseline": {
+          "event": "Test",
+          "start_us": null,
+          "end_us": 1778565660000000,
+          "baseline_metric_rows": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "event_metric_rows": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "baseline_bins": [
+            0
+          ],
+          "event_bins": [
+            2,
+            3
+          ],
+          "heatmap_reference": [
+            0.5100390191119383,
+            -0.6317631924745484,
+            -0.5884546498099631,
+            0.12773543006348176
+          ],
+          "bar_status": "accepted",
+          "heatmap_status": "accepted"
+        },
+        "baseline_candidate_rows": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "event_candidate_rows": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26
+        ],
+        "baseline_excluded_rows": [],
+        "event_excluded_rows": [],
+        "boundary_metric_rows": [
+          27
+        ],
+        "status": "computed"
+      },
+      "quality_status_counts": {
+        "accepted": 32
+      },
+      "metric_status_counts": {
+        "computed": 32
+      },
+      "artifact_hashes": {
+        "Test_SN000_Test_ch1-4_qEEG_delta_bp_metrics.csv": "d747c7a0167b9bdb8e04e36a26b2a3a087336312ecb6f7ce40dc2ad6ffedf1d7",
+        "Test_SN000_Test_ch1-4_qEEG_delta_bp_metrics.csv.meta.json": "dadbedd7489734508f95a3e54f79443e739c586d6a68adcb7c54feec9c88126f",
+        "Test_SN000_Test_ch1-4_qEEG_delta.png": "a813c448b82d35dbe6b15a1dcd33701a5989943be478f0eae57f590cde5e2328",
+        "Test_SN000_Test_ch1-4_qEEG_delta.svg": "da1b631f0c7dd2582c69fbac876f815bd9a4218266df71703ca618720848453b"
+      }
+    },
+    "no_baseline": {
+      "status": "excluded",
+      "source_samples": 80100,
+      "source_id": "35c2a9825dee73cc549ae6a99598d68124c4deececdb27c8d93606431b83635a",
+      "source_segments": 3,
+      "candidate_windows": 32,
+      "accepted_windows": 32,
+      "total_bins": 5,
+      "selection": {
+        "target": {
+          "start_us": 1778565660000000,
+          "end_us": 1778565750000000,
+          "label": "Test",
+          "color": "red",
+          "participates": true
+        },
+        "display_runs": [
+          {
+            "segment_id": 1,
+            "raw_start_idx": 25100,
+            "raw_end_idx": 35100,
+            "start_us": 1778565660000000,
+            "end_us": 1778565680000000,
+            "display_raw_indices": {
+              "count": 590,
+              "first": [
+                25100,
+                25117,
+                25134
+              ],
+              "last": [
+                35079,
+                35096,
+                35099
+              ],
+              "list_sha256": "f60fa262eef683fc0d037101557bea92fc539f93f54bcffd2586863b6739764e"
+            }
+          },
+          {
+            "segment_id": 2,
+            "raw_start_idx": 35100,
+            "raw_end_idx": 70096,
+            "start_us": 1778565680008000,
+            "end_us": 1778565750000000,
+            "display_raw_indices": {
+              "count": 2060,
+              "first": [
+                35100,
+                35117,
+                35134
+              ],
+              "last": [
+                70069,
+                70086,
+                70095
+              ],
+              "list_sha256": "fc702890cb7592e558141c12aa2435cec0ef657d8401b2f707d92595972fba23"
+            }
+          }
+        ],
+        "missing_raw_intervals": [
+          {
+            "start_us": 1778565680000000,
+            "end_us": 1778565680008000
+          }
+        ],
+        "display_bins": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "complete_event_bins": [
+          2,
+          3
+        ],
+        "valid_delta_bins": [],
+        "boundary_bins": [
+          1,
+          4
+        ],
+        "baseline": {
+          "event": "Test",
+          "start_us": 1778565660000000,
+          "end_us": 1778565660000000,
+          "baseline_metric_rows": [],
+          "event_metric_rows": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "baseline_bins": [],
+          "event_bins": [
+            2,
+            3
+          ],
+          "heatmap_reference": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "bar_status": "missing_baseline_or_event",
+          "heatmap_status": "missing_baseline"
+        },
+        "baseline_candidate_rows": [],
+        "event_candidate_rows": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26
+        ],
+        "baseline_excluded_rows": [],
+        "event_excluded_rows": [],
+        "boundary_metric_rows": [
+          27
+        ],
+        "status": "missing_baseline"
+      },
+      "quality_status_counts": {
+        "accepted": 32
+      },
+      "metric_status_counts": {
+        "computed": 32
+      },
+      "artifact_hashes": {
+        "Test_SN000_Test_ch1-4_qEEG_delta_bp_metrics.csv": "786e7e0c08d94e27f419c0cb888e9fc6e11f4d2dd9d95778549a26885337404a",
+        "Test_SN000_Test_ch1-4_qEEG_delta_bp_metrics.csv.meta.json": "6c0e3e842a603e1ca820961573f096ba3331f422edb29f79da78314b539a8a11",
+        "Test_SN000_Test_ch1-4_qEEG_delta.png": "fcdf4d4d162222700d10402afc7ffbf3df34196d91ad31be4d83a259a09c04e9",
+        "Test_SN000_Test_ch1-4_qEEG_delta.svg": "37354438d4448b85a712daafc07c2d9ea49bc6a76723f151cc76a8541ef66644"
+      }
+    },
+    "short_event": {
+      "status": "excluded",
+      "source_samples": 80100,
+      "source_id": "35c2a9825dee73cc549ae6a99598d68124c4deececdb27c8d93606431b83635a",
+      "source_segments": 3,
+      "candidate_windows": 32,
+      "accepted_windows": 32,
+      "total_bins": 5,
+      "selection": {
+        "target": {
+          "start_us": 1778565665000000,
+          "end_us": 1778565667000000,
+          "label": "Test",
+          "color": "red",
+          "participates": true
+        },
+        "display_runs": [
+          {
+            "segment_id": 1,
+            "raw_start_idx": 27600,
+            "raw_end_idx": 28600,
+            "start_us": 1778565665000000,
+            "end_us": 1778565667000000,
+            "display_raw_indices": {
+              "count": 60,
+              "first": [
+                27600,
+                27617,
+                27634
+              ],
+              "last": [
+                28569,
+                28586,
+                28599
+              ],
+              "list_sha256": "d5a0972ff91099b2dc9836fff194278d27554799244703fdf39a133072ffde23"
+            }
+          }
+        ],
+        "missing_raw_intervals": [],
+        "display_bins": [
+          1
+        ],
+        "complete_event_bins": [],
+        "valid_delta_bins": [],
+        "boundary_bins": [
+          1
+        ],
+        "baseline": {
+          "event": "Test",
+          "start_us": null,
+          "end_us": 1778565665000000,
+          "baseline_metric_rows": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "event_metric_rows": [],
+          "baseline_bins": [
+            0
+          ],
+          "event_bins": [],
+          "heatmap_reference": [
+            0.5100390191119383,
+            -0.6317631924745484,
+            -0.5884546498099631,
+            0.12773543006348176
+          ],
+          "bar_status": "missing_baseline_or_event",
+          "heatmap_status": "accepted"
+        },
+        "baseline_candidate_rows": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "event_candidate_rows": [],
+        "baseline_excluded_rows": [],
+        "event_excluded_rows": [],
+        "boundary_metric_rows": [
+          11
+        ],
+        "status": "no_complete_event_bins"
+      },
+      "quality_status_counts": {
+        "accepted": 32
+      },
+      "metric_status_counts": {
+        "computed": 32
+      },
+      "artifact_hashes": {
+        "Test_SN000_Test_ch1-4_qEEG_delta_bp_metrics.csv": "13e52ed87b5da752491c093ac098f4f55e8e29eada35e0a1b9638d64b9c7998c",
+        "Test_SN000_Test_ch1-4_qEEG_delta_bp_metrics.csv.meta.json": "d72380bcbef79a1d620f1c5a420e85aadb572bc8699c2d0ac85cce4b612a8dfd",
+        "Test_SN000_Test_ch1-4_qEEG_delta.png": "0735b95f38ef36b13e22bf3354018af83a055e65e70af5ebaac5140953387ace",
+        "Test_SN000_Test_ch1-4_qEEG_delta.svg": "1d63c9332663a59fc39e2c1eb2ff7ccc64ba5bbcffa7c816adb49a741ceae65f"
+      }
+    },
+    "large_gap": {
+      "status": "complete",
+      "source_samples": 80100,
+      "source_id": "68e6869767633b42663ae25cd2d009dec1cf0d89a139e438ea1784b4cd028241",
+      "source_segments": 3,
+      "candidate_windows": 32,
+      "accepted_windows": 32,
+      "total_bins": 5,
+      "selection": {
+        "target": {
+          "start_us": 1778565660000000,
+          "end_us": 1778565770000000,
+          "label": "Test",
+          "color": "red",
+          "participates": true
+        },
+        "display_runs": [
+          {
+            "segment_id": 1,
+            "raw_start_idx": 25100,
+            "raw_end_idx": 35100,
+            "start_us": 1778565660000000,
+            "end_us": 1778565680000000,
+            "display_raw_indices": {
+              "count": 590,
+              "first": [
+                25100,
+                25117,
+                25134
+              ],
+              "last": [
+                35079,
+                35096,
+                35099
+              ],
+              "list_sha256": "f60fa262eef683fc0d037101557bea92fc539f93f54bcffd2586863b6739764e"
+            }
+          },
+          {
+            "segment_id": 2,
+            "raw_start_idx": 35100,
+            "raw_end_idx": 70096,
+            "start_us": 1778565700008000,
+            "end_us": 1778565770000000,
+            "display_raw_indices": {
+              "count": 2060,
+              "first": [
+                35100,
+                35117,
+                35134
+              ],
+              "last": [
+                70069,
+                70086,
+                70095
+              ],
+              "list_sha256": "fc702890cb7592e558141c12aa2435cec0ef657d8401b2f707d92595972fba23"
+            }
+          }
+        ],
+        "missing_raw_intervals": [
+          {
+            "start_us": 1778565680000000,
+            "end_us": 1778565700008000
+          }
+        ],
+        "display_bins": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "complete_event_bins": [
+          2,
+          3
+        ],
+        "valid_delta_bins": [
+          2,
+          3
+        ],
+        "boundary_bins": [
+          1,
+          4
+        ],
+        "baseline": {
+          "event": "Test",
+          "start_us": null,
+          "end_us": 1778565660000000,
+          "baseline_metric_rows": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "event_metric_rows": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "baseline_bins": [
+            0
+          ],
+          "event_bins": [
+            2,
+            3
+          ],
+          "heatmap_reference": [
+            0.5100390191119383,
+            -0.6317631924745484,
+            -0.5884546498099631,
+            0.12773543006348176
+          ],
+          "bar_status": "accepted",
+          "heatmap_status": "accepted"
+        },
+        "baseline_candidate_rows": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "event_candidate_rows": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26
+        ],
+        "baseline_excluded_rows": [],
+        "event_excluded_rows": [],
+        "boundary_metric_rows": [
+          27
+        ],
+        "status": "computed"
+      },
+      "quality_status_counts": {
+        "accepted": 32
+      },
+      "metric_status_counts": {
+        "computed": 32
+      },
+      "artifact_hashes": {
+        "Test_SN000_Test_ch1-4_qEEG_delta_bp_metrics.csv": "d821b6e98550d4d7e092b367f993380cc1c4ca833fa55838b992ef7e73ec2e90",
+        "Test_SN000_Test_ch1-4_qEEG_delta_bp_metrics.csv.meta.json": "f2808c3b542cb979ef8096508ff9761aade02859ca342cacc8201986244e5356",
+        "Test_SN000_Test_ch1-4_qEEG_delta.png": "afde03a169745186e7ee96f93edb4ad47671c8fb360b62f6c9011254bb53cd85",
+        "Test_SN000_Test_ch1-4_qEEG_delta.svg": "c909ffb1e72e7f0d466f0b4686113fd4a337f6e31bb7ebd16774ad48153a4e39"
+      }
+    }
+  },
+  "general_full_session_table_and_summary_equal": true,
+  "fixture_sha256": "132e858e19baf490f0913b75a847756063762b2c7bc806b7411b57e6362ac543",
+  "real_no_baseline": {
+    "status": "excluded",
+    "reason": "missing_baseline",
+    "expected_cli_exit_code": 1,
+    "candidate_windows": 791,
+    "accepted_windows": 748,
+    "selection": {
+      "target": {
+        "start_us": 1778568600000000,
+        "end_us": 1778568900000000,
+        "label": "Color Agility Ladder",
+        "color": "#42d4f4",
+        "participates": true
+      },
+      "display_runs": [
+        {
+          "segment_id": 0,
+          "raw_start_idx": 1183216,
+          "raw_end_idx": 1333216,
+          "start_us": 1778568600000554,
+          "end_us": 1778568900000000,
+          "display_raw_indices": {
+            "count": 15001,
+            "first": [
+              1183216,
+              1183226,
+              1183236
+            ],
+            "last": [
+              1333196,
+              1333206,
+              1333215
+            ],
+            "list_sha256": "db13bebc030e42833468186f92d7da6bf106db76a4794b98dda0e8d4a10d6860"
+          }
+        }
+      ],
+      "missing_raw_intervals": [
+        {
+          "start_us": 1778568600000000,
+          "end_us": 1778568600000554
+        }
+      ],
+      "display_bins": [
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "complete_event_bins": [
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87
+      ],
+      "valid_delta_bins": [],
+      "boundary_bins": [
+        78,
+        88
+      ],
+      "baseline": {
+        "event": "Color Agility Ladder",
+        "start_us": 1778568600000000,
+        "end_us": 1778568600000000,
+        "baseline_metric_rows": [],
+        "event_metric_rows": {
+          "count": 55,
+          "first": [
+            475,
+            476,
+            477
+          ],
+          "last": [
+            530,
+            531,
+            532
+          ],
+          "list_sha256": "c42d588eee6b6c49df36ca890410295038b7c36cfb8de17f9df4e4a620504d5f"
+        },
+        "baseline_bins": [],
+        "event_bins": [
+          79,
+          80,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87
+        ],
+        "heatmap_reference": [
+          null,
+          null,
+          null,
+          null
+        ],
+        "bar_status": "missing_baseline_or_event",
+        "heatmap_status": "missing_baseline"
+      },
+      "baseline_candidate_rows": [],
+      "event_candidate_rows": {
+        "count": 59,
+        "first": [
+          474,
+          475,
+          476
+        ],
+        "last": [
+          530,
+          531,
+          532
+        ],
+        "list_sha256": "5b06327a659625ee58596b194f7d889cb84f72c1420995d5a3efd754653b4d3f"
+      },
+      "baseline_excluded_rows": [],
+      "event_excluded_rows": [
+        474,
+        494,
+        509,
+        521
+      ],
+      "boundary_metric_rows": [
+        473,
+        533
+      ],
+      "status": "missing_baseline"
+    },
+    "artifact_hashes": {
+      "Hsin_SN032_Color_Agility_Ladder_ch1-4_qEEG_delta_bp_metrics.csv": "df54bbe88e2d76bf82db31e32705cac14e888ea45bda0af303fc4b9fd0fa6e1a",
+      "Hsin_SN032_Color_Agility_Ladder_ch1-4_qEEG_delta_bp_metrics.csv.meta.json": "d1b7fb4d5b7285ff202007a41199a3030e6ba9856854681f0e0638fbbf11fbfc",
+      "Hsin_SN032_Color_Agility_Ladder_ch1-4_qEEG_delta.png": "5c7a9a7079e7d2b498f17aed6d82f48d8c0e8589358d4507ae651a124553c92c",
+      "Hsin_SN032_Color_Agility_Ladder_ch1-4_qEEG_delta.svg": "805c2b0f102a14b8505ea3678c2e811830c1e74305271292c8e94d1fbd99b306"
+    }
+  },
+  "code_sha256": "80ec4d22fc6ba277a5992788f80ed03a91d4773cd0166e5fcbdd5e080181fcc7",
+  "logs": {
+    "/tmp/lilia-stage12-all-tests.log": "4f580160b990add343e7da1f28961f269e946ad078b7c24ed421ce1bdcf3d814",
+    "/tmp/lilia-stage12-tests.log": "71327724dc8d10a09feb4a29380ea6d29787e656847a7671e22f7a84971b78fc",
+    "/tmp/lilia-stage12-parser-tests.log": "ba3c14b9483341984a7747b91b7eb0a9f342cc12ba704580ffa1e2fcb7a49c71",
+    "/tmp/lilia-stage12-real.log": "1a9b9b9c5d1fa6a60b0cdbc05281377dcc16c9cb7b3a74afcb5e118153d8b26e",
+    "/tmp/lilia-stage12-general.log": "fd01ccbfdba03935dd1d759efcff9982a952eb9775888a8c5e8fdf29b61be11c",
+    "/tmp/lilia-stage12-real-no-baseline.log": "64ce0bc201d9768e86c66ec2b642d845350a1e64900e1357c574c151a9ec7fab",
+    "/tmp/lilia-stage12-validation-fixed.log": "d334791408b7476130e7ab4d30be3e56345db8bb528378274cefb9ad602cafac",
+    "/tmp/lilia-stage12-validation.log": "84bf798f87082115cb659d44d7606beea1d67787d87a37911993f1285464bfee"
+  },
+  "validation_script": {
+    "path": "/tmp/lilia-stage12/validate_stage12.py",
+    "sha256": "0d8577c09b4dbff2f5437cb89087d52cc488a7cef332445bb67b070a6a1a978b"
+  },
+  "python_sha256": {
+    "analyze_jenqwei_pipeline.py": "29235cad630d7636397299d94c5131c4cc44effa541efc72bb25a0973ee022fa",
+    "build_bundles.py": "fcd8ffd3b916a650caa4698a0cffe7eab8024924537e92eec49cef465242591a",
+    "build_jenqwei_tflite_dataset.py": "53826e27fb4296240a388f14e2aa2a09be01b33c9ff0882fcce3dce1249e7534",
+    "compare_subjects.py": "27c06c0a0df65393bc31d6d1dfd1e243da87f2d1da9becba8498c06a0ecf6792",
+    "convert_to_tflite.py": "437b951111cd0a768807be6b5218ad950dee8a8cb611df666ad9dc7400522679",
+    "data_analysis.py": "762ccb415cab158f1d6ea74b7b3a2236a7f4c68dd369bc6457fd5ad85d9b67bc",
+    "eeg_quality_v2.py": "c135929f69c391532fe44da0e7cfa4bd909d0838a19c5b0d6433fed6f0c5dd82",
+    "eeg_utils.py": "d63e1a4fe70d8374bc7713985863a42869f24884c1329c2b148f65b2afb326fc",
+    "extract_tflite_signal_pipeline.py": "abeb6e88504fa7c94f31267f0caf0afe7a0936b6f22ac514c41d7a49abc9cc4b",
+    "filter_and_plot_hard_artifacts.py": "78b3dad9c308df81c577bb9cda008d40ef3ef4e4a743324e95a8f96672448fe5",
+    "joint_mi.py": "a839d375edb464cdf2d9cd9fd9220ef1654e995653f8a9b33d33c16a38ee0409",
+    "lilia/__init__.py": "fa833560b2326af32df390d629d4bed8bd2738ebd4c9258dca72ef6413a15162",
+    "lilia/comparison.py": "61d50026bd2f1f36affd3e6df040e079ece38355ea677e219cbaead828fa19e2",
+    "lilia/comparison_io.py": "fc7667ca20e4948cb850bc6b34586d4ccaa3231c69babe41c63a23d2eeef52ee",
+    "lilia/constants.py": "e6f087db9eaa89e408bd4c5668eaeca374e4502665f8a51b43e3d27efb59c795",
+    "lilia/entropy_io.py": "1e6df375aa9a6827450df352c512c4d9db97f5337f8bdc5929c2813ce8c596eb",
+    "lilia/event_qeeg.py": "d18280de8be5b7166930c0d7ea4c3026f19e0354ef07281802f98426a12f815b",
+    "lilia/event_qeeg_io.py": "117175fa0c353f69da479085142f27e656ae8dfeb52b69c79e700b4257ca821b",
+    "lilia/event_windows.py": "7999772ef2b149a109ff71932fbabadfb0d2e11e2244ee7d9ee49aecdadf6e42",
+    "lilia/event_zoom.py": "c53b1bc999e5c73c485f2e658c2278ccd50bd11f8a335242179d72ce3f6f60ba",
+    "lilia/event_zoom_io.py": "67556fb7bd74efdfc3d8fcde97635381147c5018b98e8ab125cb323346210e84",
+    "lilia/goertzel.py": "e3474ea1ea491fee74411f1d9e004beb5c8a35cb08b4a54f7adb91854144ab15",
+    "lilia/goertzel_distribution.py": "367e001b806fd9ebf9b2b4bdc8519fc6fc289d352fb1e7d822186fbe94b8f7d2",
+    "lilia/goertzel_sampling.py": "ba340e316941cf512989e6a2c8798d65d9c2cf9186a0c5bfcc2a7a5aa4e55a32",
+    "lilia/hardy2.py": "cc260f4114449b49e6dc64d211c1b2753f0f4371b929a397b5d6d9cbadc22daf",
+    "lilia/hardy2_io.py": "12470b3cddcc530269bf56e875fa871006b5ff829f88b31e13c30237cbfa7d58",
+    "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+    "lilia/neural.py": "411be327030903392bcc0af5c22d62b3419b7a24b364ac9637289fd8d0ef9898",
+    "lilia/neural_io.py": "fd7d529d86eccdc6bf3039e5b49ec3c7727aa0a8fa32f934b58567b230b07ee5",
+    "lilia/pathing.py": "66c75d6465546797cdb7ae469c9b3fa34193af96948c5bbe59b310dcf7f1de0c",
+    "lilia/provenance.py": "f901537aed78eb3e2941ee4f898b7f4389649e44e9d5f91dac1ef11d5894a6d5",
+    "lilia/qeeg.py": "c98f2937f86b567cb86b9a7796a70ac9b203d5a3ea14b8519d4f21f8e4efb0e6",
+    "lilia/quality.py": "955632a04ba3c1c72965ce80e14407c9a03f82646f7b5ea69936e57cf3751039",
+    "lilia/quality_policy.py": "2edf6f4cc11353ca564b84f8735a9e75c6194d109a611ada61a58912b300908e",
+    "lilia/segment_sampling.py": "70033099065e64380463639e31c93169ef0cb204e60eddf69f1d25dd64bad087",
+    "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+    "lilia/state_entropy_io.py": "b4afec863856a1a4d6ffbede8386b8e7d03a13886332efabbf5bea2b33d75098",
+    "lilia/state_windows.py": "0b785e21a3ed94b42fc10519aa474979cba1357fc70648af6527cfc8ed331ef8",
+    "lilia/subject_comparison.py": "cdf8f934365f454d6d2eec5996ddf5ea61eb3678c170edc53395f09093f0e413",
+    "lilia/subject_comparison_io.py": "c8296d7e283da715d72a2497f505bf0d492e58d7449ed3ba2669e0edea3209c0",
+    "lilia/subject_paths.py": "35ae1dfcfa14296490d3a21838c603bdb217d84a55c96855ced38d36e815e41e",
+    "lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+    "lilia/tflite_baseline.py": "840140b3925a6d075eff2994e071defbf9350438c6acb78f84861b1f1df35b7a",
+    "lilia/tflite_io.py": "67e460354fe7cdec3d181afc2a98e47c41804be0f848a9265627ef9429fd7a0d",
+    "lilia/time_utils.py": "65e368faf50e10dac21aca98922addf96efc81a36a5c4ee53aa44e594ab56043",
+    "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+    "merge_subject_csvs.py": "e093785c58af1585f816d2f3020f5e9e64591fa393fdb4232e300bf491880521",
+    "plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029",
+    "plot_focus_relax_anim.py": "a4d20117256a2c51cff95568f272b0eed5e20c25ab4946cfe3d6ba9b802e36f6",
+    "plot_goertzel_histograms.py": "e5aea056b51de91b34d08b04346ad5c78470ec1db3097f21d4c79298b78023a7",
+    "plot_goertzel_vs_raw.py": "7d230aeaf5d9debab7264b867621261f074446739c7a3082ef0907728b4e1b0c",
+    "plot_index_vs_raw.py": "01f120d1fc0b247821efb3d1d41278d7ce0fd74f5d867da29a5af3e7129753ba",
+    "plot_index_vs_raw_bundle/lilia/__init__.py": "fa833560b2326af32df390d629d4bed8bd2738ebd4c9258dca72ef6413a15162",
+    "plot_index_vs_raw_bundle/lilia/comparison.py": "61d50026bd2f1f36affd3e6df040e079ece38355ea677e219cbaead828fa19e2",
+    "plot_index_vs_raw_bundle/lilia/comparison_io.py": "fc7667ca20e4948cb850bc6b34586d4ccaa3231c69babe41c63a23d2eeef52ee",
+    "plot_index_vs_raw_bundle/lilia/constants.py": "e6f087db9eaa89e408bd4c5668eaeca374e4502665f8a51b43e3d27efb59c795",
+    "plot_index_vs_raw_bundle/lilia/entropy_io.py": "1e6df375aa9a6827450df352c512c4d9db97f5337f8bdc5929c2813ce8c596eb",
+    "plot_index_vs_raw_bundle/lilia/event_qeeg.py": "d18280de8be5b7166930c0d7ea4c3026f19e0354ef07281802f98426a12f815b",
+    "plot_index_vs_raw_bundle/lilia/event_qeeg_io.py": "117175fa0c353f69da479085142f27e656ae8dfeb52b69c79e700b4257ca821b",
+    "plot_index_vs_raw_bundle/lilia/event_windows.py": "7999772ef2b149a109ff71932fbabadfb0d2e11e2244ee7d9ee49aecdadf6e42",
+    "plot_index_vs_raw_bundle/lilia/event_zoom.py": "c53b1bc999e5c73c485f2e658c2278ccd50bd11f8a335242179d72ce3f6f60ba",
+    "plot_index_vs_raw_bundle/lilia/event_zoom_io.py": "67556fb7bd74efdfc3d8fcde97635381147c5018b98e8ab125cb323346210e84",
+    "plot_index_vs_raw_bundle/lilia/goertzel.py": "e3474ea1ea491fee74411f1d9e004beb5c8a35cb08b4a54f7adb91854144ab15",
+    "plot_index_vs_raw_bundle/lilia/goertzel_distribution.py": "367e001b806fd9ebf9b2b4bdc8519fc6fc289d352fb1e7d822186fbe94b8f7d2",
+    "plot_index_vs_raw_bundle/lilia/goertzel_sampling.py": "ba340e316941cf512989e6a2c8798d65d9c2cf9186a0c5bfcc2a7a5aa4e55a32",
+    "plot_index_vs_raw_bundle/lilia/hardy2.py": "cc260f4114449b49e6dc64d211c1b2753f0f4371b929a397b5d6d9cbadc22daf",
+    "plot_index_vs_raw_bundle/lilia/hardy2_io.py": "12470b3cddcc530269bf56e875fa871006b5ff829f88b31e13c30237cbfa7d58",
+    "plot_index_vs_raw_bundle/lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+    "plot_index_vs_raw_bundle/lilia/neural.py": "411be327030903392bcc0af5c22d62b3419b7a24b364ac9637289fd8d0ef9898",
+    "plot_index_vs_raw_bundle/lilia/neural_io.py": "fd7d529d86eccdc6bf3039e5b49ec3c7727aa0a8fa32f934b58567b230b07ee5",
+    "plot_index_vs_raw_bundle/lilia/pathing.py": "66c75d6465546797cdb7ae469c9b3fa34193af96948c5bbe59b310dcf7f1de0c",
+    "plot_index_vs_raw_bundle/lilia/provenance.py": "f901537aed78eb3e2941ee4f898b7f4389649e44e9d5f91dac1ef11d5894a6d5",
+    "plot_index_vs_raw_bundle/lilia/qeeg.py": "c98f2937f86b567cb86b9a7796a70ac9b203d5a3ea14b8519d4f21f8e4efb0e6",
+    "plot_index_vs_raw_bundle/lilia/quality.py": "955632a04ba3c1c72965ce80e14407c9a03f82646f7b5ea69936e57cf3751039",
+    "plot_index_vs_raw_bundle/lilia/quality_policy.py": "2edf6f4cc11353ca564b84f8735a9e75c6194d109a611ada61a58912b300908e",
+    "plot_index_vs_raw_bundle/lilia/segment_sampling.py": "70033099065e64380463639e31c93169ef0cb204e60eddf69f1d25dd64bad087",
+    "plot_index_vs_raw_bundle/lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+    "plot_index_vs_raw_bundle/lilia/state_entropy_io.py": "b4afec863856a1a4d6ffbede8386b8e7d03a13886332efabbf5bea2b33d75098",
+    "plot_index_vs_raw_bundle/lilia/state_windows.py": "0b785e21a3ed94b42fc10519aa474979cba1357fc70648af6527cfc8ed331ef8",
+    "plot_index_vs_raw_bundle/lilia/subject_comparison.py": "cdf8f934365f454d6d2eec5996ddf5ea61eb3678c170edc53395f09093f0e413",
+    "plot_index_vs_raw_bundle/lilia/subject_comparison_io.py": "c8296d7e283da715d72a2497f505bf0d492e58d7449ed3ba2669e0edea3209c0",
+    "plot_index_vs_raw_bundle/lilia/subject_paths.py": "35ae1dfcfa14296490d3a21838c603bdb217d84a55c96855ced38d36e815e41e",
+    "plot_index_vs_raw_bundle/lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+    "plot_index_vs_raw_bundle/lilia/tflite_baseline.py": "840140b3925a6d075eff2994e071defbf9350438c6acb78f84861b1f1df35b7a",
+    "plot_index_vs_raw_bundle/lilia/tflite_io.py": "67e460354fe7cdec3d181afc2a98e47c41804be0f848a9265627ef9429fd7a0d",
+    "plot_index_vs_raw_bundle/lilia/time_utils.py": "65e368faf50e10dac21aca98922addf96efc81a36a5c4ee53aa44e594ab56043",
+    "plot_index_vs_raw_bundle/lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+    "plot_index_vs_raw_bundle/merge_subject_csvs.py": "e093785c58af1585f816d2f3020f5e9e64591fa393fdb4232e300bf491880521",
+    "plot_index_vs_raw_bundle/plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029",
+    "plot_index_vs_raw_bundle/plot_index_vs_raw.py": "01f120d1fc0b247821efb3d1d41278d7ce0fd74f5d867da29a5af3e7129753ba",
+    "plot_index_vs_raw_session.py": "214ddb2d4486c80b3e3355d7694fca230079b6abf1852ce593268351ee88991a",
+    "plot_meditation_zoom.py": "ced4616c696618993e26dd648dfe136edfdf902d50f5657f7d4f96a612298b63",
+    "plot_peri_event_delta.py": "8ba521d25ffce6067be07f7e617f1024ee0ce6b6119702384187b33df5b39905",
+    "plot_raw_eeg.py": "f80c833051a57e27b0a83612b18d3af7a0893702029d7481359530475c00609a",
+    "plot_tflite_summary.py": "c4ff852907eb00b2b67096b82448d0634986eb56317e760353c45061c16b2377",
+    "plot_timevarying_mi.py": "f26a2924419d7030a86470371d620ca561f6d732cef154601db58d4399ab5d1f",
+    "plot_tyy_meditation.py": "ac239568bfbce5b7b64c8cdd9aee94c7d4b4206d3a2e54fcbf0a51d4d189c9e3",
+    "power_spectral_app.py": "ec20a22fb1c096d1f0ed5bfc712c6e4b09460b03b440f16fb6cad3d4b8cb5446",
+    "process_lilia_eye_open_close.py": "b941c85ad6fb342f1c12f40a87e12c5fbf402c6f4083d99e3ae2e93ed59697be",
+    "qeeg_indices.py": "a59077b8e85672feb2019f3af6d81d86771fcd4f8e27b0d71ec2780bb39df2fb",
+    "quality_check.py": "0553c3e710f3b22b183b6e484efdee373aed2d3e9467de019d1900761e8ef377",
+    "resample_clean_goertzel_samples.py": "aa0b6b0db22dae476bcd1bae57066c7a00a4995169812cf0762ff2fceb1e2485",
+    "run_goertzel_single_csv.py": "4e19d32ee7249b99c73e92b43641b8bee884d5303be8a64b74cc62e6ce0fccc8",
+    "sample_segments_by_goertzel_db.py": "cd0cab25da89d4107669b2f4e992a6dc37f66cb30055935b46fe19e3aae4305a",
+    "signal_quality_package/eeg_quality_v2.py": "31c3f47ec4f437ebedd105d0f84621bf5f2012e151c4ce1078dc88dc0302a930",
+    "signal_quality_package/quality.py": "955632a04ba3c1c72965ce80e14407c9a03f82646f7b5ea69936e57cf3751039",
+    "spectral_entropy.py": "bea46faed34daa97cc53f931ee440ddf7c1542e3b220a69376999ed5f6487b2a",
+    "summarize_goertzel_distribution.py": "99458d7da34ed1d4542cf6c0fca2fbae2e6cf73b5c9b8de1748c9b4a211386ca",
+    "tests/test_app_nuc_regression.py": "98bd5f7daaae0fe059d2110fd9a83a6ab513d0526883fa1f9ec48a5ee0e23db7",
+    "tests/test_csv_contract_regression.py": "8b6080155ec7980c9abf93f6e7a26538a93fe200939346310f463f5daec351ef",
+    "tests/test_entropy_windows_regression.py": "a0fea8c2c48551af3ad0646d90b426a412355c9078eaa10189496b5b4101c6c4",
+    "tests/test_event_qeeg_regression.py": "9f4598c60d7f04855488f155f32431fe125516698c8e55a3862a7989c207b54b",
+    "tests/test_event_windows_regression.py": "1ea2bc2c3c0b354aba78b8b08c29fc2f3347f61a1d02383c99fc1eea25176b34",
+    "tests/test_event_zoom_regression.py": "8cfc2722d06ef2265f63a0862c54d9e4a39b7ff887b56896542852fc5c61986f",
+    "tests/test_goertzel_distribution_regression.py": "cb0b2f733f98c7aac85acd79062ba1a17b2109d167dae6491a64d5e9eae2debb",
+    "tests/test_goertzel_sampling_regression.py": "959da6bce3a1a438afbee624d662ffd4be0233384b26c9140eba4e2679d74761",
+    "tests/test_hardy2_regression.py": "03f89b93337d45ea7d832ff082e200b672e74f02d1ef90beb98272fb92b74340",
+    "tests/test_joint_mi_windows_regression.py": "b49383dd63374d32d6e0af69007d3ef401fbc9c5983ea4ffc81f9bf61a373e44",
+    "tests/test_neural_timeline_regression.py": "32c6ecb900797b1cef97fae52eb3c4c4794bf4ac5e1f1eb520f99cc960df474d",
+    "tests/test_phase_smoke.py": "f8ed388179bbb3fd39f57f861d717d255cbb01e3de6d0cd2b1b239bcf9946a78",
+    "tests/test_pipeline_output_regression.py": "1c157d5bbf6a31232ed652653a684662c1ab575a6d731aa729add39389510621",
+    "tests/test_safety_regression.py": "dc11d811ac106f4b8d161f7e4113aabeff1286a3ba8cb507e0d0aa3564ab060c",
+    "tests/test_segment_sampling_regression.py": "691faaec0039749aaa795fbe02ad18d87583adedfc15c45fe1aa9b1564a3dde0",
+    "tests/test_signal_contract_regression.py": "fbe744b9c5f5db98d7d819368b3ee4b921cc94cadd4354b2830c8f70f8d95628",
+    "tests/test_state_entropy_regression.py": "acd7d79975ec3c97a2bb3d8cbc888639c340159e81b7daa9ecf3e475a2167895",
+    "tests/test_subject_comparison_regression.py": "948c114eea6e6760d7b46bd474d7deb4c202611973d56ec15981dfc1b0febf8c",
+    "tests/test_subject_discovery_regression.py": "0736516cf5ae3c10f52f5ae7d0237c80204b03ce0214f402983caca389d0ba91",
+    "tests/test_tflite_baseline_regression.py": "c64204ad87934aee861d895326b14ca95e930773e2f3bec98ec8a93b08d7306e",
+    "tests/test_time_utils_regression.py": "1fe81f49aee0b66a823e0653a4a10ca4fb9c0f372ce6458dec698d15b7cb5167",
+    "tests/test_twse_contract_regression.py": "39db6ddbdddaf575c079e7e8885a8055315d8d15ad7701a06deb73015efa0e07",
+    "twse_index_lstm_rnn.py": "76cea947386ee8ffa8214f9ead5e4fef44f079782c4fa21844bbf2191a206a5f"
+  }
+}

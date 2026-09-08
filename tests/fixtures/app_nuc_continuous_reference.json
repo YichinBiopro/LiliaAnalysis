@@ -1,0 +1,38 @@
+{
+  "seed": 931,
+  "shape": [
+    6003,
+    4
+  ],
+  "source_sha256": "87833265fc4068a09f6e050d30082057d554b9fd25e9b08d22b53cf0155eaaff",
+  "model": {
+    "checkpoint_sha256": "8c863e5ba0a32f1170be321bb7166e6aeede2cbeed93f1521d5dd34412cdebae",
+    "architecture_sha256": "2c313d9f378fa434527aea761b44c2da6ba05ee59908afe90548a63af88ed9a9",
+    "backend": "pytorch",
+    "normalization": "per-window RMS",
+    "padding": "symmetric mirrored edges, hop samples on each side",
+    "overlap_add": "Hann weighted, crop to real resampled samples",
+    "filters": {
+      "bandpass": [
+        0.5,
+        45.0
+      ],
+      "notch": [
+        60.0,
+        30.0
+      ],
+      "bandstop": [
+        33.25,
+        1.0
+      ]
+    }
+  },
+  "artifact_counts": [
+    1536,
+    1770,
+    1376,
+    1721
+  ],
+  "sampling_rate": 500,
+  "model_rate": 200
+}

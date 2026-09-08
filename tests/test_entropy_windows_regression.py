@@ -1,6 +1,8 @@
 import contextlib
 import io
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -72,6 +74,21 @@ class EntropyWindowTests(unittest.TestCase):
             np.testing.assert_allclose(sync[key], expected, atol=1e-12, rtol=1e-12)
         np.testing.assert_allclose(entropy.compute_quality_windowed_aligned(x, fs=500,
                                    win_sec=2, step_sec=1, windows=grid), reference['quality'], atol=1e-12, rtol=1e-12)
+
+    def test_hash_identity_is_text_even_with_large_exponent_or_leading_zeros(self):
+        table, _, _ = self.versioned_table()
+        side = Path(str(table)+'.meta.json')
+        original_table, original_meta = table.read_text(), json.loads(side.read_text())
+        for identity in ('68e6869767633b42663ae25cd2d009dec1cf0d89a139e438ea1784b4cd028241', '0'*64):
+            table.write_text(original_table.replace(original_meta['source_id'], identity))
+            meta = {**original_meta, 'source_id': identity, 'table_sha256': file_sha256(table)}
+            side.write_text(json.dumps(meta))
+            # Isolate a native parser failure so it cannot kill the test runner.
+            code = ('import sys; from lilia.entropy_io import load_entropy_table; '
+                    'f,m=load_entropy_table(sys.argv[1]); '
+                    'assert f.source_id.iloc[0]==sys.argv[2] and isinstance(f.source_id.iloc[0],str)')
+            result = subprocess.run([sys.executable, '-c', code, str(table), identity], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_non_grid_gap_and_jitter_keep_true_sample_centres(self):
         epoch = 1778566248498593

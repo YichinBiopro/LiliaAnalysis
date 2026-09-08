@@ -1,0 +1,1110 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-08T05:57:45.791452+00:00",
+  "scope": "full",
+  "checks": [
+    {
+      "name": "compile",
+      "passed": true,
+      "files": 138,
+      "log": "/tmp/lilia-workflow-full/compile.log"
+    },
+    {
+      "name": "pyflakes",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "pyflakes",
+        "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+        "/home/bps-yichin/lilia_analysis/build_bundles.py",
+        "/home/bps-yichin/lilia_analysis/build_jenqwei_tflite_dataset.py",
+        "/home/bps-yichin/lilia_analysis/compare_subjects.py",
+        "/home/bps-yichin/lilia_analysis/convert_to_tflite.py",
+        "/home/bps-yichin/lilia_analysis/data_analysis.py",
+        "/home/bps-yichin/lilia_analysis/eeg_quality_v2.py",
+        "/home/bps-yichin/lilia_analysis/eeg_utils.py",
+        "/home/bps-yichin/lilia_analysis/extract_tflite_signal_pipeline.py",
+        "/home/bps-yichin/lilia_analysis/filter_and_plot_hard_artifacts.py",
+        "/home/bps-yichin/lilia_analysis/joint_mi.py",
+        "/home/bps-yichin/lilia_analysis/lilia/__init__.py",
+        "/home/bps-yichin/lilia_analysis/lilia/comparison.py",
+        "/home/bps-yichin/lilia_analysis/lilia/comparison_io.py",
+        "/home/bps-yichin/lilia_analysis/lilia/constants.py",
+        "/home/bps-yichin/lilia_analysis/lilia/entropy_io.py",
+        "/home/bps-yichin/lilia_analysis/lilia/event_qeeg.py",
+        "/home/bps-yichin/lilia_analysis/lilia/event_qeeg_io.py",
+        "/home/bps-yichin/lilia_analysis/lilia/event_windows.py",
+        "/home/bps-yichin/lilia_analysis/lilia/event_zoom.py",
+        "/home/bps-yichin/lilia_analysis/lilia/event_zoom_io.py",
+        "/home/bps-yichin/lilia_analysis/lilia/goertzel.py",
+        "/home/bps-yichin/lilia_analysis/lilia/goertzel_distribution.py",
+        "/home/bps-yichin/lilia_analysis/lilia/goertzel_sampling.py",
+        "/home/bps-yichin/lilia_analysis/lilia/hardy2.py",
+        "/home/bps-yichin/lilia_analysis/lilia/hardy2_io.py",
+        "/home/bps-yichin/lilia_analysis/lilia/io.py",
+        "/home/bps-yichin/lilia_analysis/lilia/meditation.py",
+        "/home/bps-yichin/lilia_analysis/lilia/meditation_io.py",
+        "/home/bps-yichin/lilia_analysis/lilia/neural.py",
+        "/home/bps-yichin/lilia_analysis/lilia/neural_io.py",
+        "/home/bps-yichin/lilia_analysis/lilia/pathing.py",
+        "/home/bps-yichin/lilia_analysis/lilia/provenance.py",
+        "/home/bps-yichin/lilia_analysis/lilia/qeeg.py",
+        "/home/bps-yichin/lilia_analysis/lilia/quality.py",
+        "/home/bps-yichin/lilia_analysis/lilia/quality_policy.py",
+        "/home/bps-yichin/lilia_analysis/lilia/segment_sampling.py",
+        "/home/bps-yichin/lilia_analysis/lilia/signal.py",
+        "/home/bps-yichin/lilia_analysis/lilia/state_entropy_io.py",
+        "/home/bps-yichin/lilia_analysis/lilia/state_windows.py",
+        "/home/bps-yichin/lilia_analysis/lilia/subject_comparison.py",
+        "/home/bps-yichin/lilia_analysis/lilia/subject_comparison_io.py",
+        "/home/bps-yichin/lilia_analysis/lilia/subject_paths.py",
+        "/home/bps-yichin/lilia_analysis/lilia/tflite.py",
+        "/home/bps-yichin/lilia_analysis/lilia/tflite_baseline.py",
+        "/home/bps-yichin/lilia_analysis/lilia/tflite_io.py",
+        "/home/bps-yichin/lilia_analysis/lilia/time_utils.py",
+        "/home/bps-yichin/lilia_analysis/lilia/windowing.py",
+        "/home/bps-yichin/lilia_analysis/merge_subject_csvs.py",
+        "/home/bps-yichin/lilia_analysis/plot_event_markers.py",
+        "/home/bps-yichin/lilia_analysis/plot_focus_relax_anim.py",
+        "/home/bps-yichin/lilia_analysis/plot_goertzel_histograms.py",
+        "/home/bps-yichin/lilia_analysis/plot_goertzel_vs_raw.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/__init__.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/comparison.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/comparison_io.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/constants.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/entropy_io.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/event_qeeg.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/event_qeeg_io.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/event_windows.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/event_zoom.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/event_zoom_io.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/goertzel.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/goertzel_distribution.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/goertzel_sampling.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/hardy2.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/hardy2_io.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/io.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/meditation.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/meditation_io.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/neural.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/neural_io.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/pathing.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/provenance.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/qeeg.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/quality.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/quality_policy.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/segment_sampling.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/signal.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/state_entropy_io.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/state_windows.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/subject_comparison.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/subject_comparison_io.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/subject_paths.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/tflite.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/tflite_baseline.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/tflite_io.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/time_utils.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/lilia/windowing.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/merge_subject_csvs.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/plot_event_markers.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle/plot_index_vs_raw.py",
+        "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_session.py",
+        "/home/bps-yichin/lilia_analysis/plot_meditation_zoom.py",
+        "/home/bps-yichin/lilia_analysis/plot_peri_event_delta.py",
+        "/home/bps-yichin/lilia_analysis/plot_raw_eeg.py",
+        "/home/bps-yichin/lilia_analysis/plot_tflite_summary.py",
+        "/home/bps-yichin/lilia_analysis/plot_timevarying_mi.py",
+        "/home/bps-yichin/lilia_analysis/plot_tyy_meditation.py",
+        "/home/bps-yichin/lilia_analysis/power_spectral_app.py",
+        "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py",
+        "/home/bps-yichin/lilia_analysis/qeeg_indices.py",
+        "/home/bps-yichin/lilia_analysis/quality_check.py",
+        "/home/bps-yichin/lilia_analysis/resample_clean_goertzel_samples.py",
+        "/home/bps-yichin/lilia_analysis/run_goertzel_single_csv.py",
+        "/home/bps-yichin/lilia_analysis/sample_segments_by_goertzel_db.py",
+        "/home/bps-yichin/lilia_analysis/signal_quality_package/eeg_quality_v2.py",
+        "/home/bps-yichin/lilia_analysis/signal_quality_package/quality.py",
+        "/home/bps-yichin/lilia_analysis/spectral_entropy.py",
+        "/home/bps-yichin/lilia_analysis/summarize_goertzel_distribution.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_app_nuc_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_csv_contract_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_entropy_windows_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_event_qeeg_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_event_windows_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_event_zoom_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_goertzel_distribution_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_goertzel_sampling_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_hardy2_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_joint_mi_windows_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_meditation_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_neural_timeline_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_phase_smoke.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_pipeline_output_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_refactor_validation.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_safety_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_segment_sampling_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_signal_contract_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_state_entropy_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_subject_comparison_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_subject_discovery_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_tflite_baseline_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_time_utils_regression.py",
+        "/home/bps-yichin/lilia_analysis/tests/test_twse_contract_regression.py",
+        "/home/bps-yichin/lilia_analysis/tools/refactor_check.py",
+        "/home/bps-yichin/lilia_analysis/twse_index_lstm_rnn.py"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log": "/tmp/lilia-workflow-full/pyflakes.log"
+    },
+    {
+      "name": "bundle",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "build_bundles.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log": "/tmp/lilia-workflow-full/bundle.log"
+    },
+    {
+      "name": "diff",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log": "/tmp/lilia-workflow-full/diff.log"
+    },
+    {
+      "name": "tests-1",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log": "/tmp/lilia-workflow-full/tests-1.log",
+      "tests": 206,
+      "skipped": 0
+    }
+  ],
+  "snapshot": {
+    "files": {
+      "analyze_jenqwei_pipeline.py": "29235cad630d7636397299d94c5131c4cc44effa541efc72bb25a0973ee022fa",
+      "build_bundles.py": "fcd8ffd3b916a650caa4698a0cffe7eab8024924537e92eec49cef465242591a",
+      "build_jenqwei_tflite_dataset.py": "53826e27fb4296240a388f14e2aa2a09be01b33c9ff0882fcce3dce1249e7534",
+      "compare_subjects.py": "27c06c0a0df65393bc31d6d1dfd1e243da87f2d1da9becba8498c06a0ecf6792",
+      "convert_to_tflite.py": "437b951111cd0a768807be6b5218ad950dee8a8cb611df666ad9dc7400522679",
+      "data_analysis.py": "762ccb415cab158f1d6ea74b7b3a2236a7f4c68dd369bc6457fd5ad85d9b67bc",
+      "eeg_quality_v2.py": "c135929f69c391532fe44da0e7cfa4bd909d0838a19c5b0d6433fed6f0c5dd82",
+      "eeg_utils.py": "d63e1a4fe70d8374bc7713985863a42869f24884c1329c2b148f65b2afb326fc",
+      "extract_tflite_signal_pipeline.py": "abeb6e88504fa7c94f31267f0caf0afe7a0936b6f22ac514c41d7a49abc9cc4b",
+      "filter_and_plot_hard_artifacts.py": "78b3dad9c308df81c577bb9cda008d40ef3ef4e4a743324e95a8f96672448fe5",
+      "joint_mi.py": "a839d375edb464cdf2d9cd9fd9220ef1654e995653f8a9b33d33c16a38ee0409",
+      "lilia/__init__.py": "fa833560b2326af32df390d629d4bed8bd2738ebd4c9258dca72ef6413a15162",
+      "lilia/comparison.py": "61d50026bd2f1f36affd3e6df040e079ece38355ea677e219cbaead828fa19e2",
+      "lilia/comparison_io.py": "fc7667ca20e4948cb850bc6b34586d4ccaa3231c69babe41c63a23d2eeef52ee",
+      "lilia/constants.py": "e6f087db9eaa89e408bd4c5668eaeca374e4502665f8a51b43e3d27efb59c795",
+      "lilia/entropy_io.py": "1e6df375aa9a6827450df352c512c4d9db97f5337f8bdc5929c2813ce8c596eb",
+      "lilia/event_qeeg.py": "d18280de8be5b7166930c0d7ea4c3026f19e0354ef07281802f98426a12f815b",
+      "lilia/event_qeeg_io.py": "117175fa0c353f69da479085142f27e656ae8dfeb52b69c79e700b4257ca821b",
+      "lilia/event_windows.py": "7999772ef2b149a109ff71932fbabadfb0d2e11e2244ee7d9ee49aecdadf6e42",
+      "lilia/event_zoom.py": "c53b1bc999e5c73c485f2e658c2278ccd50bd11f8a335242179d72ce3f6f60ba",
+      "lilia/event_zoom_io.py": "67556fb7bd74efdfc3d8fcde97635381147c5018b98e8ab125cb323346210e84",
+      "lilia/goertzel.py": "e3474ea1ea491fee74411f1d9e004beb5c8a35cb08b4a54f7adb91854144ab15",
+      "lilia/goertzel_distribution.py": "367e001b806fd9ebf9b2b4bdc8519fc6fc289d352fb1e7d822186fbe94b8f7d2",
+      "lilia/goertzel_sampling.py": "ba340e316941cf512989e6a2c8798d65d9c2cf9186a0c5bfcc2a7a5aa4e55a32",
+      "lilia/hardy2.py": "cc260f4114449b49e6dc64d211c1b2753f0f4371b929a397b5d6d9cbadc22daf",
+      "lilia/hardy2_io.py": "12470b3cddcc530269bf56e875fa871006b5ff829f88b31e13c30237cbfa7d58",
+      "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+      "lilia/meditation.py": "61d620fbb2eb20d45c2727e556f95a140c7e456af15d104b4337f33e39a126ff",
+      "lilia/meditation_io.py": "bf315cd8233a1846e685a13ef6035cf3a7af7f00d40d749b6c60e9703c9b02e2",
+      "lilia/neural.py": "411be327030903392bcc0af5c22d62b3419b7a24b364ac9637289fd8d0ef9898",
+      "lilia/neural_io.py": "fd7d529d86eccdc6bf3039e5b49ec3c7727aa0a8fa32f934b58567b230b07ee5",
+      "lilia/pathing.py": "66c75d6465546797cdb7ae469c9b3fa34193af96948c5bbe59b310dcf7f1de0c",
+      "lilia/provenance.py": "f901537aed78eb3e2941ee4f898b7f4389649e44e9d5f91dac1ef11d5894a6d5",
+      "lilia/qeeg.py": "c98f2937f86b567cb86b9a7796a70ac9b203d5a3ea14b8519d4f21f8e4efb0e6",
+      "lilia/quality.py": "955632a04ba3c1c72965ce80e14407c9a03f82646f7b5ea69936e57cf3751039",
+      "lilia/quality_policy.py": "2edf6f4cc11353ca564b84f8735a9e75c6194d109a611ada61a58912b300908e",
+      "lilia/segment_sampling.py": "70033099065e64380463639e31c93169ef0cb204e60eddf69f1d25dd64bad087",
+      "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+      "lilia/state_entropy_io.py": "b4afec863856a1a4d6ffbede8386b8e7d03a13886332efabbf5bea2b33d75098",
+      "lilia/state_windows.py": "0b785e21a3ed94b42fc10519aa474979cba1357fc70648af6527cfc8ed331ef8",
+      "lilia/subject_comparison.py": "cdf8f934365f454d6d2eec5996ddf5ea61eb3678c170edc53395f09093f0e413",
+      "lilia/subject_comparison_io.py": "c8296d7e283da715d72a2497f505bf0d492e58d7449ed3ba2669e0edea3209c0",
+      "lilia/subject_paths.py": "35ae1dfcfa14296490d3a21838c603bdb217d84a55c96855ced38d36e815e41e",
+      "lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+      "lilia/tflite_baseline.py": "840140b3925a6d075eff2994e071defbf9350438c6acb78f84861b1f1df35b7a",
+      "lilia/tflite_io.py": "67e460354fe7cdec3d181afc2a98e47c41804be0f848a9265627ef9429fd7a0d",
+      "lilia/time_utils.py": "65e368faf50e10dac21aca98922addf96efc81a36a5c4ee53aa44e594ab56043",
+      "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+      "merge_subject_csvs.py": "e093785c58af1585f816d2f3020f5e9e64591fa393fdb4232e300bf491880521",
+      "plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029",
+      "plot_focus_relax_anim.py": "a4d20117256a2c51cff95568f272b0eed5e20c25ab4946cfe3d6ba9b802e36f6",
+      "plot_goertzel_histograms.py": "e5aea056b51de91b34d08b04346ad5c78470ec1db3097f21d4c79298b78023a7",
+      "plot_goertzel_vs_raw.py": "7d230aeaf5d9debab7264b867621261f074446739c7a3082ef0907728b4e1b0c",
+      "plot_index_vs_raw.py": "01f120d1fc0b247821efb3d1d41278d7ce0fd74f5d867da29a5af3e7129753ba",
+      "plot_index_vs_raw_bundle/lilia/__init__.py": "fa833560b2326af32df390d629d4bed8bd2738ebd4c9258dca72ef6413a15162",
+      "plot_index_vs_raw_bundle/lilia/comparison.py": "61d50026bd2f1f36affd3e6df040e079ece38355ea677e219cbaead828fa19e2",
+      "plot_index_vs_raw_bundle/lilia/comparison_io.py": "fc7667ca20e4948cb850bc6b34586d4ccaa3231c69babe41c63a23d2eeef52ee",
+      "plot_index_vs_raw_bundle/lilia/constants.py": "e6f087db9eaa89e408bd4c5668eaeca374e4502665f8a51b43e3d27efb59c795",
+      "plot_index_vs_raw_bundle/lilia/entropy_io.py": "1e6df375aa9a6827450df352c512c4d9db97f5337f8bdc5929c2813ce8c596eb",
+      "plot_index_vs_raw_bundle/lilia/event_qeeg.py": "d18280de8be5b7166930c0d7ea4c3026f19e0354ef07281802f98426a12f815b",
+      "plot_index_vs_raw_bundle/lilia/event_qeeg_io.py": "117175fa0c353f69da479085142f27e656ae8dfeb52b69c79e700b4257ca821b",
+      "plot_index_vs_raw_bundle/lilia/event_windows.py": "7999772ef2b149a109ff71932fbabadfb0d2e11e2244ee7d9ee49aecdadf6e42",
+      "plot_index_vs_raw_bundle/lilia/event_zoom.py": "c53b1bc999e5c73c485f2e658c2278ccd50bd11f8a335242179d72ce3f6f60ba",
+      "plot_index_vs_raw_bundle/lilia/event_zoom_io.py": "67556fb7bd74efdfc3d8fcde97635381147c5018b98e8ab125cb323346210e84",
+      "plot_index_vs_raw_bundle/lilia/goertzel.py": "e3474ea1ea491fee74411f1d9e004beb5c8a35cb08b4a54f7adb91854144ab15",
+      "plot_index_vs_raw_bundle/lilia/goertzel_distribution.py": "367e001b806fd9ebf9b2b4bdc8519fc6fc289d352fb1e7d822186fbe94b8f7d2",
+      "plot_index_vs_raw_bundle/lilia/goertzel_sampling.py": "ba340e316941cf512989e6a2c8798d65d9c2cf9186a0c5bfcc2a7a5aa4e55a32",
+      "plot_index_vs_raw_bundle/lilia/hardy2.py": "cc260f4114449b49e6dc64d211c1b2753f0f4371b929a397b5d6d9cbadc22daf",
+      "plot_index_vs_raw_bundle/lilia/hardy2_io.py": "12470b3cddcc530269bf56e875fa871006b5ff829f88b31e13c30237cbfa7d58",
+      "plot_index_vs_raw_bundle/lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+      "plot_index_vs_raw_bundle/lilia/meditation.py": "61d620fbb2eb20d45c2727e556f95a140c7e456af15d104b4337f33e39a126ff",
+      "plot_index_vs_raw_bundle/lilia/meditation_io.py": "bf315cd8233a1846e685a13ef6035cf3a7af7f00d40d749b6c60e9703c9b02e2",
+      "plot_index_vs_raw_bundle/lilia/neural.py": "411be327030903392bcc0af5c22d62b3419b7a24b364ac9637289fd8d0ef9898",
+      "plot_index_vs_raw_bundle/lilia/neural_io.py": "fd7d529d86eccdc6bf3039e5b49ec3c7727aa0a8fa32f934b58567b230b07ee5",
+      "plot_index_vs_raw_bundle/lilia/pathing.py": "66c75d6465546797cdb7ae469c9b3fa34193af96948c5bbe59b310dcf7f1de0c",
+      "plot_index_vs_raw_bundle/lilia/provenance.py": "f901537aed78eb3e2941ee4f898b7f4389649e44e9d5f91dac1ef11d5894a6d5",
+      "plot_index_vs_raw_bundle/lilia/qeeg.py": "c98f2937f86b567cb86b9a7796a70ac9b203d5a3ea14b8519d4f21f8e4efb0e6",
+      "plot_index_vs_raw_bundle/lilia/quality.py": "955632a04ba3c1c72965ce80e14407c9a03f82646f7b5ea69936e57cf3751039",
+      "plot_index_vs_raw_bundle/lilia/quality_policy.py": "2edf6f4cc11353ca564b84f8735a9e75c6194d109a611ada61a58912b300908e",
+      "plot_index_vs_raw_bundle/lilia/segment_sampling.py": "70033099065e64380463639e31c93169ef0cb204e60eddf69f1d25dd64bad087",
+      "plot_index_vs_raw_bundle/lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+      "plot_index_vs_raw_bundle/lilia/state_entropy_io.py": "b4afec863856a1a4d6ffbede8386b8e7d03a13886332efabbf5bea2b33d75098",
+      "plot_index_vs_raw_bundle/lilia/state_windows.py": "0b785e21a3ed94b42fc10519aa474979cba1357fc70648af6527cfc8ed331ef8",
+      "plot_index_vs_raw_bundle/lilia/subject_comparison.py": "cdf8f934365f454d6d2eec5996ddf5ea61eb3678c170edc53395f09093f0e413",
+      "plot_index_vs_raw_bundle/lilia/subject_comparison_io.py": "c8296d7e283da715d72a2497f505bf0d492e58d7449ed3ba2669e0edea3209c0",
+      "plot_index_vs_raw_bundle/lilia/subject_paths.py": "35ae1dfcfa14296490d3a21838c603bdb217d84a55c96855ced38d36e815e41e",
+      "plot_index_vs_raw_bundle/lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+      "plot_index_vs_raw_bundle/lilia/tflite_baseline.py": "840140b3925a6d075eff2994e071defbf9350438c6acb78f84861b1f1df35b7a",
+      "plot_index_vs_raw_bundle/lilia/tflite_io.py": "67e460354fe7cdec3d181afc2a98e47c41804be0f848a9265627ef9429fd7a0d",
+      "plot_index_vs_raw_bundle/lilia/time_utils.py": "65e368faf50e10dac21aca98922addf96efc81a36a5c4ee53aa44e594ab56043",
+      "plot_index_vs_raw_bundle/lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+      "plot_index_vs_raw_bundle/merge_subject_csvs.py": "e093785c58af1585f816d2f3020f5e9e64591fa393fdb4232e300bf491880521",
+      "plot_index_vs_raw_bundle/plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029",
+      "plot_index_vs_raw_bundle/plot_index_vs_raw.py": "01f120d1fc0b247821efb3d1d41278d7ce0fd74f5d867da29a5af3e7129753ba",
+      "plot_index_vs_raw_session.py": "214ddb2d4486c80b3e3355d7694fca230079b6abf1852ce593268351ee88991a",
+      "plot_meditation_zoom.py": "ced4616c696618993e26dd648dfe136edfdf902d50f5657f7d4f96a612298b63",
+      "plot_peri_event_delta.py": "8ba521d25ffce6067be07f7e617f1024ee0ce6b6119702384187b33df5b39905",
+      "plot_raw_eeg.py": "f80c833051a57e27b0a83612b18d3af7a0893702029d7481359530475c00609a",
+      "plot_tflite_summary.py": "c4ff852907eb00b2b67096b82448d0634986eb56317e760353c45061c16b2377",
+      "plot_timevarying_mi.py": "f26a2924419d7030a86470371d620ca561f6d732cef154601db58d4399ab5d1f",
+      "plot_tyy_meditation.py": "07323481985b8717f2c6e62b5aa12ee260e0b533263b247d9f5e2a1a16d67f82",
+      "power_spectral_app.py": "ec20a22fb1c096d1f0ed5bfc712c6e4b09460b03b440f16fb6cad3d4b8cb5446",
+      "process_lilia_eye_open_close.py": "b941c85ad6fb342f1c12f40a87e12c5fbf402c6f4083d99e3ae2e93ed59697be",
+      "qeeg_indices.py": "a59077b8e85672feb2019f3af6d81d86771fcd4f8e27b0d71ec2780bb39df2fb",
+      "quality_check.py": "0553c3e710f3b22b183b6e484efdee373aed2d3e9467de019d1900761e8ef377",
+      "requirement.txt": "963994b523877069265068fa5af98f8b070da9a90377d5c4d8006a6e13c57c22",
+      "resample_clean_goertzel_samples.py": "aa0b6b0db22dae476bcd1bae57066c7a00a4995169812cf0762ff2fceb1e2485",
+      "run_goertzel_single_csv.py": "4e19d32ee7249b99c73e92b43641b8bee884d5303be8a64b74cc62e6ce0fccc8",
+      "sample_segments_by_goertzel_db.py": "cd0cab25da89d4107669b2f4e992a6dc37f66cb30055935b46fe19e3aae4305a",
+      "signal_quality_package/eeg_quality_v2.py": "31c3f47ec4f437ebedd105d0f84621bf5f2012e151c4ce1078dc88dc0302a930",
+      "signal_quality_package/quality.py": "955632a04ba3c1c72965ce80e14407c9a03f82646f7b5ea69936e57cf3751039",
+      "spectral_entropy.py": "bea46faed34daa97cc53f931ee440ddf7c1542e3b220a69376999ed5f6487b2a",
+      "summarize_goertzel_distribution.py": "99458d7da34ed1d4542cf6c0fca2fbae2e6cf73b5c9b8de1748c9b4a211386ca",
+      "tests/fixtures/app_nuc_continuous_reference.json": "3af7817353917f0dbd8114c4dbc05bab92649961ccb921a360553746cbc1d497",
+      "tests/fixtures/app_nuc_continuous_reference.npz": "bdba13e066b7b86f6e14f7783d630a0edf21339dc53afa39f8a206657c4f4442",
+      "tests/fixtures/band_event_continuous_reference.json": "6880c1ab604f8e3325b00dc8e9b3366f3b2f8bbd3c7c2de2db5013ca5a5c64ba",
+      "tests/fixtures/denoise_continuous_reference.json": "1a7eab58cc9f970e9b5f95ddd24a8371cda4382e0ac02ed82d77c5ad308619e2",
+      "tests/fixtures/denoise_continuous_reference.npz": "74556395b0074beb33f00fc693f43cef2d0679b6f8b40525585dbfcd71a0ef11",
+      "tests/fixtures/denoise_resampled_reference.npz": "c2b3486d672292515351f901f661654ae38eea0fe0bea2436d16518ffe62929f",
+      "tests/fixtures/entropy_continuous_reference.json": "06fa7d146e85340402c1905e6d22066ade18045821c737deba1e3d4a356bf81b",
+      "tests/fixtures/event_qeeg_continuous_reference.json": "49493f81604c8c1a7d59050cf3f4a0bbd0f79029760856996824a0a36b18df1d",
+      "tests/fixtures/event_qeeg_policy_reference.json": "81ee8bb841094e095f4ac69cfef7a532b2443ed8967b57fac9b184d16af190d5",
+      "tests/fixtures/hardy2_continuous_reference.json": "76c07d79bb78263494809aa9659c27b661896e6503c449efbd48b1e96c415b5b",
+      "tests/fixtures/joint_mi_continuous_reference.json": "b208f626b6e8000f7161cffe35366f58638621d503d3e5bcc4abcee386178e03",
+      "tests/fixtures/meditation_zoom_continuous_reference.json": "132e858e19baf490f0913b75a847756063762b2c7bc806b7411b57e6362ac543",
+      "tests/fixtures/state_entropy_continuous_reference.json": "f20bb7fcb1b5f47e339be357b28976cacf0eac119dc2bbffc8e8458542e5542c",
+      "tests/fixtures/subject_comparison_continuous_reference.json": "c033c6224a5bed156d6eb05596848089daea131ba1ee8b76ff1f7f231578e23e",
+      "tests/fixtures/tflite_continuous_reference.json": "3f618eb2006f9c77aefffb0771d57b7b1918f78a8cd7ea8a30695a8d6a7c2d1b",
+      "tests/fixtures/tflite_continuous_reference.npz": "3e89043516d5281f89755fc46a384b7ec123745f54fe86b021dfc5a344e73d24",
+      "tests/fixtures/tyy_meditation_continuous_reference.json": "9098713f2c0a4cbfa5e155a4ee1d1423967ad3e53ac73404fab7e7b75eadec19",
+      "tests/fixtures/tyy_meditation_continuous_reference.npz": "23ab07c94e0ca1a48f3cb108c79ec62035e313890c63eb9d48b6be44d12c6573",
+      "tests/test_app_nuc_regression.py": "98bd5f7daaae0fe059d2110fd9a83a6ab513d0526883fa1f9ec48a5ee0e23db7",
+      "tests/test_csv_contract_regression.py": "8b6080155ec7980c9abf93f6e7a26538a93fe200939346310f463f5daec351ef",
+      "tests/test_entropy_windows_regression.py": "a0fea8c2c48551af3ad0646d90b426a412355c9078eaa10189496b5b4101c6c4",
+      "tests/test_event_qeeg_regression.py": "9f4598c60d7f04855488f155f32431fe125516698c8e55a3862a7989c207b54b",
+      "tests/test_event_windows_regression.py": "1ea2bc2c3c0b354aba78b8b08c29fc2f3347f61a1d02383c99fc1eea25176b34",
+      "tests/test_event_zoom_regression.py": "8cfc2722d06ef2265f63a0862c54d9e4a39b7ff887b56896542852fc5c61986f",
+      "tests/test_goertzel_distribution_regression.py": "cb0b2f733f98c7aac85acd79062ba1a17b2109d167dae6491a64d5e9eae2debb",
+      "tests/test_goertzel_sampling_regression.py": "959da6bce3a1a438afbee624d662ffd4be0233384b26c9140eba4e2679d74761",
+      "tests/test_hardy2_regression.py": "03f89b93337d45ea7d832ff082e200b672e74f02d1ef90beb98272fb92b74340",
+      "tests/test_joint_mi_windows_regression.py": "b49383dd63374d32d6e0af69007d3ef401fbc9c5983ea4ffc81f9bf61a373e44",
+      "tests/test_meditation_regression.py": "d8a55ebdbb07b66d50f9020bb72c35b1aac8e24d6432fb06e1b42d7241219400",
+      "tests/test_neural_timeline_regression.py": "32c6ecb900797b1cef97fae52eb3c4c4794bf4ac5e1f1eb520f99cc960df474d",
+      "tests/test_phase_smoke.py": "f8ed388179bbb3fd39f57f861d717d255cbb01e3de6d0cd2b1b239bcf9946a78",
+      "tests/test_pipeline_output_regression.py": "1c157d5bbf6a31232ed652653a684662c1ab575a6d731aa729add39389510621",
+      "tests/test_refactor_validation.py": "c18e11f048a036ec304ac5a32a5ae772e422c40d80b220ed07539a96a6898022",
+      "tests/test_safety_regression.py": "dc11d811ac106f4b8d161f7e4113aabeff1286a3ba8cb507e0d0aa3564ab060c",
+      "tests/test_segment_sampling_regression.py": "691faaec0039749aaa795fbe02ad18d87583adedfc15c45fe1aa9b1564a3dde0",
+      "tests/test_signal_contract_regression.py": "fbe744b9c5f5db98d7d819368b3ee4b921cc94cadd4354b2830c8f70f8d95628",
+      "tests/test_state_entropy_regression.py": "acd7d79975ec3c97a2bb3d8cbc888639c340159e81b7daa9ecf3e475a2167895",
+      "tests/test_subject_comparison_regression.py": "948c114eea6e6760d7b46bd474d7deb4c202611973d56ec15981dfc1b0febf8c",
+      "tests/test_subject_discovery_regression.py": "0736516cf5ae3c10f52f5ae7d0237c80204b03ce0214f402983caca389d0ba91",
+      "tests/test_tflite_baseline_regression.py": "c64204ad87934aee861d895326b14ca95e930773e2f3bec98ec8a93b08d7306e",
+      "tests/test_time_utils_regression.py": "1fe81f49aee0b66a823e0653a4a10ca4fb9c0f372ce6458dec698d15b7cb5167",
+      "tests/test_twse_contract_regression.py": "39db6ddbdddaf575c079e7e8885a8055315d8d15ad7701a06deb73015efa0e07",
+      "tiny_v3_finetuned_real.pth": "716c2a2523df79f8c35a92a7a4e055079a438084f8d354f890e68f036e84ac8c",
+      "tiny_v4_optimized.pth": "8c863e5ba0a32f1170be321bb7166e6aeede2cbeed93f1521d5dd34412cdebae",
+      "tiny_v4_optimized.tflite": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+      "tools/refactor_check.py": "8438b72c780570ae5df8d78e7300fec74cec60d927f2ff64fe869cae34bd6c1b",
+      "twse_index_lstm_rnn.py": "76cea947386ee8ffa8214f9ead5e4fef44f079782c4fa21844bbf2191a206a5f",
+      "validate_signal_processing.sh": "79254e4472a14b69d894a9622ee1e9e06ba941e355430dfdbaa3cc89f770dbd2"
+    },
+    "inputs": {},
+    "packages": [
+      [
+        "Jinja2",
+        "3.1.6"
+      ],
+      [
+        "Markdown",
+        "3.10.1"
+      ],
+      [
+        "MarkupSafe",
+        "3.0.3"
+      ],
+      [
+        "PyWavelets",
+        "1.8.0"
+      ],
+      [
+        "PyYAML",
+        "6.0.3"
+      ],
+      [
+        "Pygments",
+        "2.20.0"
+      ],
+      [
+        "absl-py",
+        "2.4.0"
+      ],
+      [
+        "ai-edge-litert",
+        "2.1.5"
+      ],
+      [
+        "annotated-doc",
+        "0.0.4"
+      ],
+      [
+        "annotated-types",
+        "0.7.0"
+      ],
+      [
+        "anyio",
+        "4.13.0"
+      ],
+      [
+        "array-api-compat",
+        "1.15.0"
+      ],
+      [
+        "array-api-extra",
+        "0.9.2"
+      ],
+      [
+        "astroid",
+        "4.0.4"
+      ],
+      [
+        "astunparse",
+        "1.6.3"
+      ],
+      [
+        "backports.strenum",
+        "1.3.1"
+      ],
+      [
+        "black",
+        "26.3.1"
+      ],
+      [
+        "certifi",
+        "2026.2.25"
+      ],
+      [
+        "cffi",
+        "2.0.0"
+      ],
+      [
+        "charset-normalizer",
+        "3.4.4"
+      ],
+      [
+        "click",
+        "8.3.1"
+      ],
+      [
+        "cloudpickle",
+        "3.1.2"
+      ],
+      [
+        "colorama",
+        "0.4.6"
+      ],
+      [
+        "contourpy",
+        "1.3.2"
+      ],
+      [
+        "coverage",
+        "7.16.0"
+      ],
+      [
+        "cryptography",
+        "48.0.0"
+      ],
+      [
+        "cuda-bindings",
+        "13.2.0"
+      ],
+      [
+        "cuda-pathfinder",
+        "1.5.3"
+      ],
+      [
+        "cuda-toolkit",
+        "13.0.2"
+      ],
+      [
+        "cycler",
+        "0.12.1"
+      ],
+      [
+        "decorator",
+        "5.2.1"
+      ],
+      [
+        "dill",
+        "0.4.1"
+      ],
+      [
+        "edfio",
+        "0.4.13"
+      ],
+      [
+        "einops",
+        "0.8.2"
+      ],
+      [
+        "exceptiongroup",
+        "1.3.1"
+      ],
+      [
+        "filelock",
+        "3.28.0"
+      ],
+      [
+        "flake8",
+        "7.3.0"
+      ],
+      [
+        "flatbuffers",
+        "25.12.19"
+      ],
+      [
+        "fonttools",
+        "4.61.1"
+      ],
+      [
+        "fsspec",
+        "2026.3.0"
+      ],
+      [
+        "gast",
+        "0.7.0"
+      ],
+      [
+        "git-filter-repo",
+        "2.47.0"
+      ],
+      [
+        "google-pasta",
+        "0.2.0"
+      ],
+      [
+        "greenlet",
+        "3.3.1"
+      ],
+      [
+        "grpcio",
+        "1.80.0"
+      ],
+      [
+        "h11",
+        "0.16.0"
+      ],
+      [
+        "h5py",
+        "3.14.0"
+      ],
+      [
+        "hf-xet",
+        "1.4.3"
+      ],
+      [
+        "httpcore",
+        "1.0.9"
+      ],
+      [
+        "httpx",
+        "0.28.1"
+      ],
+      [
+        "huggingface_hub",
+        "1.10.2"
+      ],
+      [
+        "hypothesis",
+        "6.167.1"
+      ],
+      [
+        "idna",
+        "3.11"
+      ],
+      [
+        "iniconfig",
+        "2.3.0"
+      ],
+      [
+        "isort",
+        "9.0.1"
+      ],
+      [
+        "joblib",
+        "1.5.3"
+      ],
+      [
+        "keras",
+        "3.12.1"
+      ],
+      [
+        "kiwisolver",
+        "1.4.9"
+      ],
+      [
+        "lazy_loader",
+        "0.4"
+      ],
+      [
+        "libclang",
+        "18.1.1"
+      ],
+      [
+        "libcst",
+        "1.9.0"
+      ],
+      [
+        "linkify-it-py",
+        "2.2.0"
+      ],
+      [
+        "llvmlite",
+        "0.47.0"
+      ],
+      [
+        "lxml",
+        "6.0.2"
+      ],
+      [
+        "mando",
+        "0.7.1"
+      ],
+      [
+        "markdown-it-py",
+        "4.0.0"
+      ],
+      [
+        "matplotlib",
+        "3.10.8"
+      ],
+      [
+        "mccabe",
+        "0.7.0"
+      ],
+      [
+        "mdit-py-plugins",
+        "0.6.1"
+      ],
+      [
+        "mdurl",
+        "0.1.2"
+      ],
+      [
+        "meegkit",
+        "0.1.9"
+      ],
+      [
+        "ml_dtypes",
+        "0.5.4"
+      ],
+      [
+        "mne",
+        "1.11.0"
+      ],
+      [
+        "mpmath",
+        "1.3.0"
+      ],
+      [
+        "mutmut",
+        "3.7.0"
+      ],
+      [
+        "mypy_extensions",
+        "1.1.0"
+      ],
+      [
+        "namex",
+        "0.1.0"
+      ],
+      [
+        "narwhals",
+        "2.23.0"
+      ],
+      [
+        "networkx",
+        "3.4.2"
+      ],
+      [
+        "numba",
+        "0.65.0"
+      ],
+      [
+        "numpy",
+        "2.2.6"
+      ],
+      [
+        "nvidia-cublas",
+        "13.1.0.3"
+      ],
+      [
+        "nvidia-cublas-cu12",
+        "12.9.2.10"
+      ],
+      [
+        "nvidia-cuda-cupti",
+        "13.0.85"
+      ],
+      [
+        "nvidia-cuda-cupti-cu12",
+        "12.9.79"
+      ],
+      [
+        "nvidia-cuda-nvcc-cu12",
+        "12.9.86"
+      ],
+      [
+        "nvidia-cuda-nvrtc",
+        "13.0.88"
+      ],
+      [
+        "nvidia-cuda-nvrtc-cu12",
+        "12.9.86"
+      ],
+      [
+        "nvidia-cuda-runtime",
+        "13.0.96"
+      ],
+      [
+        "nvidia-cuda-runtime-cu12",
+        "12.9.79"
+      ],
+      [
+        "nvidia-cudnn-cu12",
+        "9.20.0.48"
+      ],
+      [
+        "nvidia-cudnn-cu13",
+        "9.19.0.56"
+      ],
+      [
+        "nvidia-cufft",
+        "12.0.0.61"
+      ],
+      [
+        "nvidia-cufft-cu12",
+        "11.4.1.4"
+      ],
+      [
+        "nvidia-cufile",
+        "1.15.1.6"
+      ],
+      [
+        "nvidia-curand",
+        "10.4.0.35"
+      ],
+      [
+        "nvidia-curand-cu12",
+        "10.3.10.19"
+      ],
+      [
+        "nvidia-cusolver",
+        "12.0.4.66"
+      ],
+      [
+        "nvidia-cusolver-cu12",
+        "11.7.5.82"
+      ],
+      [
+        "nvidia-cusparse",
+        "12.6.3.3"
+      ],
+      [
+        "nvidia-cusparse-cu12",
+        "12.5.10.65"
+      ],
+      [
+        "nvidia-cusparselt-cu13",
+        "0.8.0"
+      ],
+      [
+        "nvidia-nccl-cu12",
+        "2.29.7"
+      ],
+      [
+        "nvidia-nccl-cu13",
+        "2.28.9"
+      ],
+      [
+        "nvidia-nvjitlink",
+        "13.0.88"
+      ],
+      [
+        "nvidia-nvjitlink-cu12",
+        "12.9.86"
+      ],
+      [
+        "nvidia-nvshmem-cu13",
+        "3.4.5"
+      ],
+      [
+        "nvidia-nvtx",
+        "13.0.85"
+      ],
+      [
+        "opt_einsum",
+        "3.4.0"
+      ],
+      [
+        "optree",
+        "0.19.0"
+      ],
+      [
+        "packaging",
+        "26.0"
+      ],
+      [
+        "pandas",
+        "2.3.3"
+      ],
+      [
+        "pathspec",
+        "1.0.4"
+      ],
+      [
+        "patsy",
+        "1.0.2"
+      ],
+      [
+        "pdfminer.six",
+        "20251230"
+      ],
+      [
+        "pdfplumber",
+        "0.11.9"
+      ],
+      [
+        "pillow",
+        "12.1.0"
+      ],
+      [
+        "pip",
+        "23.0.1"
+      ],
+      [
+        "pip",
+        "26.2.1"
+      ],
+      [
+        "platformdirs",
+        "4.9.2"
+      ],
+      [
+        "playwright",
+        "1.58.0"
+      ],
+      [
+        "plotly",
+        "6.8.0"
+      ],
+      [
+        "pluggy",
+        "1.6.0"
+      ],
+      [
+        "pooch",
+        "1.9.0"
+      ],
+      [
+        "protobuf",
+        "7.34.1"
+      ],
+      [
+        "pyEDFlib",
+        "0.1.42"
+      ],
+      [
+        "pycodestyle",
+        "2.14.0"
+      ],
+      [
+        "pycparser",
+        "3.0"
+      ],
+      [
+        "pydantic",
+        "2.13.4"
+      ],
+      [
+        "pydantic_core",
+        "2.46.4"
+      ],
+      [
+        "pyee",
+        "13.0.0"
+      ],
+      [
+        "pyflakes",
+        "3.4.0"
+      ],
+      [
+        "pylint",
+        "4.0.8"
+      ],
+      [
+        "pymatreader",
+        "1.1.0"
+      ],
+      [
+        "pynndescent",
+        "0.6.0"
+      ],
+      [
+        "pypandoc",
+        "1.16.2"
+      ],
+      [
+        "pyparsing",
+        "3.3.2"
+      ],
+      [
+        "pypdfium2",
+        "5.8.0"
+      ],
+      [
+        "pyriemann",
+        "0.12"
+      ],
+      [
+        "pytest",
+        "9.1.1"
+      ],
+      [
+        "python-dateutil",
+        "2.9.0.post0"
+      ],
+      [
+        "python-docx",
+        "1.2.0"
+      ],
+      [
+        "pytokens",
+        "0.4.1"
+      ],
+      [
+        "pytz",
+        "2026.1.post1"
+      ],
+      [
+        "radon",
+        "6.0.1"
+      ],
+      [
+        "requests",
+        "2.32.5"
+      ],
+      [
+        "rich",
+        "14.3.3"
+      ],
+      [
+        "safetensors",
+        "0.7.0"
+      ],
+      [
+        "scikit-learn",
+        "1.7.2"
+      ],
+      [
+        "scipy",
+        "1.15.3"
+      ],
+      [
+        "seaborn",
+        "0.13.2"
+      ],
+      [
+        "setproctitle",
+        "1.3.7"
+      ],
+      [
+        "setuptools",
+        "65.5.0"
+      ],
+      [
+        "shap",
+        "0.49.1"
+      ],
+      [
+        "shellingham",
+        "1.5.4"
+      ],
+      [
+        "six",
+        "1.17.0"
+      ],
+      [
+        "slicer",
+        "0.0.8"
+      ],
+      [
+        "sortedcontainers",
+        "2.4.0"
+      ],
+      [
+        "statsmodels",
+        "0.14.6"
+      ],
+      [
+        "sympy",
+        "1.14.0"
+      ],
+      [
+        "tensorflow",
+        "2.21.0"
+      ],
+      [
+        "termcolor",
+        "3.3.0"
+      ],
+      [
+        "textual",
+        "8.2.8"
+      ],
+      [
+        "threadpoolctl",
+        "3.6.0"
+      ],
+      [
+        "timm",
+        "1.0.26"
+      ],
+      [
+        "toml",
+        "0.10.2"
+      ],
+      [
+        "tomli",
+        "2.4.1"
+      ],
+      [
+        "tomlkit",
+        "0.15.1"
+      ],
+      [
+        "torch",
+        "2.11.0"
+      ],
+      [
+        "torchvision",
+        "0.26.0"
+      ],
+      [
+        "tqdm",
+        "4.67.1"
+      ],
+      [
+        "triton",
+        "3.6.0"
+      ],
+      [
+        "typer",
+        "0.24.1"
+      ],
+      [
+        "typing-inspection",
+        "0.4.2"
+      ],
+      [
+        "typing_extensions",
+        "4.15.0"
+      ],
+      [
+        "tzdata",
+        "2025.3"
+      ],
+      [
+        "umap-learn",
+        "0.5.11"
+      ],
+      [
+        "urllib3",
+        "2.6.3"
+      ],
+      [
+        "wheel",
+        "0.46.3"
+      ],
+      [
+        "wrapt",
+        "2.1.2"
+      ],
+      [
+        "xmltodict",
+        "1.0.2"
+      ]
+    ],
+    "python": "3.10.12 (main, May 12 2025, 17:51:13) [GCC 11.4.0]",
+    "executable": "/home/bps/.pyenv/versions/3.10.12/bin/python",
+    "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.35",
+    "environment": {
+      "PYTHONPATH": null,
+      "PYTHONHASHSEED": null,
+      "OMP_NUM_THREADS": null,
+      "MKL_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null,
+      "CUDA_VISIBLE_DEVICES": null,
+      "TF_DETERMINISTIC_OPS": null
+    }
+  },
+  "inputs_unchanged": true,
+  "passed": true
+}

@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-08T05:58:38.897889+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_bp_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_bp_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite.svg",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/iBrainCenter/TYY(SN041)/merged.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_bp_metrics.csv",
+      "kind": "meditation_bp",
+      "rows": 803,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_tflite_metrics.csv",
+      "kind": "meditation_tflite",
+      "rows": 803,
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-workflow-evidence-inputs/bp_actual.npz",
+      "expected": "/tmp/lilia-workflow-evidence-inputs/bp_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "calm": 9.8879238130678e-17,
+        "flow": 9.8879238130678e-17,
+        "focus": 1.1102230246251565e-16,
+        "relaxation": 1.1102230246251565e-16,
+        "time_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-workflow-evidence-inputs/tflite_actual.npz",
+      "expected": "/tmp/lilia-workflow-evidence-inputs/tflite_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "calm": 1.1102230246251565e-16,
+        "flow": 9.8879238130678e-17,
+        "focus": 1.1102230246251565e-16,
+        "relaxation": 1.1102230246251565e-16,
+        "time_us": 0.0
+      },
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/iBrainCenter/TYY(SN041)/merged.csv": "19d53956673ad7756689066bcbf9e8f195faee43c732021a8ea98f102f6b4a6f",
+    "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite.png": "361f0dc746b0b932d8913b80a46f77362e14283d7ee1f6596cf19f211eeea66d",
+    "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite.svg": "c48cdbede4acff6904b69a9372b20096a1b9e4b17169763efdbfe708aa195c74",
+    "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_bp_metrics.csv": "8a28d6cf372124d33ba4d2e64af93d3cf4e3d2b45a6274528b0ef9153b37759e",
+    "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_bp_metrics.csv.meta.json": "6cf04da5846a1fb580f90b84183f4b7afb1eb31c9354dc55538cca7d3250ec24",
+    "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_tflite_metrics.csv": "f7ce8b92c7a6387d1f077f1120f21b43a1384a077b7944c7a59669231edbfe26",
+    "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_tflite_metrics.csv.meta.json": "058f302a1ae983787f08252afec17433baef71035d38532bf0cac9fac651fac7",
+    "/tmp/lilia-workflow-evidence-inputs/bp_actual.npz": "7478a0c88af729a2f260da34b6ae312563517ab2d1fe31db50054b3184b1ee84",
+    "/tmp/lilia-workflow-evidence-inputs/bp_expected.npz": "21fcb84b9c0e79b72d5ae3c0371260bda53793857255cd395586e2bc1da633c4",
+    "/tmp/lilia-workflow-evidence-inputs/manifest.json": "9c78e0d7a28eec4efebefaf786f7e7f7d2a8ed2c4eda7a22765c8ab9277d3d57",
+    "/tmp/lilia-workflow-evidence-inputs/tflite_actual.npz": "2441169104f0729bd40505a2cef3eda693a321ea444c7062afcc1b1729f437e7",
+    "/tmp/lilia-workflow-evidence-inputs/tflite_expected.npz": "061d5297550a48cf6f70be0ebe4c1624cff5707f43b94da510261083a12613bc"
+  },
+  "log": "/tmp/lilia-workflow-evidence/evidence.log"
+}

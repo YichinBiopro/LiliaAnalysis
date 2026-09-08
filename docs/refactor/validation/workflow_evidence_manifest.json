@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_bp_metrics.csv",
+      "sha256": "8a28d6cf372124d33ba4d2e64af93d3cf4e3d2b45a6274528b0ef9153b37759e"
+    },
+    {
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_bp_metrics.csv.meta.json",
+      "sha256": "6cf04da5846a1fb580f90b84183f4b7afb1eb31c9354dc55538cca7d3250ec24"
+    },
+    {
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_tflite_metrics.csv",
+      "sha256": "f7ce8b92c7a6387d1f077f1120f21b43a1384a077b7944c7a59669231edbfe26"
+    },
+    {
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_tflite_metrics.csv.meta.json",
+      "sha256": "058f302a1ae983787f08252afec17433baef71035d38532bf0cac9fac651fac7"
+    },
+    {
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite.png",
+      "sha256": "361f0dc746b0b932d8913b80a46f77362e14283d7ee1f6596cf19f211eeea66d"
+    },
+    {
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite.svg",
+      "sha256": "c48cdbede4acff6904b69a9372b20096a1b9e4b17169763efdbfe708aa195c74"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/iBrainCenter/TYY(SN041)/merged.csv",
+      "sha256": "19d53956673ad7756689066bcbf9e8f195faee43c732021a8ea98f102f6b4a6f"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91"
+    }
+  ],
+  "tables": [
+    {
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_bp_metrics.csv",
+      "kind": "meditation_bp",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/iBrainCenter/TYY(SN041)/merged.csv"
+    },
+    {
+      "path": "/tmp/lilia-stage13/real/TYY_SN041_meditation_tflite_tflite_metrics.csv",
+      "kind": "meditation_tflite",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/iBrainCenter/TYY(SN041)/merged.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    }
+  ],
+  "comparisons": [
+    {
+      "actual": "/tmp/lilia-workflow-evidence-inputs/bp_actual.npz",
+      "expected": "/tmp/lilia-workflow-evidence-inputs/bp_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-workflow-evidence-inputs/tflite_actual.npz",
+      "expected": "/tmp/lilia-workflow-evidence-inputs/tflite_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false
+    }
+  ]
+}

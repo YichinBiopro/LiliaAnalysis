@@ -1,11 +1,28 @@
 # Python 修正接手狀態
 
-更新日期：2026-09-07。**狀態：第八階段 plot_event_markers 一般主流程的分段 BP／TFLite、raw 品質映射、事件 baseline 與圖表已完成；下一步為 data_analysis.py CLI 分段遷移。**
+> **日常接手入口已改為 [REFACTOR_STATUS.md](REFACTOR_STATUS.md)。** 本檔保留第十三階段以前的完整交接與歷史證據，按需查閱，不再逐階段累加。當前任務見 [任務單](docs/refactor/TASKS.md)，執行與驗證見 [精簡流程](docs/refactor/WORKFLOW.md)。
+
+更新日期：2026-09-08。**狀態：第十三階段 plot_tyy_meditation.py 已完成；下一步為 lilia.qeeg／qeeg_indices.py CLI。**
 
 ## 先讀文件
 
+- [第十三階段修正報告](PYTHON_FIX_REPORT_2026-09-08_STAGE13.md)：TYY 固定 baseline、全 raw 裁切／模型映射、四通道 BP 行為更正與限制。
+- [第十三階段驗證](PYTHON_FIX_VALIDATION_2026-09-08_STAGE13.json)：目前 Python 指紋、197 tests、舊主函式真實模型基準、完整 TYY 與四個合成案例。
+
+- [第十二階段修正報告](PYTHON_FIX_REPORT_2026-09-08_STAGE12.md)：單事件 zoom、完整 pre-event-rest bins、顯示對齊、hash parser 崩潰修復與限制。
+- [第十二階段驗證](PYTHON_FIX_VALIDATION_2026-09-08_STAGE12.json)：第十二階段歷史指紋、184 tests、舊連續基準、Hsin 與一般入口逐值核對及缺資料案例。
+
+- [第十一階段修正報告](PYTHON_FIX_REPORT_2026-09-08_STAGE11.md)：跨受試者分段 BP／TFLite、兩組 baseline、缺值圖形與限制。
+- [第十一階段驗證](PYTHON_FIX_VALIDATION_2026-09-08_STAGE11.json)：第十一階段歷史指紋、171 tests、連續基準、全部 8 位真實受試者與合成不同模型裁尾窗口。
+
+- [第十階段修正報告](PYTHON_FIX_REPORT_2026-09-07_STAGE10.md)：Hardy_2 五頻帶／時段政策、缺口圖形與限制。
+- [第十階段驗證](PYTHON_FIX_VALIDATION_2026-09-07_STAGE10.json)：第十階段歷史指紋、155 tests、連續基準、完整 Hardy_2 主版／bundle 與合成污染段。
+
+- [第九階段修正報告](PYTHON_FIX_REPORT_2026-09-07_STAGE9.md)：APP／NUC 分段 MAD／OLA、elapsed 配對、圖表與限制。
+- [第九階段驗證](PYTHON_FIX_VALIDATION_2026-09-07_STAGE9.json)：第九階段歷史指紋、142 tests、連續基準與真實 APP／NUC 兩案例。
+
 - [第八階段修正報告](PYTHON_FIX_REPORT_2026-09-07_STAGE8.md)：event markers 一般主流程、baseline 政策差異與限制。
-- [第八階段驗證](PYTHON_FIX_VALIDATION_2026-09-07_STAGE8.json)：目前 Python 指紋、129 tests、真實模型連續基準與完整 Hardy 兩模式。
+- [第八階段驗證](PYTHON_FIX_VALIDATION_2026-09-07_STAGE8.json)：第八階段歷史指紋、129 tests、真實模型連續基準與完整 Hardy 兩模式。
 
 - [第七階段修正報告](PYTHON_FIX_REPORT_2026-09-07_STAGE7.md)：普通 entropy state 的窗口政策、連續數值、排除紀錄與限制。
 - [第七階段驗證](PYTHON_FIX_VALIDATION_2026-09-07_STAGE7.json)：第七階段歷史指紋、116 tests、連續基準與完整 Hardy 兩模式。
@@ -22,7 +39,7 @@
 - [第三階段修正報告](PYTHON_FIX_REPORT_2026-09-07_STAGE3.md)：第三階段歷史修改、方法變更與限制。
 - [第三階段驗證](PYTHON_FIX_VALIDATION_2026-09-07_STAGE3.json)：第三階段歷史指紋、76 個測試與完整 Hardy 數值。
 
-下列文件保留為歷史；第一至第七階段指紋不代表目前版本。
+下列文件保留為歷史；第一至第十二階段指紋不代表目前版本。
 
 1. [PYTHON_FIX_REPORT_2026-09-07.md](PYTHON_FIX_REPORT_2026-09-07.md)：本輪原因、方法、成果與限制。
 2. [PYTHON_FIX_VALIDATION_2026-09-07.json](PYTHON_FIX_VALIDATION_2026-09-07.json)：第二階段歷史驗證摘要及 Python 檔案指紋。
@@ -37,7 +54,9 @@
 
 第一階段 commit 為 `8c07401`，第二階段已提交為 `c76bc43`。第三階段開始時工作區乾淨，分支為 `spectral-entropy-flow-rework`，與本機 origin tracking ref 相同（本輪未 fetch）。第三至第八階段的程式、測試、fixtures、報告、驗證摘要與 bundle 變更收錄於本次整合提交。各階段報告中的「未 commit／push」是撰寫當時的歷史狀態；目前提交與遠端同步狀態以 Git 為準。
 
-使用者於本次對話已明確要求將這幾輪修改 commit and push，授權將目前累積變更推送至既有遠端 `https://github.com/YichinBiopro/LiliaAnalysis.git` 的 `spectral-entropy-flow-rework`。先前 push 審核拒絕保留為歷史；這次依新授權正常提交及推送，不使用 force push。
+第三至第八階段已整合為 `edd119b`。第九階段開始與結束時，HEAD 與本機 `origin/spectral-entropy-flow-rework` tracking ref 均指向該提交；本階段沒有 fetch，不能據此宣稱已即時查驗 GitHub。先前 push 曾被自動審核拒絕，不能將本機 tracking ref 狀態當作該次 push 成功的證據。
+
+使用者此前的 commit and push 要求針對前幾輪累積修改。第九至十三階段依「繼續下一階段／確認交接並繼續」執行程式修正與測試，五階段修改保留在工作區，未 commit／push。第十一階段接手時程式與 13 項測試已存在但未記入交接，本輪補齊例外處理、圖形邊界、真實驗證與文件。後續發布依當次明確授權及審核結果執行；不要自行重試已被拒絕的操作。
 
 沒有自動續跑排程，也不能保證五小時後自動啟動下一個工作時段。此文件供手動接手。
 
@@ -116,18 +135,71 @@
 - **129 tests、111 Python 編譯、Pyflakes、bundle／diff check 通過。** 完整 Hardy 兩種 baseline 模式均實際 BP＋TFLite，各 848 窗口、683 合格／165 低品質、139 heatmap bins。最後中心 4791.844551 秒。pre-event-rest 的 Color Agility Ladder 無 baseline，明示排除；PNG/SVG、CSV/meta/audit 與來源重讀完成。
 - 未遷移 `--hardy2-analysis` 特殊分支及其他 legacy helper callers；不要據一般主流程完成而宣稱所有入口已支援缺口。
 
+第九階段：
+
+- `lilia.comparison` 逐 raw segment 濾波、MAD 插值、500→200 Hz 重採樣及 PyTorch OLA；短段排除保留 epoch／原 segment ID，保留段資料或模型失敗明示報錯。
+- APP／NUC 使用各自 elapsed clock，最長共同連續段估單一 ch1 lag，一對一配對保留兩端索引及 residual。這是波形對齊，不是 absolute clock 同步；週期訊號可能有多個相關峰。
+- Welch 逐段計算、依子窗口數平均線性 power；各自完整錄製 PSD 範圍沿用舊版。TD、STFT 與 5 秒 qEEG 保留缺口及真實 timestamps，孤立 qEEG 窗口有可見點。
+- `lilia.comparison_io` 的 signal／qEEG／alignment CSV + sidecar 核對 raw、模型、設定、原始及模型索引映射。保存修復區間、短段／窗口及失敗 audit。quality 明示 disabled，不與 MAD 修復混淆。
+- **142 tests、116 Python 編譯、Pyflakes、bundle／diff check 通過。** 等間距連續 fixture 的真實模型、MAD、PSD、STFT、qEEG 與時間全部最大誤差 0。
+- 真實 10 Hz APP／NUC：11725／12000 模型輸出、11／12 qEEG 窗口、lag −32、11725 配對。從兩份真實來源刪列構造不同大／小缺口：10724／10999 輸出、9／10 qEEG、10394 配對分為 4 段；短前綴排除。每案例 5 表重讀與 30 產物 hash 核對通過；STFT／qEEG 目視完成。
+- 固定 500 Hz／前四通道、無 quality scorer、單一 lag 與非原子整批發布等限制見報告；尚未完成所有其他入口。
+
+第十階段：
+
+- `lilia.hardy2` 保留每通道五頻帶正規化／median 及獨立四指標公式，使用來源分段 grid、逐段 BP、有效 run 的 5 窗口平滑。每段短尾、非有限段／窗口、filter／metric 失敗均明示。
+- 四 period 只納入完整包含的窗口；跨事件邊界 rows 留在時序圖與表，但不計入時段 mean。底色依有效相鄰窗口的實際範圍，不跨缺口或污染窗口。quality 明示 disabled。
+- `lilia.hardy2_io` 保存 metrics CSV/meta，核對 raw、完整窗口／段／短尾、通道 median、平滑及 period rows／spans／means。成功／失敗均有 analysis audit，全短／全排除非零退出。
+- 新增 `--hardy2-csv`，預設路徑相容，bundle 可指定外部錄製；x 軸限來源範圍，只標示範圍內事件。
+- **155 tests、121 Python 編譯、Pyflakes、bundle／diff check 通過。** 連續 raw／BP 五頻帶、指標、平滑及同政策 period mean 最大誤差 0。
+- 完整 Hardy_2：958384 樣本、2 段、313.290063 秒缺資料、383 有限窗口、884 未滿窗口尾樣本。最後中心 2225.790063 秒；3 個跨事件窗口明示不納入 period，四 period 分別 149／35／179／17 窗口。分段 BP 與 period 政策造成的真實數值差異另存對照。
+- 主版／bundle 真實 metrics 表完全相同；合成短前綴／小大缺口／污染段 9 候選、7 有限。三案例各 14 產物 hash 與 table 重讀完成；真實及合成圖目視通過。
+
+第十一階段：
+
+- `compare_subjects.py` 改用 `lilia.event_qeeg`／`lilia.tflite` 分段 BP、模型裁尾與各自指標 grid；品質按真正 raw 範圍評分，不再截齊列數或讓 unmatched tail 默認合格。
+- `lilia.subject_comparison` 保留 iBrain 第一參與事件前完整窗口 baseline、YoGa 前 `max(1,N//5)` 候選指標列 baseline，先選候選再遮罩品質。每通道先算窗口 mean 差，再算通道 mean／population SD。
+- `lilia.subject_comparison_io` 保存並核對 raw／model／config、原始與模型窗口、品質索引及所有 baseline／事件候選／接受／排除與 delta。缺 baseline、缺事件、未參與、模型失敗均明示；BP 部分成果保留，CLI 續跑其他受試者並彙總非零失敗。
+- 共享 `score_branch` 的單窗口 metric 例外清除部分通道結果並保留失敗列；非有限指標不能接受。圖表區分 NA／NP／OFF／真實零值，全缺值子圖固定受試者軸範圍。
+- **171 tests、126 Python 編譯、Pyflakes、bundle／diff check 通過。** 連續 BP／TFLite／raw 品質及兩種 delta 最大絕對誤差均為 0。新完整事件選窗與舊中心選窗差異另留數值，不宣稱政策等價。
+- 真實 iBrain 5 位、YoGa 3 位全成功，共 16 表重讀、32 表／sidecar、8 subject audit、12 圖形 hashes 核對。Hardy 6 段、848 窗口／683 合格，最後中心 4791.844551 秒；Jammie 3 段、1128／954。其餘數字見報告。
+- 合成短前綴／5 秒段／小大缺口使用真實模型與 scorer，BP 9 窗口、TFLite 8 窗口；後續品質無位移。Session／event 兩案例 4 表重讀與圖形目視完成。
+- bundle 同步新增模組與共享修正；既有 manifest 未包含 compare_subjects CLI，沒有自行新增發行入口。
+
+第十二階段：
+
+- `plot_meditation_zoom.py` 共用一般 event markers 的逐來源段 BP／raw 品質與 `pre-event-rest` summary。`lilia.event_zoom` 保存 raw 顯示 runs、缺資料區間、baseline／event 候選與排除、完整／邊界／有效 bins，無空選區 fallback。
+- 每個 30 秒 bin 按真正起訖畫矩形；跨事件邊界灰色、沒有完整 bin 留白。raw 逐 run 降採樣保留首尾、逐段斷線／底色；獨立 colorbar 欄讓 raw 與 heatmap 實際時間位置對齊。
+- `lilia.event_zoom_io` 的 event_marker_bp／scope=event_zoom 表可重讀，重建來源 grid／品質映射、有效性、整份 summary、顯示索引／缺資料／選區／段短尾。未參與、缺 raw、全短、缺 baseline、全排除保存圖與 audit 並非零退出。新增 `--csv`，沿用 subject schedule。
+- 實際來源 hash `68e6869767633…` 使 pandas 2.3.3 自動型別推斷 segfault；單欄子程序重現。共享 `_load_window_table` 強制 source_id／config_id 為文字後正常，另測前導零 hash，不再觸發數值推斷。
+- **184 tests、131 Python 編譯、Pyflakes、bundle／diff check 通過。** 舊連續 24 窗口的 BP／raw 品質／absolute／delta heatmap 最大差異 0；bin 中心有意改正 2.5 秒。Hsin 新版與一般完整 pre-event-rest 表／summary 逐值相同。
+- 真實 Hsin 1978896 樣本、791 窗口／748 合格、131 bins；meditation 20 完整有效 event bins、5 baseline bins、1 邊界灰色 bin。舊 baseline 及 delta 政策差異另留數值。真實 Color Agility Ladder 明示缺 baseline，保存缺值圖並 exit 1。
+- 四個合成案例包含短前綴、8 ms／20.008 秒缺口、短事件與缺 baseline；兩個真實與四個合成 zoom 案例均表重讀、每例 4 產物 hash 核對及圖形檢查。共享模組同步 bundle，既有 manifest 未包含 zoom CLI。
+
+第十三階段：
+
+- 舊 TYY 註解稱 BP 只用 Ch1／Ch2，但舊主函式實跑證實 BP 使用四通道，只有 raw 圖顯示前兩通道。保留實際四通道 BP、四通道模型輸入／兩通道輸出；第十二階段下一步的誤記已更正。
+- `lilia.meditation` 按原始微秒半開裁切，逐段 BP、重採樣與 TFLite 完整模型窗／裁尾。BP 保持完整 raw 索引，模型輸出索引另外明示；source crop／原 segment ID／epoch／model-to-raw 映射均保留。
+- baseline 保留固定 14:24 前完整 30 秒 bins，載入 14:10–15:19、顯示 15:00–15:19；不套 pre-event-rest，也不加入品質 scorer。quality 明示 disabled，無 baseline 不再 fallback 零。
+- `lilia.meditation_io` 重讀核對 source／crop／model／原始與模型 grid、顯示 indices、有限性、baseline／heatmap 與 audit。來源短尾、污染段、模型缺失／推論失敗明示；BP 部分成果保留後非零退出。新增 --csv／--model。
+- 真正 30 秒矩形不跨段補色，raw 首尾保留／斷線，colorbar 不改變面板軸寬；原 ±150 µV raw 顯示限保留。
+- **197 tests、136 Python 編譯、Pyflakes、bundle／diff check 通過。** 連續 BP／TFLite 指標與 delta 最大誤差 0，真實模型 output 逐值相同。舊 bin 中心有意改正 2.5 秒。
+- 完整 TYY：2009328 樣本、1 段；兩分支各 803 有限窗口、133 bins、27 baseline bins、34 顯示 bins。TFLite 803600 輸出／2009 模型窗。新舊真實 delta 差異 0，CSV round-trip 不超過 1.12e-16。
+- 真實與 4 合成案例共 9 表重讀、28 產物 hash 核對；合成 crop 從原索引 6100／原 segment 2開始，保留segment 3 與 8 ms／20.008 秒缺口。缺 baseline／缺模型案例明確失敗並保留圖與 audit。共享模組同步 bundle；manifest 未包含 TYY CLI。
+
 ## 下一個具體任務
 
-**遷移 `data_analysis.py` CLI 的完整分段流程，驗證後才移除其 guard。**
+**遷移 `python -m lilia.qeeg`／根目錄 `qeeg_indices.py` 相容 CLI，完成驗證後解除 guard。**
 
-1. 保存目前連續資料主入口的模型、品質、時間軸與輸出數值基準；優先檢查載入秒／微秒、濾波、重採樣及模型推論呼叫順序。
-2. 重用已完成的 `lilia.neural` timeline／來源映射，逐原始 segment 濾波、重採樣、推論；不要重新拼接不相鄰樣本，也不要混用 PyTorch OLA 與 TFLite 裁尾政策。
-3. 下游圖表與匯出使用正確模型輸出索引／timestamps，品質失敗、短段及全數排除明示；保留來源與模型 hash 驗證。
-4. 完成連續基準、合成缺口／邊界、真實錄製與輸出重讀後，才移除 CLI guard；更新報告及 bundle。
+1. 保存目前直接分析單一 raw channel 的連續三頻帶／四指標、窗口中心、CLI summary／PNG 基準。此入口沒有 BP、TFLite、品質 scorer 或 baseline，不要直接套用其他入口的方法。
+2. CLI 保留原始整數微秒，不再先轉絕對 float 秒再 round-trip。用 WindowGrid 保留來源 segment ID／原始樣本窗口／真實 elapsed 或明示的絕對時間；確保不跨缺口窗口、保留各段短尾與非有限值排除。
+3. `compute_qeeg_indices_windowed` 是共用／相容 helper：盤點 callers，保留無 timestamp 呼叫的既有語義，若增加 timestamps／grid 參數需驗證形狀及設定；不要為 CLI 改變所有既有 callers。
+4. 兩面板圖不跨段連線，孤立窗口有可見點。輸出 CSV/meta＋analysis audit，核對來源、channel、設定與全部窗口；全短／全排除／錯誤 channel 明確失敗。品質若未評分明示 disabled，不把有限值稱為品質合格。
+5. 完成連續基準、合成缺口／短段／非有限／邊界、完整有缺口 Hardy 真實資料，主版／相容入口／bundle 來源重讀與圖形目視，再移除 guard、更新報告與 bundle。
 
-已完成的普通 entropy 時序／baseline-event／clean、band-event MI、raw joint-MI、denoise MI、TFLite summary、event markers 一般主流程避免重写。
+已完成的普通 entropy、band-event MI、raw／denoise joint-MI、TFLite summary、event markers 一般主流程、APP／NUC CLI、Hardy_2、compare_subjects、meditation zoom 與 TYY meditation 避免重寫。
 
-其後仍有其他入口（含 `--hardy2-analysis`、compare_subjects、meditation 圖、qEEG CLI、眼開閉與 Jenqwei）的盤點／遷移、品質 scorer 短窗／fallback、baseline 方法整理、大型入口拆分、批次與 artifact 原子發佈、PSD／Goertzel／MI 方法校準、F19 相容介面及整體驗收。不同模式的 baseline／品質與索引空間不能直接混用。
+其後仍有眼開閉與 Jenqwei 的盤點／遷移、品質 scorer 短窗／fallback、baseline 方法整理、大型入口拆分、批次與 artifact 原子發佈、PSD／Goertzel／MI 方法校準、F19 相容介面及整體驗收。不同模式的 baseline／品質與索引空間不能直接混用。
 
 ## 工作區與相容性保護
 
@@ -151,6 +223,35 @@ git diff --check
 依下一階段實際修改選測試；沒有新修改或失敗，不需要反覆重跑全部驗證。套件 qEEG CLI 用 `python -m lilia.qeeg` 或根目錄相容入口 `qeeg_indices.py`。
 
 ## 暫存與持久資源
+
+- `/tmp/lilia-stage13/real/`：完整 TYY BP／TFLite PNG/SVG、metrics CSV/meta、analysis audit。
+- `/tmp/lilia-stage13/gapped/`、`large_gap/`、`no_baseline/`、`missing_model/`：四合成案例，來源為 `synthetic_source.csv`／`large_source.csv`，裁切原始索引／模型對齊與失敗輸出。
+- `tests/fixtures/tyy_meditation_continuous_reference.json/.npz`：舊主函式 BP 四通道／真實模型兩通道基準與原始模型輸出。`/tmp/lilia-stage13/capture_before.py`、`plot_tyy_meditation_before.py`、`real_before.json` 保存實跑程序與真實舊數值。
+- `/tmp/lilia-stage13/validate_stage13.py`、`evidence.json`：完整來源／模型／產物重讀與新舊比對；重要摘要持久保存於第十三階段驗證 JSON。
+- `/tmp/lilia-stage13-all-tests.log`、`/tmp/lilia-stage13-tests.log`、`/tmp/lilia-stage13-real.log`、`/tmp/lilia-stage13-validation.log`。
+
+- `/tmp/lilia-stage12/real/`、`general/`：Hsin meditation zoom 與獨立一般 pre-event-rest 完整圖／表／summary 對照；`real_no_baseline/` 為真實 Color Agility Ladder 缺 baseline 案例。
+- `/tmp/lilia-stage12/gapped/`、`large_gap/`、`short_event/`、`no_baseline/`：四個合成案例，來源在 `synthetic_source.csv`／`large_gap_source.csv`。
+- `/tmp/lilia-stage12/capture_before.py`、`plot_meditation_zoom_before.py`、`hsin_before.json`：舊主入口實跑基準；連續 fixture 已持久保存於 `tests/fixtures/meditation_zoom_continuous_reference.json`。
+- `/tmp/lilia-stage12/validate_stage12.py`、`evidence.json`：完整來源／產物重讀與數值對照；重要摘要保存於第十二階段驗證 JSON。
+- `/tmp/lilia-stage12-all-tests.log`、`/tmp/lilia-stage12-tests.log`、`/tmp/lilia-stage12-parser-tests.log`、`/tmp/lilia-stage12-validation-fixed.log`。`/tmp/lilia-stage12-validation.log` 保留修復前 native parser crash traceback，不能當作成功驗證 log。
+
+- `/tmp/lilia-stage11/real/iBrainCenter/`、`real/YoGa/`：全部 8 位受試者的 BP／TFLite CSV/meta、subject/group audit 與 12 張 PNG/SVG。
+- `/tmp/lilia-stage11/synthetic/session/`、`synthetic/events/`、`synthetic_source/`：短前綴、不同模型裁尾、小大缺口及未參與／無資料事件案例。
+- `/tmp/lilia-stage11/validate_stage11.py`、`evidence.json`：本輪實跑重讀與連續／選窗政策比對腳本及完整證據；重要摘要已持久保存於驗證 JSON。
+- `/tmp/lilia-stage11-all-tests.log`、`/tmp/lilia-stage11-tests-current.log`、`/tmp/lilia-stage11-real.log`、`/tmp/lilia-stage11-validation.log`。
+- `tests/fixtures/subject_comparison_continuous_reference.json`：第十一階段改前 BP／TFLite／raw 品質、兩種 delta、seed、shape 與程式／模型 hash。
+
+- `/tmp/lilia-stage10/real/`、`/tmp/lilia-stage10/bundle_real/`：Hardy_2 真實資料主版／bundle 的 6 類 PNG/SVG、metrics CSV/meta、analysis audit。
+- `/tmp/lilia-stage10/synthetic/` 與 `synthetic_source/`：短前綴／小大缺口／污染段的合成輸出與來源。
+- `/tmp/lilia-stage10-all-tests.log`、`/tmp/lilia-stage10-real.log`、`/tmp/lilia-stage10-bundle.log`、`/tmp/lilia-stage10-synthetic.log`。
+- `tests/fixtures/hardy2_continuous_reference.json`：第十階段修改前的 raw／BP 五頻帶、四指標、平滑、時段 mean 及程式 hash。
+- `/tmp/lilia-stage10/real_before.json`：修改前真實資料數值；重要新舊差異與 period means 已保存於第十階段驗證 JSON。
+
+- `/tmp/lilia-stage9/real_10hz/`、`/tmp/lilia-stage9/gapped_10hz/`：真實 APP／NUC 原始與人工缺口案例的 PNG、CSV/meta、analysis audit。
+- `/tmp/lilia-stage9/gapped_source/`：從真實來源刪列產生的測試副本；刪除範圍與 source hashes 見第九階段報告／JSON。
+- `/tmp/lilia-stage9-all-tests.log`、`/tmp/lilia-stage9-real.log`、`/tmp/lilia-stage9-gapped.log`。
+- `tests/fixtures/app_nuc_continuous_reference.json/.npz`：第九階段修改前的連續濾波／MAD／真實 PyTorch／PSD／STFT／qEEG 數值與模型／程式 hash。
 
 - `/tmp/lilia-stage8/hardy/`：session-start／pre-event-rest 的 BP＋TFLite PNG/SVG、metrics CSV/meta、analysis audit。
 - `/tmp/lilia-stage8-all-tests.log`、`/tmp/lilia-stage8-hardy.log`、`/tmp/lilia-stage8/hardy_validation.json`。
@@ -186,4 +287,4 @@ git diff --check
 
 ## 下一時段接手指令
 
-> 請讀 REFACTOR_HANDOFF.md 與第八階段報告，從已整合的第三至第八階段版本接續，並保留任何新的工作區修改。plot_event_markers 一般主流程的分段 BP／TFLite、raw 品質映射、事件 baseline、缺口圖形及完整 Hardy 已驗證；接著處理 data_analysis.py CLI，沿用 lilia.neural 的逐段重採樣／OLA timeline，保存連續基準、驗證後才移除 guard。特殊入口／品質 scorer／方法校準與整庫工程收尾仍未完成。更新報告並同步 bundle；後續發布依當次使用者授權範圍執行。
+> 請讀 REFACTOR_HANDOFF.md 與第十三階段報告，保留工作區第九至十三階段修改，從 lilia.qeeg／qeeg_indices.py CLI 接續。TYY 已驗證原本四通道 BP／兩通道模型、未啟用品質遮罩與固定 14:24 前 baseline，不需重做。qEEG CLI 本身直接分析單一 raw channel，沒有 BP／品質／baseline；先保存連續三頻帶／四指標及 summary，再接上原始微秒窗口與缺口／短尾／非有限排除、不跨段圖形及可重讀輸出。保護 compute_qeeg_indices_windowed 的既有 callers。完成有缺口 Hardy 真實資料與主版／相容／bundle 驗證後再解除 guard。更新報告並同步 bundle；其餘入口／方法校準／工程收尾仍待處理，發布依當次授權執行。

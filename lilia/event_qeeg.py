@@ -47,11 +47,21 @@ def score_branch(time_us, raw, data, grid, fs, raw_fs, scorer, params, threshold
         if not np.isfinite(window).all():
             row['metric_status'] = 'nonfinite_filtered_segment'
         else:
-            for channel in range(data.shape[1]):
-                values = compute_qeeg_indices(window[:, channel].astype(np.float64), fs=fs)
+            try:
+                for channel in range(data.shape[1]):
+                    values = compute_qeeg_indices(window[:, channel].astype(np.float64), fs=fs)
+                    for key in INDEX_KEYS:
+                        scores[key][i, channel] = values[key]
+                if all(np.isfinite(scores[key][i]).all() for key in INDEX_KEYS):
+                    row['metric_status'] = 'computed'
+                else:
+                    row['metric_status'] = 'nonfinite_metrics'
+            except Exception as exc:
+                # Discard partial channel results, but retain this candidate and
+                # continue scoring subsequent windows and the other branch.
                 for key in INDEX_KEYS:
-                    scores[key][i, channel] = values[key]
-            row['metric_status'] = 'computed'
+                    scores[key][i] = np.nan
+                row.update(metric_status='metric_error', metric_error=str(exc))
         audit.append(row)
     valid = np.isfinite(quality).all(axis=1) & (np.median(quality, axis=1) >= threshold)
     for values in scores.values():

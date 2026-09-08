@@ -195,7 +195,7 @@ def compute_qeeg_indices_windowed(data_col, fs=DEFAULT_FS,
 
 # ── Plotting ───────────────────────────────────────────────────────────────────
 
-def plot_qeeg_indices(indices, title, outpath, t_offset=0.0):
+def plot_qeeg_indices(indices, title, outpath, t_offset=0.0, marker=None):
     """
     Two-panel figure:
       top    — relative θ / α / β band powers over time.
@@ -226,6 +226,11 @@ def plot_qeeg_indices(indices, title, outpath, t_offset=0.0):
     ax1.set_xlabel('Time (s)')
     ax1.legend(loc='upper right', fontsize=9)
     ax1.grid(True, alpha=0.3)
+
+    if marker is not None:
+        # A segment with only one metric window still needs a visible point.
+        for line in [*ax0.lines, *ax1.lines[:4]]:
+            line.set_marker(marker)
 
     fig.tight_layout()
     fig.savefig(outpath, dpi=150)

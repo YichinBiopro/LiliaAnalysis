@@ -68,7 +68,10 @@ def _load_window_table(path, raw_csv=None, channel=None, *, kind):
     sorting/filtering or source edits are never silently interpreted as new times.
     """
     label = kind.replace('_', '-')
-    frame = pd.read_csv(path)
+    # SHA-256 identities are opaque text. Numeric inference can strip leading
+    # zeros or parse a digit/e prefix as an enormous scientific exponent (some
+    # pandas versions crash in that conversion before validation can run).
+    frame = pd.read_csv(path, dtype={'source_id': str, 'config_id': str})
     sidecar = Path(str(path) + '.meta.json')
     is_new = any(key in frame for key in WINDOW_COLUMNS if key != 'time_s') or 'window_schema_version' in frame
     if not is_new and not sidecar.exists():

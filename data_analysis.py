@@ -2,9 +2,12 @@
 import argparse
 import glob
 import os
+import json
+import hashlib
+from pathlib import Path
 
 import matplotlib.pyplot as plt
-from lilia.windowing import require_continuous
+from lilia.windowing import continuous_slices, plot_breaks
 import numpy as np
 import torch
 from scipy import signal
@@ -78,22 +81,28 @@ def resolve_paths(args: argparse.Namespace) -> tuple[str, str, str, str]:
 
 
 # ── File loading ───────────────────────────────────────────────────────────────
-def load_file(path: str) -> tuple[np.ndarray, np.ndarray, str, float]:
-    """Load a lilia EEG CSV and return (time_s, data, filename, gain).
-
-    Reads gain from row 2, skips 4-row header. Time and channel columns are
-    selected positionally (col 0 = time, cols 1..N_CH = channels).
-    Returns time in seconds (float64), data as (N, N_CH) float64.
-    """
-    with open(path) as f:
-        lines = [f.readline() for _ in range(5)]
+def load_file_us(path):
+    """Load original integer timestamps; header absolute offsets are not applied."""
+    from lilia.io import read_lilia_frame, read_abs_time_offset
+    with open(path) as handle:
+        lines = [handle.readline() for _ in range(4)]
     gain = float(lines[1].split(',')[1])
-    from lilia.io import read_lilia_frame
-    df = read_lilia_frame(path)
-    time_s = df.iloc[:, 0].values.astype(float) / 1e6
-    data = df.iloc[:, 1 : N_CH + 1].values.astype(float)
-    require_continuous(time_s * 1e6, FS, 'data_analysis.py')
-    return time_s, data, os.path.basename(path), gain
+    frame = read_lilia_frame(path)
+    if len(frame.columns) < N_CH+1:
+        raise ValueError('APP/NUC recordings require at least four EEG channels')
+    time_us = frame.iloc[:,0].to_numpy(dtype=np.int64)
+    continuous_slices(time_us, FS)
+    raw = frame.iloc[:,1:N_CH+1].to_numpy(dtype=float)
+    info = {'filename':os.path.basename(path), 'gain':gain,
+            'header_abs_time_offset_us':read_abs_time_offset(path),
+            'used_channels':[1,2,3,4], 'declared_channels':len(frame.columns)-1}
+    return time_us, raw, info
+
+
+def load_file(path: str) -> tuple[np.ndarray, np.ndarray, str, float]:
+    """Compatibility seconds adapter; the CLI retains integer microseconds."""
+    t, raw, info = load_file_us(path)
+    return t/1e6, raw, info['filename'], info['gain']
 
 
 def bandpass(data: np.ndarray, fs: float = FS,
@@ -140,6 +149,7 @@ def remove_artifacts(data: np.ndarray, label: str = '',
                      fs: float = FS,
                      thresh_mad: float = ARTIFACT_THRESH_MAD,
                      margin_ms: float = ARTIFACT_MARGIN_MS,
+                     return_masks: bool = False,
                      ) -> tuple[np.ndarray, list[int]]:
     """Detect and linearly-interpolate amplitude artifacts via MAD threshold.
 
@@ -156,6 +166,12 @@ def remove_artifacts(data: np.ndarray, label: str = '',
     cleaned : (N, n_ch) float array with artifacts interpolated
     counts  : list of removed-sample counts per channel
     """
+    data = np.asarray(data,dtype=float)
+    if data.ndim != 2 or not len(data) or not np.isfinite(data).all():
+        raise ValueError('Artifact removal needs nonempty finite channel data')
+    if not all(np.isfinite(v) for v in (fs,thresh_mad,margin_ms)) or fs<=0 or thresh_mad<0 or margin_ms<0:
+        raise ValueError('Invalid artifact repair settings')
+    masks = np.zeros(data.shape,dtype=bool)
     margin = int(fs * margin_ms / 1000)
     n      = data.shape[0]
     out    = data.copy()
@@ -168,13 +184,16 @@ def remove_artifacts(data: np.ndarray, label: str = '',
         bad_exp = np.zeros(n, dtype=bool)
         for idx in np.where(bad)[0]:
             bad_exp[max(0, idx - margin) : min(n, idx + margin + 1)] = True
+        masks[:,ch] = bad_exp
         counts.append(int(bad_exp.sum()))
         if bad_exp.any():
             x_good = np.where(~bad_exp)[0]
+            if not len(x_good):
+                raise ValueError(f'No finite interpolation anchors in channel {ch+1}')
             out[:, ch] = np.interp(np.arange(n), x_good, col[x_good])
     for i, cnt in enumerate(counts):
         print(f'{label} ch{i+1}: removed {cnt} samples ({cnt/n*100:.2f}%)')
-    return out, counts
+    return (out, counts, masks) if return_masks else (out, counts)
 
 
 # ── Model inference ─────────────────────────────────────────────────────────────
@@ -251,9 +270,15 @@ def estimate_lag(sig_a: np.ndarray, sig_b: np.ndarray,
     Positive L → sig_b leads sig_a.
     """
     N = min(len(sig_a), len(sig_b))
+    if N < 8:
+        raise ValueError('Lag estimation needs at least 8 finite paired samples')
     a = sig_a[:N, ref_ch].copy(); a = (a - a.mean()) / (a.std() + 1e-8)
     b = sig_b[:N, ref_ch].copy(); b = (b - b.mean()) / (b.std() + 1e-8)
-    corr = np.correlate(a, b, mode='full')
+    if N < 8 or not np.isfinite(a).all() or not np.isfinite(b).all():
+        raise ValueError('Lag estimation needs at least 8 finite paired samples')
+    if np.std(a)<1e-12 or np.std(b)<1e-12:
+        raise ValueError('Lag is undefined for a constant reference channel')
+    corr = signal.correlate(a, b, mode='full', method='direct' if N<=10000 else 'fft')
     lags = np.arange(-(N - 1), N)
     lag  = int(lags[np.argmax(corr)])
     leader = 'NUC leads APP' if lag > 0 else 'APP leads NUC'
@@ -279,11 +304,12 @@ def align_for_comparison(sig_a: np.ndarray, time_a: np.ndarray,
 
 
 # ── PSD ────────────────────────────────────────────────────────────────────────
-def compute_psd(data_col: np.ndarray, fs: float = FS) -> tuple[np.ndarray, np.ndarray]:
-    """Compute Welch PSD in dB. Returns (frequencies, psd_db)."""
-    freqs, psd = signal.welch(data_col, fs=fs, nperseg=fs*4,
-                               noverlap=fs*2, window='hann')
-    return freqs, 10 * np.log10(psd + 1e-12)
+def compute_psd(data_col: np.ndarray, fs: float = FS, segments=None):
+    """Segment-local Welch, pooled in linear power by actual Welch window count."""
+    from lilia.comparison import segmented_psd
+    segments = [slice(0,len(data_col))] if segments is None else segments
+    freqs, db, _ = segmented_psd(data_col,fs,segments)
+    return freqs, db
 
 
 # ── STFT ───────────────────────────────────────────────────────────────────────
@@ -295,6 +321,11 @@ def compute_stft(data_col: np.ndarray, fs: float = FS,
                  nperseg: int = STFT_NPERSEG,
                  noverlap: int = STFT_NOVERLAP) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Compute STFT magnitude in dB. Returns (frequencies, times, S_db)."""
+    data_col=np.asarray(data_col)
+    if data_col.ndim!=1 or len(data_col)<8 or not np.isfinite(data_col).all():
+        raise ValueError('STFT requires at least 8 finite samples')
+    nperseg=min(nperseg,len(data_col))
+    noverlap=min(noverlap,nperseg-1)
     f, t, Zxx = signal.stft(data_col, fs=fs, nperseg=nperseg, noverlap=noverlap,
                              window='hann')
     return f, t, 20 * np.log10(np.abs(Zxx) + 1e-12)
@@ -306,83 +337,57 @@ def _shared_clim(arrays, lo=2, hi=98):
     return np.percentile(combined, lo), np.percentile(combined, hi)
 
 
-def plot_stft_before_after(time, before, after, title, outpath, color,
-                           fmax=50.0, fs=FS):
-    """Plot per-channel STFT spectrograms before and after processing."""
-    n_ch = before.shape[1]
-    fig, axes = plt.subplots(n_ch, 2, figsize=(18, 3.5 * n_ch))
-    if n_ch == 1:
-        axes = axes[np.newaxis, :]
-    fig.suptitle(title, fontsize=14, fontweight='bold')
-    t0 = time[0]
-    for i in range(n_ch):
-        panels = [(before[:, i], 'Before'), (after[:, i], 'After')]
-        specs = []
-        for sig, _ in panels:
-            f, t_stft, Sdb = compute_stft(sig, fs=fs)
-            mask = f <= fmax
-            specs.append((f, t_stft, Sdb, mask))
-        vmin, vmax = _shared_clim([S[mask] for f, t_stft, S, mask in specs])
-        for col_idx, ((f, t_stft, Sdb, mask), (_, lbl)) in enumerate(
-                zip(specs, panels)):
-            ax = axes[i, col_idx]
-            img = ax.pcolormesh(t_stft + t0, f[mask], Sdb[mask],
-                                shading='gouraud', cmap='inferno',
-                                vmin=vmin, vmax=vmax)
-            plt.colorbar(img, ax=ax, label='dB')
-            ax.set_ylabel('Frequency (Hz)')
-            ax.set_title(f'Ch{i+1} — {lbl}')
-            ax.set_xlabel('Time (s)')
-    fig.tight_layout()
-    fig.savefig(outpath, dpi=150)
-    plt.close(fig)
-    print(f'Saved: {os.path.basename(outpath)}')
+def _plot_segment_stft(time_a, sig_a, time_b, sig_b, n_ch, title, outpath,
+                       label_a, label_b, fmax, fs, ids_a=None, ids_b=None):
+    from lilia.comparison import stft_parts
+    fig, axes = plt.subplots(n_ch,2,figsize=(18,3.5*n_ch),squeeze=False)
+    fig.suptitle(title,fontsize=14,fontweight='bold')
+    for ch in range(n_ch):
+        panels = [stft_parts(time_a,sig_a[:,ch],fs,ids_a), stft_parts(time_b,sig_b[:,ch],fs,ids_b)]
+        matrices = [db[f<=fmax] for parts in panels for f,t,db in parts]
+        if not matrices:
+            for ax in axes[ch]: ax.text(.5,.5,'No complete spectrogram interval',transform=ax.transAxes,ha='center')
+            continue
+        vmin,vmax = _shared_clim(matrices)
+        for col,parts in enumerate(panels):
+            ax=axes[ch,col]
+            img=None
+            for f,t,db in parts:
+                mask=f<=fmax
+                img=ax.pcolormesh(t,f[mask],db[mask],shading='gouraud',cmap='inferno',vmin=vmin,vmax=vmax)
+            if img is not None:fig.colorbar(img,ax=ax,label='dB')
+            ax.set(xlabel='Elapsed time (s)',ylabel='Frequency (Hz)',title=f'Ch{ch+1} — {[label_a,label_b][col]}')
+    fig.tight_layout();fig.savefig(outpath,dpi=150);plt.close(fig)
+
+
+def plot_stft_before_after(time, before, after, title, outpath, color, fmax=50., fs=FS, segment_ids=None):
+    _plot_segment_stft(time,before,time,after,before.shape[1],title,outpath,'Before','After',fmax,fs,segment_ids,segment_ids)
 
 
 def plot_stft_comparison(time_a, sig_a, time_b, sig_b, n_ch, title, outpath,
-                         label_a, label_b, fmax=50.0, fs=FS):
-    """Plot per-channel STFT spectrograms side-by-side for two signals."""
-    fig, axes = plt.subplots(n_ch, 2, figsize=(18, 3.5 * n_ch))
-    if n_ch == 1:
-        axes = axes[np.newaxis, :]
-    fig.suptitle(title, fontsize=14, fontweight='bold')
-    for i in range(n_ch):
-        panels = [(sig_a[:, i], time_a, label_a), (sig_b[:, i], time_b, label_b)]
-        specs = []
-        for sig, t, lbl in panels:
-            f, t_stft, Sdb = compute_stft(sig, fs=fs)
-            mask = f <= fmax
-            specs.append((f, t_stft, Sdb, mask, t, lbl))
-        vmin, vmax = _shared_clim([S[mask] for f, t_stft, S, mask, t, lbl in specs])
-        for col_idx, (f, t_stft, Sdb, mask, t, lbl) in enumerate(specs):
-            ax = axes[i, col_idx]
-            img = ax.pcolormesh(t_stft + t[0], f[mask], Sdb[mask],
-                                shading='gouraud', cmap='inferno',
-                                vmin=vmin, vmax=vmax)
-            plt.colorbar(img, ax=ax, label='dB')
-            ax.set_ylabel('Frequency (Hz)')
-            ax.set_title(f'Ch{i+1} — {lbl}')
-            ax.set_xlabel('Time (s)')
-    fig.tight_layout()
-    fig.savefig(outpath, dpi=150)
-    plt.close(fig)
-    print(f'Saved: {os.path.basename(outpath)}')
+                         label_a, label_b, fmax=50., fs=FS, segment_ids_a=None, segment_ids_b=None):
+    _plot_segment_stft(time_a,sig_a,time_b,sig_b,n_ch,title,outpath,label_a,label_b,fmax,fs,segment_ids_a,segment_ids_b)
 
 
 from lilia.qeeg import (          # noqa: E402  (after sys.path setup)
-    compute_qeeg_indices_windowed,
+    compute_qeeg_indices_windowed as _compute_qeeg_indices_windowed,
     plot_qeeg_indices,
 )
 
+
+def compute_qeeg_indices_windowed(*args, **kwargs):
+    """Compatibility adapter for callers of the historical CLI helper."""
+    return _compute_qeeg_indices_windowed(*args, **kwargs)
+
 # ── Plotting helpers ───────────────────────────────────────────────────────────
-def plot_artifact_removal(time, raw, cleaned, counts, title, outpath, color):
+def plot_artifact_removal(time, raw, cleaned, counts, title, outpath, color, segment_ids=None):
     """Plot per-channel time-domain traces before and after artifact removal."""
     fig, axes = plt.subplots(N_CH, 1, figsize=(18, 3.0*N_CH), sharex=True)
     fig.suptitle(title, fontsize=14, fontweight='bold')
     for i in range(N_CH):
         ax = axes[i]
-        ax.plot(time, raw[:, i],     color='#aaaaaa', lw=0.5, label='before')
-        ax.plot(time, cleaned[:, i], color=color,     lw=0.7, label='after')
+        ax.plot(*plot_breaks(time, raw[:, i], segment_ids),     color='#aaaaaa', lw=0.5, label='before')
+        ax.plot(*plot_breaks(time, cleaned[:, i], segment_ids), color=color,     lw=0.7, label='after')
         ax.set_ylabel('Amplitude (µV)')
         ax.set_title(f'Channel {i+1}  (removed {counts[i]} samples)')
         ax.legend(loc='upper right', fontsize=8)
@@ -394,7 +399,7 @@ def plot_artifact_removal(time, raw, cleaned, counts, title, outpath, color):
     print(f'Saved: {os.path.basename(outpath)}')
 
 
-def plot_psd_before_after(raw, cleaned, title, outpath, color, fs=FS):
+def plot_psd_before_after(raw, cleaned, title, outpath, color, fs=FS, segments=None):
     """Plot per-channel PSD before and after processing."""
     n_ch = raw.shape[1]
     fig, axes = plt.subplots(n_ch, 1, figsize=(12, 3.5*n_ch), sharex=True)
@@ -403,8 +408,8 @@ def plot_psd_before_after(raw, cleaned, title, outpath, color, fs=FS):
     fig.suptitle(title, fontsize=14, fontweight='bold')
     for i in range(n_ch):
         ax = axes[i]
-        f_b, p_b = compute_psd(raw[:, i], fs=fs)
-        f_a, p_a = compute_psd(cleaned[:, i], fs=fs)
+        f_b, p_b = compute_psd(raw[:, i], fs=fs, segments=segments)
+        f_a, p_a = compute_psd(cleaned[:, i], fs=fs, segments=segments)
         ax.plot(f_b, p_b, color='#aaaaaa', lw=1.2, label='before')
         ax.plot(f_a, p_a, color=color,     lw=1.2, label='after')
         ax.set_ylabel('PSD (dB/Hz)'); ax.set_title(f'Channel {i+1}')
@@ -418,15 +423,15 @@ def plot_psd_before_after(raw, cleaned, title, outpath, color, fs=FS):
 
 
 def plot_td_comparison(time, sig_a, sig_b, n_ch, title, outpath,
-                       label_a, label_b, colors):
+                       label_a, label_b, colors, segment_ids=None):
     """Plot per-channel time-domain comparison of two signals."""
     fig, axes = plt.subplots(n_ch, 1, figsize=(16, 3.5*n_ch), sharex=True, sharey=True)
     fig.suptitle(title, fontsize=14, fontweight='bold')
     for i in range(n_ch):
         ax = axes[i]
-        ax.plot(time, sig_a[:, i], color=colors[0], alpha=0.8, lw=0.6,
+        ax.plot(*plot_breaks(time, sig_a[:, i], segment_ids), color=colors[0], alpha=0.8, lw=0.6,
                 label=f'{label_a} | ch{i+1}')
-        ax.plot(time, sig_b[:, i], color=colors[1], alpha=0.8, lw=0.6,
+        ax.plot(*plot_breaks(time, sig_b[:, i], segment_ids), color=colors[1], alpha=0.8, lw=0.6,
                 label=f'{label_b} | ch{i+1}')
         ax.set_ylabel('Amplitude (µV)'); ax.set_title(f'Channel {i+1}')
         ax.legend(loc='upper right', fontsize=8)
@@ -440,14 +445,14 @@ def plot_td_comparison(time, sig_a, sig_b, n_ch, title, outpath,
 
 
 def plot_psd_comparison(sig_a, sig_b, n_ch, title, outpath,
-                        label_a, label_b, colors, fs=FS):
+                        label_a, label_b, colors, fs=FS, segments_a=None, segments_b=None):
     """Plot per-channel PSD comparison of two signals."""
     fig, axes = plt.subplots(n_ch, 1, figsize=(12, 3.5*n_ch), sharex=True)
     fig.suptitle(title, fontsize=14, fontweight='bold')
     for i in range(n_ch):
         ax = axes[i]
-        f_a, p_a = compute_psd(sig_a[:, i], fs=fs)
-        f_b, p_b = compute_psd(sig_b[:, i], fs=fs)
+        f_a, p_a = compute_psd(sig_a[:, i], fs=fs, segments=segments_a)
+        f_b, p_b = compute_psd(sig_b[:, i], fs=fs, segments=segments_b)
         ax.plot(f_a, p_a, color=colors[0], lw=1.2, label=f'{label_a} | ch{i+1}')
         ax.plot(f_b, p_b, color=colors[1], lw=1.2, label=f'{label_b} | ch{i+1}')
         ax.set_ylabel('PSD (dB/Hz)'); ax.set_title(f'Channel {i+1}')
@@ -460,14 +465,14 @@ def plot_psd_comparison(sig_a, sig_b, n_ch, title, outpath,
     print(f'Saved: {os.path.basename(outpath)}')
 
 
-def plot_model_before_after(time, before, after, title, outpath, color):
+def plot_model_before_after(time, before, after, title, outpath, color, segment_ids=None):
     """Plot per-channel time-domain traces before and after model inference."""
     fig, axes = plt.subplots(N_CH_OUT, 1, figsize=(18, 3.5*N_CH_OUT), sharex=True, sharey=True)
     fig.suptitle(title, fontsize=14, fontweight='bold')
     for i in range(N_CH_OUT):
         ax = axes[i]
-        ax.plot(time, before[:, i], color='#aaaaaa', lw=0.5, alpha=0.9, label='before model')
-        ax.plot(time, after[:, i],  color=color,     lw=0.7, alpha=0.9, label='after model')
+        ax.plot(*plot_breaks(time, before[:, i], segment_ids), color='#aaaaaa', lw=0.5, alpha=0.9, label='before model')
+        ax.plot(*plot_breaks(time, after[:, i], segment_ids),  color=color,     lw=0.7, alpha=0.9, label='after model')
         ax.set_ylabel('Amplitude (µV)'); ax.set_title(f'Channel {i+1}')
         ax.legend(loc='upper right', fontsize=8); ax.grid(True, alpha=0.3)
     axes[-1].set_xlabel('Time (s)')
@@ -479,153 +484,103 @@ def plot_model_before_after(time, before, after, title, outpath, color):
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 def main():
+    from lilia.comparison import prepare_recording, align_recordings, segmented_psd
+    from lilia.comparison_io import write_recording, write_pair_table
+    from lilia.neural import build_inference_timeline, model_provenance
+    from lilia.provenance import file_sha256
     args = parse_args()
     path_a, path_b, outdir, label = resolve_paths(args)
-
-    def out(name): return os.path.join(outdir, name)
-
-    time_a, raw_a, _, _ = load_file(path_a)
-    time_b, raw_b, _, _ = load_file(path_b)
-
-    colors  = ['#1f77b4', '#ff7f0e']
-    short_a = 'APP'
-    short_b = 'NUC'
-
-    # ── Filtering ───────────────────────────────────────────────────────────────
-    filt_a_raw = apply_filters(raw_a)
-    filt_b_raw = apply_filters(raw_b)
-
-    # ── Artifact removal (both APP and NUC) ────────────────────────────────────
-    print('--- Artifact removal ---')
-    filt_a, counts_a = remove_artifacts(filt_a_raw, label='APP')
-    filt_b, counts_b = remove_artifacts(filt_b_raw, label='NUC')
-
-    print(f'--- Downsampling {FS}Hz to {DOWNSAMPLED_FS}Hz ---')
-    time_a_ds, filt_a_ds = downsample_data(time_a, filt_a)
-    time_b_ds, filt_b_ds = downsample_data(time_b, filt_b)
-    analysis_fs = DOWNSAMPLED_FS
-
-    # ── Artifact removal plots: APP ────────────────────────────────────────────
-    plot_artifact_removal(
-        time_a, filt_a_raw, filt_a, counts_a,
-        'APP: Before vs After Artifact Removal',
-        out('app_artifact_removal.png'), colors[0])
-
-    plot_psd_before_after(
-        filt_a_raw, filt_a,
-        'APP: PSD Before vs After Artifact Removal',
-        out('app_psd_artifact_removal.png'), colors[0])
-
-    # ── Artifact removal plots: NUC ────────────────────────────────────────────
-    plot_artifact_removal(
-        time_b, filt_b_raw, filt_b, counts_b,
-        'NUC: Before vs After Artifact Removal',
-        out('nuc_artifact_removal.png'), colors[1])
-
-    plot_psd_before_after(
-        filt_b_raw, filt_b,
-        'NUC: PSD Before vs After Artifact Removal',
-        out('nuc_psd_artifact_removal.png'), colors[1])
-
-    # ── Model inference ─────────────────────────────────────────────────────────
-    print('--- Model inference ---')
-    model = load_model()
-    print('Running model on APP...')
-    out_a = run_model(model, filt_a_ds)
-    print('Running model on NUC...')
-    out_b = run_model(model, filt_b_ds)
-
-    # ── Model before/after plots ────────────────────────────────────────────────
-    plot_model_before_after(time_a_ds, filt_a_ds[:, :N_CH_OUT], out_a,
-                            'APP: Before vs After Model (ch1 & ch2)',
-                            out('app_model_before_after_td.png'), colors[0])
-    plot_model_before_after(time_b_ds, filt_b_ds[:, :N_CH_OUT], out_b,
-                            'NUC: Before vs After Model (ch1 & ch2)',
-                            out('nuc_model_before_after_td.png'), colors[1])
-
-    plot_psd_before_after(
-        filt_a_ds[:, :N_CH_OUT], out_a,
-        'APP: PSD Before vs After Model (ch1 & ch2)',
-        out('app_model_before_after_psd.png'), colors[0], fs=analysis_fs)
-    plot_psd_before_after(
-        filt_b_ds[:, :N_CH_OUT], out_b,
-        'NUC: PSD Before vs After Model (ch1 & ch2)',
-        out('nuc_model_before_after_psd.png'), colors[1], fs=analysis_fs)
-
-    # ── Phase-lag alignment ─────────────────────────────────────────────────────
-    lag = estimate_lag(filt_a_ds, filt_b_ds, fs=analysis_fs)
-    filt_a_cmp, filt_b_cmp, time_cmp = align_for_comparison(
-        filt_a_ds, time_a_ds, filt_b_ds, lag)
-    out_a_cmp, out_b_cmp, time_m_cmp = align_for_comparison(
-        out_a, time_a_ds, out_b, lag)
-
-    # ── Filtered 4-ch comparison ────────────────────────────────────────────────
-    plot_td_comparison(
-        time_cmp, filt_a_cmp, filt_b_cmp, N_CH,
-        f'Time-domain Comparison (Filtered, 4ch, lag={lag:+d} samples)',
-        out('time_domain_comparison.png'),
-        short_a, short_b, colors)
-
-    plot_psd_comparison(
-        filt_a_ds, filt_b_ds, N_CH,
-        'PSD Comparison (Filtered, 4ch)',
-        out('psd_comparison.png'),
-        short_a, short_b, colors, fs=analysis_fs)
-
-    # ── Model output comparison ─────────────────────────────────────────────────
-    plot_td_comparison(
-        time_m_cmp, out_a_cmp, out_b_cmp, N_CH_OUT,
-        f'Model Output: Time-domain Comparison (lag={lag:+d} samples)',
-        out('model_output_time_domain.png'),
-        short_a, short_b, colors)
-
-    plot_psd_comparison(
-        out_a, out_b, N_CH_OUT,
-        'Model Output: PSD Comparison (ch1 & ch2)',
-        out('model_output_psd.png'),
-        short_a, short_b, colors, fs=analysis_fs)
-
-    # ── STFT / Spectrogram analysis ─────────────────────────────────────────────
-    print('--- STFT analysis ---')
-    plot_stft_before_after(
-        time_a_ds, filt_a_ds[:, :N_CH_OUT], out_a,
-        'APP: Spectrogram Before vs After Model (ch1 & ch2)',
-        out('app_model_stft.png'), colors[0], fs=analysis_fs)
-
-    plot_stft_before_after(
-        time_b_ds, filt_b_ds[:, :N_CH_OUT], out_b,
-        'NUC: Spectrogram Before vs After Model (ch1 & ch2)',
-        out('nuc_model_stft.png'), colors[1], fs=analysis_fs)
-
-    plot_stft_comparison(
-        time_cmp, filt_a_cmp[:, :N_CH_OUT],
-        time_cmp, filt_b_cmp[:, :N_CH_OUT],
-        N_CH_OUT,
-        f'Spectrogram Comparison — Filtered (lag={lag:+d} samples)',
-        out('stft_filtered_comparison.png'),
-        short_a, short_b, fs=analysis_fs)
-
-    plot_stft_comparison(
-        time_m_cmp, out_a_cmp,
-        time_m_cmp, out_b_cmp,
-        N_CH_OUT,
-        f'Spectrogram Comparison — Model Output (lag={lag:+d} samples)',
-        out('stft_model_output_comparison.png'),
-        short_a, short_b, fs=analysis_fs)
-
-    # ── qEEG wellness indices ────────────────────────────────────────────────────
-    print('--- qEEG wellness indices ---')
-    for ch_idx in range(N_CH_OUT):
-        for sig, tag in [(out_a, short_a), (out_b, short_b)]:
-            indices = compute_qeeg_indices_windowed(sig[:, ch_idx], fs=analysis_fs)
-            fname   = f'qeeg_indices_{tag.lower()}_ch{ch_idx+1}.png'
-            plot_qeeg_indices(
-                indices,
-                f'{tag}: qEEG Wellness Indices — Ch{ch_idx+1} (model output)',
-                out(fname),
-                t_offset=0.0)
-
-    print(f'\nAll outputs saved to: {outdir}')
+    audit_path = Path(outdir)/'app_nuc_analysis.json'
+    audit = {'kind':'app_nuc_analysis','schema_version':1,'label':label,'sources':{},'errors':[],
+             'quality_state':'disabled','clock_policy':'each_recording_elapsed; header offsets recorded but not applied'}
+    artifacts = []
+    def out(name):
+        path = Path(outdir)/name
+        artifacts.append(path)
+        return str(path)
+    def save_audit():
+        audit['artifacts']={p.name:file_sha256(p) for p in artifacts if p.is_file()}
+        audit_path.write_text(json.dumps(audit,indent=2,allow_nan=False)+'\n')
+    try:
+        paths = [Path(__file__), *sorted((Path(__file__).parent/'lilia').glob('*.py'))]
+        code_id = hashlib.sha256(''.join(file_sha256(p) for p in paths).encode()).hexdigest()
+        parameters = {'input_fs':FS,'fs':DOWNSAMPLED_FS,'model_window':MODEL_WINDOW,'model_hop':MODEL_WINDOW//2,
+            'win_sec':5.,'step_sec':5.,'index_space':'resampled_model_output','model':model_provenance(),
+            'artifact_repair':{'threshold_mad':ARTIFACT_THRESH_MAD,'margin_ms':ARTIFACT_MARGIN_MS,
+                               'scope':'within_each_source_segment','edge_policy':'nearest_valid_anchor'},
+            'quality_state':'disabled','clock_policy':audit['clock_policy']}
+        audit.update(parameters=parameters,code_sha256=code_id)
+        model = load_model()
+        records = {}
+        for tag,path,color in [('app',path_a,'#1f77b4'),('nuc',path_b,'#ff7f0e')]:
+            print(f'--- Processing {tag.upper()} by source segment ---')
+            t,raw,info = load_file_us(path)
+            initial = build_inference_timeline(t,FS,DOWNSAMPLED_FS,MODEL_WINDOW,MODEL_WINDOW//2)
+            audit['sources'][tag]={'source_path':str(Path(path).resolve()),'source_id':file_sha256(path),
+                                    'header':info,'inference':initial.metadata(),'status':'processing'}
+            rec = prepare_recording(t,raw,model)
+            records[tag] = rec
+            tl = rec['timeline']
+            raw_slices = continuous_slices(t,FS)
+            raw_ids = np.concatenate([np.full(sl.stop-sl.start,i,dtype=np.int64) for i,sl in enumerate(raw_slices)])
+            slices = continuous_slices(tl.time_us,tl.fs_out,segment_ids=tl.segment_ids)
+            rec['slices'] = slices
+            elapsed = (tl.time_us-tl.source_epoch_us)/1e6
+            rec['elapsed'] = elapsed
+            counts = np.sum([r['counts'] for r in rec['repair']],axis=0).astype(int).tolist()
+            audit['sources'][tag].update(status='complete',artifact_repair=rec['repair'],
+                output_samples=len(tl.time_us),qeeg_windows=len(rec['qeeg_grid'].starts) if rec['qeeg_grid'] is not None else 0,
+                qeeg_status='computed' if rec['qeeg_grid'] is not None else 'no_complete_5s_window',
+                psd_raw=segmented_psd(rec['cleaned_raw'][:,0],FS,raw_slices)[2],
+                psd_model=segmented_psd(rec['output'][:,0],tl.fs_out,slices)[2])
+            artifacts.extend(write_recording(outdir,tag,path,rec,parameters,code_id))
+            plot_artifact_removal((t-t[0])/1e6,rec['filtered_raw'],rec['cleaned_raw'],counts,
+                f'{tag.upper()}: segment-local MAD repair',out(f'{tag}_artifact_removal.png'),color,segment_ids=raw_ids)
+            plot_psd_before_after(rec['filtered_raw'],rec['cleaned_raw'],f'{tag.upper()}: PSD before/after MAD repair',
+                out(f'{tag}_psd_artifact_removal.png'),color,segments=raw_slices)
+            plot_model_before_after(elapsed,rec['input'][:,:2],rec['output'],f'{tag.upper()}: before/after model',
+                out(f'{tag}_model_before_after_td.png'),color,segment_ids=tl.segment_ids)
+            plot_psd_before_after(rec['input'][:,:2],rec['output'],f'{tag.upper()}: model PSD',
+                out(f'{tag}_model_before_after_psd.png'),color,fs=tl.fs_out,segments=slices)
+            plot_stft_before_after(elapsed,rec['input'][:,:2],rec['output'],f'{tag.upper()}: model spectrogram',
+                out(f'{tag}_model_stft.png'),color,fs=tl.fs_out,segment_ids=tl.segment_ids)
+            if rec['qeeg_grid'] is not None:
+                grid = rec['qeeg_grid']
+                for ch in range(2):
+                    indices = {}
+                    for key in ('theta','alpha','beta','focus','flow','calm','relaxation'):
+                        times,values = plot_breaks(grid.time_s,rec['qeeg'][f'{key}_ch{ch+1}'],grid.columns['segment_id'])
+                        indices[key] = values
+                    indices['time'] = times
+                    plot_qeeg_indices(indices,f'{tag.upper()}: model qEEG ch{ch+1} (quality scoring disabled)',
+                                      out(f'qeeg_indices_{tag}_ch{ch+1}.png'),marker='.')
+        a,b = records['app'],records['nuc']
+        ia,ib,groups,alignment = align_recordings(a,b)
+        audit['alignment'] = alignment
+        pair_path = out('app_nuc_alignment.csv')
+        write_pair_table(pair_path,a,b,ia,ib,groups,alignment,path_a,path_b,parameters)
+        artifacts.append(Path(pair_path+'.meta.json'))
+        time_cmp = a['elapsed'][ia]
+        audit['comparison_psd_policy'] = 'independent full recordings; segment Welch weighted by subwindow count'
+        for key,n_ch,td_name,psd_name,stft_name in [
+            ('input',4,'time_domain_comparison.png','psd_comparison.png','stft_filtered_comparison.png'),
+            ('output',2,'model_output_time_domain.png','model_output_psd.png','stft_model_output_comparison.png')]:
+            title=f'APP/NUC {key}: elapsed waveform alignment, lag={alignment["lag_samples"]:+d} samples'
+            plot_td_comparison(time_cmp,a[key][ia],b[key][ib],n_ch,title,out(td_name),
+                               'APP','NUC',['#1f77b4','#ff7f0e'],segment_ids=groups)
+            plot_psd_comparison(a[key],b[key],n_ch,f'APP/NUC {key}: independent segment PSDs',out(psd_name),
+                'APP','NUC',['#1f77b4','#ff7f0e'],fs=DOWNSAMPLED_FS,segments_a=a['slices'],segments_b=b['slices'])
+            plot_stft_comparison(time_cmp,a[key][ia,:2],time_cmp,b[key][ib,:2],2,title,out(stft_name),
+                'APP','NUC',fs=DOWNSAMPLED_FS,segment_ids_a=groups,segment_ids_b=groups)
+        audit['status'] = 'complete'
+    except Exception as exc:
+        audit['status'] = 'failed'
+        audit['errors'].append(f'{type(exc).__name__}: {exc}')
+        save_audit()
+        raise
+    save_audit()
+    print(f'All outputs and source audit saved to: {outdir}')
+    return audit
 
 
 if __name__ == '__main__':
