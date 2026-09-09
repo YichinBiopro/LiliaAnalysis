@@ -1,0 +1,388 @@
+{
+  "scope": "stage16_processing_increment",
+  "cli_guard": "retained",
+  "plots": "legacy_not_migrated",
+  "cases": {
+    "jenqwei_move_head_reference": {
+      "before_rows": 11994,
+      "after_rows": 11600,
+      "max_absolute_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "segments": [
+        {
+          "segment_id": 0,
+          "raw_start_idx": 0,
+          "raw_end_idx": 29984,
+          "raw_start_us": 0,
+          "raw_end_us": 59968000,
+          "resampled_samples": 11994,
+          "retained_samples": 11600,
+          "trimmed_samples": 394,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "retained",
+          "reason": "",
+          "output_start_idx": 0,
+          "output_end_idx": 11600,
+          "filter_context_start_idx": 0,
+          "filter_context_end_idx": 29984,
+          "packed_raw_start_idx": 0,
+          "packed_raw_end_idx": 29984,
+          "before_start_idx": 0,
+          "before_end_idx": 11994
+        }
+      ]
+    },
+    "jenqwei_synthetic_reference": {
+      "before_rows": 1002,
+      "after_rows": 800,
+      "max_absolute_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "segments": [
+        {
+          "segment_id": 0,
+          "raw_start_idx": 0,
+          "raw_end_idx": 2503,
+          "raw_start_us": 1234567,
+          "raw_end_us": 6240567,
+          "resampled_samples": 1002,
+          "retained_samples": 800,
+          "trimmed_samples": 202,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "retained",
+          "reason": "",
+          "output_start_idx": 0,
+          "output_end_idx": 800,
+          "filter_context_start_idx": 0,
+          "filter_context_end_idx": 2503,
+          "packed_raw_start_idx": 0,
+          "packed_raw_end_idx": 2503,
+          "before_start_idx": 0,
+          "before_end_idx": 1002
+        }
+      ]
+    },
+    "jenqwei_synthetic_truncated_reference": {
+      "before_rows": 602,
+      "after_rows": 400,
+      "max_absolute_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "segments": [
+        {
+          "segment_id": 0,
+          "raw_start_idx": 0,
+          "raw_end_idx": 1503,
+          "raw_start_us": 1234567,
+          "raw_end_us": 4240567,
+          "resampled_samples": 602,
+          "retained_samples": 400,
+          "trimmed_samples": 202,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "retained",
+          "reason": "",
+          "output_start_idx": 0,
+          "output_end_idx": 400,
+          "filter_context_start_idx": 0,
+          "filter_context_end_idx": 2503,
+          "packed_raw_start_idx": 0,
+          "packed_raw_end_idx": 1503,
+          "before_start_idx": 0,
+          "before_end_idx": 602
+        }
+      ]
+    },
+    "jenqwei_talk_reference": {
+      "before_rows": 12260,
+      "after_rows": 12000,
+      "max_absolute_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "segments": [
+        {
+          "segment_id": 0,
+          "raw_start_idx": 0,
+          "raw_end_idx": 30648,
+          "raw_start_us": 0,
+          "raw_end_us": 61296000,
+          "resampled_samples": 12260,
+          "retained_samples": 12000,
+          "trimmed_samples": 260,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "retained",
+          "reason": "",
+          "output_start_idx": 0,
+          "output_end_idx": 12000,
+          "filter_context_start_idx": 0,
+          "filter_context_end_idx": 30648,
+          "packed_raw_start_idx": 0,
+          "packed_raw_end_idx": 30648,
+          "before_start_idx": 0,
+          "before_end_idx": 12260
+        }
+      ]
+    },
+    "jenqwei_vibration_level1_reference": {
+      "before_rows": 12391,
+      "after_rows": 12000,
+      "max_absolute_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "segments": [
+        {
+          "segment_id": 0,
+          "raw_start_idx": 0,
+          "raw_end_idx": 30976,
+          "raw_start_us": 0,
+          "raw_end_us": 61952000,
+          "resampled_samples": 12391,
+          "retained_samples": 12000,
+          "trimmed_samples": 391,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "retained",
+          "reason": "",
+          "output_start_idx": 0,
+          "output_end_idx": 12000,
+          "filter_context_start_idx": 0,
+          "filter_context_end_idx": 30976,
+          "packed_raw_start_idx": 0,
+          "packed_raw_end_idx": 30976,
+          "before_start_idx": 0,
+          "before_end_idx": 12391
+        }
+      ]
+    },
+    "jenqwei_vibration_level2_reference": {
+      "before_rows": 12925,
+      "after_rows": 12800,
+      "max_absolute_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "segments": [
+        {
+          "segment_id": 0,
+          "raw_start_idx": 0,
+          "raw_end_idx": 32312,
+          "raw_start_us": 0,
+          "raw_end_us": 64624000,
+          "resampled_samples": 12925,
+          "retained_samples": 12800,
+          "trimmed_samples": 125,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "retained",
+          "reason": "",
+          "output_start_idx": 0,
+          "output_end_idx": 12800,
+          "filter_context_start_idx": 0,
+          "filter_context_end_idx": 32312,
+          "packed_raw_start_idx": 0,
+          "packed_raw_end_idx": 32312,
+          "before_start_idx": 0,
+          "before_end_idx": 12925
+        }
+      ]
+    },
+    "jenqwei_vibration_level3_reference": {
+      "before_rows": 12260,
+      "after_rows": 12000,
+      "max_absolute_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "segments": [
+        {
+          "segment_id": 0,
+          "raw_start_idx": 0,
+          "raw_end_idx": 30648,
+          "raw_start_us": 0,
+          "raw_end_us": 61296000,
+          "resampled_samples": 12260,
+          "retained_samples": 12000,
+          "trimmed_samples": 260,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "retained",
+          "reason": "",
+          "output_start_idx": 0,
+          "output_end_idx": 12000,
+          "filter_context_start_idx": 0,
+          "filter_context_end_idx": 30648,
+          "packed_raw_start_idx": 0,
+          "packed_raw_end_idx": 30648,
+          "before_start_idx": 0,
+          "before_end_idx": 12260
+        }
+      ]
+    },
+    "real_segmented": {
+      "before_rows": 1403,
+      "after_rows": 1200,
+      "max_absolute_errors": {
+        "before_raw_fractional_idx": 0.0,
+        "before_segment_ids": 0.0,
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "model_raw_fractional_idx": 0.0,
+        "model_segment_ids": 0.0,
+        "model_to_before_idx": 0.0,
+        "pre_data_200": 0.0,
+        "raw_sample_idx": 0.0,
+        "tfl_data_200": 0.0,
+        "tfl_time_us_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "segments": [
+        {
+          "segment_id": 0,
+          "raw_start_idx": 0,
+          "raw_end_idx": 10,
+          "raw_start_us": 9000000000000001,
+          "raw_end_us": 9000000000020001,
+          "resampled_samples": 4,
+          "retained_samples": 0,
+          "trimmed_samples": 4,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "excluded",
+          "reason": "shorter_than_model_window",
+          "filter_context_start_idx": 0,
+          "filter_context_end_idx": 10
+        },
+        {
+          "segment_id": 1,
+          "raw_start_idx": 10,
+          "raw_end_idx": 1513,
+          "raw_start_us": 9000000010000001,
+          "raw_end_us": 9000000013006001,
+          "resampled_samples": 602,
+          "retained_samples": 400,
+          "trimmed_samples": 202,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "retained",
+          "reason": "",
+          "output_start_idx": 0,
+          "output_end_idx": 400,
+          "filter_context_start_idx": 10,
+          "filter_context_end_idx": 1513,
+          "packed_raw_start_idx": 0,
+          "packed_raw_end_idx": 1503,
+          "before_start_idx": 0,
+          "before_end_idx": 602
+        },
+        {
+          "segment_id": 2,
+          "raw_start_idx": 1513,
+          "raw_end_idx": 3514,
+          "raw_start_us": 9000000020000001,
+          "raw_end_us": 9000000024002001,
+          "resampled_samples": 801,
+          "retained_samples": 800,
+          "trimmed_samples": 1,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "retained",
+          "reason": "",
+          "output_start_idx": 400,
+          "output_end_idx": 1200,
+          "filter_context_start_idx": 1513,
+          "filter_context_end_idx": 3514,
+          "packed_raw_start_idx": 1503,
+          "packed_raw_end_idx": 3504,
+          "before_start_idx": 602,
+          "before_end_idx": 1403
+        },
+        {
+          "segment_id": 3,
+          "raw_start_idx": 3514,
+          "raw_end_idx": 4511,
+          "raw_start_us": 9000000030000001,
+          "raw_end_us": 9000000031994001,
+          "resampled_samples": 399,
+          "retained_samples": 0,
+          "trimmed_samples": 399,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "excluded",
+          "reason": "shorter_than_model_window",
+          "filter_context_start_idx": 3514,
+          "filter_context_end_idx": 4511
+        }
+      ],
+      "model_windows": [
+        {
+          "model_window_id": 0,
+          "segment_id": 1,
+          "output_start_idx": 0,
+          "output_end_idx": 400,
+          "window_start_us": 9000000010000001,
+          "window_end_us": 9000000012000001,
+          "raw_start_idx": 10,
+          "raw_end_idx": 1010
+        },
+        {
+          "model_window_id": 1,
+          "segment_id": 2,
+          "output_start_idx": 400,
+          "output_end_idx": 800,
+          "window_start_us": 9000000020000001,
+          "window_end_us": 9000000022000001,
+          "raw_start_idx": 1513,
+          "raw_end_idx": 2513
+        },
+        {
+          "model_window_id": 2,
+          "segment_id": 2,
+          "output_start_idx": 800,
+          "output_end_idx": 1200,
+          "window_start_us": 9000000022000001,
+          "window_end_us": 9000000024000001,
+          "raw_start_idx": 2513,
+          "raw_end_idx": 3513
+        }
+      ]
+    }
+  }
+}

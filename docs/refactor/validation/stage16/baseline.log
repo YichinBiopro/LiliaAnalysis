@@ -1,0 +1,18 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1788946105.599490       4 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1788946106.416193       4 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+move_head: raw=(29984, 4), before=(11994, 4), after=(11600, 2)
+talk: raw=(30648, 4), before=(12260, 4), after=(12000, 2)
+vibration_level1: raw=(30976, 4), before=(12391, 4), after=(12000, 2)
+vibration_level2: raw=(32312, 4), before=(12925, 4), after=(12800, 2)
+vibration_level3: raw=(30648, 4), before=(12260, 4), after=(12000, 2)
+synthetic: raw=(2503, 4), before=(1002, 4), after=(800, 2)
+synthetic_truncated: raw=(2503, 4), before=(602, 4), after=(400, 2)

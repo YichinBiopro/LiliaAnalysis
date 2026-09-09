@@ -1,0 +1,289 @@
+[
+  {
+    "case": "move_head",
+    "legacy_commit": "141bde2",
+    "legacy_entry_sha256": "29235cad630d7636397299d94c5131c4cc44effa541efc72bb25a0973ee022fa",
+    "dependencies": {
+      "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+      "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+      "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+      "lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+      "plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029"
+    },
+    "source_path": "jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+    "source_sha256": "fd291cbc7f9ee7c24561751c9c70793e067d161be24459801868f0727d2d8540",
+    "seed": null,
+    "model_sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "numpy_version": "2.2.6",
+    "scipy_version": "1.15.3",
+    "tensorflow_version": "2.21.0",
+    "source_shape": [
+      29984,
+      4
+    ],
+    "before_shape": [
+      11994,
+      4
+    ],
+    "after_shape": [
+      11600,
+      2
+    ],
+    "max_samples": null,
+    "max_display_sec": 60.0,
+    "npz_sha256": "131af32eb34890916e8c7565536093c1d32bf2a6381c39d2a324b8985861b241",
+    "notes": [
+      "Before retains all resampled tail samples; After trims to complete 400-sample windows.",
+      "Filtering precedes max_samples truncation; preserve full-segment filter context.",
+      "Legacy display ch2/3 (0-based) clamps After to model ch1; known mismatched comparison, not a valid same-source channel contract.",
+      "Welch density: nperseg=min(800,len(before)); After min with own length; defaults Hann, half overlap, constant detrend.",
+      "STFT: first min(len,12000) samples; Hann 256, overlap 128, default zero boundary/padding; 20*log10(abs(z)+1e-8)."
+    ]
+  },
+  {
+    "case": "talk",
+    "legacy_commit": "141bde2",
+    "legacy_entry_sha256": "29235cad630d7636397299d94c5131c4cc44effa541efc72bb25a0973ee022fa",
+    "dependencies": {
+      "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+      "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+      "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+      "lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+      "plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029"
+    },
+    "source_path": "jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+    "source_sha256": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883",
+    "seed": null,
+    "model_sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "numpy_version": "2.2.6",
+    "scipy_version": "1.15.3",
+    "tensorflow_version": "2.21.0",
+    "source_shape": [
+      30648,
+      4
+    ],
+    "before_shape": [
+      12260,
+      4
+    ],
+    "after_shape": [
+      12000,
+      2
+    ],
+    "max_samples": null,
+    "max_display_sec": 60.0,
+    "npz_sha256": "d006ce25868b1c4a592b6f3611776bd93ab6439445952ac2c7298b444a5053c4",
+    "notes": [
+      "Before retains all resampled tail samples; After trims to complete 400-sample windows.",
+      "Filtering precedes max_samples truncation; preserve full-segment filter context.",
+      "Legacy display ch2/3 (0-based) clamps After to model ch1; known mismatched comparison, not a valid same-source channel contract.",
+      "Welch density: nperseg=min(800,len(before)); After min with own length; defaults Hann, half overlap, constant detrend.",
+      "STFT: first min(len,12000) samples; Hann 256, overlap 128, default zero boundary/padding; 20*log10(abs(z)+1e-8)."
+    ]
+  },
+  {
+    "case": "vibration_level1",
+    "legacy_commit": "141bde2",
+    "legacy_entry_sha256": "29235cad630d7636397299d94c5131c4cc44effa541efc72bb25a0973ee022fa",
+    "dependencies": {
+      "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+      "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+      "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+      "lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+      "plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029"
+    },
+    "source_path": "jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+    "source_sha256": "248dda71a06a6c4f76a4082fd734961383b80b464d8b8fbe9278cae23866d91a",
+    "seed": null,
+    "model_sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "numpy_version": "2.2.6",
+    "scipy_version": "1.15.3",
+    "tensorflow_version": "2.21.0",
+    "source_shape": [
+      30976,
+      4
+    ],
+    "before_shape": [
+      12391,
+      4
+    ],
+    "after_shape": [
+      12000,
+      2
+    ],
+    "max_samples": null,
+    "max_display_sec": 60.0,
+    "npz_sha256": "bb804a86d56b62eed9e070eb570533280584922238d759ed85424d6f5c0fc22c",
+    "notes": [
+      "Before retains all resampled tail samples; After trims to complete 400-sample windows.",
+      "Filtering precedes max_samples truncation; preserve full-segment filter context.",
+      "Legacy display ch2/3 (0-based) clamps After to model ch1; known mismatched comparison, not a valid same-source channel contract.",
+      "Welch density: nperseg=min(800,len(before)); After min with own length; defaults Hann, half overlap, constant detrend.",
+      "STFT: first min(len,12000) samples; Hann 256, overlap 128, default zero boundary/padding; 20*log10(abs(z)+1e-8)."
+    ]
+  },
+  {
+    "case": "vibration_level2",
+    "legacy_commit": "141bde2",
+    "legacy_entry_sha256": "29235cad630d7636397299d94c5131c4cc44effa541efc72bb25a0973ee022fa",
+    "dependencies": {
+      "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+      "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+      "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+      "lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+      "plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029"
+    },
+    "source_path": "jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+    "source_sha256": "3ecea3ac6d6393849157cd57b5a97e69af15a84e2bf124178fc469ac728503c0",
+    "seed": null,
+    "model_sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "numpy_version": "2.2.6",
+    "scipy_version": "1.15.3",
+    "tensorflow_version": "2.21.0",
+    "source_shape": [
+      32312,
+      4
+    ],
+    "before_shape": [
+      12925,
+      4
+    ],
+    "after_shape": [
+      12800,
+      2
+    ],
+    "max_samples": null,
+    "max_display_sec": 60.0,
+    "npz_sha256": "10f109e8f62f6081a940402026f255bdee751a5c19c12bf43962188ace0852fb",
+    "notes": [
+      "Before retains all resampled tail samples; After trims to complete 400-sample windows.",
+      "Filtering precedes max_samples truncation; preserve full-segment filter context.",
+      "Legacy display ch2/3 (0-based) clamps After to model ch1; known mismatched comparison, not a valid same-source channel contract.",
+      "Welch density: nperseg=min(800,len(before)); After min with own length; defaults Hann, half overlap, constant detrend.",
+      "STFT: first min(len,12000) samples; Hann 256, overlap 128, default zero boundary/padding; 20*log10(abs(z)+1e-8)."
+    ]
+  },
+  {
+    "case": "vibration_level3",
+    "legacy_commit": "141bde2",
+    "legacy_entry_sha256": "29235cad630d7636397299d94c5131c4cc44effa541efc72bb25a0973ee022fa",
+    "dependencies": {
+      "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+      "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+      "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+      "lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+      "plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029"
+    },
+    "source_path": "jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+    "source_sha256": "07cf89ba2216be66a09195c884a565498d802bf193432f21a7be27b0b9320d8b",
+    "seed": null,
+    "model_sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "numpy_version": "2.2.6",
+    "scipy_version": "1.15.3",
+    "tensorflow_version": "2.21.0",
+    "source_shape": [
+      30648,
+      4
+    ],
+    "before_shape": [
+      12260,
+      4
+    ],
+    "after_shape": [
+      12000,
+      2
+    ],
+    "max_samples": null,
+    "max_display_sec": 60.0,
+    "npz_sha256": "2d85ca1511906acb6af31d7147c508ae1ffc830e38a266fdd3015717beacfa8d",
+    "notes": [
+      "Before retains all resampled tail samples; After trims to complete 400-sample windows.",
+      "Filtering precedes max_samples truncation; preserve full-segment filter context.",
+      "Legacy display ch2/3 (0-based) clamps After to model ch1; known mismatched comparison, not a valid same-source channel contract.",
+      "Welch density: nperseg=min(800,len(before)); After min with own length; defaults Hann, half overlap, constant detrend.",
+      "STFT: first min(len,12000) samples; Hann 256, overlap 128, default zero boundary/padding; 20*log10(abs(z)+1e-8)."
+    ]
+  },
+  {
+    "case": "synthetic",
+    "legacy_commit": "141bde2",
+    "legacy_entry_sha256": "29235cad630d7636397299d94c5131c4cc44effa541efc72bb25a0973ee022fa",
+    "dependencies": {
+      "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+      "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+      "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+      "lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+      "plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029"
+    },
+    "source_path": null,
+    "source_sha256": null,
+    "seed": 16016,
+    "model_sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "numpy_version": "2.2.6",
+    "scipy_version": "1.15.3",
+    "tensorflow_version": "2.21.0",
+    "source_shape": [
+      2503,
+      4
+    ],
+    "before_shape": [
+      1002,
+      4
+    ],
+    "after_shape": [
+      800,
+      2
+    ],
+    "max_samples": null,
+    "max_display_sec": 60.0,
+    "npz_sha256": "d3a7a0c330618bde3c4fd8f8c0e4079f8afa06b6f16b99da23301ee0a459bc00",
+    "notes": [
+      "Before retains all resampled tail samples; After trims to complete 400-sample windows.",
+      "Filtering precedes max_samples truncation; preserve full-segment filter context.",
+      "Legacy display ch2/3 (0-based) clamps After to model ch1; known mismatched comparison, not a valid same-source channel contract.",
+      "Welch density: nperseg=min(800,len(before)); After min with own length; defaults Hann, half overlap, constant detrend.",
+      "STFT: first min(len,12000) samples; Hann 256, overlap 128, default zero boundary/padding; 20*log10(abs(z)+1e-8)."
+    ]
+  },
+  {
+    "case": "synthetic_truncated",
+    "legacy_commit": "141bde2",
+    "legacy_entry_sha256": "29235cad630d7636397299d94c5131c4cc44effa541efc72bb25a0973ee022fa",
+    "dependencies": {
+      "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+      "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+      "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+      "lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+      "plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029"
+    },
+    "source_path": null,
+    "source_sha256": null,
+    "seed": 16016,
+    "model_sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "numpy_version": "2.2.6",
+    "scipy_version": "1.15.3",
+    "tensorflow_version": "2.21.0",
+    "source_shape": [
+      2503,
+      4
+    ],
+    "before_shape": [
+      602,
+      4
+    ],
+    "after_shape": [
+      400,
+      2
+    ],
+    "max_samples": 1503,
+    "max_display_sec": 60.0,
+    "npz_sha256": "15e1bf161062d4bcdc396865591449a5ec27027f0668f32d437326d0c853b1f1",
+    "notes": [
+      "Before retains all resampled tail samples; After trims to complete 400-sample windows.",
+      "Filtering precedes max_samples truncation; preserve full-segment filter context.",
+      "Legacy display ch2/3 (0-based) clamps After to model ch1; known mismatched comparison, not a valid same-source channel contract.",
+      "Welch density: nperseg=min(800,len(before)); After min with own length; defaults Hann, half overlap, constant detrend.",
+      "STFT: first min(len,12000) samples; Hann 256, overlap 128, default zero boundary/padding; 20*log10(abs(z)+1e-8)."
+    ]
+  }
+]

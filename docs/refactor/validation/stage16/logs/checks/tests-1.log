@@ -1,0 +1,26 @@
+test_all_short_and_polluted_short_segments_fail_before_inference (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_failed_model_in_second_segment_has_source_context (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_five_real_and_two_synthetic_cases_match_frozen_model_and_spectra (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1788946273.028399     110 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1788946273.057436     110 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1788946273.818774     110 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+ok
+test_gaps_preserve_distinct_before_and_after_tails_and_source_positions (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_invalid_shape_timestamp_limit_and_legacy_gap_guard (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_max_samples_filters_full_segment_before_truncating (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_segment_filter_and_model_are_isolated_from_other_segments (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_small_gap_is_not_lost_at_output_rate_and_tail_positions_extrapolate (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.228s
+
+OK

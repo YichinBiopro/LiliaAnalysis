@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_move_head_reference.npz",
+      "sha256": "131af32eb34890916e8c7565536093c1d32bf2a6381c39d2a324b8985861b241"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_move_head_reference.json",
+      "sha256": "497edfe7648800d0901554900b8f432ae2d7505b9b9bb6c6bdc4b5c605b56984"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+      "sha256": "fd291cbc7f9ee7c24561751c9c70793e067d161be24459801868f0727d2d8540"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_talk_reference.npz",
+      "sha256": "d006ce25868b1c4a592b6f3611776bd93ab6439445952ac2c7298b444a5053c4"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_talk_reference.json",
+      "sha256": "02063d1380f0684799e8329a860f1d2302e491a84027d9022f87bdb7152f81ac"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "sha256": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level1_reference.npz",
+      "sha256": "bb804a86d56b62eed9e070eb570533280584922238d759ed85424d6f5c0fc22c"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level1_reference.json",
+      "sha256": "b568c514b2d3a182ccac042e01cc5ab08d35346f02dd8c00ea0f6ae1fec49fce"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+      "sha256": "248dda71a06a6c4f76a4082fd734961383b80b464d8b8fbe9278cae23866d91a"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level2_reference.npz",
+      "sha256": "10f109e8f62f6081a940402026f255bdee751a5c19c12bf43962188ace0852fb"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level2_reference.json",
+      "sha256": "892c2e392b838594163064223b3b4c9a2ba1a32298b97be05cafd024308c13f0"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+      "sha256": "3ecea3ac6d6393849157cd57b5a97e69af15a84e2bf124178fc469ac728503c0"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level3_reference.npz",
+      "sha256": "2d85ca1511906acb6af31d7147c508ae1ffc830e38a266fdd3015717beacfa8d"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level3_reference.json",
+      "sha256": "07c6492bb2a70fa6079ccaaf2e06a25da8395f44e537c3b2e2a0c25bee1b6475"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+      "sha256": "07cf89ba2216be66a09195c884a565498d802bf193432f21a7be27b0b9320d8b"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_reference.npz",
+      "sha256": "d3a7a0c330618bde3c4fd8f8c0e4079f8afa06b6f16b99da23301ee0a459bc00"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_reference.json",
+      "sha256": "c4b9ccdebc088008663ebc56c05e7861c09d09541791baf9914bd5082c7182c1"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_truncated_reference.npz",
+      "sha256": "15e1bf161062d4bcdc396865591449a5ec27027f0668f32d437326d0c853b1f1"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_truncated_reference.json",
+      "sha256": "111207b081b8292049a1791bb4b14a00694b7429f5760d7b1c735b6c45974b31"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage16/baseline_legacy_entry.py.txt",
+      "sha256": "29235cad630d7636397299d94c5131c4cc44effa541efc72bb25a0973ee022fa"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tools/capture_jenqwei_baseline_stage16.py",
+      "sha256": "cba61c910a5407eda53e57695ecec548cc4107b41a7317baaf60daf0ad835d60"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/io.py",
+      "sha256": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/signal.py",
+      "sha256": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/windowing.py",
+      "sha256": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/tflite.py",
+      "sha256": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/plot_event_markers.py",
+      "sha256": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage16/inventory.json",
+      "sha256": "43047125e9836d0a2bf65d9bd9dc9f5475cec1157b3677eaad8610ea7552b305"
+    }
+  ]
+}

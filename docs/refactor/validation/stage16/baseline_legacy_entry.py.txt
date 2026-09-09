@@ -42,11 +42,10 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-from lilia.windowing import continuous_slices, require_continuous
+from lilia.windowing import require_continuous
 import numpy as np
 from scipy.signal import welch, stft
 from lilia.signal import resample_with_time
-from lilia.tflite import build_tflite_timeline
 
 # ── 重用既有模組（單一事實來源）─────────────────────────────────────────────────
 from lilia.io import bandpass_filter, read_lilia_frame
@@ -174,87 +173,6 @@ def run_pipeline(time_us: np.ndarray,
         "pre_data_200"  : pre_data_200,
         "tfl_data_200"  : tfl_data_200,
     }
-
-
-def process_segments(time_us: np.ndarray, data_raw: np.ndarray,
-                     max_samples: int | None = None) -> dict:
-    """Stage-16 adapter; the legacy CLI remains guarded pending plot/IO migration.
-
-    Keep all Before samples for retained segments and trim only After to complete
-    model windows. Raw, Before and After have independent packed index spaces;
-    explicit maps refer to original source positions, including fractional
-    resampling positions beyond the final raw sample center. Model-short segments
-    are excluded from all three packed arrays and recorded in the timeline.
-
-    Preserve legacy max_samples semantics: filter each full source segment first,
-    then truncate the raw prefix and resample. No filtering crosses source gaps.
-    """
-    t = np.asarray(time_us)
-    data = np.asarray(data_raw, dtype=np.float32)
-    if data.ndim != 2 or data.shape != (len(t), N_TFLITE_CH):
-        raise ValueError('Jenqwei processing needs aligned timestamps and exactly four channels')
-    if not np.isfinite(data).all():
-        raise ValueError('Jenqwei input contains non-finite samples, including excluded segments')
-    if max_samples is not None and (isinstance(max_samples, bool)
-                                   or not isinstance(max_samples, int) or max_samples <= 0):
-        raise ValueError('max_samples must be a positive integer or None')
-    # Validate the complete source, including the part outside a requested prefix.
-    full_timeline = build_tflite_timeline(t, FS, TFLITE_FS, TFLITE_WIN)
-    n = len(t) if max_samples is None else min(len(t), max_samples)
-    timeline = (full_timeline if n == len(t)
-                else build_tflite_timeline(t[:n], FS, TFLITE_FS, TFLITE_WIN))
-    if not len(timeline.time_us):
-        raise ValueError('No source segment contains a complete TFLite window after resampling')
-    source_slices = continuous_slices(t, FS)
-    filtered_parts, raw_indices, before_parts, before_times = [], [], [], []
-    before_groups, before_raw_positions, model_to_before, outputs, records = [], [], [], [], []
-    raw_offset = before_offset = 0
-    for segment in timeline.segments:
-        record = dict(segment)
-        context = source_slices[segment['segment_id']]
-        record.update(filter_context_start_idx=context.start, filter_context_end_idx=context.stop)
-        records.append(record)
-        if segment['status'] != 'retained':
-            continue
-        a, b = segment['raw_start_idx'], segment['raw_end_idx']
-        try:
-            filtered = bandpass_filter(data[context], fs=FS, lo=BP_LOW, hi=BP_HIGH)[:b - a]
-            pre_t, before = resample_with_time(t[a:b], filtered, FS, TFLITE_FS)
-            if before.shape != (segment['resampled_samples'], 4) or not np.isfinite(before).all():
-                raise ValueError('Resampled Before does not match source segment')
-            after = np.asarray(apply_tflite_windowed(before))
-            keep = segment['retained_samples']
-            if after.shape != (keep, 2) or not np.isfinite(after).all():
-                raise ValueError('Model output does not match complete TFLite windows')
-            oa, ob = segment['output_start_idx'], segment['output_end_idx']
-            if not np.array_equal(pre_t[:keep], timeline.time_us[oa:ob]):
-                raise ValueError('Model timestamps differ from retained Before timestamps')
-        except Exception as exc:
-            raise ValueError(f"Jenqwei segment {segment['segment_id']} raw [{a}:{b}] failed: {exc}") from exc
-        record.update(packed_raw_start_idx=raw_offset, packed_raw_end_idx=raw_offset + b - a,
-                      before_start_idx=before_offset, before_end_idx=before_offset + len(before))
-        filtered_parts.append(filtered)
-        raw_indices.append(np.arange(a, b, dtype=np.int64))
-        before_parts.append(before)
-        before_times.append(pre_t)
-        before_groups.append(np.full(len(before), segment['segment_id'], dtype=np.int64))
-        before_raw_positions.append(a + np.arange(len(before)) * segment['ratio_down'] / segment['ratio_up'])
-        model_to_before.append(before_offset + np.arange(keep, dtype=np.int64))
-        outputs.append(after)
-        raw_offset += b - a
-        before_offset += len(before)
-    raw_idx = np.concatenate(raw_indices)
-    before_positions = np.concatenate(before_raw_positions)
-    after_map = np.concatenate(model_to_before)
-    return {'time_us_500': t[raw_idx], 'data_raw': data[raw_idx],
-            'data_filt_500': np.concatenate(filtered_parts), 'raw_sample_idx': raw_idx,
-            'time_us_200': np.concatenate(before_times), 'pre_data_200': np.concatenate(before_parts),
-            'before_segment_ids': np.concatenate(before_groups),
-            'before_raw_fractional_idx': before_positions,
-            'tfl_time_us_200': timeline.time_us, 'tfl_data_200': np.concatenate(outputs),
-            'model_to_before_idx': after_map, 'model_raw_fractional_idx': before_positions[after_map],
-            'timeline': timeline, 'segments': records, 'full_source_samples': len(t),
-            'used_source_samples': n, 'max_samples': max_samples, 'quality_state': 'disabled'}
 
 
 def _time_axis_sec(time_us: np.ndarray) -> np.ndarray:

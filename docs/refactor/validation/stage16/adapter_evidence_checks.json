@@ -1,0 +1,431 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-09T09:33:32.519851+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_move_head_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_move_head_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_move_head_reference_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_move_head_reference_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_synthetic_reference_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_synthetic_reference_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_truncated_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_truncated_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_synthetic_truncated_reference_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_synthetic_truncated_reference_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_talk_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_talk_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_talk_reference_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_talk_reference_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level1_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level1_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level1_reference_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level1_reference_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level2_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level2_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level2_reference_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level2_reference_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level3_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level3_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level3_reference_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level3_reference_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage16/baseline_legacy_entry.py.txt",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/segmented_source.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/real_segmented_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/real_segmented_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tools/validate_jenqwei_adapter_stage16.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage16-adapter-v1/analysis.json",
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage16-adapter-v1/jenqwei_move_head_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-adapter-v1/jenqwei_move_head_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage16-adapter-v1/jenqwei_synthetic_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-adapter-v1/jenqwei_synthetic_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage16-adapter-v1/jenqwei_synthetic_truncated_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-adapter-v1/jenqwei_synthetic_truncated_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage16-adapter-v1/jenqwei_talk_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-adapter-v1/jenqwei_talk_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level1_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level1_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level2_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level2_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level3_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level3_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage16-adapter-v1/real_segmented_actual.npz",
+      "expected": "/tmp/lilia-stage16-adapter-v1/real_segmented_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "before_raw_fractional_idx": 0.0,
+        "before_segment_ids": 0.0,
+        "data_filt_500": 0.0,
+        "data_raw": 0.0,
+        "model_raw_fractional_idx": 0.0,
+        "model_segment_ids": 0.0,
+        "model_to_before_idx": 0.0,
+        "pre_data_200": 0.0,
+        "raw_sample_idx": 0.0,
+        "tfl_data_200": 0.0,
+        "tfl_time_us_200": 0.0,
+        "time_us_200": 0.0,
+        "time_us_500": 0.0
+      },
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py": "1c482636263bdc10e88b97cb451624e5b07beb2a401780bbcdc421622f47efd0",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage16/baseline_legacy_entry.py.txt": "29235cad630d7636397299d94c5131c4cc44effa541efc72bb25a0973ee022fa",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv": "fd291cbc7f9ee7c24561751c9c70793e067d161be24459801868f0727d2d8540",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv": "248dda71a06a6c4f76a4082fd734961383b80b464d8b8fbe9278cae23866d91a",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv": "3ecea3ac6d6393849157cd57b5a97e69af15a84e2bf124178fc469ac728503c0",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv": "07cf89ba2216be66a09195c884a565498d802bf193432f21a7be27b0b9320d8b",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_move_head_reference.json": "497edfe7648800d0901554900b8f432ae2d7505b9b9bb6c6bdc4b5c605b56984",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_move_head_reference.npz": "131af32eb34890916e8c7565536093c1d32bf2a6381c39d2a324b8985861b241",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_reference.json": "c4b9ccdebc088008663ebc56c05e7861c09d09541791baf9914bd5082c7182c1",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_reference.npz": "d3a7a0c330618bde3c4fd8f8c0e4079f8afa06b6f16b99da23301ee0a459bc00",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_truncated_reference.json": "111207b081b8292049a1791bb4b14a00694b7429f5760d7b1c735b6c45974b31",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_truncated_reference.npz": "15e1bf161062d4bcdc396865591449a5ec27027f0668f32d437326d0c853b1f1",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_talk_reference.json": "02063d1380f0684799e8329a860f1d2302e491a84027d9022f87bdb7152f81ac",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_talk_reference.npz": "d006ce25868b1c4a592b6f3611776bd93ab6439445952ac2c7298b444a5053c4",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level1_reference.json": "b568c514b2d3a182ccac042e01cc5ab08d35346f02dd8c00ea0f6ae1fec49fce",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level1_reference.npz": "bb804a86d56b62eed9e070eb570533280584922238d759ed85424d6f5c0fc22c",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level2_reference.json": "892c2e392b838594163064223b3b4c9a2ba1a32298b97be05cafd024308c13f0",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level2_reference.npz": "10f109e8f62f6081a940402026f255bdee751a5c19c12bf43962188ace0852fb",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level3_reference.json": "07c6492bb2a70fa6079ccaaf2e06a25da8395f44e537c3b2e2a0c25bee1b6475",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level3_reference.npz": "2d85ca1511906acb6af31d7147c508ae1ffc830e38a266fdd3015717beacfa8d",
+    "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "/home/bps-yichin/lilia_analysis/tools/validate_jenqwei_adapter_stage16.py": "343d4003fa356f24cbc08500442563e3e4f4686068bff31ff1a7a663b9eee486",
+    "/tmp/lilia-stage16-adapter-v1/analysis.json": "57a8dcf95a4e0d7df039ec9067dfe8369aa923f1cbe700e1132051b11e50359e",
+    "/tmp/lilia-stage16-adapter-v1/evidence.json": "a6bd68774c0b6908d80ac44f1ef0f9694db1a7cf04aa972ac4a2a3279080dc73",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_move_head_reference_actual.npz": "230cced58831f852fc22f382bfb37830bbd4331c57a9bb641d5ee414fa2bfa7e",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_move_head_reference_expected.npz": "397824eb704ede538acc771bff7a62e432d214b00b28ce74a209f2987fe0c2f0",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_synthetic_reference_actual.npz": "64bd7af2dbae4be468a0f429aefef5e571610f32e17feb9e132b3324e43817cb",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_synthetic_reference_expected.npz": "64bd7af2dbae4be468a0f429aefef5e571610f32e17feb9e132b3324e43817cb",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_synthetic_truncated_reference_actual.npz": "68fe3d32bf93370016fecd816f40750b419cebf06ef639a9197ac59b057d3a4c",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_synthetic_truncated_reference_expected.npz": "253ef219eae06d0a468b44384c3f7b957b930b9215047c13dcbee254b2f884d2",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_talk_reference_actual.npz": "d0d4ae058456f25c1be62ddd92684db732558c2abf7ff5016f895a445edf07e2",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_talk_reference_expected.npz": "2610d11ea0b7fdce85129bd4ad61f0c3c59265b9e69146a95f7283c0115e2776",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level1_reference_actual.npz": "b88aedfefe9b29393fd6ff15af574557850ba8237ba1fb29609a4b56bfa12c14",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level1_reference_expected.npz": "ebea7f817fedf57e472a67ce23579e5e2356f7889d6d3dd87383796fb8031fc0",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level2_reference_actual.npz": "3bb430125e6cc46f7b698e00d554a94c91baf84a9b428c8d92ced24361078ea0",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level2_reference_expected.npz": "e3b96b9b14436783b6abeebd35e32dedc315b1cd19d01c66d344eadcc91262e5",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level3_reference_actual.npz": "30dc0a3e6926960b06c1ce836fcd6e48b975f7dc7959b270a0eb8dafe6127503",
+    "/tmp/lilia-stage16-adapter-v1/jenqwei_vibration_level3_reference_expected.npz": "835dc2f1abcd11b7d5e94479cd602261c531a97b9d9c39bfe9776bcf28c305bf",
+    "/tmp/lilia-stage16-adapter-v1/real_segmented_actual.npz": "d82bd7ee3c91b876a29fade4810a45547286d9c51d6be9513bb9a0df298789fa",
+    "/tmp/lilia-stage16-adapter-v1/real_segmented_expected.npz": "d82bd7ee3c91b876a29fade4810a45547286d9c51d6be9513bb9a0df298789fa",
+    "/tmp/lilia-stage16-adapter-v1/segmented_source.npz": "7583715dbbb2fdf0019b5a562beeb33002201e8ab6faffd8eb89293e59860026"
+  },
+  "log": "/tmp/lilia-stage16-adapter-evidence-v1/evidence.log"
+}

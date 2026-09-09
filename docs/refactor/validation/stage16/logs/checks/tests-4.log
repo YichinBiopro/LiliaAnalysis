@@ -1,0 +1,9 @@
+test_custom_markers_at_200hz_apply_quality_in_aligned_windows (test_pipeline_output_regression.PipelineOutputTests) ... ok
+test_event_selection_preserves_prior_event_baseline_anchor (test_pipeline_output_regression.PipelineOutputTests) ... ok
+test_eye_output_header_matches_resampled_channels_and_time (test_pipeline_output_regression.PipelineOutputTests) ... ok
+test_negative_entropy_delta_remains_visible (test_pipeline_output_regression.PipelineOutputTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.263s
+
+OK

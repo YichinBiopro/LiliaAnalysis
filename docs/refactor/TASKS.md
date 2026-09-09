@@ -1,6 +1,6 @@
 # 階段任務單
 
-只讀當前卡片。14–15 已完成；當前為 16，待盤點。16–17 細節於接手時確認。
+只讀當前卡片。14–15 已完成；當前為 16，處理函式已起步；CLI／IO／繪圖待續。17 細節於接手時確認。
 所有任務共用 [WORKFLOW](WORKFLOW.md) 的驗證與收尾規則。方法校準另立任務，勿混入等價搬移。
 
 <a id="stage-14"></a>
@@ -26,16 +26,19 @@
 - 保留：八通道映射、float32 bandpass、兩組四通道 PyTorch 輸入與 ch1/2/5/6 輸出、鏡射 OLA、完整重採樣尾樣本；不引入 notch／bandstop 或品質 scorer。
 - 專屬測試：`tests/test_eye_open_close_regression.py`、`tests/test_eye_plot_regression.py`；實跑：`tools/validate_eye_stage15.py --out /path/to/new-directory`。
 - 歷史：[起步基準](STAGE15_REPORT_2026-09-09.md)／[CLI／IO 增量](STAGE15_IO_REPORT_2026-09-09.md)。其中 guard 保留、繪圖未完成均為當時狀態。
-- Git：基準與 CLI／IO 已提交 `b84029e`；繪圖／測試／本次驗收工具及證據未提交，未 push。
+- Git：基準與 CLI／IO 已提交 `b84029e`；繪圖／測試／完整驗收證據已提交 `141bde2`，未 push。
 
 <a id="stage-16"></a>
-## 16：Jenqwei 分析 — 待盤點
+## 16：Jenqwei 分析 — 進行中（基準／分段處理完成，CLI／IO／繪圖待續）
 
-- 目標：`analyze_jenqwei_pipeline.py`、必要的共享 TFLite／IO。
-- 保留：現有通道選擇、BP／重採樣／TFLite 及 TD／PSD／STFT 定義；先確認 callers 與真實模型基準。
-- 實作：逐段模型流程、來源索引與圖形時間、短尾／失敗 audit；盤點重複推論是否可共用結果。
-- 起始測試：`python tools/refactor_check.py check --tests tests/test_neural_timeline_regression.py tests/test_signal_contract_regression.py tests/test_pipeline_output_regression.py`
-- 完成條件：專屬連續／缺口／短段／污染／模型失敗測試、真實 Jenqwei 模型數值對照、產物重讀／hash／目視及完整檢查；完成後才解除 guard。
+- 2026-09-09 起步：[增量報告](STAGE16_REPORT_2026-09-09.md)。五份完整真實與兩個合成舊模型／PSD／STFT 基準已凍結；新增 `process_segments`，41 tests／0 skipped、154 Python 靜態、28 項基準與 55 項 adapter evidence 通過。連續與分段真實模型最大誤差 0。
+- main 仍走舊 `run_pipeline`，CLI guard 保留；尚未完成可重讀輸出、分段圖形或目視／完整階段驗收。
+- 目標：`analyze_jenqwei_pipeline.py`、必要的共享 TFLite／IO。repo 無外部入口 callers；五份來源均連續，現有 main 逐顯示通道重複推論。
+- 保留：前四通道 float32 bandpass、500→200 Hz、400 點不重疊 TFLite；Before 全重採樣尾樣本／After 按段裁尾；`max_samples` 先完整來源段濾波再截斷。raw／Before／After 索引不可混用。
+- 接續：main 每來源只推論一次；Before／After 可來源驗證表、metadata、失敗 audit；TD／STFT 逐段 elapsed 與裁尾，PSD 保留逐段方法，不能把缺口兩側串接做 Welch 或暗加跨段平均。
+- 已知：舊 ch=2/3（0-based）的 After 被 clamp 到模型 ch=1，不能視為同來源比較；需修正來源映射／標題或明示通道限制，不能把錯圖當相容契約。實際 CLI 為 `--channels`，檔頭 `--channel` 描述待修。
+- 起始測試：`python tools/refactor_check.py check --tests tests/test_jenqwei_pipeline_regression.py tests/test_neural_timeline_regression.py tests/test_signal_contract_regression.py tests/test_pipeline_output_regression.py tests/test_tflite_baseline_regression.py`
+- 完成條件：專屬連續／缺口／短段／污染／模型失敗測試、真實 Jenqwei 模型數值對照、CLI 產物重讀／hash／目視及完整檢查；完成後才解除 guard。品質與方法校準另立工作。
 
 <a id="stage-17"></a>
 ## 17：Jenqwei 資料集 — 待盤點
