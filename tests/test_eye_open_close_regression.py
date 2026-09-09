@@ -288,14 +288,12 @@ class EyeOutputTests(unittest.TestCase):
         np.testing.assert_array_equal(frame['Time[us]'], timeline.time_us)
         np.testing.assert_array_equal(frame.iloc[:, 1:], expected)
 
-    def test_main_failure_audits_preserve_guard_short_nonfinite_and_model_context(self):
-        cases = ('gap', 'short', 'nonfinite', 'model', 'missing', 'invalid_fmax')
+    def test_main_failure_audits_preserve_short_nonfinite_and_model_context(self):
+        cases = ('short', 'nonfinite', 'model', 'missing', 'invalid_fmax')
         for case in cases:
             with self.subTest(case=case):
                 t = np.arange(1503) * 2000
-                if case == 'gap':
-                    t[1000:] += 10000000
-                elif case == 'short':
+                if case == 'short':
                     t = t[:997]
                 raw = np.ones((len(t), 8), dtype=np.float32)
                 if case == 'nonfinite':
@@ -315,10 +313,7 @@ class EyeOutputTests(unittest.TestCase):
                 self.assertFalse(audit['table_verified'])
                 self.assertEqual(audit['artifacts'], [])
                 self.assertFalse((Path(args.outdir) / 'source_tinyv4_output.csv').exists())
-                if case == 'gap':
-                    self.assertEqual(audit['stage'], 'continuity_guard')
-                    self.assertEqual(len(audit['inference']['segments']), 2)
-                elif case == 'short':
+                if case == 'short':
                     self.assertEqual(audit['inference']['segments'][0]['status'], 'excluded')
                 elif case == 'nonfinite':
                     self.assertEqual(audit['nonfinite_input'], [{'segment_id': 0, 'input_channel': 8, 'count': 1}])
@@ -342,6 +337,62 @@ class EyeOutputTests(unittest.TestCase):
             self.assertEqual(path.read_bytes(), contents)
         failure, = directory.glob('source_analysis_audit_*.json')
         self.assertEqual(json.loads(failure.read_text())['stage'], 'preflight')
+
+    def test_gapped_main_runs_all_plots_and_retains_source_ids(self):
+        t = 9000000000000001 + np.r_[np.arange(10) * 2000,
+                                   10000000 + np.arange(998) * 2000,
+                                   12002000 + np.arange(998) * 2000]
+        self.recording(t)
+        figures = []
+
+        def save(fig, path, **kwargs):
+            figures.append([ax.get_title() for ax in fig.axes])
+            Path(path).write_bytes(b'plot placeholder; real renders validated separately')
+
+        with patch.object(eye, 'load_model', return_value=Identity()), \
+                patch('matplotlib.figure.Figure.savefig', save):
+            audit = eye.run_analysis(self.args())
+        self.assertEqual(audit['status'], 'success')
+        self.assertEqual(audit['continuity_guard'], 'not_required_segmented_pipeline')
+        self.assertEqual(audit['plotting_status'], 'complete')
+        self.assertEqual(audit['output_samples'], 800)
+        self.assertEqual(len(figures), 4)
+        self.assertEqual([s['segment_id'] for s in audit['plot_timeline']['segments']], [1, 2])
+        self.assertEqual(audit['plot_timeline']['segments'][0]['clip_end_s'], 11.996)
+        self.assertEqual(audit['plot_timeline']['segments'][1]['clip_start_s'], 12.002)
+
+    def test_plot_failure_preserves_verified_signal_and_failed_audit(self):
+        self.recording(np.arange(1503) * 2000)
+        with patch.object(eye, 'load_model', return_value=Identity()), \
+                patch.object(eye, 'plot_output_channels', side_effect=OSError('disk full')):
+            with self.assertRaisesRegex(OSError, 'disk full'):
+                eye.run_analysis(self.args())
+        audit = json.loads((self.root / 'run/source_analysis_audit.json').read_text())
+        self.assertEqual(audit['status'], 'failed')
+        self.assertEqual(audit['stage'], 'segmented_plots')
+        self.assertEqual(audit['plotting_status'], 'not_started')
+        self.assertTrue(audit['table_verified'])
+        self.assertEqual(len(audit['artifacts']), 2)
+
+    def test_polluted_short_segment_and_missing_model_fail_with_audit(self):
+        t = np.r_[np.arange(10) * 2000, 10000000 + np.arange(998) * 2000]
+        raw = np.ones((len(t), 8))
+        raw[0, 0] = np.inf
+        self.recording(t, raw)
+        with patch.object(eye, 'load_model') as loader:
+            with self.assertRaisesRegex(ValueError, 'non-finite'):
+                eye.run_analysis(self.args('polluted'))
+            loader.assert_not_called()
+        audit = json.loads((self.root / 'polluted/source_analysis_audit.json').read_text())
+        self.assertEqual(audit['nonfinite_input'], [{'segment_id': 0, 'input_channel': 1, 'count': 1}])
+        self.assertEqual(audit['inference']['segments'][0]['status'], 'excluded')
+        self.recording(np.arange(998) * 2000)
+        with patch.object(eye, 'signal_parameters', side_effect=FileNotFoundError('checkpoint missing')):
+            with self.assertRaisesRegex(FileNotFoundError, 'checkpoint missing'):
+                eye.run_analysis(self.args('missing_model'))
+        audit = json.loads((self.root / 'missing_model/source_analysis_audit.json').read_text())
+        self.assertEqual(audit['stage'], 'model_provenance')
+        self.assertEqual(audit['artifacts'], [])
 
 
 if __name__ == '__main__':

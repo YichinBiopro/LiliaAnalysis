@@ -1,0 +1,49 @@
+"""Render extra views through the production plotting path, changing only x limits."""
+import json
+from pathlib import Path
+import sys
+from unittest.mock import patch
+
+ROOT = Path('/home/bps-yichin/lilia_analysis')
+sys.path.insert(0, str(ROOT))
+import numpy as np
+from matplotlib.figure import Figure
+from matplotlib.patches import Rectangle
+import process_lilia_eye_open_close as eye
+from lilia.provenance import file_sha256
+
+out = Path(__file__).resolve().parent
+manifest = json.loads((out / 'evidence.json').read_text())
+paths = [out / 'small_gap_actual.npz', out / 'small_gap_source.csv', ROOT / 'process_lilia_eye_open_close.py']
+for path in paths:
+    recorded = next(item['sha256'] for item in manifest['files'] if item['path'] == str(path))
+    assert file_sha256(path) == recorded
+raw_t, _ = eye.load_lilia_csv(out / 'small_gap_source.csv')
+timeline = eye.build_inference_timeline(raw_t, 500, 200, 400, 200)
+original_save = Figure.savefig
+records = []
+with np.load(out / 'small_gap_actual.npz') as signals:
+    for name, limits in [('small_gap_detail', (11.975, 12.025)), ('short_prefix_detail', (0., .04))]:
+        def save(fig, path, **kwargs):
+            for ax in fig.axes:
+                if ax.get_xlabel() == 'Elapsed time (s)':
+                    ax.set_xlim(limits)
+                    ax.ticklabel_format(axis='x', style='plain', useOffset=False)
+                    # Production source clips assume the full elapsed extent.
+                    # The detail view must intersect those clips with its viewport.
+                    for mesh, record in zip(ax.collections, eye.plot_coordinates(timeline)):
+                        left = max(record['clip_start_s'], limits[0])
+                        right = min(record['clip_end_s'], limits[1])
+                        if right <= left:
+                            mesh.set_visible(False)
+                        else:
+                            mesh.set_clip_path(Rectangle((left, 0), right - left, 50, transform=ax.transData))
+            fig.suptitle(fig._suptitle.get_text() + '\nAcceptance detail: elapsed zoom only')
+            original_save(fig, path, **kwargs)
+        with patch.object(Figure, 'savefig', save):
+            path = Path(eye.plot_before_after_channels(timeline, signals['before'], signals['processed'],
+                        str(out / 'details_v2'), name, 50, 2, 'ch5_6'))
+        records.append({'path': str(path), 'sha256': file_sha256(path), 'xlim_s': list(limits)})
+records.append({'path': str(Path(__file__)), 'sha256': file_sha256(__file__)})
+(out / 'detail_artifacts_v2.json').write_text(json.dumps(records, indent=2) + '\n')
+print(json.dumps(records, indent=2))

@@ -1,0 +1,11 @@
+test_rendered_comparison_uses_ch5_6_and_never_draws_across_small_gap (test_eye_plot_regression.EyePlotTests) ... ok
+test_rendered_output_keeps_short_spans_and_closes_on_save_failure (test_eye_plot_regression.EyePlotTests) ... ok
+test_segmented_stft_preserves_frozen_real_and_synthetic_values (test_eye_plot_regression.EyePlotTests) ... ok
+test_short_prefix_tail_and_large_epoch_keep_source_elapsed_extent (test_eye_plot_regression.EyePlotTests) ... ok
+test_small_gap_has_two_independent_stfts_and_padding_is_clipped (test_eye_plot_regression.EyePlotTests) ... ok
+test_stft_centers_follow_timestamp_jitter_without_changing_spectrum (test_eye_plot_regression.EyePlotTests) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.557s
+
+OK

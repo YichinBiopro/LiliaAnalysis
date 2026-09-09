@@ -1,0 +1,746 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-09T09:20:15.714425+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/2026-07-03-lilia-eye-open-close.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_real_continuous_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_real_continuous_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.pth",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tools/validate_eye_stage15.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/eye_io.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real.log",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_output.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_output.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_output_ch1_2_time_stft.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_before_after_ch1_2.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_output_ch5_6_time_stft.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_before_after_ch5_6.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/baseline_legacy_entry.py.txt",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_source.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_signal.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_signal.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli.log",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output_ch1_2_time_stft.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_before_after_ch1_2.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output_ch5_6_time_stft.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_before_after_ch5_6.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_spectra_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_spectra_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real_spectra_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real_spectra_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_synthetic_continuous_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_synthetic_continuous_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic_source.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic.log",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_output.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_output.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_output_ch1_2_time_stft.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_before_after_ch1_2.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_output_ch5_6_time_stft.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_before_after_ch5_6.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic_spectra_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic_spectra_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap_source.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap.log",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_output.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_output.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_output_ch1_2_time_stft.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_before_after_ch1_2.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_output_ch5_6_time_stft.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_before_after_ch5_6.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap_spectra_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap_spectra_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/short_source.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/short_rejected.log",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/short_rejected/short_source_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/nonfinite_source.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/nonfinite_rejected.log",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/nonfinite_rejected/nonfinite_source_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/missing_rejected.log",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/missing_rejected/absent_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-acceptance-v1/analysis.json",
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_output.csv",
+      "kind": "eye_model_signal",
+      "rows": 18109,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_signal.csv",
+      "kind": "eye_model_signal",
+      "rows": 1403,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output.csv",
+      "kind": "eye_model_signal",
+      "rows": 1403,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_output.csv",
+      "kind": "eye_model_signal",
+      "rows": 602,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_output.csv",
+      "kind": "eye_model_signal",
+      "rows": 800,
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage15-acceptance-v1/real_actual.npz",
+      "expected": "/tmp/lilia-stage15-acceptance-v1/real_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "processed": 0.0,
+        "time_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage15-acceptance-v1/segmented_actual.npz",
+      "expected": "/tmp/lilia-stage15-acceptance-v1/segmented_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "before": 0.0,
+        "processed": 0.0,
+        "time_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage15-acceptance-v1/segmented_cli_actual.npz",
+      "expected": "/tmp/lilia-stage15-acceptance-v1/segmented_cli_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "processed": 0.0,
+        "time_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage15-acceptance-v1/segmented_spectra_actual.npz",
+      "expected": "/tmp/lilia-stage15-acceptance-v1/segmented_spectra_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "after_seg1_ch1_db": 0.0,
+        "after_seg1_ch1_elapsed": 1.7763568394002505e-15,
+        "after_seg1_ch1_frequency": 0.0,
+        "after_seg1_ch2_db": 0.0,
+        "after_seg1_ch2_elapsed": 1.7763568394002505e-15,
+        "after_seg1_ch2_frequency": 0.0,
+        "after_seg1_ch5_db": 0.0,
+        "after_seg1_ch5_elapsed": 1.7763568394002505e-15,
+        "after_seg1_ch5_frequency": 0.0,
+        "after_seg1_ch6_db": 0.0,
+        "after_seg1_ch6_elapsed": 1.7763568394002505e-15,
+        "after_seg1_ch6_frequency": 0.0,
+        "after_seg2_ch1_db": 0.0,
+        "after_seg2_ch1_elapsed": 0.0,
+        "after_seg2_ch1_frequency": 0.0,
+        "after_seg2_ch2_db": 0.0,
+        "after_seg2_ch2_elapsed": 0.0,
+        "after_seg2_ch2_frequency": 0.0,
+        "after_seg2_ch5_db": 0.0,
+        "after_seg2_ch5_elapsed": 0.0,
+        "after_seg2_ch5_frequency": 0.0,
+        "after_seg2_ch6_db": 0.0,
+        "after_seg2_ch6_elapsed": 0.0,
+        "after_seg2_ch6_frequency": 0.0,
+        "before_seg1_ch1_db": 0.0,
+        "before_seg1_ch1_elapsed": 1.7763568394002505e-15,
+        "before_seg1_ch1_frequency": 0.0,
+        "before_seg1_ch2_db": 0.0,
+        "before_seg1_ch2_elapsed": 1.7763568394002505e-15,
+        "before_seg1_ch2_frequency": 0.0,
+        "before_seg1_ch5_db": 0.0,
+        "before_seg1_ch5_elapsed": 1.7763568394002505e-15,
+        "before_seg1_ch5_frequency": 0.0,
+        "before_seg1_ch6_db": 0.0,
+        "before_seg1_ch6_elapsed": 1.7763568394002505e-15,
+        "before_seg1_ch6_frequency": 0.0,
+        "before_seg2_ch1_db": 0.0,
+        "before_seg2_ch1_elapsed": 0.0,
+        "before_seg2_ch1_frequency": 0.0,
+        "before_seg2_ch2_db": 0.0,
+        "before_seg2_ch2_elapsed": 0.0,
+        "before_seg2_ch2_frequency": 0.0,
+        "before_seg2_ch5_db": 0.0,
+        "before_seg2_ch5_elapsed": 0.0,
+        "before_seg2_ch5_frequency": 0.0,
+        "before_seg2_ch6_db": 0.0,
+        "before_seg2_ch6_elapsed": 0.0,
+        "before_seg2_ch6_frequency": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage15-acceptance-v1/real_spectra_actual.npz",
+      "expected": "/tmp/lilia-stage15-acceptance-v1/real_spectra_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "after_seg0_ch1_db": 0.0,
+        "after_seg0_ch1_elapsed": 1.4210854715202004e-14,
+        "after_seg0_ch1_frequency": 0.0,
+        "after_seg0_ch2_db": 0.0,
+        "after_seg0_ch2_elapsed": 1.4210854715202004e-14,
+        "after_seg0_ch2_frequency": 0.0,
+        "after_seg0_ch5_db": 0.0,
+        "after_seg0_ch5_elapsed": 1.4210854715202004e-14,
+        "after_seg0_ch5_frequency": 0.0,
+        "after_seg0_ch6_db": 0.0,
+        "after_seg0_ch6_elapsed": 1.4210854715202004e-14,
+        "after_seg0_ch6_frequency": 0.0,
+        "before_seg0_ch1_db": 0.0,
+        "before_seg0_ch1_elapsed": 1.4210854715202004e-14,
+        "before_seg0_ch1_frequency": 0.0,
+        "before_seg0_ch2_db": 0.0,
+        "before_seg0_ch2_elapsed": 1.4210854715202004e-14,
+        "before_seg0_ch2_frequency": 0.0,
+        "before_seg0_ch5_db": 0.0,
+        "before_seg0_ch5_elapsed": 1.4210854715202004e-14,
+        "before_seg0_ch5_frequency": 0.0,
+        "before_seg0_ch6_db": 0.0,
+        "before_seg0_ch6_elapsed": 1.4210854715202004e-14,
+        "before_seg0_ch6_frequency": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage15-acceptance-v1/synthetic_actual.npz",
+      "expected": "/tmp/lilia-stage15-acceptance-v1/synthetic_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "processed": 0.0,
+        "time_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage15-acceptance-v1/synthetic_spectra_actual.npz",
+      "expected": "/tmp/lilia-stage15-acceptance-v1/synthetic_spectra_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "after_seg0_ch1_db": 0.0,
+        "after_seg0_ch1_elapsed": 4.440892098500626e-16,
+        "after_seg0_ch1_frequency": 0.0,
+        "after_seg0_ch2_db": 0.0,
+        "after_seg0_ch2_elapsed": 4.440892098500626e-16,
+        "after_seg0_ch2_frequency": 0.0,
+        "after_seg0_ch5_db": 0.0,
+        "after_seg0_ch5_elapsed": 4.440892098500626e-16,
+        "after_seg0_ch5_frequency": 0.0,
+        "after_seg0_ch6_db": 0.0,
+        "after_seg0_ch6_elapsed": 4.440892098500626e-16,
+        "after_seg0_ch6_frequency": 0.0,
+        "before_seg0_ch1_db": 0.0,
+        "before_seg0_ch1_elapsed": 4.440892098500626e-16,
+        "before_seg0_ch1_frequency": 0.0,
+        "before_seg0_ch2_db": 0.0,
+        "before_seg0_ch2_elapsed": 4.440892098500626e-16,
+        "before_seg0_ch2_frequency": 0.0,
+        "before_seg0_ch5_db": 0.0,
+        "before_seg0_ch5_elapsed": 4.440892098500626e-16,
+        "before_seg0_ch5_frequency": 0.0,
+        "before_seg0_ch6_db": 0.0,
+        "before_seg0_ch6_elapsed": 4.440892098500626e-16,
+        "before_seg0_ch6_frequency": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage15-acceptance-v1/small_gap_actual.npz",
+      "expected": "/tmp/lilia-stage15-acceptance-v1/small_gap_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "before": 0.0,
+        "processed": 0.0,
+        "time_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage15-acceptance-v1/small_gap_spectra_actual.npz",
+      "expected": "/tmp/lilia-stage15-acceptance-v1/small_gap_spectra_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "after_seg1_ch1_db": 0.0,
+        "after_seg1_ch1_elapsed": 1.7763568394002505e-15,
+        "after_seg1_ch1_frequency": 0.0,
+        "after_seg1_ch2_db": 0.0,
+        "after_seg1_ch2_elapsed": 1.7763568394002505e-15,
+        "after_seg1_ch2_frequency": 0.0,
+        "after_seg1_ch5_db": 0.0,
+        "after_seg1_ch5_elapsed": 1.7763568394002505e-15,
+        "after_seg1_ch5_frequency": 0.0,
+        "after_seg1_ch6_db": 0.0,
+        "after_seg1_ch6_elapsed": 1.7763568394002505e-15,
+        "after_seg1_ch6_frequency": 0.0,
+        "after_seg2_ch1_db": 0.0,
+        "after_seg2_ch1_elapsed": 1.7763568394002505e-15,
+        "after_seg2_ch1_frequency": 0.0,
+        "after_seg2_ch2_db": 0.0,
+        "after_seg2_ch2_elapsed": 1.7763568394002505e-15,
+        "after_seg2_ch2_frequency": 0.0,
+        "after_seg2_ch5_db": 0.0,
+        "after_seg2_ch5_elapsed": 1.7763568394002505e-15,
+        "after_seg2_ch5_frequency": 0.0,
+        "after_seg2_ch6_db": 0.0,
+        "after_seg2_ch6_elapsed": 1.7763568394002505e-15,
+        "after_seg2_ch6_frequency": 0.0,
+        "before_seg1_ch1_db": 0.0,
+        "before_seg1_ch1_elapsed": 1.7763568394002505e-15,
+        "before_seg1_ch1_frequency": 0.0,
+        "before_seg1_ch2_db": 0.0,
+        "before_seg1_ch2_elapsed": 1.7763568394002505e-15,
+        "before_seg1_ch2_frequency": 0.0,
+        "before_seg1_ch5_db": 0.0,
+        "before_seg1_ch5_elapsed": 1.7763568394002505e-15,
+        "before_seg1_ch5_frequency": 0.0,
+        "before_seg1_ch6_db": 0.0,
+        "before_seg1_ch6_elapsed": 1.7763568394002505e-15,
+        "before_seg1_ch6_frequency": 0.0,
+        "before_seg2_ch1_db": 0.0,
+        "before_seg2_ch1_elapsed": 1.7763568394002505e-15,
+        "before_seg2_ch1_frequency": 0.0,
+        "before_seg2_ch2_db": 0.0,
+        "before_seg2_ch2_elapsed": 1.7763568394002505e-15,
+        "before_seg2_ch2_frequency": 0.0,
+        "before_seg2_ch5_db": 0.0,
+        "before_seg2_ch5_elapsed": 1.7763568394002505e-15,
+        "before_seg2_ch5_frequency": 0.0,
+        "before_seg2_ch6_db": 0.0,
+        "before_seg2_ch6_elapsed": 1.7763568394002505e-15,
+        "before_seg2_ch6_frequency": 0.0
+      },
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/2026-07-03-lilia-eye-open-close.csv": "f737cd4b16f8463c400f2606e7b89a7035c2036d809658e6904a29536857cc0f",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/baseline_legacy_entry.py.txt": "b941c85ad6fb342f1c12f40a87e12c5fbf402c6f4083d99e3ae2e93ed59697be",
+    "/home/bps-yichin/lilia_analysis/lilia/eye_io.py": "ecd284ba3b24d2b4fb510692baccdb5b6e4c97b868bdc64691a3541fc6fc6856",
+    "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py": "9be0ad198435fd95ced9d0113b5a859d0c09536b8c101a4aad8c3992f892ad69",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_real_continuous_reference.json": "9d4c63606245efeb5810ac7dfba29c8dcd9f78d236089d7231507a480c0f6fbf",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_real_continuous_reference.npz": "95b458498c000231b65ee84bcd5a12410d11b7cdfd064d713ba4d8271d4b8f0b",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_synthetic_continuous_reference.json": "cc1347e14c19adc050dee52350d0b0e83be48ca26a09263199f84bade04b1bb4",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_synthetic_continuous_reference.npz": "0a1ddd8abff370b49619dafdbe598a30e5b6fe1957fc693c60c7dbad15a1ead1",
+    "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.pth": "8c863e5ba0a32f1170be321bb7166e6aeede2cbeed93f1521d5dd34412cdebae",
+    "/home/bps-yichin/lilia_analysis/tools/validate_eye_stage15.py": "6095a8dcac54747174c9aa3213a239eb4993bf5109ce8f33695ab1c4937b70cd",
+    "/tmp/lilia-stage15-acceptance-v1/analysis.json": "97c99104a1de9522db0d75fe3c03b38847bedf835cb5d0b6c611b29f93100b5d",
+    "/tmp/lilia-stage15-acceptance-v1/evidence.json": "3db28477e6472ab4004d63db71958d2476197e3850131e728b5bb54b2db5326d",
+    "/tmp/lilia-stage15-acceptance-v1/missing_rejected/absent_analysis_audit.json": "34173a3453eaaf1de304fb1a8fa8b945afc2bf8dd37358c7954023489648b6f0",
+    "/tmp/lilia-stage15-acceptance-v1/missing_rejected.log": "0823067ed3f25ca9f83a24688704284616b405759bb1d7a8c49cdcb21e84f965",
+    "/tmp/lilia-stage15-acceptance-v1/nonfinite_rejected/nonfinite_source_analysis_audit.json": "b739f85ab36f41aa828098ff2eab36f83ec2b8e867c6f61fb8a527988a8fef7d",
+    "/tmp/lilia-stage15-acceptance-v1/nonfinite_rejected.log": "12fd42e2017de3b1cca044ff1142da902acbd4492b26091b5f3a53fdaf569adb",
+    "/tmp/lilia-stage15-acceptance-v1/nonfinite_source.csv": "1283b39bbb35edcf01917fd444a149c604281e94c2eb9b356c99906b1483bca5",
+    "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_analysis_audit.json": "00aff3a4eeabf7e3b13ebbcf4230dda52a69757795c01d86b7e03a22f89c3d65",
+    "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_before_after_ch1_2.png": "bcde6d92d84a01c1a09ebab4a0fc0f8d8a1ae2d69874c62726e386c9e994a571",
+    "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_before_after_ch5_6.png": "ca0b61c4fe1ee5bc55bc78da928ef3e0be1d2da46dd6b002855b43cfbad68800",
+    "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_output.csv": "2904e750f10df22b1171d731595247ff14666ea7339e88f99f4517648ec22e8b",
+    "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_output.csv.meta.json": "1d9b1b23ea0f895bf27387ffb149ce4b51eb47368a29a01b8d70437cf4d5fba3",
+    "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_output_ch1_2_time_stft.png": "da0e80b4f432c99d493d693c61e259729f88cd47779af9ed138e12252b361293",
+    "/tmp/lilia-stage15-acceptance-v1/real/2026-07-03-lilia-eye-open-close_tinyv4_output_ch5_6_time_stft.png": "d1927ad308c368cbbc980e24c4c9c340ebbc5fc00b1a198f65d7eb6d8e0d8cd9",
+    "/tmp/lilia-stage15-acceptance-v1/real.log": "7ffcc418ce71ca51c3dc1ea3db5132fc0560023c39f2fae06e5306b2bc50cd90",
+    "/tmp/lilia-stage15-acceptance-v1/real_actual.npz": "11916b987df0aad0418e597f2857965f7c5d922451bf21a797c94c6197442d66",
+    "/tmp/lilia-stage15-acceptance-v1/real_expected.npz": "51545d1f5d974c095a64d449f32a159be562d8ca15581ab148d27cfb6378c608",
+    "/tmp/lilia-stage15-acceptance-v1/real_spectra_actual.npz": "6ceb3139aff227308cf04a00666df777c5c6c7402f0bb65ea976e7a13f22fbce",
+    "/tmp/lilia-stage15-acceptance-v1/real_spectra_expected.npz": "b1e23035ebc71d0177eb5fea92d15784e7092cf481e17b2b5a0f90cdfc4f50ef",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_actual.npz": "4b604056c716574bbcd6c60db274771b39f2e84aaa23ffc380d6600ef0ff43b7",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_analysis_audit.json": "cc701f83543816041d364e3b7e167f075f9432ffc4f40b43ca1e7279169e7827",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_before_after_ch1_2.png": "bd01cf084e1b89f05ff56b878f5393b5b8a1c38dcf2e59a5ad4b4692bb92ae17",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_before_after_ch5_6.png": "a21481b8c87ba314f93a041a1c0862a603346fa5bb74943dd8327d28faf2ea35",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output.csv": "438181716c05eb0d9bc3b14464b31a20c8daa00a0119d33a9a37b34f391daeba",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output.csv.meta.json": "ff3969aad85103d3783a975e59cc0ad8239396ddebfa87d2758c3c67d9233924",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output_ch1_2_time_stft.png": "e48e3c01a7eec8eaa091adffc6ecbfa5cdc1377d24acbd6766bf7ea57497b9d3",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output_ch5_6_time_stft.png": "36a80776a8d84fbe649ad9e8158c9a56fb4669a59629152aaaa09247e87fa48e",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_cli.log": "8b6fe977a8be07124477f77aa3b39e37f5e67bcb7718e04115aa929c8efa7ab7",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_cli_actual.npz": "5e5ccaf22b6e94db41c8e63b55f8e78b7b6d1ab71f3363ad83669326e65ab6b2",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_cli_expected.npz": "5db69a3d10ed55c20ccc28ffbcec7dfa89678799175380eb9673701c0772ac85",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_expected.npz": "e0bf8d53e0aa617088af065d3def67ecee5040c90a3f5370c863ddcd8df3bdb6",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_signal.csv": "438181716c05eb0d9bc3b14464b31a20c8daa00a0119d33a9a37b34f391daeba",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_signal.csv.meta.json": "f86d792323a8640986883f3ea808c0bed0cc2f22d07ad3dce6f65b3d0ade84d7",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_source.csv": "0962b4b8cc752f411848ad9e27fb8539e287d710d6df217cb18b6d4ca19da3ce",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_spectra_actual.npz": "5a39cb8fa0c3608cbd3fbe649442ecd558af7e5a136b4825fb9e3b5597659b68",
+    "/tmp/lilia-stage15-acceptance-v1/segmented_spectra_expected.npz": "7e66f14fe7d13c93b88a8904409843e3e339193567695fddf4f9b1b3321b2885",
+    "/tmp/lilia-stage15-acceptance-v1/short_rejected/short_source_analysis_audit.json": "74bb6bb9d3ca29602b73b84ef81b99f44a4e95a0f7d8a19dd2f1fde74e913a9a",
+    "/tmp/lilia-stage15-acceptance-v1/short_rejected.log": "d19dc2fc914d2620f1cb40630e3be12bf6e3c46cef09877610ef9425eef73b7a",
+    "/tmp/lilia-stage15-acceptance-v1/short_source.csv": "fa9cf1cecefd44e25051440f9485142cc232501284394254e5357417fa5a54e6",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_analysis_audit.json": "96ad52518065e3962855d4b5e2f7a982c0a73f25f1d7ba79920b2aba5ebd6cac",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_before_after_ch1_2.png": "adc2ef95d7dd792ccd64638453e55fe4a61df2d89c1d34b2fa922b679dc99928",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_before_after_ch5_6.png": "4265e8afefd2e97b9baea3e1f3cdf499c9aa15123a7aba7a31f51bc618d57ca5",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_output.csv": "59e3d0f5fde67834e26e1c9ce1ef3fc6d40d1af92b34265a0e2d0fa3950737c9",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_output.csv.meta.json": "6f8c9ca3d89d16220489ec75c848c06c4d205dfca880850074fdb1a5f417279c",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_output_ch1_2_time_stft.png": "55ba9ed9cedcf23cab74f71f0ea3c0d96fc51b4a148ef11911b0c21483e9f527",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap/small_gap_source_tinyv4_output_ch5_6_time_stft.png": "cab1b1ebc1f0ee0d7ada798e47e13ae795cb4a7426b5f9d7da30d6b2bba0f82e",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap.log": "901f253e3f3c51bcc53d445b87e24630a76edf33209a4665838d19a6c23dc384",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap_actual.npz": "9368a295fc4924b0c2217d251b4fed9a894e12b2eb2de7d148edae9ad21bcfcc",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap_expected.npz": "29c32c0a06be97120688f93a8d122229dbaaca83ff9c0679a7da8d85fc6b6b2d",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap_source.csv": "e9f4aa17b6e9d6079668927390f75dcb99e684319b3541ee335e0c96d3f81699",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap_spectra_actual.npz": "5a3029864cace146dc1d512d7e90c334c56bcda89c66c761afeb1a61f5017f17",
+    "/tmp/lilia-stage15-acceptance-v1/small_gap_spectra_expected.npz": "737f30d163026eb89231c33f7326cbc30ea68db69206dca8daaaa53dcd0d1a9e",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_analysis_audit.json": "b003107a0c7ab9073aa6c51234b2d0542fbe68abf0e00a8d8ab1920899ec4388",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_before_after_ch1_2.png": "aae220eec86ab7f748f94b450d8bab52f10f18e3b142f151def8ae3446ed8dd8",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_before_after_ch5_6.png": "1ea4dcb4fea88f2f7233813d51fa34aea776036ca75f4bc8c4710f6086727a6d",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_output.csv": "6d39d49738702626cf553367d84dff7b17d50a2ad2f546a8403c420c75710a0e",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_output.csv.meta.json": "075b9f486ff2d3cc9aa87a8a9c549d71933db89bb8778966f20390b8e42748da",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_output_ch1_2_time_stft.png": "4e37adabc78701ca94a971e25d936910c90a73742e408df3008023aaf9d4f778",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic/synthetic_source_tinyv4_output_ch5_6_time_stft.png": "a1aa68df1e23d0e509835537cb6826bcbceca7b6f632b07120724e70ee9c1362",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic.log": "82e0e46852be5a60a8053bfda9ead0e017385d7530241ca5acd8722ccb945702",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic_actual.npz": "3e184680157ca9637fe87b490a276e8bb71955bfe4e05cd678eac5ee59ab6743",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic_expected.npz": "88e879aee4a5a522074ed2f2e99c4f19cf303eaa78bf5f2074c11899eab0fa55",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic_source.csv": "48ea517b91febe073f699a3e1b1082bfe5f4d0c7f13bd87942c575b5b98a1095",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic_spectra_actual.npz": "1525701c82425025c19dacac059659fb78b1cf12b91ab8d6b6064acd819f32f6",
+    "/tmp/lilia-stage15-acceptance-v1/synthetic_spectra_expected.npz": "5c3236de7bea962e0275e929136556f36fa2f06f693fde95d7a7d8f295b70867"
+  },
+  "log": "/tmp/lilia-stage15-acceptance-evidence-v1/evidence.log"
+}

@@ -1,0 +1,378 @@
+{
+  "schema_version": 1,
+  "kind": "eye_analysis",
+  "status": "success",
+  "source_path": "/tmp/lilia-stage15-acceptance-v1/segmented_source.csv",
+  "quality_state": "disabled",
+  "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.pth",
+  "table_verified": true,
+  "continuity_guard": "not_required_segmented_pipeline",
+  "plotting_status": "complete",
+  "artifacts": [
+    {
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output.csv",
+      "sha256": "438181716c05eb0d9bc3b14464b31a20c8daa00a0119d33a9a37b34f391daeba"
+    },
+    {
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output.csv.meta.json",
+      "sha256": "ff3969aad85103d3783a975e59cc0ad8239396ddebfa87d2758c3c67d9233924"
+    },
+    {
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output_ch1_2_time_stft.png",
+      "sha256": "e48e3c01a7eec8eaa091adffc6ecbfa5cdc1377d24acbd6766bf7ea57497b9d3"
+    },
+    {
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_before_after_ch1_2.png",
+      "sha256": "bd01cf084e1b89f05ff56b878f5393b5b8a1c38dcf2e59a5ad4b4692bb92ae17"
+    },
+    {
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_output_ch5_6_time_stft.png",
+      "sha256": "36a80776a8d84fbe649ad9e8158c9a56fb4669a59629152aaaa09247e87fa48e"
+    },
+    {
+      "path": "/tmp/lilia-stage15-acceptance-v1/segmented_cli/segmented_source_tinyv4_before_after_ch5_6.png",
+      "sha256": "a21481b8c87ba314f93a041a1c0862a603346fa5bb74943dd8327d28faf2ea35"
+    }
+  ],
+  "stage": "complete",
+  "plot_parameters": {
+    "fmax": 50.0
+  },
+  "source_id": "0962b4b8cc752f411848ad9e27fb8539e287d710d6df217cb18b6d4ca19da3ce",
+  "inference": {
+    "source_samples": 4511,
+    "source_epoch_us": 1234567,
+    "fs_in": 500.0,
+    "fs_out": 200.0,
+    "model_window": 400,
+    "model_hop": 200,
+    "segments": [
+      {
+        "segment_id": 0,
+        "raw_start_idx": 0,
+        "raw_end_idx": 10,
+        "raw_start_us": 1234567,
+        "raw_end_us": 1254567,
+        "resampled_samples": 4,
+        "ratio_up": 2,
+        "ratio_down": 5,
+        "status": "excluded",
+        "reason": "shorter_than_model_window"
+      },
+      {
+        "segment_id": 1,
+        "raw_start_idx": 10,
+        "raw_end_idx": 1513,
+        "raw_start_us": 11234567,
+        "raw_end_us": 14240567,
+        "resampled_samples": 602,
+        "ratio_up": 2,
+        "ratio_down": 5,
+        "status": "retained",
+        "reason": "",
+        "output_start_idx": 0,
+        "output_end_idx": 602
+      },
+      {
+        "segment_id": 2,
+        "raw_start_idx": 1513,
+        "raw_end_idx": 3514,
+        "raw_start_us": 21234567,
+        "raw_end_us": 25236567,
+        "resampled_samples": 801,
+        "ratio_up": 2,
+        "ratio_down": 5,
+        "status": "retained",
+        "reason": "",
+        "output_start_idx": 602,
+        "output_end_idx": 1403
+      },
+      {
+        "segment_id": 3,
+        "raw_start_idx": 3514,
+        "raw_end_idx": 4511,
+        "raw_start_us": 31234567,
+        "raw_end_us": 33228567,
+        "resampled_samples": 399,
+        "ratio_up": 2,
+        "ratio_down": 5,
+        "status": "excluded",
+        "reason": "shorter_than_model_window"
+      }
+    ],
+    "model_windows": [
+      {
+        "segment_id": 1,
+        "input_start_idx": -200,
+        "input_end_idx": 200,
+        "output_start_idx": 0,
+        "output_end_idx": 200
+      },
+      {
+        "segment_id": 1,
+        "input_start_idx": 0,
+        "input_end_idx": 400,
+        "output_start_idx": 0,
+        "output_end_idx": 400
+      },
+      {
+        "segment_id": 1,
+        "input_start_idx": 200,
+        "input_end_idx": 600,
+        "output_start_idx": 200,
+        "output_end_idx": 600
+      },
+      {
+        "segment_id": 1,
+        "input_start_idx": 400,
+        "input_end_idx": 800,
+        "output_start_idx": 400,
+        "output_end_idx": 602
+      },
+      {
+        "segment_id": 2,
+        "input_start_idx": -200,
+        "input_end_idx": 200,
+        "output_start_idx": 602,
+        "output_end_idx": 802
+      },
+      {
+        "segment_id": 2,
+        "input_start_idx": 0,
+        "input_end_idx": 400,
+        "output_start_idx": 602,
+        "output_end_idx": 1002
+      },
+      {
+        "segment_id": 2,
+        "input_start_idx": 200,
+        "input_end_idx": 600,
+        "output_start_idx": 802,
+        "output_end_idx": 1202
+      },
+      {
+        "segment_id": 2,
+        "input_start_idx": 400,
+        "input_end_idx": 800,
+        "output_start_idx": 1002,
+        "output_end_idx": 1402
+      },
+      {
+        "segment_id": 2,
+        "input_start_idx": 600,
+        "input_end_idx": 1000,
+        "output_start_idx": 1202,
+        "output_end_idx": 1403
+      }
+    ]
+  },
+  "inference_status": "completed",
+  "nonfinite_input": [],
+  "parameters": {
+    "index_space": "resampled_model_output",
+    "input_fs": 500,
+    "fs": 200,
+    "model_window": 400,
+    "model_hop": 200,
+    "input_channels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "model_input_groups": [
+      [
+        1,
+        2,
+        3,
+        4
+      ],
+      [
+        5,
+        6,
+        7,
+        8
+      ]
+    ],
+    "output_channels": [
+      1,
+      2,
+      5,
+      6
+    ],
+    "filter_dtype": "float32",
+    "filter_order": 4,
+    "resampling": "scipy.signal.resample_poly default",
+    "short_segments": "exclude_if_resampled_samples_less_than_model_window",
+    "nonfinite_input": "fail_entire_analysis_including_excluded_segments",
+    "model_failure": "fail_entire_analysis",
+    "quality_state": "disabled",
+    "model": {
+      "checkpoint_sha256": "8c863e5ba0a32f1170be321bb7166e6aeede2cbeed93f1521d5dd34412cdebae",
+      "architecture_sha256": "2c313d9f378fa434527aea761b44c2da6ba05ee59908afe90548a63af88ed9a9",
+      "backend": "pytorch",
+      "normalization": "per-window RMS",
+      "padding": "symmetric mirrored edges, hop samples on each side",
+      "overlap_add": "Hann weighted, crop to real resampled samples",
+      "filters": {
+        "bandpass": [
+          0.5,
+          45.0
+        ]
+      }
+    }
+  },
+  "code_sha256": {
+    "process_lilia_eye_open_close.py": "9be0ad198435fd95ced9d0113b5a859d0c09536b8c101a4aad8c3992f892ad69",
+    "lilia/eye_io.py": "ecd284ba3b24d2b4fb510692baccdb5b6e4c97b868bdc64691a3541fc6fc6856",
+    "data_analysis.py": "762ccb415cab158f1d6ea74b7b3a2236a7f4c68dd369bc6457fd5ad85d9b67bc",
+    "lilia/neural.py": "411be327030903392bcc0af5c22d62b3419b7a24b364ac9637289fd8d0ef9898",
+    "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+    "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+    "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c"
+  },
+  "plot_timeline": {
+    "time_axis": "elapsed_from_source_epoch",
+    "source_epoch_us": 1234567,
+    "xlim_s": [
+      0.0,
+      31.994
+    ],
+    "source_channels": [
+      1,
+      2,
+      5,
+      6
+    ],
+    "before_columns": [
+      0,
+      1,
+      4,
+      5
+    ],
+    "after_columns": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "excluded_spans": [
+      {
+        "segment_id": 0,
+        "start_s": 0.0,
+        "end_s": 0.02,
+        "reason": "shorter_than_model_window"
+      },
+      {
+        "segment_id": 3,
+        "start_s": 30.0,
+        "end_s": 31.994,
+        "reason": "shorter_than_model_window"
+      }
+    ],
+    "missing_spans": [
+      {
+        "start_s": 0.02,
+        "end_s": 10.0
+      },
+      {
+        "start_s": 13.006,
+        "end_s": 20.0
+      },
+      {
+        "start_s": 24.002,
+        "end_s": 30.0
+      }
+    ],
+    "stft": {
+      "fs": 200.0,
+      "nperseg": 256,
+      "noverlap": 192,
+      "window": "hann",
+      "boundary": "zeros",
+      "padded": true,
+      "fmax": 50.0,
+      "scale": "20*log10(abs(z)+1e-8)",
+      "display": "clip_to_source_segment"
+    },
+    "segments": [
+      {
+        "segment_id": 1,
+        "output_start_idx": 0,
+        "output_end_idx": 602,
+        "stft_sample_positions": [
+          0,
+          64,
+          128,
+          192,
+          256,
+          320,
+          384,
+          448,
+          512,
+          576,
+          640
+        ],
+        "stft_time_s": [
+          10.0,
+          10.32,
+          10.64,
+          10.96,
+          11.28,
+          11.6,
+          11.92,
+          12.24,
+          12.56,
+          12.88,
+          13.200000000000001
+        ],
+        "clip_start_s": 10.0,
+        "clip_end_s": 13.006
+      },
+      {
+        "segment_id": 2,
+        "output_start_idx": 602,
+        "output_end_idx": 1403,
+        "stft_sample_positions": [
+          0,
+          64,
+          128,
+          192,
+          256,
+          320,
+          384,
+          448,
+          512,
+          576,
+          640,
+          704,
+          768,
+          832
+        ],
+        "stft_time_s": [
+          20.0,
+          20.32,
+          20.64,
+          20.96,
+          21.28,
+          21.6,
+          21.92,
+          22.24,
+          22.56,
+          22.88,
+          23.2,
+          23.52,
+          23.84,
+          24.16
+        ],
+        "clip_start_s": 20.0,
+        "clip_end_s": 24.002
+      }
+    ]
+  },
+  "output_samples": 1403
+}

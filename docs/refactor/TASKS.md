@@ -1,6 +1,6 @@
 # 階段任務單
 
-只讀當前卡片。14 已完成；當前為 15。15–17 將其後入口拆成工作單元，細節於接手時確認。
+只讀當前卡片。14–15 已完成；當前為 16，待盤點。16–17 細節於接手時確認。
 所有任務共用 [WORKFLOW](WORKFLOW.md) 的驗證與收尾規則。方法校準另立任務，勿混入等價搬移。
 
 <a id="stage-14"></a>
@@ -18,18 +18,15 @@
 - 收尾：完整檢查＋實跑 evidence manifest＋增量報告；更新短進度至任務 15。
 
 <a id="stage-15"></a>
-## 15：眼開閉 — 進行中（main／IO 已接入，繪圖待續）
+## 15：眼開閉 — 已完成（2026-09-09）
 
-- 2026-09-09 起步：[增量報告](STAGE15_REPORT_2026-09-09.md)。已保存完整真實／合成舊模型與 STFT 基準，新增 `process_segments`；36 tests／0 skipped、靜態通過，連續最大誤差 0。尚未接入 main，CLI guard 保留。
-- 2026-09-09 接續：[CLI／IO 增量報告](STAGE15_IO_REPORT_2026-09-09.md)。main 已接分段函式，CSV sidecar／失敗 audit／來源模型索引重讀完成；53 tests／0 skipped、38 項 evidence 及靜態通過，真實 CLI／分段 IO 舊模型最大誤差 0。guard 仍保留；起步報告的「main 未接入」為歷史。
-- 提交：基準、分段函式、CLI／IO 與驗證證據已收錄於 `b84029e`；第十五階段尚未完成。
-- 接續：分段 TD／STFT 與 elapsed 軸，修正 ch5/6 比較圖誤取 before ch3/4 及標題。完成分段 CLI／圖形／目視／全套驗證後才解除 guard。
-
-- 目標：`process_lilia_eye_open_close.py`、必要的共享 signal／neural adapter／IO。
-- 保留：現有八通道映射、兩組四通道 PyTorch 輸入、指定輸出通道、濾波／模型／TD／STFT 方法；CSV header 已修，勿重做。
-- 實作：分段濾波與重採樣、模型時間軸／裁尾、原始索引映射；輸出及圖形不跨缺口。
-- 起始測試：`python tools/refactor_check.py check --tests tests/test_eye_open_close_regression.py tests/test_neural_timeline_regression.py tests/test_signal_contract_regression.py tests/test_csv_contract_regression.py tests/test_pipeline_output_regression.py tests/test_refactor_validation.py --input 2026-07-03-lilia-eye-open-close.csv`
-- 完成條件：接手先保存舊連續模型基準；新增入口專屬缺口／短段／污染／失敗測試；真實眼開閉模型對照、輸出重讀及圖形檢查；完整檢查通過才解除 guard。
+- 成果：[完整驗收報告](STAGE15_ACCEPTANCE_REPORT_2026-09-09.md)。分段 TD／STFT、elapsed 軸、ch5/6 來源映射與標題完成；CLI guard 的解除已通過驗收。
+- 驗證：246 tests／0 skipped、151 Python 靜態／bundle／diff；88 項數值／產物 evidence、9 項持久目視產物 hash、六張正式圖與兩張細節圖目視通過。
+- 真實連續 18,109 列、真實訊號分段副本 1,403 列、合成連續 602 列及小缺口 800 列；模型與 STFT dB 最大誤差 0，整數時間精確一致。
+- 保留：八通道映射、float32 bandpass、兩組四通道 PyTorch 輸入與 ch1/2/5/6 輸出、鏡射 OLA、完整重採樣尾樣本；不引入 notch／bandstop 或品質 scorer。
+- 專屬測試：`tests/test_eye_open_close_regression.py`、`tests/test_eye_plot_regression.py`；實跑：`tools/validate_eye_stage15.py --out /path/to/new-directory`。
+- 歷史：[起步基準](STAGE15_REPORT_2026-09-09.md)／[CLI／IO 增量](STAGE15_IO_REPORT_2026-09-09.md)。其中 guard 保留、繪圖未完成均為當時狀態。
+- Git：基準與 CLI／IO 已提交 `b84029e`；繪圖／測試／本次驗收工具及證據未提交，未 push。
 
 <a id="stage-16"></a>
 ## 16：Jenqwei 分析 — 待盤點

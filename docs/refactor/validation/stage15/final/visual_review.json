@@ -1,0 +1,60 @@
+{
+  "scope": "stage15_final_acceptance",
+  "stage15_complete": true,
+  "review_method": "Direct visual inspection of six production PNGs and two supplementary detail views; numerical/render-object tests independently verify mapping and clipping.",
+  "figures": [
+    {
+      "path": "figures/2026-07-03-lilia-eye-open-close_tinyv4_before_after_ch5_6.png",
+      "generated_sha256": "ca0b61c4fe1ee5bc55bc78da928ef3e0be1d2da46dd6b002855b43cfbad68800",
+      "result": "passed",
+      "notes": "Ch5/6 labels and before/after mapping consistent with numerical channel checks; elapsed 0–90.544 s."
+    },
+    {
+      "path": "figures/2026-07-03-lilia-eye-open-close_tinyv4_output_ch1_2_time_stft.png",
+      "generated_sha256": "da0e80b4f432c99d493d693c61e259729f88cd47779af9ed138e12252b361293",
+      "result": "passed",
+      "notes": "Continuous TD/STFT visible, aligned elapsed axes; no clipping or layout defects."
+    },
+    {
+      "path": "figures/segmented_source_tinyv4_before_after_ch5_6.png",
+      "generated_sha256": "a21481b8c87ba314f93a041a1c0862a603346fa5bb74943dd8327d28faf2ea35",
+      "result": "passed",
+      "notes": "Two retained source spans at 10–13.006 and 20–24.002 s; gaps blank, excluded tail hatched; Ch5/6 titles correct."
+    },
+    {
+      "path": "figures/segmented_source_tinyv4_output_ch1_2_time_stft.png",
+      "generated_sha256": "e48e3c01a7eec8eaa091adffc6ecbfa5cdc1377d24acbd6766bf7ea57497b9d3",
+      "result": "passed",
+      "notes": "TD and STFT source spans align; neither joins the large gaps; short tail visible."
+    },
+    {
+      "path": "figures/synthetic_source_tinyv4_before_after_ch1_2.png",
+      "generated_sha256": "aae220eec86ab7f748f94b450d8bab52f10f18e3b142f151def8ae3446ed8dd8",
+      "result": "passed",
+      "notes": "Nonzero source epoch rendered as 0–3.006 elapsed s; true resampled tail retained; four columns align."
+    },
+    {
+      "path": "figures/small_gap_source_tinyv4_before_after_ch5_6.png",
+      "generated_sha256": "4265e8afefd2e97b9baea3e1f3cdf499c9aa15123a7aba7a31f51bc618d57ca5",
+      "result": "passed",
+      "notes": "Large integer epoch rendered over 0–21.994 s; two retained segments near 10–14 s; excluded tail hatched. Six-ms gap and 20-ms prefix require detail views at overview resolution."
+    },
+    {
+      "path": "figures/small_gap_detail_tinyv4_before_after_ch5_6.png",
+      "generated_sha256": "105635a11e952b9a17f38f64b70d151e82da7e416ab9027c0c0e1446b75ea63a",
+      "result": "passed",
+      "notes": "Supplementary zoom: TD stops before and starts after gap; STFT blank over 11.996–12.002 s. Viewport intersects existing source clip; signal and STFT values unchanged."
+    },
+    {
+      "path": "figures/short_prefix_detail_tinyv4_before_after_ch5_6.png",
+      "generated_sha256": "f459b22717d982a8b48e71bccaf8f6d51fcee5c9986bfa6515cb817b05548c14",
+      "result": "passed",
+      "notes": "Supplementary zoom: excluded prefix hatched over 0–0.020 s, then missing span blank; no signal invented."
+    }
+  ],
+  "limitations": [
+    "Subpixel spans cannot be assessed from full-duration overview alone; source metadata, rendering tests and detail views provide boundary evidence.",
+    "The first supplementary zoom failed layout: source clip boxes extended outside a narrowed viewport. Only the external detail renderer was corrected to intersect the viewport; production full-extent plotting is unchanged. Rejected preview is excluded from acceptance."
+  ],
+  "open_failures": []
+}

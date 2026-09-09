@@ -1,0 +1,9 @@
+{
+  "accepted": false,
+  "scope": "supplementary zoom only",
+  "warning": "constrained_layout not applied because axes sizes collapsed to zero",
+  "impact": "Oversized invalid preview; image viewer could not load short-prefix PNG.",
+  "resolution": "Intersect source clip rectangles with detail viewport in render_details_v2.py.txt; preserve production code and original CLI images.",
+  "original_artifacts": "detail_artifacts.json",
+  "corrected_artifacts": "detail_artifacts_v2.json"
+}

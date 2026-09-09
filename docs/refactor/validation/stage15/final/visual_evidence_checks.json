@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-09T09:22:52.660355+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/2026-07-03-lilia-eye-open-close_tinyv4_before_after_ch5_6.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/2026-07-03-lilia-eye-open-close_tinyv4_output_ch1_2_time_stft.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/segmented_source_tinyv4_before_after_ch5_6.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/segmented_source_tinyv4_output_ch1_2_time_stft.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/synthetic_source_tinyv4_before_after_ch1_2.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/small_gap_source_tinyv4_before_after_ch5_6.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/small_gap_detail_tinyv4_before_after_ch5_6.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/short_prefix_detail_tinyv4_before_after_ch5_6.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/render_details_v2.py.txt",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/2026-07-03-lilia-eye-open-close_tinyv4_before_after_ch5_6.png": "ca0b61c4fe1ee5bc55bc78da928ef3e0be1d2da46dd6b002855b43cfbad68800",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/2026-07-03-lilia-eye-open-close_tinyv4_output_ch1_2_time_stft.png": "da0e80b4f432c99d493d693c61e259729f88cd47779af9ed138e12252b361293",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/segmented_source_tinyv4_before_after_ch5_6.png": "a21481b8c87ba314f93a041a1c0862a603346fa5bb74943dd8327d28faf2ea35",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/segmented_source_tinyv4_output_ch1_2_time_stft.png": "e48e3c01a7eec8eaa091adffc6ecbfa5cdc1377d24acbd6766bf7ea57497b9d3",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/short_prefix_detail_tinyv4_before_after_ch5_6.png": "f459b22717d982a8b48e71bccaf8f6d51fcee5c9986bfa6515cb817b05548c14",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/small_gap_detail_tinyv4_before_after_ch5_6.png": "105635a11e952b9a17f38f64b70d151e82da7e416ab9027c0c0e1446b75ea63a",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/small_gap_source_tinyv4_before_after_ch5_6.png": "4265e8afefd2e97b9baea3e1f3cdf499c9aa15123a7aba7a31f51bc618d57ca5",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/figures/synthetic_source_tinyv4_before_after_ch1_2.png": "aae220eec86ab7f748f94b450d8bab52f10f18e3b142f151def8ae3446ed8dd8",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/render_details_v2.py.txt": "178c0d6ed69becff77c67d942ddcfce5750ba5073b1c66018b16ebe209d21851",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/final/visual_evidence.json": "a923db8c48fd5e6941f316e7a0ee29b4bef340859e1f9952aa839e0496733ef4"
+  },
+  "log": "/tmp/lilia-stage15-acceptance-visual-evidence-v1/evidence.log"
+}

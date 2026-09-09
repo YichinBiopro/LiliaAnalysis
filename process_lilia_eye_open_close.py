@@ -31,7 +31,6 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
-from lilia.windowing import require_continuous
 import numpy as np
 from lilia.io import read_lilia_frame
 from scipy.signal import stft
@@ -64,8 +63,7 @@ STFT_NOVERLAP = 192
 def process_segments(time_us: np.ndarray, data_raw: np.ndarray, *, model=None):
     """Return (timeline, eight-channel input, packed output ch1/2/5/6).
 
-    Stage 15 processing adapter; CLI remains guarded until segmented output and
-    plotting validation is complete. Filtering and inference are independent for
+    Filtering and inference are independent for
     every retained source segment. Short segments are recorded in the timeline;
     non-finite input or any failed model group aborts the entire analysis.
 
@@ -161,146 +159,165 @@ def compute_stft_db(sig: np.ndarray, fs: float, fmax: float) -> tuple[np.ndarray
     return f[mask], t, 20.0 * np.log10(np.abs(zxx[mask]) + 1e-8)
 
 
-def plot_output_channels(time_s: np.ndarray,
-                         data_200: np.ndarray,
-                         outdir: str,
-                         stem: str,
-                         fmax: float,
-                         ch_offset: int,
-                         suffix: str) -> str:
-    out_sig = data_200[:, ch_offset:ch_offset + 2]
+def plot_coordinates(timeline):
+    """Project each source segment onto elapsed time without joining padding.
 
-    stft_panels = [compute_stft_db(out_sig[:, idx], fs=DOWNSAMPLED_FS, fmax=fmax)
-                   for idx in range(2)]
-    vmin = min(panel[2].min() for panel in stft_panels)
-    vmax = max(panel[2].max() for panel in stft_panels)
-
-    fig, axes = plt.subplots(2, 2, figsize=(16, 9), constrained_layout=True)
-    fig.suptitle(
-        f"{stem} - TinyUNetV4 output channels {ch_offset + 1}-{ch_offset + 2}\n"
-        f"Bandpass {BANDPASS_LOW:.1f}-{BANDPASS_HIGH:.1f} Hz, 500 Hz -> {DOWNSAMPLED_FS} Hz",
-        fontsize=12,
-    )
-
-    for row in range(2):
-        sig = out_sig[:, row]
-        f, t, zdb = stft_panels[row]
-
-        ax_td = axes[row, 0]
-        ax_td.plot(time_s, sig, color="#1f77b4", lw=0.7)
-        ax_td.set_title(f"Output Ch{ch_offset + row + 1} - Time Domain")
-        ax_td.set_xlabel("Time (s)")
-        ax_td.set_ylabel("Amplitude")
-        ax_td.grid(True, alpha=0.25)
-
-        ax_stft = axes[row, 1]
-        pcm = ax_stft.pcolormesh(
-            t,
-            f,
-            zdb,
-            shading="gouraud",
-            cmap="inferno",
-            vmin=vmin,
-            vmax=vmax,
-        )
-        ax_stft.set_title(f"Output Ch{ch_offset + row + 1} - STFT (0-{fmax:.0f} Hz)")
-        ax_stft.set_xlabel("Time (s)")
-        ax_stft.set_ylabel("Frequency (Hz)")
-        ax_stft.set_ylim(0, fmax)
-        fig.colorbar(pcm, ax=ax_stft, label="dB", pad=0.01)
-
-    os.makedirs(outdir, exist_ok=True)
-    outpath = os.path.join(outdir, f"{stem}_tinyv4_output_{suffix}_time_stft.png")
-    fig.savefig(outpath, dpi=150, bbox_inches="tight")
-    plt.close(fig)
-    return outpath
+    STFT centers refer to segment-local sample positions. Interpolate timestamps
+    at those positions (including source jitter); extrapolate only padded centers
+    at the nominal sample period. Rendering is clipped to the raw segment end.
+    """
+    hop = STFT_NPERSEG - STFT_NOVERLAP
+    records = []
+    for segment in timeline.segments:
+        if segment['status'] != 'retained':
+            continue
+        a, b = segment['output_start_idx'], segment['output_end_idx']
+        elapsed = (timeline.time_us[a:b] - timeline.source_epoch_us) / 1e6
+        positions = np.arange((b - a + hop - 1) // hop + 1) * hop
+        centers = np.interp(positions, np.arange(b - a), elapsed)
+        beyond = positions > b - a - 1
+        centers[beyond] = elapsed[-1] + (positions[beyond] - (b - a - 1)) / timeline.fs_out
+        records.append({'segment_id': segment['segment_id'], 'output_start_idx': a,
+                        'output_end_idx': b, 'sample_time_s': elapsed,
+                        'stft_sample_positions': positions, 'stft_time_s': centers,
+                        'clip_start_s': (segment['raw_start_us'] - timeline.source_epoch_us) / 1e6,
+                        'clip_end_s': (segment['raw_end_us'] - timeline.source_epoch_us) / 1e6})
+    return records
 
 
-def plot_before_after_channels(time_s: np.ndarray,
-                               before_200: np.ndarray,
-                               after_200: np.ndarray,
-                               outdir: str,
-                               stem: str,
-                               fmax: float,
-                               ch_offset: int,
-                               suffix: str) -> str:
-    before_sig = before_200[:, ch_offset:ch_offset + 2]
-    after_sig = after_200[:, ch_offset:ch_offset + 2]
+def segmented_stft(timeline, values, fmax):
+    values = np.asarray(values)
+    if (values.ndim != 2 or values.shape[0] != len(timeline.time_us)
+            or not values.shape[1] or not np.isfinite(values).all()):
+        raise ValueError('Plot signals must be finite and aligned to the model timeline')
+    panels = []
+    for record in plot_coordinates(timeline):
+        a, b = record['output_start_idx'], record['output_end_idx']
+        channels = []
+        for col in range(values.shape[1]):
+            f, t, db = compute_stft_db(values[a:b, col], timeline.fs_out, fmax)
+            if not np.array_equal(np.rint(t * timeline.fs_out).astype(int), record['stft_sample_positions']):
+                raise ValueError('STFT centers differ from the source segment mapping')
+            channels.append(db)
+        panels.append({**record, 'frequency_hz': f, 'db': np.asarray(channels)})
+    if not panels:
+        raise ValueError('No retained segment to plot')
+    return panels
 
-    before_stft = [compute_stft_db(before_sig[:, idx], fs=DOWNSAMPLED_FS, fmax=fmax)
-                   for idx in range(2)]
-    after_stft = [compute_stft_db(after_sig[:, idx], fs=DOWNSAMPLED_FS, fmax=fmax)
-                  for idx in range(2)]
-    vmin = min(panel[2].min() for panel in before_stft + after_stft)
-    vmax = max(panel[2].max() for panel in before_stft + after_stft)
 
-    fig, axes = plt.subplots(2, 4, figsize=(22, 9), constrained_layout=True)
-    fig.suptitle(
-        f"{stem} - TinyUNetV4 before/after comparison for channels {ch_offset + 1}-{ch_offset + 2}\n"
-        f"Before: bandpass-filtered + downsampled, After: model output, {DOWNSAMPLED_FS} Hz",
-        fontsize=12,
-    )
+def plot_metadata(timeline, fmax):
+    excluded, gaps = [], []
+    for i, segment in enumerate(timeline.segments):
+        lo = (segment['raw_start_us'] - timeline.source_epoch_us) / 1e6
+        hi = (segment['raw_end_us'] - timeline.source_epoch_us) / 1e6
+        if segment['status'] == 'excluded':
+            excluded.append({'segment_id': segment['segment_id'], 'start_s': lo,
+                             'end_s': hi, 'reason': segment['reason']})
+        if i:
+            prev = timeline.segments[i - 1]
+            gaps.append({'start_s': (prev['raw_end_us'] - timeline.source_epoch_us) / 1e6,
+                         'end_s': lo})
+    return {'time_axis': 'elapsed_from_source_epoch', 'source_epoch_us': timeline.source_epoch_us,
+            'xlim_s': [0., (timeline.segments[-1]['raw_end_us'] - timeline.source_epoch_us) / 1e6],
+            'source_channels': [1, 2, 5, 6], 'before_columns': [0, 1, 4, 5],
+            'after_columns': [0, 1, 2, 3], 'excluded_spans': excluded, 'missing_spans': gaps,
+            'stft': {'fs': timeline.fs_out, 'nperseg': STFT_NPERSEG, 'noverlap': STFT_NOVERLAP,
+                     'window': 'hann', 'boundary': 'zeros', 'padded': True, 'fmax': fmax,
+                     'scale': '20*log10(abs(z)+1e-8)', 'display': 'clip_to_source_segment'},
+            'segments': [{k: v.tolist() if isinstance(v, np.ndarray) else v
+                          for k, v in record.items() if k != 'sample_time_s'}
+                         for record in plot_coordinates(timeline)]}
 
-    for row in range(2):
-        f_b, t_b, zdb_b = before_stft[row]
-        f_a, t_a, zdb_a = after_stft[row]
 
-        ax_td_b = axes[row, 0]
-        ax_td_a = axes[row, 1]
-        ax_stft_b = axes[row, 2]
-        ax_stft_a = axes[row, 3]
+def _draw_eye_panels(ax_td, ax_stft, timeline, values, panels, col, channel, label,
+                     color, cmap, vmin, vmax, metadata):
+    from matplotlib.patches import Rectangle
 
-        ax_td_b.plot(time_s, before_sig[:, row], color="#7f7f7f", lw=0.7)
-        ax_td_b.set_title(f"Ch{ch_offset + row + 1} - Before (Time)")
-        ax_td_b.set_xlabel("Time (s)")
-        ax_td_b.set_ylabel("Amplitude")
-        ax_td_b.grid(True, alpha=0.25)
+    for panel in panels:
+        a, b = panel['output_start_idx'], panel['output_end_idx']
+        ax_td.plot(panel['sample_time_s'], values[a:b, col], color=color, lw=.7)
+        pcm = ax_stft.pcolormesh(panel['stft_time_s'], panel['frequency_hz'], panel['db'][col],
+                                shading='gouraud', cmap=cmap, vmin=vmin, vmax=vmax)
+        # Keep the legacy padded STFT values; never paint beyond the source span.
+        clip = Rectangle((panel['clip_start_s'], 0), panel['clip_end_s'] - panel['clip_start_s'],
+                         metadata['stft']['fmax'], transform=ax_stft.transData)
+        pcm.set_clip_path(clip)
+    for ax in (ax_td, ax_stft):
+        for excluded in metadata['excluded_spans']:
+            ax.axvspan(excluded['start_s'], excluded['end_s'], facecolor='.9',
+                       edgecolor='.6', hatch='///', linewidth=.6)
+        for gap in metadata['missing_spans']:
+            for boundary in (gap['start_s'], gap['end_s']):
+                ax.axvline(boundary, color='.65', lw=.6, linestyle=':')
+        ax.set_xlim(metadata['xlim_s'])
+        ax.set_xlabel('Elapsed time (s)')
+    ax_td.set_title(f'Ch{channel} - {label} (Time)')
+    ax_td.set_ylabel('Amplitude')
+    ax_td.grid(True, alpha=.25)
+    ax_stft.set_title(f'Ch{channel} - {label} (STFT)')
+    ax_stft.set_ylabel('Frequency (Hz)')
+    ax_stft.set_ylim(0, metadata['stft']['fmax'])
+    return pcm
 
-        ax_td_a.plot(time_s, after_sig[:, row], color="#d62728", lw=0.7)
-        ax_td_a.set_title(f"Ch{ch_offset + row + 1} - After (Time)")
-        ax_td_a.set_xlabel("Time (s)")
-        ax_td_a.set_ylabel("Amplitude")
-        ax_td_a.grid(True, alpha=0.25)
 
-        pcm_b = ax_stft_b.pcolormesh(
-            t_b,
-            f_b,
-            zdb_b,
-            shading="gouraud",
-            cmap="Blues",
-            vmin=vmin,
-            vmax=vmax,
-        )
-        ax_stft_b.set_title(f"Ch{ch_offset + row + 1} - Before (STFT 0-{fmax:.0f} Hz)")
-        ax_stft_b.set_xlabel("Time (s)")
-        ax_stft_b.set_ylabel("Frequency (Hz)")
-        ax_stft_b.set_ylim(0, fmax)
-        fig.colorbar(pcm_b, ax=ax_stft_b, label="dB", pad=0.01)
+def _plot_eye_channels(timeline, before, after, outdir, stem, fmax, ch_offset, suffix):
+    if ch_offset not in (0, 2):
+        raise ValueError('Eye plot output offset must be 0 or 2')
+    source_channels = [1, 2, 5, 6][ch_offset:ch_offset + 2]
+    after = np.asarray(after)
+    if after.shape != (len(timeline.time_us), 4):
+        raise ValueError('Eye plot needs packed output channels 1/2/5/6')
+    output = after[:, ch_offset:ch_offset + 2]
+    branches = [('Output', output, '#1f77b4', 'inferno')]
+    if before is not None:
+        before = np.asarray(before)
+        if before.shape != (len(timeline.time_us), 8):
+            raise ValueError('Eye comparison needs eight source input channels')
+        branches = [('Before', before[:, np.asarray(source_channels) - 1], '#7f7f7f', 'Blues'),
+                    ('After', output, '#d62728', 'Reds')]
+    panels = [segmented_stft(timeline, branch[1], fmax) for branch in branches]
+    vmin = min(panel['db'].min() for branch in panels for panel in branch)
+    vmax = max(panel['db'].max() for branch in panels for panel in branch)
+    metadata = plot_metadata(timeline, fmax)
+    comparison = before is not None
+    # Dedicated colorbar columns keep all TD/STFT time axes equally wide.
+    ratios = [1, 1, 1, .035, 1, .035] if comparison else [1, 1, .035]
+    fig = plt.figure(figsize=(23 if comparison else 16, 9), constrained_layout=True)
+    grid = fig.add_gridspec(2, len(ratios), width_ratios=ratios)
+    count = len(panels[0])
+    fig.suptitle(f'{stem} - TinyUNetV4 {"before/after" if comparison else "output"} '
+                 f'channels {source_channels[0]}-{source_channels[1]}\n'
+                 f'Bandpass {BANDPASS_LOW:.1f}-{BANDPASS_HIGH:.1f} Hz, '
+                 f'{FS} Hz -> {DOWNSAMPLED_FS} Hz; {count} retained segments; '
+                 'gaps blank, excluded short segments hatched', fontsize=12)
+    try:
+        for row, channel in enumerate(source_channels):
+            for branch_idx, (label, values, color, cmap) in enumerate(branches):
+                td_col, stft_col, bar_col = ((branch_idx, 2 + 2 * branch_idx, 3 + 2 * branch_idx)
+                                            if comparison else (0, 1, 2))
+                ax_td, ax_stft = fig.add_subplot(grid[row, td_col]), fig.add_subplot(grid[row, stft_col])
+                pcm = _draw_eye_panels(ax_td, ax_stft, timeline, values, panels[branch_idx], row,
+                                       channel, label, color, cmap, vmin, vmax, metadata)
+                fig.colorbar(pcm, cax=fig.add_subplot(grid[row, bar_col]), label='dB')
+        os.makedirs(outdir, exist_ok=True)
+        name = f'{stem}_tinyv4_before_after_{suffix}.png' if comparison else f'{stem}_tinyv4_output_{suffix}_time_stft.png'
+        path = os.path.join(outdir, name)
+        fig.savefig(path, dpi=150, bbox_inches='tight')
+    finally:
+        plt.close(fig)
+    return path
 
-        pcm_a = ax_stft_a.pcolormesh(
-            t_a,
-            f_a,
-            zdb_a,
-            shading="gouraud",
-            cmap="Reds",
-            vmin=vmin,
-            vmax=vmax,
-        )
-        ax_stft_a.set_title(f"Ch{ch_offset + row + 1} - After (STFT 0-{fmax:.0f} Hz)")
-        ax_stft_a.set_xlabel("Time (s)")
-        ax_stft_a.set_ylabel("Frequency (Hz)")
-        ax_stft_a.set_ylim(0, fmax)
-        fig.colorbar(pcm_a, ax=ax_stft_a, label="dB", pad=0.01)
 
-    os.makedirs(outdir, exist_ok=True)
-    outpath = os.path.join(outdir, f"{stem}_tinyv4_before_after_{suffix}.png")
-    fig.savefig(outpath, dpi=150, bbox_inches="tight")
-    plt.close(fig)
-    return outpath
+def plot_output_channels(timeline, data_200, outdir, stem, fmax, ch_offset, suffix):
+    return _plot_eye_channels(timeline, None, data_200, outdir, stem, fmax, ch_offset, suffix)
+
+
+def plot_before_after_channels(timeline, before_200, after_200, outdir, stem, fmax, ch_offset, suffix):
+    return _plot_eye_channels(timeline, before_200, after_200, outdir, stem, fmax, ch_offset, suffix)
 
 
 def run_analysis(args) -> dict:
-    """Run the guarded CLI and preserve an audit on success or failure."""
+    """Run the segmented CLI and preserve an audit on success or failure."""
     csv_path = Path(args.csv)
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
@@ -317,8 +334,8 @@ def run_analysis(args) -> dict:
     audit = {'schema_version': 1, 'kind': 'eye_analysis', 'status': 'failed',
              'source_path': str(csv_path.resolve()), 'quality_state': 'disabled',
              'model_path': str(Path(MODEL_PATH).resolve()), 'table_verified': False,
-             'continuity_guard': 'enabled_pending_segmented_plot_validation',
-             'plotting_status': 'legacy_pending_segment_and_ch5_6_mapping_fix',
+             'continuity_guard': 'not_required_segmented_pipeline',
+             'plotting_status': 'not_started',
              'artifacts': [], 'stage': 'preflight'}
 
     def record_artifacts(paths):
@@ -344,8 +361,6 @@ def run_analysis(args) -> dict:
             for channel, count in enumerate(np.count_nonzero(
                 ~np.isfinite(data_raw[segment['raw_start_idx']:segment['raw_end_idx']]), axis=0))
             if count]
-        audit['stage'] = 'continuity_guard'
-        require_continuous(time_us, FS, 'process_lilia_eye_open_close.py')
         audit['stage'] = 'model_provenance'
         parameters = signal_parameters()
         audit['parameters'] = parameters
@@ -365,18 +380,17 @@ def run_analysis(args) -> dict:
         load_signal_table(out_csv, csv_path, model_path=MODEL_PATH)
         audit['table_verified'] = True
         print(f'Saved and verified processed CSV: {out_csv}')
-        audit['stage'] = 'legacy_plots'
-        # Plot migration remains a separate stage-15 task; guard above prevents
-        # packed segments being passed to the legacy whole-recording STFT.
-        time_s = timeline.time_us.astype(np.float64) / 1e6
+        audit['stage'] = 'segmented_plots'
+        audit['plot_timeline'] = plot_metadata(timeline, args.fmax)
         for offset, suffix in ((0, 'ch1_2'), (2, 'ch5_6')):
-            record_artifacts([plot_output_channels(time_s, processed, str(outdir), stem,
+            record_artifacts([plot_output_channels(timeline, processed, str(outdir), stem,
                                                    args.fmax, offset, suffix)])
-            record_artifacts([plot_before_after_channels(time_s, before, processed, str(outdir),
+            record_artifacts([plot_before_after_channels(timeline, before, processed, str(outdir),
                                                         stem, args.fmax, offset, suffix)])
         if file_sha256(csv_path) != audit['source_id'] or signal_parameters() != parameters:
             raise ValueError('Eye source or model changed during analysis')
-        audit.update(status='success', stage='complete', output_samples=len(processed))
+        audit.update(status='success', stage='complete', output_samples=len(processed),
+                     plotting_status='complete')
     except Exception as exc:
         audit['error'] = {'type': type(exc).__name__, 'message': str(exc)}
         raise

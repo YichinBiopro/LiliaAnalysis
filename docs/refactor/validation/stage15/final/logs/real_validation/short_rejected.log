@@ -1,0 +1,11 @@
+Saved analysis audit: /tmp/lilia-stage15-acceptance-v1/short_rejected/short_source_analysis_audit.json
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py", line 410, in <module>
+    main()
+  File "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py", line 406, in main
+    run_analysis(parse_args())
+  File "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py", line 373, in run_analysis
+    timeline, before, processed = process_segments(time_us, data_raw)
+  File "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py", line 80, in process_segments
+    raise ValueError('No continuous segment contains a complete model window after resampling')
+ValueError: No continuous segment contains a complete model window after resampling

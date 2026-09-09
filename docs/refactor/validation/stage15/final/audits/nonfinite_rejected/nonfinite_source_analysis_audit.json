@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "kind": "eye_analysis",
+  "status": "failed",
+  "source_path": "/tmp/lilia-stage15-acceptance-v1/nonfinite_source.csv",
+  "quality_state": "disabled",
+  "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.pth",
+  "table_verified": false,
+  "continuity_guard": "not_required_segmented_pipeline",
+  "plotting_status": "not_started",
+  "artifacts": [],
+  "stage": "process_segments",
+  "plot_parameters": {
+    "fmax": 50.0
+  },
+  "source_id": "1283b39bbb35edcf01917fd444a149c604281e94c2eb9b356c99906b1483bca5",
+  "inference": {
+    "source_samples": 1503,
+    "source_epoch_us": 0,
+    "fs_in": 500.0,
+    "fs_out": 200.0,
+    "model_window": 400,
+    "model_hop": 200,
+    "segments": [
+      {
+        "segment_id": 0,
+        "raw_start_idx": 0,
+        "raw_end_idx": 1503,
+        "raw_start_us": 0,
+        "raw_end_us": 3006000,
+        "resampled_samples": 602,
+        "ratio_up": 2,
+        "ratio_down": 5,
+        "status": "retained",
+        "reason": "",
+        "output_start_idx": 0,
+        "output_end_idx": 602
+      }
+    ],
+    "model_windows": [
+      {
+        "segment_id": 0,
+        "input_start_idx": -200,
+        "input_end_idx": 200,
+        "output_start_idx": 0,
+        "output_end_idx": 200
+      },
+      {
+        "segment_id": 0,
+        "input_start_idx": 0,
+        "input_end_idx": 400,
+        "output_start_idx": 0,
+        "output_end_idx": 400
+      },
+      {
+        "segment_id": 0,
+        "input_start_idx": 200,
+        "input_end_idx": 600,
+        "output_start_idx": 200,
+        "output_end_idx": 600
+      },
+      {
+        "segment_id": 0,
+        "input_start_idx": 400,
+        "input_end_idx": 800,
+        "output_start_idx": 400,
+        "output_end_idx": 602
+      }
+    ]
+  },
+  "inference_status": "planned_not_processed",
+  "nonfinite_input": [
+    {
+      "segment_id": 0,
+      "input_channel": 8,
+      "count": 1
+    }
+  ],
+  "parameters": {
+    "index_space": "resampled_model_output",
+    "input_fs": 500,
+    "fs": 200,
+    "model_window": 400,
+    "model_hop": 200,
+    "input_channels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "model_input_groups": [
+      [
+        1,
+        2,
+        3,
+        4
+      ],
+      [
+        5,
+        6,
+        7,
+        8
+      ]
+    ],
+    "output_channels": [
+      1,
+      2,
+      5,
+      6
+    ],
+    "filter_dtype": "float32",
+    "filter_order": 4,
+    "resampling": "scipy.signal.resample_poly default",
+    "short_segments": "exclude_if_resampled_samples_less_than_model_window",
+    "nonfinite_input": "fail_entire_analysis_including_excluded_segments",
+    "model_failure": "fail_entire_analysis",
+    "quality_state": "disabled",
+    "model": {
+      "checkpoint_sha256": "8c863e5ba0a32f1170be321bb7166e6aeede2cbeed93f1521d5dd34412cdebae",
+      "architecture_sha256": "2c313d9f378fa434527aea761b44c2da6ba05ee59908afe90548a63af88ed9a9",
+      "backend": "pytorch",
+      "normalization": "per-window RMS",
+      "padding": "symmetric mirrored edges, hop samples on each side",
+      "overlap_add": "Hann weighted, crop to real resampled samples",
+      "filters": {
+        "bandpass": [
+          0.5,
+          45.0
+        ]
+      }
+    }
+  },
+  "code_sha256": {
+    "process_lilia_eye_open_close.py": "9be0ad198435fd95ced9d0113b5a859d0c09536b8c101a4aad8c3992f892ad69",
+    "lilia/eye_io.py": "ecd284ba3b24d2b4fb510692baccdb5b6e4c97b868bdc64691a3541fc6fc6856",
+    "data_analysis.py": "762ccb415cab158f1d6ea74b7b3a2236a7f4c68dd369bc6457fd5ad85d9b67bc",
+    "lilia/neural.py": "411be327030903392bcc0af5c22d62b3419b7a24b364ac9637289fd8d0ef9898",
+    "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+    "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+    "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c"
+  },
+  "error": {
+    "type": "ValueError",
+    "message": "Eye processing input contains non-finite samples"
+  }
+}

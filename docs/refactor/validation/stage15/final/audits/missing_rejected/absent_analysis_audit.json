@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "kind": "eye_analysis",
+  "status": "failed",
+  "source_path": "/tmp/lilia-stage15-acceptance-v1/absent.csv",
+  "quality_state": "disabled",
+  "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.pth",
+  "table_verified": false,
+  "continuity_guard": "not_required_segmented_pipeline",
+  "plotting_status": "not_started",
+  "artifacts": [],
+  "stage": "load_source",
+  "plot_parameters": {
+    "fmax": 50.0
+  },
+  "error": {
+    "type": "FileNotFoundError",
+    "message": "[Errno 2] No such file or directory: '/tmp/lilia-stage15-acceptance-v1/absent.csv'"
+  }
+}

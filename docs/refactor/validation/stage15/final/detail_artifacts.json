@@ -1,0 +1,22 @@
+[
+  {
+    "path": "/tmp/lilia-stage15-acceptance-v1/details/small_gap_detail_tinyv4_before_after_ch5_6.png",
+    "sha256": "0298c497abd1753d74d9dbb93cd76fe4e98387dd267de8bc950f033a0f01ede2",
+    "xlim_s": [
+      11.975,
+      12.025
+    ]
+  },
+  {
+    "path": "/tmp/lilia-stage15-acceptance-v1/details/short_prefix_detail_tinyv4_before_after_ch5_6.png",
+    "sha256": "4e58a31cdc8be497d37ad7f6080b016d63dac8b1043aa56f83a18d45f23229a5",
+    "xlim_s": [
+      0.0,
+      0.04
+    ]
+  },
+  {
+    "path": "/tmp/lilia-stage15-acceptance-v1/render_details.py",
+    "sha256": "402a52b32a310614bc10b711de3a0ef7b363a56f0d41569f1bda504bf78fc490"
+  }
+]
