@@ -24,4 +24,5 @@
 ## 未解問題與下一步
 
 - 接續[任務 15](TASKS.md#stage-15)：分段 TD／STFT、elapsed 軸、ch5/6 真正來源映射及標題；補分段圖形／CLI 與失敗驗收，完成真實／合成目視及 `--full` 後才解除 guard。
-- 本次實跑成功只代表 guarded CLI／IO 完成，不代表眼開閉整階段或舊圖正確。基準起步歷史另見[原報告](STAGE15_REPORT_2026-09-09.md)。保留所有既有修改；本次未 commit／push，後續 push 由使用者負責。
+- 本次實跑成功只代表 guarded CLI／IO 完成，不代表眼開閉整階段或舊圖正確。基準起步歷史另見[原報告](STAGE15_REPORT_2026-09-09.md)。
+- 提交狀態：第十五階段基準、分段函式、CLI／IO、測試與驗證證據已提交 `b84029e`（`Refactor eye processing with verified signal outputs and failure audits`）。本代理未執行 push；後續推送由使用者負責。最新接手狀態以 [REFACTOR_STATUS.md](../../REFACTOR_STATUS.md) 為準。

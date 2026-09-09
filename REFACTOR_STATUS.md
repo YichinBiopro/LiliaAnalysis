@@ -16,7 +16,7 @@
 - 不同入口的 baseline、品質與 raw／模型索引空間不可混用。
 - 只有完成分段遷移與驗證的路徑才能解除 continuity guard；legacy／抽樣 guard 個別判定。
 - 普通 entropy、MI、TFLite summary、event markers、APP／NUC、Hardy_2、compare_subjects、zoom、TYY、qEEG CLI 已完成，勿重寫。
-- Git：第十四階段已提交 `96fee9d`；第十五階段基準與 CLI／IO 修改納入本次提交，繪圖與完整驗收待續。後續推送由使用者負責，不再代為 push。
+- Git：第十四階段已提交 `96fee9d`；第十五階段基準與 CLI／IO 已提交 `b84029e`，繪圖與完整驗收待續。後續推送由使用者負責，不再代為 push。
 - 眼開閉只做 float32 bandpass，不能混入共用 denoise 的 notch／bandstop；模型輸出依序為來源 ch1/2/5/6。
 - 不覆寫原始錄製、模型或舊圖。bundle 改主版後執行 `python build_bundles.py`，再 `--check`。
 

@@ -22,6 +22,7 @@
 
 - 2026-09-09 起步：[增量報告](STAGE15_REPORT_2026-09-09.md)。已保存完整真實／合成舊模型與 STFT 基準，新增 `process_segments`；36 tests／0 skipped、靜態通過，連續最大誤差 0。尚未接入 main，CLI guard 保留。
 - 2026-09-09 接續：[CLI／IO 增量報告](STAGE15_IO_REPORT_2026-09-09.md)。main 已接分段函式，CSV sidecar／失敗 audit／來源模型索引重讀完成；53 tests／0 skipped、38 項 evidence 及靜態通過，真實 CLI／分段 IO 舊模型最大誤差 0。guard 仍保留；起步報告的「main 未接入」為歷史。
+- 提交：基準、分段函式、CLI／IO 與驗證證據已收錄於 `b84029e`；第十五階段尚未完成。
 - 接續：分段 TD／STFT 與 elapsed 軸，修正 ch5/6 比較圖誤取 before ch3/4 及標題。完成分段 CLI／圖形／目視／全套驗證後才解除 guard。
 
 - 目標：`process_lilia_eye_open_close.py`、必要的共享 signal／neural adapter／IO。
