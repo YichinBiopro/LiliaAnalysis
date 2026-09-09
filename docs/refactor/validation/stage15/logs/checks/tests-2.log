@@ -1,0 +1,15 @@
+test_cli_output_metadata_verifies_inference_axis_not_raw_grid (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_denoise_rejects_disabling_required_filters (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_fractional_rate_jitter_mapping_and_end_cap (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_invalid_time_and_failed_model_output_are_rejected (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_metadata_rejects_mapping_or_rehashed_window_changes (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_overlap_add_identity_preserves_real_edges_and_rejects_short (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_real_model_matches_correct_resampling_old_ola_reference (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_segment_filtering_inference_and_input_fs_are_independent (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_short_segment_preserves_raw_epoch_and_original_id (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_small_gap_survives_resampling_and_grid_restarts_per_segment (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.186s
+
+OK

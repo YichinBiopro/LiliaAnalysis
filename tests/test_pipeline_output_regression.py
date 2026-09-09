@@ -24,11 +24,13 @@ class PipelineOutputTests(unittest.TestCase):
                            for i in range(1000))
             write_recording(raw, rows, offset=0, channels=','.join(['value'] * 8))
             args = argparse.Namespace(csv=str(raw), outdir=str(root), fmax=50)
+            mock_plot = root / 'mock.png'
+            mock_plot.write_bytes(b'test plot artifact')
             with patch.object(eye, 'parse_args', return_value=args), \
                  patch.object(eye, 'load_model', return_value=object()), \
-                 patch.object(eye, 'run_model', side_effect=lambda model, x: x[:, :2]), \
-                 patch.object(eye, 'plot_output_channels', return_value='mock.png'), \
-                 patch.object(eye, 'plot_before_after_channels', return_value='mock.png'), \
+                 patch.object(eye, 'run_model', side_effect=lambda model, x, **kwargs: x[:, :2]), \
+                 patch.object(eye, 'plot_output_channels', return_value=str(mock_plot)), \
+                 patch.object(eye, 'plot_before_after_channels', return_value=str(mock_plot)), \
                  contextlib.redirect_stdout(io.StringIO()):
                 eye.main()
             output = root / 'eye_tinyv4_output.csv'

@@ -18,12 +18,16 @@
 - 收尾：完整檢查＋實跑 evidence manifest＋增量報告；更新短進度至任務 15。
 
 <a id="stage-15"></a>
-## 15：眼開閉 — 待盤點
+## 15：眼開閉 — 進行中（main／IO 已接入，繪圖待續）
+
+- 2026-09-09 起步：[增量報告](STAGE15_REPORT_2026-09-09.md)。已保存完整真實／合成舊模型與 STFT 基準，新增 `process_segments`；36 tests／0 skipped、靜態通過，連續最大誤差 0。尚未接入 main，CLI guard 保留。
+- 2026-09-09 接續：[CLI／IO 增量報告](STAGE15_IO_REPORT_2026-09-09.md)。main 已接分段函式，CSV sidecar／失敗 audit／來源模型索引重讀完成；53 tests／0 skipped、38 項 evidence 及靜態通過，真實 CLI／分段 IO 舊模型最大誤差 0。guard 仍保留；起步報告的「main 未接入」為歷史。
+- 接續：分段 TD／STFT 與 elapsed 軸，修正 ch5/6 比較圖誤取 before ch3/4 及標題。完成分段 CLI／圖形／目視／全套驗證後才解除 guard。
 
 - 目標：`process_lilia_eye_open_close.py`、必要的共享 signal／neural adapter／IO。
 - 保留：現有八通道映射、兩組四通道 PyTorch 輸入、指定輸出通道、濾波／模型／TD／STFT 方法；CSV header 已修，勿重做。
 - 實作：分段濾波與重採樣、模型時間軸／裁尾、原始索引映射；輸出及圖形不跨缺口。
-- 起始測試：`python tools/refactor_check.py check --tests tests/test_neural_timeline_regression.py tests/test_signal_contract_regression.py tests/test_csv_contract_regression.py`
+- 起始測試：`python tools/refactor_check.py check --tests tests/test_eye_open_close_regression.py tests/test_neural_timeline_regression.py tests/test_signal_contract_regression.py tests/test_csv_contract_regression.py tests/test_pipeline_output_regression.py tests/test_refactor_validation.py --input 2026-07-03-lilia-eye-open-close.csv`
 - 完成條件：接手先保存舊連續模型基準；新增入口專屬缺口／短段／污染／失敗測試；真實眼開閉模型對照、輸出重讀及圖形檢查；完整檢查通過才解除 guard。
 
 <a id="stage-16"></a>

@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-09T02:19:55.338614+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-adapter-evidence/real_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-adapter-evidence/real_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_real_continuous_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_real_continuous_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-adapter-evidence/synthetic_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage15-adapter-evidence/synthetic_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_synthetic_continuous_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_synthetic_continuous_reference.json",
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage15-adapter-evidence/real_actual.npz",
+      "expected": "/tmp/lilia-stage15-adapter-evidence/real_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "after_ch1_db": 0.0,
+        "after_ch1_f": 0.0,
+        "after_ch1_t": 0.0,
+        "after_ch2_db": 0.0,
+        "after_ch2_f": 0.0,
+        "after_ch2_t": 0.0,
+        "after_ch5_db": 0.0,
+        "after_ch5_f": 0.0,
+        "after_ch5_t": 0.0,
+        "after_ch6_db": 0.0,
+        "after_ch6_f": 0.0,
+        "after_ch6_t": 0.0,
+        "before": 0.0,
+        "before_ch1_db": 0.0,
+        "before_ch1_f": 0.0,
+        "before_ch1_t": 0.0,
+        "before_ch2_db": 0.0,
+        "before_ch2_f": 0.0,
+        "before_ch2_t": 0.0,
+        "before_ch5_db": 0.0,
+        "before_ch5_f": 0.0,
+        "before_ch5_t": 0.0,
+        "before_ch6_db": 0.0,
+        "before_ch6_f": 0.0,
+        "before_ch6_t": 0.0,
+        "processed": 0.0,
+        "time_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage15-adapter-evidence/synthetic_actual.npz",
+      "expected": "/tmp/lilia-stage15-adapter-evidence/synthetic_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "after_ch1_db": 0.0,
+        "after_ch1_f": 0.0,
+        "after_ch1_t": 0.0,
+        "after_ch2_db": 0.0,
+        "after_ch2_f": 0.0,
+        "after_ch2_t": 0.0,
+        "after_ch5_db": 0.0,
+        "after_ch5_f": 0.0,
+        "after_ch5_t": 0.0,
+        "after_ch6_db": 0.0,
+        "after_ch6_f": 0.0,
+        "after_ch6_t": 0.0,
+        "before": 0.0,
+        "before_ch1_db": 0.0,
+        "before_ch1_f": 0.0,
+        "before_ch1_t": 0.0,
+        "before_ch2_db": 0.0,
+        "before_ch2_f": 0.0,
+        "before_ch2_t": 0.0,
+        "before_ch5_db": 0.0,
+        "before_ch5_f": 0.0,
+        "before_ch5_t": 0.0,
+        "before_ch6_db": 0.0,
+        "before_ch6_f": 0.0,
+        "before_ch6_t": 0.0,
+        "processed": 0.0,
+        "time_us": 0.0
+      },
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/adapter_evidence.json": "e9bf38ddcad1931f9636dffe3918ec96da77355ebcdd880c64db4795b67d2fa3",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_real_continuous_reference.json": "9d4c63606245efeb5810ac7dfba29c8dcd9f78d236089d7231507a480c0f6fbf",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_real_continuous_reference.npz": "95b458498c000231b65ee84bcd5a12410d11b7cdfd064d713ba4d8271d4b8f0b",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_synthetic_continuous_reference.json": "cc1347e14c19adc050dee52350d0b0e83be48ca26a09263199f84bade04b1bb4",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_synthetic_continuous_reference.npz": "0a1ddd8abff370b49619dafdbe598a30e5b6fe1957fc693c60c7dbad15a1ead1",
+    "/tmp/lilia-stage15-adapter-evidence/real_actual.npz": "4dc9817e6c67179dd4fa73da000c6dc2d3c29c650020cf36215b79150f25da70",
+    "/tmp/lilia-stage15-adapter-evidence/real_expected.npz": "4dc9817e6c67179dd4fa73da000c6dc2d3c29c650020cf36215b79150f25da70",
+    "/tmp/lilia-stage15-adapter-evidence/synthetic_actual.npz": "d616f9ebb08c56a77577b1de95805fdd1a46a9fb71e677ea75bdc53a663829de",
+    "/tmp/lilia-stage15-adapter-evidence/synthetic_expected.npz": "d616f9ebb08c56a77577b1de95805fdd1a46a9fb71e677ea75bdc53a663829de"
+  },
+  "log": "/tmp/lilia-stage15-adapter-checks/evidence.log"
+}

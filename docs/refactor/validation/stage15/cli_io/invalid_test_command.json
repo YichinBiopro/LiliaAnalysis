@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-09T02:47:44.402756+00:00",
+  "passed": false,
+  "error": "ValueError: Expected an existing tests/test_*.py: tests/test_refactor_check_regression.py",
+  "log": "/tmp/lilia-refactor-x10oy8nx/error.log"
+}

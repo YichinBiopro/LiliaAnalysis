@@ -1,0 +1,51 @@
+{
+  "legacy_commit": "96fee9d",
+  "legacy_entry_sha256": "b941c85ad6fb342f1c12f40a87e12c5fbf402c6f4083d99e3ae2e93ed59697be",
+  "dependencies": {
+    "data_analysis.py": "762ccb415cab158f1d6ea74b7b3a2236a7f4c68dd369bc6457fd5ad85d9b67bc",
+    "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+    "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+    "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c"
+  },
+  "source_path": null,
+  "source_sha256": null,
+  "seed": 15015,
+  "raw_shape": [
+    1503,
+    8
+  ],
+  "output_shape": [
+    602,
+    4
+  ],
+  "fs_in": 500,
+  "fs_out": 200,
+  "model": {
+    "checkpoint_sha256": "8c863e5ba0a32f1170be321bb7166e6aeede2cbeed93f1521d5dd34412cdebae",
+    "architecture_sha256": "2c313d9f378fa434527aea761b44c2da6ba05ee59908afe90548a63af88ed9a9",
+    "backend": "pytorch",
+    "normalization": "per-window RMS",
+    "padding": "symmetric mirrored edges, hop samples on each side",
+    "overlap_add": "Hann weighted, crop to real resampled samples",
+    "filters": {
+      "bandpass": [
+        0.5,
+        45.0
+      ],
+      "order": 4,
+      "output_dtype": "float32"
+    }
+  },
+  "torch_version": "2.11.0+cu130",
+  "numpy_version": "2.2.6",
+  "scipy_version": "1.15.3",
+  "threads": 1,
+  "npz_sha256": "0a1ddd8abff370b49619dafdbe598a30e5b6fe1957fc693c60c7dbad15a1ead1",
+  "notes": [
+    "Model output is packed as source channels 1,2,5,6.",
+    "Before STFT uses actual source channels 1,2,5,6.",
+    "Old ch5/6 comparison PNG instead plotted before ch3/4; this is a known plotting bug.",
+    "STFT: scipy defaults, Hann 256, overlap 192, 20*log10(abs(z)+1e-8), f<=50.",
+    "All real resampled tail samples retained by existing mirrored overlap-add."
+  ]
+}

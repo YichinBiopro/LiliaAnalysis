@@ -1,0 +1,2 @@
+real: raw=(45272, 8), before=(18109, 8), output=(18109, 4), last_time_us=90540000
+synthetic: raw=(1503, 8), before=(602, 8), output=(602, 4), last_time_us=4239567

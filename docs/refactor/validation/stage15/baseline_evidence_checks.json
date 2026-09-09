@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-09T02:19:55.344295+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_real_continuous_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_real_continuous_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_synthetic_continuous_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_synthetic_continuous_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/baseline_legacy_entry.py.txt",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/baseline_evidence.json": "5800266505cbca6141a9990144287a4d3dcac30de7d74777b35b12a76f70572d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage15/baseline_legacy_entry.py.txt": "b941c85ad6fb342f1c12f40a87e12c5fbf402c6f4083d99e3ae2e93ed59697be",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_real_continuous_reference.json": "9d4c63606245efeb5810ac7dfba29c8dcd9f78d236089d7231507a480c0f6fbf",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_real_continuous_reference.npz": "95b458498c000231b65ee84bcd5a12410d11b7cdfd064d713ba4d8271d4b8f0b",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_synthetic_continuous_reference.json": "cc1347e14c19adc050dee52350d0b0e83be48ca26a09263199f84bade04b1bb4",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/eye_synthetic_continuous_reference.npz": "0a1ddd8abff370b49619dafdbe598a30e5b6fe1957fc693c60c7dbad15a1ead1"
+  },
+  "log": "/tmp/lilia-stage15-baseline-checks/evidence.log"
+}

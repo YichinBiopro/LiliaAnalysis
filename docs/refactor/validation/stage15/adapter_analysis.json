@@ -1,0 +1,804 @@
+{
+  "status": "adapter_validated_cli_migration_pending",
+  "cases": {
+    "real": {
+      "max_absolute_errors": {
+        "time_us": 0.0,
+        "before": 0.0,
+        "processed": 0.0,
+        "before_ch1_f": 0.0,
+        "before_ch1_t": 0.0,
+        "before_ch1_db": 0.0,
+        "after_ch1_f": 0.0,
+        "after_ch1_t": 0.0,
+        "after_ch1_db": 0.0,
+        "before_ch2_f": 0.0,
+        "before_ch2_t": 0.0,
+        "before_ch2_db": 0.0,
+        "after_ch2_f": 0.0,
+        "after_ch2_t": 0.0,
+        "after_ch2_db": 0.0,
+        "before_ch5_f": 0.0,
+        "before_ch5_t": 0.0,
+        "before_ch5_db": 0.0,
+        "after_ch5_f": 0.0,
+        "after_ch5_t": 0.0,
+        "after_ch5_db": 0.0,
+        "before_ch6_f": 0.0,
+        "before_ch6_t": 0.0,
+        "before_ch6_db": 0.0,
+        "after_ch6_f": 0.0,
+        "after_ch6_t": 0.0,
+        "after_ch6_db": 0.0
+      },
+      "input_shape": [
+        45272,
+        8
+      ],
+      "output_shape": [
+        18109,
+        4
+      ],
+      "timeline": {
+        "source_samples": 45272,
+        "source_epoch_us": 0,
+        "fs_in": 500.0,
+        "fs_out": 200.0,
+        "model_window": 400,
+        "model_hop": 200,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 45272,
+            "raw_start_us": 0,
+            "raw_end_us": 90544000,
+            "resampled_samples": 18109,
+            "ratio_up": 2,
+            "ratio_down": 5,
+            "status": "retained",
+            "reason": "",
+            "output_start_idx": 0,
+            "output_end_idx": 18109
+          }
+        ],
+        "model_windows": [
+          {
+            "segment_id": 0,
+            "input_start_idx": -200,
+            "input_end_idx": 200,
+            "output_start_idx": 0,
+            "output_end_idx": 200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 0,
+            "input_end_idx": 400,
+            "output_start_idx": 0,
+            "output_end_idx": 400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 200,
+            "input_end_idx": 600,
+            "output_start_idx": 200,
+            "output_end_idx": 600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 400,
+            "input_end_idx": 800,
+            "output_start_idx": 400,
+            "output_end_idx": 800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 600,
+            "input_end_idx": 1000,
+            "output_start_idx": 600,
+            "output_end_idx": 1000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 800,
+            "input_end_idx": 1200,
+            "output_start_idx": 800,
+            "output_end_idx": 1200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 1000,
+            "input_end_idx": 1400,
+            "output_start_idx": 1000,
+            "output_end_idx": 1400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 1200,
+            "input_end_idx": 1600,
+            "output_start_idx": 1200,
+            "output_end_idx": 1600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 1400,
+            "input_end_idx": 1800,
+            "output_start_idx": 1400,
+            "output_end_idx": 1800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 1600,
+            "input_end_idx": 2000,
+            "output_start_idx": 1600,
+            "output_end_idx": 2000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 1800,
+            "input_end_idx": 2200,
+            "output_start_idx": 1800,
+            "output_end_idx": 2200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 2000,
+            "input_end_idx": 2400,
+            "output_start_idx": 2000,
+            "output_end_idx": 2400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 2200,
+            "input_end_idx": 2600,
+            "output_start_idx": 2200,
+            "output_end_idx": 2600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 2400,
+            "input_end_idx": 2800,
+            "output_start_idx": 2400,
+            "output_end_idx": 2800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 2600,
+            "input_end_idx": 3000,
+            "output_start_idx": 2600,
+            "output_end_idx": 3000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 2800,
+            "input_end_idx": 3200,
+            "output_start_idx": 2800,
+            "output_end_idx": 3200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 3000,
+            "input_end_idx": 3400,
+            "output_start_idx": 3000,
+            "output_end_idx": 3400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 3200,
+            "input_end_idx": 3600,
+            "output_start_idx": 3200,
+            "output_end_idx": 3600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 3400,
+            "input_end_idx": 3800,
+            "output_start_idx": 3400,
+            "output_end_idx": 3800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 3600,
+            "input_end_idx": 4000,
+            "output_start_idx": 3600,
+            "output_end_idx": 4000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 3800,
+            "input_end_idx": 4200,
+            "output_start_idx": 3800,
+            "output_end_idx": 4200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 4000,
+            "input_end_idx": 4400,
+            "output_start_idx": 4000,
+            "output_end_idx": 4400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 4200,
+            "input_end_idx": 4600,
+            "output_start_idx": 4200,
+            "output_end_idx": 4600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 4400,
+            "input_end_idx": 4800,
+            "output_start_idx": 4400,
+            "output_end_idx": 4800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 4600,
+            "input_end_idx": 5000,
+            "output_start_idx": 4600,
+            "output_end_idx": 5000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 4800,
+            "input_end_idx": 5200,
+            "output_start_idx": 4800,
+            "output_end_idx": 5200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 5000,
+            "input_end_idx": 5400,
+            "output_start_idx": 5000,
+            "output_end_idx": 5400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 5200,
+            "input_end_idx": 5600,
+            "output_start_idx": 5200,
+            "output_end_idx": 5600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 5400,
+            "input_end_idx": 5800,
+            "output_start_idx": 5400,
+            "output_end_idx": 5800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 5600,
+            "input_end_idx": 6000,
+            "output_start_idx": 5600,
+            "output_end_idx": 6000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 5800,
+            "input_end_idx": 6200,
+            "output_start_idx": 5800,
+            "output_end_idx": 6200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 6000,
+            "input_end_idx": 6400,
+            "output_start_idx": 6000,
+            "output_end_idx": 6400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 6200,
+            "input_end_idx": 6600,
+            "output_start_idx": 6200,
+            "output_end_idx": 6600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 6400,
+            "input_end_idx": 6800,
+            "output_start_idx": 6400,
+            "output_end_idx": 6800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 6600,
+            "input_end_idx": 7000,
+            "output_start_idx": 6600,
+            "output_end_idx": 7000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 6800,
+            "input_end_idx": 7200,
+            "output_start_idx": 6800,
+            "output_end_idx": 7200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 7000,
+            "input_end_idx": 7400,
+            "output_start_idx": 7000,
+            "output_end_idx": 7400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 7200,
+            "input_end_idx": 7600,
+            "output_start_idx": 7200,
+            "output_end_idx": 7600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 7400,
+            "input_end_idx": 7800,
+            "output_start_idx": 7400,
+            "output_end_idx": 7800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 7600,
+            "input_end_idx": 8000,
+            "output_start_idx": 7600,
+            "output_end_idx": 8000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 7800,
+            "input_end_idx": 8200,
+            "output_start_idx": 7800,
+            "output_end_idx": 8200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 8000,
+            "input_end_idx": 8400,
+            "output_start_idx": 8000,
+            "output_end_idx": 8400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 8200,
+            "input_end_idx": 8600,
+            "output_start_idx": 8200,
+            "output_end_idx": 8600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 8400,
+            "input_end_idx": 8800,
+            "output_start_idx": 8400,
+            "output_end_idx": 8800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 8600,
+            "input_end_idx": 9000,
+            "output_start_idx": 8600,
+            "output_end_idx": 9000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 8800,
+            "input_end_idx": 9200,
+            "output_start_idx": 8800,
+            "output_end_idx": 9200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 9000,
+            "input_end_idx": 9400,
+            "output_start_idx": 9000,
+            "output_end_idx": 9400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 9200,
+            "input_end_idx": 9600,
+            "output_start_idx": 9200,
+            "output_end_idx": 9600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 9400,
+            "input_end_idx": 9800,
+            "output_start_idx": 9400,
+            "output_end_idx": 9800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 9600,
+            "input_end_idx": 10000,
+            "output_start_idx": 9600,
+            "output_end_idx": 10000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 9800,
+            "input_end_idx": 10200,
+            "output_start_idx": 9800,
+            "output_end_idx": 10200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 10000,
+            "input_end_idx": 10400,
+            "output_start_idx": 10000,
+            "output_end_idx": 10400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 10200,
+            "input_end_idx": 10600,
+            "output_start_idx": 10200,
+            "output_end_idx": 10600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 10400,
+            "input_end_idx": 10800,
+            "output_start_idx": 10400,
+            "output_end_idx": 10800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 10600,
+            "input_end_idx": 11000,
+            "output_start_idx": 10600,
+            "output_end_idx": 11000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 10800,
+            "input_end_idx": 11200,
+            "output_start_idx": 10800,
+            "output_end_idx": 11200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 11000,
+            "input_end_idx": 11400,
+            "output_start_idx": 11000,
+            "output_end_idx": 11400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 11200,
+            "input_end_idx": 11600,
+            "output_start_idx": 11200,
+            "output_end_idx": 11600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 11400,
+            "input_end_idx": 11800,
+            "output_start_idx": 11400,
+            "output_end_idx": 11800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 11600,
+            "input_end_idx": 12000,
+            "output_start_idx": 11600,
+            "output_end_idx": 12000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 11800,
+            "input_end_idx": 12200,
+            "output_start_idx": 11800,
+            "output_end_idx": 12200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 12000,
+            "input_end_idx": 12400,
+            "output_start_idx": 12000,
+            "output_end_idx": 12400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 12200,
+            "input_end_idx": 12600,
+            "output_start_idx": 12200,
+            "output_end_idx": 12600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 12400,
+            "input_end_idx": 12800,
+            "output_start_idx": 12400,
+            "output_end_idx": 12800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 12600,
+            "input_end_idx": 13000,
+            "output_start_idx": 12600,
+            "output_end_idx": 13000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 12800,
+            "input_end_idx": 13200,
+            "output_start_idx": 12800,
+            "output_end_idx": 13200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 13000,
+            "input_end_idx": 13400,
+            "output_start_idx": 13000,
+            "output_end_idx": 13400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 13200,
+            "input_end_idx": 13600,
+            "output_start_idx": 13200,
+            "output_end_idx": 13600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 13400,
+            "input_end_idx": 13800,
+            "output_start_idx": 13400,
+            "output_end_idx": 13800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 13600,
+            "input_end_idx": 14000,
+            "output_start_idx": 13600,
+            "output_end_idx": 14000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 13800,
+            "input_end_idx": 14200,
+            "output_start_idx": 13800,
+            "output_end_idx": 14200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 14000,
+            "input_end_idx": 14400,
+            "output_start_idx": 14000,
+            "output_end_idx": 14400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 14200,
+            "input_end_idx": 14600,
+            "output_start_idx": 14200,
+            "output_end_idx": 14600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 14400,
+            "input_end_idx": 14800,
+            "output_start_idx": 14400,
+            "output_end_idx": 14800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 14600,
+            "input_end_idx": 15000,
+            "output_start_idx": 14600,
+            "output_end_idx": 15000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 14800,
+            "input_end_idx": 15200,
+            "output_start_idx": 14800,
+            "output_end_idx": 15200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 15000,
+            "input_end_idx": 15400,
+            "output_start_idx": 15000,
+            "output_end_idx": 15400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 15200,
+            "input_end_idx": 15600,
+            "output_start_idx": 15200,
+            "output_end_idx": 15600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 15400,
+            "input_end_idx": 15800,
+            "output_start_idx": 15400,
+            "output_end_idx": 15800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 15600,
+            "input_end_idx": 16000,
+            "output_start_idx": 15600,
+            "output_end_idx": 16000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 15800,
+            "input_end_idx": 16200,
+            "output_start_idx": 15800,
+            "output_end_idx": 16200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 16000,
+            "input_end_idx": 16400,
+            "output_start_idx": 16000,
+            "output_end_idx": 16400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 16200,
+            "input_end_idx": 16600,
+            "output_start_idx": 16200,
+            "output_end_idx": 16600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 16400,
+            "input_end_idx": 16800,
+            "output_start_idx": 16400,
+            "output_end_idx": 16800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 16600,
+            "input_end_idx": 17000,
+            "output_start_idx": 16600,
+            "output_end_idx": 17000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 16800,
+            "input_end_idx": 17200,
+            "output_start_idx": 16800,
+            "output_end_idx": 17200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 17000,
+            "input_end_idx": 17400,
+            "output_start_idx": 17000,
+            "output_end_idx": 17400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 17200,
+            "input_end_idx": 17600,
+            "output_start_idx": 17200,
+            "output_end_idx": 17600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 17400,
+            "input_end_idx": 17800,
+            "output_start_idx": 17400,
+            "output_end_idx": 17800
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 17600,
+            "input_end_idx": 18000,
+            "output_start_idx": 17600,
+            "output_end_idx": 18000
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 17800,
+            "input_end_idx": 18200,
+            "output_start_idx": 17800,
+            "output_end_idx": 18109
+          }
+        ]
+      },
+      "last_time_us": 90540000
+    },
+    "synthetic": {
+      "max_absolute_errors": {
+        "time_us": 0.0,
+        "before": 0.0,
+        "processed": 0.0,
+        "before_ch1_f": 0.0,
+        "before_ch1_t": 0.0,
+        "before_ch1_db": 0.0,
+        "after_ch1_f": 0.0,
+        "after_ch1_t": 0.0,
+        "after_ch1_db": 0.0,
+        "before_ch2_f": 0.0,
+        "before_ch2_t": 0.0,
+        "before_ch2_db": 0.0,
+        "after_ch2_f": 0.0,
+        "after_ch2_t": 0.0,
+        "after_ch2_db": 0.0,
+        "before_ch5_f": 0.0,
+        "before_ch5_t": 0.0,
+        "before_ch5_db": 0.0,
+        "after_ch5_f": 0.0,
+        "after_ch5_t": 0.0,
+        "after_ch5_db": 0.0,
+        "before_ch6_f": 0.0,
+        "before_ch6_t": 0.0,
+        "before_ch6_db": 0.0,
+        "after_ch6_f": 0.0,
+        "after_ch6_t": 0.0,
+        "after_ch6_db": 0.0
+      },
+      "input_shape": [
+        1503,
+        8
+      ],
+      "output_shape": [
+        602,
+        4
+      ],
+      "timeline": {
+        "source_samples": 1503,
+        "source_epoch_us": 1234567,
+        "fs_in": 500.0,
+        "fs_out": 200.0,
+        "model_window": 400,
+        "model_hop": 200,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 1503,
+            "raw_start_us": 1234567,
+            "raw_end_us": 4240567,
+            "resampled_samples": 602,
+            "ratio_up": 2,
+            "ratio_down": 5,
+            "status": "retained",
+            "reason": "",
+            "output_start_idx": 0,
+            "output_end_idx": 602
+          }
+        ],
+        "model_windows": [
+          {
+            "segment_id": 0,
+            "input_start_idx": -200,
+            "input_end_idx": 200,
+            "output_start_idx": 0,
+            "output_end_idx": 200
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 0,
+            "input_end_idx": 400,
+            "output_start_idx": 0,
+            "output_end_idx": 400
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 200,
+            "input_end_idx": 600,
+            "output_start_idx": 200,
+            "output_end_idx": 600
+          },
+          {
+            "segment_id": 0,
+            "input_start_idx": 400,
+            "input_end_idx": 800,
+            "output_start_idx": 400,
+            "output_end_idx": 602
+          }
+        ]
+      },
+      "last_time_us": 4239567
+    }
+  },
+  "rtol": 1e-06,
+  "atol": 1e-06
+}

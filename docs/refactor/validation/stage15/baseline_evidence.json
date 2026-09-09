@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "../../../../tests/fixtures/eye_real_continuous_reference.npz",
+      "sha256": "95b458498c000231b65ee84bcd5a12410d11b7cdfd064d713ba4d8271d4b8f0b"
+    },
+    {
+      "path": "../../../../tests/fixtures/eye_real_continuous_reference.json",
+      "sha256": "9d4c63606245efeb5810ac7dfba29c8dcd9f78d236089d7231507a480c0f6fbf"
+    },
+    {
+      "path": "../../../../tests/fixtures/eye_synthetic_continuous_reference.npz",
+      "sha256": "0a1ddd8abff370b49619dafdbe598a30e5b6fe1957fc693c60c7dbad15a1ead1"
+    },
+    {
+      "path": "../../../../tests/fixtures/eye_synthetic_continuous_reference.json",
+      "sha256": "cc1347e14c19adc050dee52350d0b0e83be48ca26a09263199f84bade04b1bb4"
+    },
+    {
+      "path": "baseline_legacy_entry.py.txt",
+      "sha256": "b941c85ad6fb342f1c12f40a87e12c5fbf402c6f4083d99e3ae2e93ed59697be"
+    }
+  ]
+}

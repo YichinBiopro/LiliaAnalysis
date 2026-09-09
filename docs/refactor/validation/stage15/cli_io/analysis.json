@@ -1,0 +1,159 @@
+{
+  "scope": "stage15_cli_io_increment",
+  "cases": {
+    "real": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py",
+        "--csv",
+        "/home/bps-yichin/lilia_analysis/2026-07-03-lilia-eye-open-close.csv",
+        "--outdir",
+        "/tmp/lilia-stage15-cli-io-v1/real"
+      ],
+      "exit_code": 0,
+      "status": "success",
+      "stage": "complete",
+      "error": null,
+      "rows": 18109,
+      "max_absolute_errors": {
+        "processed": 0.0,
+        "time_us": 0.0
+      },
+      "last_time_us": 90540000,
+      "table_verified": true
+    },
+    "segmented_io": {
+      "rows": 1403,
+      "max_absolute_errors": {
+        "before": 0.0,
+        "processed": 0.0,
+        "time_us": 0.0
+      },
+      "segments": [
+        {
+          "segment_id": 0,
+          "raw_start_idx": 0,
+          "raw_end_idx": 10,
+          "raw_start_us": 1234567,
+          "raw_end_us": 1254567,
+          "resampled_samples": 4,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "excluded",
+          "reason": "shorter_than_model_window"
+        },
+        {
+          "segment_id": 1,
+          "raw_start_idx": 10,
+          "raw_end_idx": 1513,
+          "raw_start_us": 11234567,
+          "raw_end_us": 14240567,
+          "resampled_samples": 602,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "retained",
+          "reason": "",
+          "output_start_idx": 0,
+          "output_end_idx": 602
+        },
+        {
+          "segment_id": 2,
+          "raw_start_idx": 1513,
+          "raw_end_idx": 3514,
+          "raw_start_us": 21234567,
+          "raw_end_us": 25236567,
+          "resampled_samples": 801,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "retained",
+          "reason": "",
+          "output_start_idx": 602,
+          "output_end_idx": 1403
+        },
+        {
+          "segment_id": 3,
+          "raw_start_idx": 3514,
+          "raw_end_idx": 4511,
+          "raw_start_us": 31234567,
+          "raw_end_us": 33228567,
+          "resampled_samples": 399,
+          "ratio_up": 2,
+          "ratio_down": 5,
+          "status": "excluded",
+          "reason": "shorter_than_model_window"
+        }
+      ],
+      "last_time_us": 25234567
+    },
+    "gap_rejected": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py",
+        "--csv",
+        "/tmp/lilia-stage15-cli-io-v1/segmented_source.csv",
+        "--outdir",
+        "/tmp/lilia-stage15-cli-io-v1/gap_rejected"
+      ],
+      "exit_code": 1,
+      "status": "failed",
+      "stage": "continuity_guard",
+      "error": {
+        "type": "ValueError",
+        "message": "process_lilia_eye_open_close.py requires a continuous recording; split at timestamp gaps first"
+      }
+    },
+    "short_rejected": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py",
+        "--csv",
+        "/tmp/lilia-stage15-cli-io-v1/short_source.csv",
+        "--outdir",
+        "/tmp/lilia-stage15-cli-io-v1/short_rejected"
+      ],
+      "exit_code": 1,
+      "status": "failed",
+      "stage": "process_segments",
+      "error": {
+        "type": "ValueError",
+        "message": "No continuous segment contains a complete model window after resampling"
+      }
+    },
+    "nonfinite_rejected": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py",
+        "--csv",
+        "/tmp/lilia-stage15-cli-io-v1/nonfinite_source.csv",
+        "--outdir",
+        "/tmp/lilia-stage15-cli-io-v1/nonfinite_rejected"
+      ],
+      "exit_code": 1,
+      "status": "failed",
+      "stage": "process_segments",
+      "error": {
+        "type": "ValueError",
+        "message": "Eye processing input contains non-finite samples"
+      }
+    },
+    "missing_rejected": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py",
+        "--csv",
+        "/tmp/lilia-stage15-cli-io-v1/absent.csv",
+        "--outdir",
+        "/tmp/lilia-stage15-cli-io-v1/missing_rejected"
+      ],
+      "exit_code": 1,
+      "status": "failed",
+      "stage": "load_source",
+      "error": {
+        "type": "FileNotFoundError",
+        "message": "[Errno 2] No such file or directory: '/tmp/lilia-stage15-cli-io-v1/absent.csv'"
+      }
+    }
+  },
+  "segmented_cli_guard": "retained",
+  "plot_migration": "pending"
+}

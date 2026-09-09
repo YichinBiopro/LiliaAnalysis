@@ -1,0 +1,11 @@
+Saved analysis audit: /tmp/lilia-stage15-cli-io-v1/missing_rejected/absent_analysis_audit.json
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py", line 396, in <module>
+    main()
+  File "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py", line 392, in main
+    run_analysis(parse_args())
+  File "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py", line 335, in run_analysis
+    audit['source_id'] = file_sha256(csv_path)
+  File "/home/bps-yichin/lilia_analysis/lilia/provenance.py", line 11, in file_sha256
+    with open(path, 'rb') as handle:
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/lilia-stage15-cli-io-v1/absent.csv'

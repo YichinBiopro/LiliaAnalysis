@@ -1,0 +1,11 @@
+test_custom_output_rerun_is_idempotent_and_preserves_collisions (test_csv_contract_regression.CSVContractTests) ... ok
+test_extra_columns_never_shift_time_and_channels (test_csv_contract_regression.CSVContractTests) ... ok
+test_invalid_and_empty_time_are_explicit (test_csv_contract_regression.CSVContractTests) ... ok
+test_schema_failure_does_not_overwrite_existing_output (test_csv_contract_regression.CSVContractTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.015s
+
+OK
+  → /tmp/tmp4zx1707e/custom.csv  (2 files, 3 rows, 0.0 s)
+  → /tmp/tmp4zx1707e/custom.csv  (2 files, 3 rows, 0.0 s)

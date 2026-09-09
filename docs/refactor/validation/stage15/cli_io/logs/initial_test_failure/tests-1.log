@@ -1,0 +1,30 @@
+test_gapped_table_roundtrip_keeps_short_segments_epoch_and_all_sample_maps (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_main_collision_preserves_previous_artifacts_and_audit (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_main_failure_audits_preserve_guard_short_nonfinite_and_model_context (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_main_uses_adapter_exact_timestamps_and_verifies_outputs (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_metadata_tampering_rejected_even_with_valid_table_hash (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_source_model_and_signal_hash_mismatch_rejected (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_table_timestamp_header_width_and_nonfinite_tampering_rejected (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_writer_preserves_existing_table_and_rejects_nonfinite (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_all_short_fails_before_loading_model (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_bad_channel_shape_and_timestamps_fail (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_failed_second_group_reports_segment_and_never_returns_partial_output (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_group_mapping_and_gap_processing_equal_independent_segments (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_minimum_model_length_and_small_raw_gap_are_explicit (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_nonfinite_even_in_short_segments_fails_before_inference (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_real_and_synthetic_models_match_frozen_continuous_baseline (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_short_segments_keep_source_id_epoch_and_complete_resampled_tail (test_eye_open_close_regression.EyeProcessingTests) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.504s
+
+OK
+Saved analysis audit: /tmp/tmpbs8_x_40/run/source_analysis_audit_c4d35209a9724065bee1e33bd76a4149.json
+Saved analysis audit: /tmp/tmp6y8tv_x2/gap/source_analysis_audit.json
+Saved analysis audit: /tmp/tmp6y8tv_x2/short/source_analysis_audit.json
+Saved analysis audit: /tmp/tmp6y8tv_x2/nonfinite/source_analysis_audit.json
+Saved analysis audit: /tmp/tmp6y8tv_x2/model/source_analysis_audit.json
+Saved analysis audit: /tmp/tmp6y8tv_x2/missing/source_analysis_audit.json
+Saved analysis audit: /tmp/tmp6y8tv_x2/invalid_fmax/source_analysis_audit.json
+Saved and verified processed CSV: /tmp/tmpfdztr4o7/run/source_tinyv4_output.csv
+Saved analysis audit: /tmp/tmpfdztr4o7/run/source_analysis_audit.json

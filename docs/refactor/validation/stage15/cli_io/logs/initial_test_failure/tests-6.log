@@ -1,0 +1,16 @@
+test_hash_manifest_rejects_tamper_empty_and_unknown_schema (test_refactor_validation.RefactorValidationTests) ... ok
+test_keys_shape_empty_and_tolerance_rejected (test_refactor_validation.RefactorValidationTests) ... ok
+test_large_integer_timestamps_are_exact (test_refactor_validation.RefactorValidationTests) ... ok
+test_nonzero_exit_is_not_a_pass (test_refactor_validation.RefactorValidationTests) ... FAIL failure — /tmp/tmpjz7394rt/failure.log
+ok
+test_numeric_difference_and_nan_policy (test_refactor_validation.RefactorValidationTests) ... ok
+test_snapshot_detects_fixture_model_and_external_input_changes (test_refactor_validation.RefactorValidationTests) ... ok
+test_status_missing_input_returns_unusable_result (test_refactor_validation.RefactorValidationTests) ... ok
+test_unknown_table_kind_cannot_silently_downgrade (test_refactor_validation.RefactorValidationTests) ... ok
+test_zero_test_run_is_not_a_pass (test_refactor_validation.RefactorValidationTests) ... FAIL zero (0 tests, 0 skipped) — /tmp/tmp3uyhj6ot/zero.log
+ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.382s
+
+OK

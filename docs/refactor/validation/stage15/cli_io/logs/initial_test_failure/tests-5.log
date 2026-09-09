@@ -1,0 +1,43 @@
+test_custom_markers_at_200hz_apply_quality_in_aligned_windows (test_pipeline_output_regression.PipelineOutputTests) ... ok
+test_event_selection_preserves_prior_event_baseline_anchor (test_pipeline_output_regression.PipelineOutputTests) ... ok
+test_eye_output_header_matches_resampled_channels_and_time (test_pipeline_output_regression.PipelineOutputTests) ... ERROR
+test_negative_entropy_delta_remains_visible (test_pipeline_output_regression.PipelineOutputTests) ... ok
+
+======================================================================
+ERROR: test_eye_output_header_matches_resampled_channels_and_time (test_pipeline_output_regression.PipelineOutputTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py", line 100, in process_segments
+    predicted = np.asarray(run_model(model, before[:, offset:offset + 4],
+  File "/home/bps/.pyenv/versions/3.10.12/lib/python3.10/unittest/mock.py", line 1114, in __call__
+    return self._mock_call(*args, **kwargs)
+  File "/home/bps/.pyenv/versions/3.10.12/lib/python3.10/unittest/mock.py", line 1118, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+  File "/home/bps/.pyenv/versions/3.10.12/lib/python3.10/unittest/mock.py", line 1179, in _execute_mock_call
+    result = effect(*args, **kwargs)
+TypeError: PipelineOutputTests.test_eye_output_header_matches_resampled_channels_and_time.<locals>.<lambda>() got an unexpected keyword argument 'window'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py", line 106, in process_segments
+    raise ValueError(f'input channels {offset + 1}-{offset + 4}: {exc}') from exc
+ValueError: input channels 1-4: PipelineOutputTests.test_eye_output_header_matches_resampled_channels_and_time.<locals>.<lambda>() got an unexpected keyword argument 'window'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/tests/test_pipeline_output_regression.py", line 33, in test_eye_output_header_matches_resampled_channels_and_time
+    eye.main()
+  File "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py", line 393, in main
+    run_analysis(parse_args())
+  File "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py", line 359, in run_analysis
+    timeline, before, processed = process_segments(time_us, data_raw)
+  File "/home/bps-yichin/lilia_analysis/process_lilia_eye_open_close.py", line 109, in process_segments
+    raise ValueError(f'Eye processing failed in {label}: {exc}') from exc
+ValueError: Eye processing failed in segment 0 raw [0:1000]: input channels 1-4: PipelineOutputTests.test_eye_output_header_matches_resampled_channels_and_time.<locals>.<lambda>() got an unexpected keyword argument 'window'
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.257s
+
+FAILED (errors=1)

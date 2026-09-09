@@ -64,4 +64,6 @@ python tools/refactor_check.py evidence /path/to/manifest.json
 
 NPZ 對照要求相同 keys、非空相同 shape；整數 indices／timestamps 精確比對，浮點依明示 tolerance，NaN 需明確允許且位置一致。缺值相符不代表品質合格；全非有限陣列的最大誤差記 null。工具不生成新基準、不決定方法容許差異、不自動目視圖形，也不以表重讀取代重新計算的數值對照。
 
+第十五階段新增 `eye_model_signal` reader，必須提供 `model_path`；核對保留四行 header 的 CSV、來源／模型／固定設定、完整 inference 與逐列來源映射。reader 不重跑模型，數值對照仍需獨立舊基準；目前眼開閉 CLI guard 保留，分段 IO 通過不代表分段繪圖已完成。
+
 真實資料的生成命令、專屬分析參數及必要的特殊比較仍由任務記錄；共用工具處理機械性核對。完整報告只貼摘要與失敗項目；持久保存重要 JSON／manifest，原始大型產物留指定資料目錄。不要為補證據覆寫正式來源。

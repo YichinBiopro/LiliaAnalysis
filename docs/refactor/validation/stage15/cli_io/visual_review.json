@@ -1,0 +1,18 @@
+{
+  "scope": "CLI/IO increment only; plot migration pending",
+  "stage15_complete": false,
+  "figures": [
+    {
+      "path": "figures/2026-07-03-lilia-eye-open-close_tinyv4_output_ch1_2_time_stft.png",
+      "generated_sha256": "4455aeb129b2b80f84f5a55d31a989fa68fbdbc1c73206967896b6aef0b98174",
+      "result": "limited_continuous_review_passed",
+      "notes": "Visible TD and STFT over approximately 0\u201390.54 seconds; no segmented plotting acceptance claimed."
+    },
+    {
+      "path": "figures/2026-07-03-lilia-eye-open-close_tinyv4_before_after_ch5_6.png",
+      "generated_sha256": "71f10a3c8590b2373256d70e6d7801d9fdb40495ee50f8246286405ab30602ea",
+      "result": "known_failure_pending_plot_task",
+      "notes": "Legacy title still says channels 3\u20134 and before data uses source ch3/4 while after uses source ch5/6. This figure must not be treated as a valid channel comparison."
+    }
+  ]
+}

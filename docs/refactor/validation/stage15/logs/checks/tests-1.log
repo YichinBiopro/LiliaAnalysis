@@ -1,0 +1,13 @@
+test_all_short_fails_before_loading_model (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_bad_channel_shape_and_timestamps_fail (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_failed_second_group_reports_segment_and_never_returns_partial_output (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_group_mapping_and_gap_processing_equal_independent_segments (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_minimum_model_length_and_small_raw_gap_are_explicit (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_nonfinite_even_in_short_segments_fails_before_inference (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_real_and_synthetic_models_match_frozen_continuous_baseline (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_short_segments_keep_source_id_epoch_and_complete_resampled_tail (test_eye_open_close_regression.EyeProcessingTests) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.287s
+
+OK

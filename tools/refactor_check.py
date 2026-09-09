@@ -20,6 +20,7 @@ sys.path.insert(0, str(ROOT))
 SOURCE_DIRS = ('lilia', 'tests', 'tools', 'plot_index_vs_raw_bundle', 'signal_quality_package')
 # Only known readers; a manifest cannot select arbitrary Python code.
 READERS = {
+    'eye_model_signal': ('eye_io', 'load_signal_table', True),
     'raw_qeeg': ('qeeg_io', 'load_qeeg_table', False),
     'band_entropy': ('entropy_io', 'load_entropy_table', False),
     'joint_mi': ('entropy_io', 'load_joint_mi_table', False),

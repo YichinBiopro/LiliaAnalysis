@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/tools/refactor_check.py", line 259, in main
+    report.update(check(args, outdir))
+  File "/home/bps-yichin/lilia_analysis/tools/refactor_check.py", line 114, in check
+    raise ValueError(f'Expected an existing tests/test_*.py: {name}')
+ValueError: Expected an existing tests/test_*.py: tests/test_refactor_check_regression.py
