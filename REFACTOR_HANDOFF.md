@@ -1,6 +1,6 @@
 # Python 修正接手狀態
 
-> **日常接手入口已改為 [REFACTOR_STATUS.md](REFACTOR_STATUS.md)。** 本檔保留第十三階段以前的完整交接與歷史證據，按需查閱，不再逐階段累加。當前任務見 [任務單](docs/refactor/TASKS.md)，執行與驗證見 [精簡流程](docs/refactor/WORKFLOW.md)。
+> **日常接手入口已改為 [REFACTOR_STATUS.md](REFACTOR_STATUS.md)。** 本檔保留第十三階段以前的完整交接與歷史證據，按需查閱，不再逐階段累加。下文「下一步 qEEG」為歷史狀態；第十四階段現已完成，當前任務見 [任務單](docs/refactor/TASKS.md)，執行與驗證見 [精簡流程](docs/refactor/WORKFLOW.md)。
 
 更新日期：2026-09-08。**狀態：第十三階段 plot_tyy_meditation.py 已完成；下一步為 lilia.qeeg／qeeg_indices.py CLI。**
 

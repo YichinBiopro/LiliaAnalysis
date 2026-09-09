@@ -1,0 +1,6 @@
+/home/bps/.pyenv/versions/3.10.12/lib/python3.10/runpy.py:126: RuntimeWarning: 'lilia.qeeg' found in sys.modules after import of package 'lilia', but prior to execution of 'lilia.qeeg'; this may result in unpredictable behaviour
+  warn(RuntimeWarning(msg))
+Error: qEEG needs at least 8 samples per window
+Loading: /tmp/lilia-stage14-review/gapped.csv
+Computing qEEG indices — ch1, win=0.01s, fs=500Hz
+Saved audit: /tmp/lilia-stage14-review/invalid_window/gapped_qeeg_ch1_analysis_audit.json

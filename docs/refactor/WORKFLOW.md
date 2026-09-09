@@ -60,7 +60,7 @@ python tools/refactor_check.py status /tmp/lilia-refactor-XXXX/summary.json
 python tools/refactor_check.py evidence /path/to/manifest.json
 ```
 
-`files` 的預期 hash 必須取自先前產生時的 audit／固定基準；不要驗證時重新算一份相同 hash 冒充舊證據。可列 PNG、SVG、CSV、sidecar、audit、來源、模型及已記錄的程式檔。表格使用 `tools/refactor_check.py` 的 `READERS` 白名單呼叫既有來源驗證 loader；zoom 自動依 scope 使用專屬 reader，模型表必須提供模型。新 qEEG schema 在第十四階段實作後加入 reader，現在不猜測契約。APP／NUC 專屬配對等未列支援的 kind 仍由原專屬測試驗證，不降級成僅 pandas 讀取。
+`files` 的預期 hash 必須取自先前產生時的 audit／固定基準；不要驗證時重新算一份相同 hash 冒充舊證據。可列 PNG、SVG、CSV、sidecar、audit、來源、模型及已記錄的程式檔。表格使用 `tools/refactor_check.py` 的 `READERS` 白名單呼叫既有來源驗證 loader；zoom 自動依 scope 使用專屬 reader，模型表必須提供模型。第十四階段新增 `raw_qeeg` reader，重建原始格點並核對 channel、完整 audit 與重算數值。APP／NUC 專屬配對等未列支援的 kind 仍由原專屬測試驗證，不降級成僅 pandas 讀取。
 
 NPZ 對照要求相同 keys、非空相同 shape；整數 indices／timestamps 精確比對，浮點依明示 tolerance，NaN 需明確允許且位置一致。缺值相符不代表品質合格；全非有限陣列的最大誤差記 null。工具不生成新基準、不決定方法容許差異、不自動目視圖形，也不以表重讀取代重新計算的數值對照。
 

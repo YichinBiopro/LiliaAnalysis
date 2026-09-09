@@ -1,0 +1,27 @@
+{
+  "date": "2026-09-08",
+  "method": "Direct image inspection after final legend/text fix; copied image hashes checked against generation audit.",
+  "images": [
+    {
+      "case": "hardy_main",
+      "path": "figures/hardy_main.png",
+      "sha256": "af28b0904cf8f7b87e8eab77336d7ab8992b33fa778be2a1342430bce6fe166a",
+      "result": "passed",
+      "notes": "Both panels retain the long recording gap; legends outside axes do not cover data."
+    },
+    {
+      "case": "gapped_main",
+      "path": "figures/gapped_main.png",
+      "sha256": "6565a52e46e64bd55d1d52bc10fa61620b603dc45dddb8b97c5674790b800163",
+      "result": "passed",
+      "notes": "Three isolated finite windows are visible; missing window and segment gaps have no connecting lines."
+    },
+    {
+      "case": "all_excluded",
+      "path": "figures/all_excluded.png",
+      "sha256": "470a1e0fa24aef6ec35f10279ddfb614265a08ead51a0eceefaae5c36c90b152",
+      "result": "passed",
+      "notes": "Both panels label absent finite values; white text background prevents zero-line overlap."
+    }
+  ]
+}

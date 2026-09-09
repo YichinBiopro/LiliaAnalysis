@@ -1,0 +1,6 @@
+/home/bps/.pyenv/versions/3.10.12/lib/python3.10/runpy.py:126: RuntimeWarning: 'lilia.qeeg' found in sys.modules after import of package 'lilia', but prior to execution of 'lilia.qeeg'; this may result in unpredictable behaviour
+  warn(RuntimeWarning(msg))
+Error: channel 3 not found (file has 2 channels)
+Loading: /tmp/lilia-stage14-review/gapped.csv
+Computing qEEG indices — ch3, win=5.0s, fs=500Hz
+Saved audit: /tmp/lilia-stage14-review/wrong_channel/gapped_qeeg_ch3_analysis_audit.json

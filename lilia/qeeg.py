@@ -13,6 +13,8 @@ The CSV is expected to share the same format as the lilia_analysis pipeline
 """
 
 import argparse
+import json
+from pathlib import Path
 import os
 import sys
 
@@ -20,7 +22,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import signal
 from lilia.io import read_lilia_frame
-from lilia.windowing import require_continuous
+from lilia.windowing import plot_breaks
 
 # ── Constants ──────────────────────────────────────────────────────────────────
 EPSILON    = 1e-9
@@ -195,13 +197,20 @@ def compute_qeeg_indices_windowed(data_col, fs=DEFAULT_FS,
 
 # ── Plotting ───────────────────────────────────────────────────────────────────
 
-def plot_qeeg_indices(indices, title, outpath, t_offset=0.0, marker=None):
+def plot_qeeg_indices(indices, title, outpath, t_offset=0.0, marker=None,
+                      segment_ids=None, time_label="Time (s)", time_limits=None):
     """
     Two-panel figure:
       top    — relative θ / α / β band powers over time.
       bottom — all four wellness indices over time.
     """
     t = indices['time'] + t_offset
+    if segment_ids is not None:
+        indices = dict(indices)
+        for key in ('theta', 'alpha', 'beta', 'focus', 'flow', 'calm', 'relaxation'):
+            _, indices[key] = plot_breaks(t, indices[key], segment_ids)
+        t, _ = plot_breaks(t, np.zeros(len(t)), segment_ids)
+        marker = '.' if marker is None else marker
     fig, axes = plt.subplots(2, 1, figsize=(14, 8), sharex=True)
     fig.suptitle(title, fontsize=14, fontweight='bold')
 
@@ -223,7 +232,7 @@ def plot_qeeg_indices(indices, title, outpath, t_offset=0.0, marker=None):
     ax1.axhline(0, color='k', lw=0.8, ls='--', alpha=0.5)
     ax1.set_ylabel('Index')
     ax1.set_title('Wellness Indices (§3.3)')
-    ax1.set_xlabel('Time (s)')
+    ax1.set_xlabel(time_label)
     ax1.legend(loc='upper right', fontsize=9)
     ax1.grid(True, alpha=0.3)
 
@@ -231,6 +240,21 @@ def plot_qeeg_indices(indices, title, outpath, t_offset=0.0, marker=None):
         # A segment with only one metric window still needs a visible point.
         for line in [*ax0.lines, *ax1.lines[:4]]:
             line.set_marker(marker)
+
+    if segment_ids is not None:
+        # Keep isolated points visible even at the upper-right edge.
+        for ax in axes:
+            ax.legend(loc='upper left', bbox_to_anchor=(1.01, 1), fontsize=9)
+
+    if time_limits is not None:
+        ax1.set_xlim(*time_limits)
+    if segment_ids is not None and not any(np.isfinite(indices[key]).any()
+                                           for key in ('focus', 'flow', 'calm', 'relaxation')):
+        for ax in axes:
+            ax.text(.5, .5, 'No finite qEEG windows', transform=ax.transAxes,
+                    ha='center', va='center', color='dimgray',
+                    bbox={'facecolor': 'white', 'edgecolor': 'none', 'pad': 3})
+        ax1.set_ylim(-1.1, 1.1)
 
     fig.tight_layout()
     fig.savefig(outpath, dpi=150)
@@ -241,13 +265,13 @@ def plot_qeeg_indices(indices, title, outpath, t_offset=0.0, marker=None):
 # ── CLI ────────────────────────────────────────────────────────────────────────
 
 def _load_eeg_csv(path, n_header=4):
-    """Load lilia-format CSV; returns (time_s, data[N, n_ch])."""
+    """Load lilia-format CSV; returns (integer time_us, data[N, n_ch])."""
     if n_header != 4:
         raise ValueError('The Lilia CSV reader requires four metadata rows')
     df      = read_lilia_frame(path)
-    time_s  = df.iloc[:, 0].values.astype(float) / 1e6
+    time_us = df.iloc[:, 0].to_numpy(dtype=np.int64)
     data    = df.iloc[:, 1:].values.astype(float)
-    return time_s, data
+    return time_us, data
 
 
 def _parse_args():
@@ -267,34 +291,62 @@ def _parse_args():
 
 
 def main():
-    args   = _parse_args()
-    outdir = args.out or os.path.dirname(os.path.abspath(args.csv))
-    os.makedirs(outdir, exist_ok=True)
+    from lilia.qeeg_raw import analyze_raw_qeeg, INDEX_KEYS
+    from lilia.qeeg_io import write_qeeg_table
+    from lilia.provenance import file_sha256
+    from lilia.entropy_io import config_id
 
-    print(f'Loading: {args.csv}')
-    time_s, data = _load_eeg_csv(args.csv)
-    require_continuous(np.rint(time_s * 1e6).astype(np.int64), args.fs, 'qEEG CLI')
-    ch_idx = args.ch - 1
-    if ch_idx < 0 or ch_idx >= data.shape[1]:
-        sys.exit(f'Error: channel {args.ch} not found '
-                 f'(file has {data.shape[1]} channels).')
-
-    print(f'Computing qEEG indices — ch{args.ch}, win={args.win}s, fs={args.fs}Hz')
-    indices = compute_qeeg_indices_windowed(
-        data[:, ch_idx], fs=args.fs, win_sec=args.win)
-
-    basename = os.path.splitext(os.path.basename(args.csv))[0]
-    outpath  = os.path.join(outdir, f'{basename}_qeeg_ch{args.ch}.png')
-    plot_qeeg_indices(
-        indices,
-        title=f'qEEG Wellness Indices — {os.path.basename(args.csv)} ch{args.ch}',
-        outpath=outpath,
-        t_offset=time_s[0])
-
-    print('\nSummary (mean ± std):')
-    for key in ('focus', 'flow', 'calm', 'relaxation'):
-        v = indices[key]
-        print(f'  {key:12s}: {v.mean():+.3f} ± {v.std():.3f}')
+    args = _parse_args()
+    outdir = Path(args.out or os.path.dirname(os.path.abspath(args.csv)))
+    outdir.mkdir(parents=True, exist_ok=True)
+    stem = f'{Path(args.csv).stem}_qeeg_ch{args.ch}'
+    audit_path = outdir / f'{stem}_analysis_audit.json'
+    audit = {'schema_version': 1, 'kind': 'raw_qeeg', 'status': 'failed',
+             'source_path': str(Path(args.csv).resolve()),
+             'requested': {'fs': str(args.fs), 'win_sec': str(args.win), 'channel': args.ch},
+             'quality_state': 'disabled', 'artifacts': {}}
+    try:
+        print(f'Loading: {args.csv}')
+        audit['source_id'] = file_sha256(args.csv)
+        time_us, data = _load_eeg_csv(args.csv)
+        print(f'Computing qEEG indices — ch{args.ch}, win={args.win}s, fs={args.fs}Hz')
+        result = analyze_raw_qeeg(time_us, data, fs=args.fs, win_sec=args.win, channel=args.ch)
+        audit.update(parameters=result['parameters'], analysis=result['analysis'])
+        audit['config_id'] = config_id(result['parameters'])
+        audit['code_sha256'] = {name: file_sha256(Path(__file__).with_name(name))
+                                for name in ('qeeg.py', 'qeeg_raw.py', 'qeeg_io.py', 'windowing.py',
+                                             'io.py', 'entropy_io.py', 'provenance.py')}
+        grid = result['grid']
+        if grid is not None:
+            table = outdir / f'{stem}.csv'
+            write_qeeg_table(table, args.csv, result, config_id(audit['code_sha256']))
+            for path in (table, Path(str(table) + '.meta.json')):
+                audit['artifacts'][path.name] = file_sha256(path)
+            outpath = outdir / f'{stem}.png'
+            plot_qeeg_indices(
+                {'time': grid.time_s, **result['metrics']},
+                title=f'qEEG Wellness Indices — {Path(args.csv).name} ch{args.ch}',
+                outpath=outpath, segment_ids=grid.columns['segment_id'],
+                time_label='Elapsed time from first source sample (s)',
+                time_limits=(0., (int(time_us[-1]) - int(time_us[0])) / 1e6 + 1 / args.fs))
+            audit['artifacts'][outpath.name] = file_sha256(outpath)
+        if result['analysis']['status'] != 'success':
+            raise ValueError(result['analysis']['status'])
+        print('\nSummary (mean ± std):')
+        for key in INDEX_KEYS:
+            stats = result['analysis']['summary'][key]
+            print(f"  {key:12s}: {stats['mean']:+.3f} ± {stats['std']:.3f}")
+        print(f"Windows: {result['analysis']['finite_windows']} finite / "
+              f"{result['analysis']['candidate_windows']} candidates; quality=disabled")
+        audit['status'] = 'success'
+    except Exception as exc:
+        audit['error'] = f'{type(exc).__name__}: {exc}'
+        print(f'Error: {exc}', file=sys.stderr)
+    finally:
+        audit_path.write_text(json.dumps(audit, indent=2, allow_nan=False) + '\n', encoding='utf-8')
+        print(f'Saved audit: {audit_path}')
+    if audit['status'] != 'success':
+        raise SystemExit(1)
 
 
 if __name__ == '__main__':

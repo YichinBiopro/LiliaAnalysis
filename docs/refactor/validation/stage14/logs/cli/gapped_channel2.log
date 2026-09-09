@@ -1,0 +1,13 @@
+/home/bps/.pyenv/versions/3.10.12/lib/python3.10/runpy.py:126: RuntimeWarning: 'lilia.qeeg' found in sys.modules after import of package 'lilia', but prior to execution of 'lilia.qeeg'; this may result in unpredictable behaviour
+  warn(RuntimeWarning(msg))
+Loading: /tmp/lilia-stage14-review/gapped.csv
+Computing qEEG indices — ch2, win=5.0s, fs=500Hz
+Saved: /tmp/lilia-stage14-review/gapped_channel2/gapped_qeeg_ch2.png
+
+Summary (mean ± std):
+  focus       : +0.482 ± 0.087
+  flow        : -0.626 ± 0.081
+  calm        : -0.589 ± 0.075
+  relaxation  : +0.216 ± 0.104
+Windows: 4 finite / 4 candidates; quality=disabled
+Saved audit: /tmp/lilia-stage14-review/gapped_channel2/gapped_qeeg_ch2_analysis_audit.json

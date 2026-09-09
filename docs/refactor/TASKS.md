@@ -1,18 +1,20 @@
 # 階段任務單
 
-只讀當前卡片。14 已由原交接排定；15–17 將其後入口拆成工作單元，細節於接手時確認。
+只讀當前卡片。14 已完成；當前為 15。15–17 將其後入口拆成工作單元，細節於接手時確認。
 所有任務共用 [WORKFLOW](WORKFLOW.md) 的驗證與收尾規則。方法校準另立任務，勿混入等價搬移。
 
 <a id="stage-14"></a>
-## 14：qEEG CLI — 待開始
+## 14：qEEG CLI — 已完成（2026-09-08）
+
+- 成果：221 tests／0 skipped、完整 Hardy 845 窗口、三入口表相同；表重讀／hash／數值／目視已完成，CLI guard 已解除。[增量報告](STAGE14_REPORT_2026-09-08.md)。
 
 - 目標：`lilia/qeeg.py`、`qeeg_indices.py`、必要的新 IO／測試與生成 bundle。
 - 先讀：上述兩檔、`lilia/windowing.py`；用 `rg` 盤點 `compute_qeeg_indices_windowed` callers。
 - 保留：單一 raw channel 的 theta／alpha／beta 相對功率、四指標、連續窗口中心、summary／PNG；無 BP／TFLite／品質／baseline。無 timestamp 的共用 helper 保留既有語義。
 - 實作：保留整數微秒；WindowGrid 原始索引／segment／真實時間；不跨缺口窗口；短尾、非有限與無合法窗口有 audit。CSV/meta 核對來源／channel／設定／全部窗口。兩面板圖斷線且孤立窗口可見。
 - 完成條件：舊連續數值基準通過；缺口、短段、非有限、錯誤 channel、邊界案例通過；全短／全排除明確失敗；完整有缺口 Hardy 真實分析；主版、相容 CLI 與 bundle 核對；表重讀、產物 hash、目視完成後才解除 guard。
-- 起始測試：`python tools/refactor_check.py check --tests tests/test_signal_contract_regression.py tests/test_time_utils_regression.py tests/test_entropy_windows_regression.py`
-- 新增入口專屬測試後，把其路徑加入此命令。既有測試只是起點，不能單獨宣稱 qEEG 遷移完成。
+- 起始測試：`python tools/refactor_check.py check --tests tests/test_signal_contract_regression.py tests/test_time_utils_regression.py tests/test_entropy_windows_regression.py tests/test_qeeg_cli_regression.py`
+- 已新增入口專屬測試並加入命令；階段完成依據另含真實資料、產物與目視證據。
 - 收尾：完整檢查＋實跑 evidence manifest＋增量報告；更新短進度至任務 15。
 
 <a id="stage-15"></a>

@@ -1,0 +1,1859 @@
+{
+  "cases": {
+    "continuous_0": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/tmp/lilia-stage14/final/continuous.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/continuous_0",
+        "--win",
+        "5.0"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 0,
+      "analysis": {
+        "status": "success",
+        "source_channels": 2,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 30017,
+            "raw_start_us": 1750000000000001,
+            "raw_end_us": 1750000060034001,
+            "gap_before_us": 0,
+            "complete_windows": 12,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 30000,
+            "tail_end_idx": 30017,
+            "tail_samples": 17,
+            "unwindowed_samples": 17,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              0,
+              12
+            ]
+          }
+        ],
+        "excluded_grid_windows": [],
+        "candidate_windows": 12,
+        "finite_windows": 12,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": 0.4845692940718771,
+            "std": 0.14390679110483576
+          },
+          "flow": {
+            "mean": -0.6147047090427679,
+            "std": 0.1290637229560061
+          },
+          "calm": {
+            "mean": -0.577414353528648,
+            "std": 0.11613416254197279
+          },
+          "relaxation": {
+            "mean": 0.13997823769580517,
+            "std": 0.22267082199890942
+          }
+        },
+        "window_status_counts": {
+          "computed": 12
+        },
+        "excluded_window_audit": []
+      },
+      "error": null,
+      "artifacts": {
+        "continuous_qeeg_ch1.csv": "59732f392b01d51af8d2111a495309fb7be4d0236624788a60b1c5ba8a6743f0",
+        "continuous_qeeg_ch1.csv.meta.json": "f4d95910fd826ca46299af4a156823bb9da7c137c69b511855f25e23cd550525",
+        "continuous_qeeg_ch1.png": "b634755ec722ad66f333664496c4af9f9e364f1e98c842ed10c4881a319efe94"
+      }
+    },
+    "continuous_1": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/tmp/lilia-stage14/final/continuous.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/continuous_1",
+        "--win",
+        "1.0019"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 0,
+      "analysis": {
+        "status": "success",
+        "source_channels": 2,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 30017,
+            "raw_start_us": 1750000000000001,
+            "raw_end_us": 1750000060034001,
+            "gap_before_us": 0,
+            "complete_windows": 60,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 30000,
+            "tail_end_idx": 30017,
+            "tail_samples": 17,
+            "unwindowed_samples": 17,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              0,
+              60
+            ]
+          }
+        ],
+        "excluded_grid_windows": [],
+        "candidate_windows": 60,
+        "finite_windows": 60,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": 0.5698472111899557,
+            "std": 0.22941032073263948
+          },
+          "flow": {
+            "mean": -0.6987598542336202,
+            "std": 0.19970874229502783
+          },
+          "calm": {
+            "mean": -0.6545413469081047,
+            "std": 0.17269320002372396
+          },
+          "relaxation": {
+            "mean": -0.05585446055657533,
+            "std": 0.3808876210498022
+          }
+        },
+        "window_status_counts": {
+          "computed": 60
+        },
+        "excluded_window_audit": []
+      },
+      "error": null,
+      "artifacts": {
+        "continuous_qeeg_ch1.csv": "e1b7d02a62764fab054c55e4a420d9d94e7d572b4ca8d1e8430f1b76d79a0f9a",
+        "continuous_qeeg_ch1.csv.meta.json": "0bff046d9c4ea89e981b01ad56ab0a3ceb2c74087bfbcf147e8a5ae865fdee0b",
+        "continuous_qeeg_ch1.png": "a14ea1b47d4cb9687b7fdd7be7f6a725708352a18b2804557ce3bb5a5677f0b4"
+      }
+    },
+    "continuous_2": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/tmp/lilia-stage14/final/continuous.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/continuous_2",
+        "--win",
+        "0.018"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 0,
+      "analysis": {
+        "status": "success",
+        "source_channels": 2,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 30017,
+            "raw_start_us": 1750000000000001,
+            "raw_end_us": 1750000060034001,
+            "gap_before_us": 0,
+            "complete_windows": 3335,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 30015,
+            "tail_end_idx": 30017,
+            "tail_samples": 2,
+            "unwindowed_samples": 2,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              0,
+              3335
+            ]
+          }
+        ],
+        "excluded_grid_windows": [],
+        "candidate_windows": 3335,
+        "finite_windows": 3335,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "flow": {
+            "mean": -1.0599999916666667,
+            "std": 0.0
+          },
+          "calm": {
+            "mean": 0.0,
+            "std": 0.0
+          },
+          "relaxation": {
+            "mean": 0.0,
+            "std": 0.0
+          }
+        },
+        "window_status_counts": {
+          "computed": 3335
+        },
+        "excluded_window_audit": []
+      },
+      "error": null,
+      "artifacts": {
+        "continuous_qeeg_ch1.csv": "2af9aebd80ad9ae40f165278ab53121b7749b052cb8b257debc1a0141c2329d9",
+        "continuous_qeeg_ch1.csv.meta.json": "9154603105725b16f42e19b2074e55cc313aef526ab780220a2542d03b8b423b",
+        "continuous_qeeg_ch1.png": "77b38b5ba878ab8dfde9f62e6a3af57cfb17308a0ca963a6d3e403b964e1de3c"
+      }
+    },
+    "real_continuous": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/tmp/lilia-stage14/final/real_continuous.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/real_continuous"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 0,
+      "analysis": {
+        "status": "success",
+        "source_channels": 4,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 30017,
+            "raw_start_us": 1778566248498593,
+            "raw_end_us": 1778566308532593,
+            "gap_before_us": 0,
+            "complete_windows": 12,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 30000,
+            "tail_end_idx": 30017,
+            "tail_samples": 17,
+            "unwindowed_samples": 17,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              0,
+              12
+            ]
+          }
+        ],
+        "excluded_grid_windows": [],
+        "candidate_windows": 12,
+        "finite_windows": 12,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": -0.3579495103953893,
+            "std": 0.3774350846897752
+          },
+          "flow": {
+            "mean": 0.060359951556482085,
+            "std": 0.28035873602940503
+          },
+          "calm": {
+            "mean": -0.042137864080772545,
+            "std": 0.22308656429070187
+          },
+          "relaxation": {
+            "mean": 0.565274059325201,
+            "std": 0.33397119823141147
+          }
+        },
+        "window_status_counts": {
+          "computed": 12
+        },
+        "excluded_window_audit": []
+      },
+      "error": null,
+      "artifacts": {
+        "real_continuous_qeeg_ch1.csv": "ccd8de581d2f68a3072129c2d9361253edfba41d059021b08332c21a4078371a",
+        "real_continuous_qeeg_ch1.csv.meta.json": "fd46058378e10f7cc1b9dde71f00f6a24db84b86a0695face6c97b6e5541e1ec",
+        "real_continuous_qeeg_ch1.png": "344998ce29ce29c2426be432f36b5fa16c2b4385c7bf41893d626377c3f91d22"
+      }
+    },
+    "hardy_main": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/home/bps-yichin/lilia_analysis/iBrainCenter/Hardy(SN036)/merged.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/hardy_main"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 0,
+      "analysis": {
+        "status": "success",
+        "source_channels": 4,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 1079424,
+            "raw_start_us": 1778566248498593,
+            "raw_end_us": 1778568407346593,
+            "gap_before_us": 0,
+            "complete_windows": 431,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 1077500,
+            "tail_end_idx": 1079424,
+            "tail_samples": 1924,
+            "unwindowed_samples": 1924,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              0,
+              431
+            ]
+          },
+          {
+            "segment_id": 1,
+            "raw_start_idx": 1079424,
+            "raw_end_idx": 1109424,
+            "raw_start_us": 1778568463346593,
+            "raw_end_us": 1778568523346593,
+            "gap_before_us": 56000000,
+            "complete_windows": 11,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 1079424,
+            "excluded_prefix_end_idx": 1080000,
+            "tail_start_idx": 1107500,
+            "tail_end_idx": 1109424,
+            "tail_samples": 1924,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              431,
+              442
+            ]
+          },
+          {
+            "segment_id": 2,
+            "raw_start_idx": 1109424,
+            "raw_end_idx": 1169408,
+            "raw_start_us": 1778568547538593,
+            "raw_end_us": 1778568667506593,
+            "gap_before_us": 24192000,
+            "complete_windows": 23,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 1109424,
+            "excluded_prefix_end_idx": 1110000,
+            "tail_start_idx": 1167500,
+            "tail_end_idx": 1169408,
+            "tail_samples": 1908,
+            "unwindowed_samples": 2484,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              442,
+              465
+            ]
+          },
+          {
+            "segment_id": 3,
+            "raw_start_idx": 1169408,
+            "raw_end_idx": 1946712,
+            "raw_start_us": 1778568686642593,
+            "raw_end_us": 1778570241250593,
+            "gap_before_us": 19136000,
+            "complete_windows": 310,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 1169408,
+            "excluded_prefix_end_idx": 1170000,
+            "tail_start_idx": 1945000,
+            "tail_end_idx": 1946712,
+            "tail_samples": 1712,
+            "unwindowed_samples": 2304,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              465,
+              775
+            ]
+          },
+          {
+            "segment_id": 4,
+            "raw_start_idx": 1946712,
+            "raw_end_idx": 2006712,
+            "raw_start_us": 1778570651003144,
+            "raw_end_us": 1778570771003144,
+            "gap_before_us": 409752551,
+            "complete_windows": 23,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 1946712,
+            "excluded_prefix_end_idx": 1947500,
+            "tail_start_idx": 2005000,
+            "tail_end_idx": 2006712,
+            "tail_samples": 1712,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              775,
+              798
+            ]
+          },
+          {
+            "segment_id": 5,
+            "raw_start_idx": 2006712,
+            "raw_end_idx": 2126712,
+            "raw_start_us": 1778570802843144,
+            "raw_end_us": 1778571042843144,
+            "gap_before_us": 31840000,
+            "complete_windows": 47,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 2006712,
+            "excluded_prefix_end_idx": 2007500,
+            "tail_start_idx": 2125000,
+            "tail_end_idx": 2126712,
+            "tail_samples": 1712,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              798,
+              845
+            ]
+          }
+        ],
+        "excluded_grid_windows": [
+          {
+            "window_start_idx": 1077500,
+            "window_end_idx": 1080000,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 1107500,
+            "window_end_idx": 1110000,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 1167500,
+            "window_end_idx": 1170000,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 1945000,
+            "window_end_idx": 1947500,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 2005000,
+            "window_end_idx": 2007500,
+            "status": "crosses_gap"
+          }
+        ],
+        "candidate_windows": 845,
+        "finite_windows": 845,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": -0.176485069276809,
+            "std": 0.4572637558037464
+          },
+          "flow": {
+            "mean": -0.08393290125257949,
+            "std": 0.36083042363666
+          },
+          "calm": {
+            "mean": -0.14452205614395702,
+            "std": 0.3193718370997245
+          },
+          "relaxation": {
+            "mean": 0.4948063134543755,
+            "std": 0.37808232751083165
+          }
+        },
+        "window_status_counts": {
+          "computed": 845
+        },
+        "excluded_window_audit": []
+      },
+      "error": null,
+      "artifacts": {
+        "merged_qeeg_ch1.csv": "9eab0ea287f553cae681382a1d8407d269799f07406187185d91c98f7be927ed",
+        "merged_qeeg_ch1.csv.meta.json": "768afd0a26a363d70432d8f2a426c90a8b80a2ba966978cdd619f18e50aa9d9d",
+        "merged_qeeg_ch1.png": "18456962c34c4ce7462d04729648e40e7e83d4aa46b9dc82bceaf446860b7ab7"
+      }
+    },
+    "hardy_shim": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "qeeg_indices.py",
+        "--csv",
+        "/home/bps-yichin/lilia_analysis/iBrainCenter/Hardy(SN036)/merged.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/hardy_shim"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 0,
+      "analysis": {
+        "status": "success",
+        "source_channels": 4,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 1079424,
+            "raw_start_us": 1778566248498593,
+            "raw_end_us": 1778568407346593,
+            "gap_before_us": 0,
+            "complete_windows": 431,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 1077500,
+            "tail_end_idx": 1079424,
+            "tail_samples": 1924,
+            "unwindowed_samples": 1924,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              0,
+              431
+            ]
+          },
+          {
+            "segment_id": 1,
+            "raw_start_idx": 1079424,
+            "raw_end_idx": 1109424,
+            "raw_start_us": 1778568463346593,
+            "raw_end_us": 1778568523346593,
+            "gap_before_us": 56000000,
+            "complete_windows": 11,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 1079424,
+            "excluded_prefix_end_idx": 1080000,
+            "tail_start_idx": 1107500,
+            "tail_end_idx": 1109424,
+            "tail_samples": 1924,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              431,
+              442
+            ]
+          },
+          {
+            "segment_id": 2,
+            "raw_start_idx": 1109424,
+            "raw_end_idx": 1169408,
+            "raw_start_us": 1778568547538593,
+            "raw_end_us": 1778568667506593,
+            "gap_before_us": 24192000,
+            "complete_windows": 23,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 1109424,
+            "excluded_prefix_end_idx": 1110000,
+            "tail_start_idx": 1167500,
+            "tail_end_idx": 1169408,
+            "tail_samples": 1908,
+            "unwindowed_samples": 2484,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              442,
+              465
+            ]
+          },
+          {
+            "segment_id": 3,
+            "raw_start_idx": 1169408,
+            "raw_end_idx": 1946712,
+            "raw_start_us": 1778568686642593,
+            "raw_end_us": 1778570241250593,
+            "gap_before_us": 19136000,
+            "complete_windows": 310,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 1169408,
+            "excluded_prefix_end_idx": 1170000,
+            "tail_start_idx": 1945000,
+            "tail_end_idx": 1946712,
+            "tail_samples": 1712,
+            "unwindowed_samples": 2304,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              465,
+              775
+            ]
+          },
+          {
+            "segment_id": 4,
+            "raw_start_idx": 1946712,
+            "raw_end_idx": 2006712,
+            "raw_start_us": 1778570651003144,
+            "raw_end_us": 1778570771003144,
+            "gap_before_us": 409752551,
+            "complete_windows": 23,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 1946712,
+            "excluded_prefix_end_idx": 1947500,
+            "tail_start_idx": 2005000,
+            "tail_end_idx": 2006712,
+            "tail_samples": 1712,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              775,
+              798
+            ]
+          },
+          {
+            "segment_id": 5,
+            "raw_start_idx": 2006712,
+            "raw_end_idx": 2126712,
+            "raw_start_us": 1778570802843144,
+            "raw_end_us": 1778571042843144,
+            "gap_before_us": 31840000,
+            "complete_windows": 47,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 2006712,
+            "excluded_prefix_end_idx": 2007500,
+            "tail_start_idx": 2125000,
+            "tail_end_idx": 2126712,
+            "tail_samples": 1712,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              798,
+              845
+            ]
+          }
+        ],
+        "excluded_grid_windows": [
+          {
+            "window_start_idx": 1077500,
+            "window_end_idx": 1080000,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 1107500,
+            "window_end_idx": 1110000,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 1167500,
+            "window_end_idx": 1170000,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 1945000,
+            "window_end_idx": 1947500,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 2005000,
+            "window_end_idx": 2007500,
+            "status": "crosses_gap"
+          }
+        ],
+        "candidate_windows": 845,
+        "finite_windows": 845,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": -0.176485069276809,
+            "std": 0.4572637558037464
+          },
+          "flow": {
+            "mean": -0.08393290125257949,
+            "std": 0.36083042363666
+          },
+          "calm": {
+            "mean": -0.14452205614395702,
+            "std": 0.3193718370997245
+          },
+          "relaxation": {
+            "mean": 0.4948063134543755,
+            "std": 0.37808232751083165
+          }
+        },
+        "window_status_counts": {
+          "computed": 845
+        },
+        "excluded_window_audit": []
+      },
+      "error": null,
+      "artifacts": {
+        "merged_qeeg_ch1.csv": "9eab0ea287f553cae681382a1d8407d269799f07406187185d91c98f7be927ed",
+        "merged_qeeg_ch1.csv.meta.json": "768afd0a26a363d70432d8f2a426c90a8b80a2ba966978cdd619f18e50aa9d9d",
+        "merged_qeeg_ch1.png": "18456962c34c4ce7462d04729648e40e7e83d4aa46b9dc82bceaf446860b7ab7"
+      }
+    },
+    "hardy_bundle": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/home/bps-yichin/lilia_analysis/iBrainCenter/Hardy(SN036)/merged.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/hardy_bundle"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle",
+      "exit": 0,
+      "analysis": {
+        "status": "success",
+        "source_channels": 4,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 1079424,
+            "raw_start_us": 1778566248498593,
+            "raw_end_us": 1778568407346593,
+            "gap_before_us": 0,
+            "complete_windows": 431,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 1077500,
+            "tail_end_idx": 1079424,
+            "tail_samples": 1924,
+            "unwindowed_samples": 1924,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              0,
+              431
+            ]
+          },
+          {
+            "segment_id": 1,
+            "raw_start_idx": 1079424,
+            "raw_end_idx": 1109424,
+            "raw_start_us": 1778568463346593,
+            "raw_end_us": 1778568523346593,
+            "gap_before_us": 56000000,
+            "complete_windows": 11,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 1079424,
+            "excluded_prefix_end_idx": 1080000,
+            "tail_start_idx": 1107500,
+            "tail_end_idx": 1109424,
+            "tail_samples": 1924,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              431,
+              442
+            ]
+          },
+          {
+            "segment_id": 2,
+            "raw_start_idx": 1109424,
+            "raw_end_idx": 1169408,
+            "raw_start_us": 1778568547538593,
+            "raw_end_us": 1778568667506593,
+            "gap_before_us": 24192000,
+            "complete_windows": 23,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 1109424,
+            "excluded_prefix_end_idx": 1110000,
+            "tail_start_idx": 1167500,
+            "tail_end_idx": 1169408,
+            "tail_samples": 1908,
+            "unwindowed_samples": 2484,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              442,
+              465
+            ]
+          },
+          {
+            "segment_id": 3,
+            "raw_start_idx": 1169408,
+            "raw_end_idx": 1946712,
+            "raw_start_us": 1778568686642593,
+            "raw_end_us": 1778570241250593,
+            "gap_before_us": 19136000,
+            "complete_windows": 310,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 1169408,
+            "excluded_prefix_end_idx": 1170000,
+            "tail_start_idx": 1945000,
+            "tail_end_idx": 1946712,
+            "tail_samples": 1712,
+            "unwindowed_samples": 2304,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              465,
+              775
+            ]
+          },
+          {
+            "segment_id": 4,
+            "raw_start_idx": 1946712,
+            "raw_end_idx": 2006712,
+            "raw_start_us": 1778570651003144,
+            "raw_end_us": 1778570771003144,
+            "gap_before_us": 409752551,
+            "complete_windows": 23,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 1946712,
+            "excluded_prefix_end_idx": 1947500,
+            "tail_start_idx": 2005000,
+            "tail_end_idx": 2006712,
+            "tail_samples": 1712,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              775,
+              798
+            ]
+          },
+          {
+            "segment_id": 5,
+            "raw_start_idx": 2006712,
+            "raw_end_idx": 2126712,
+            "raw_start_us": 1778570802843144,
+            "raw_end_us": 1778571042843144,
+            "gap_before_us": 31840000,
+            "complete_windows": 47,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 2006712,
+            "excluded_prefix_end_idx": 2007500,
+            "tail_start_idx": 2125000,
+            "tail_end_idx": 2126712,
+            "tail_samples": 1712,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              798,
+              845
+            ]
+          }
+        ],
+        "excluded_grid_windows": [
+          {
+            "window_start_idx": 1077500,
+            "window_end_idx": 1080000,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 1107500,
+            "window_end_idx": 1110000,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 1167500,
+            "window_end_idx": 1170000,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 1945000,
+            "window_end_idx": 1947500,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 2005000,
+            "window_end_idx": 2007500,
+            "status": "crosses_gap"
+          }
+        ],
+        "candidate_windows": 845,
+        "finite_windows": 845,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": -0.176485069276809,
+            "std": 0.4572637558037464
+          },
+          "flow": {
+            "mean": -0.08393290125257949,
+            "std": 0.36083042363666
+          },
+          "calm": {
+            "mean": -0.14452205614395702,
+            "std": 0.3193718370997245
+          },
+          "relaxation": {
+            "mean": 0.4948063134543755,
+            "std": 0.37808232751083165
+          }
+        },
+        "window_status_counts": {
+          "computed": 845
+        },
+        "excluded_window_audit": []
+      },
+      "error": null,
+      "artifacts": {
+        "merged_qeeg_ch1.csv": "9eab0ea287f553cae681382a1d8407d269799f07406187185d91c98f7be927ed",
+        "merged_qeeg_ch1.csv.meta.json": "768afd0a26a363d70432d8f2a426c90a8b80a2ba966978cdd619f18e50aa9d9d",
+        "merged_qeeg_ch1.png": "18456962c34c4ce7462d04729648e40e7e83d4aa46b9dc82bceaf446860b7ab7"
+      }
+    },
+    "gapped_main": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/tmp/lilia-stage14/final/gapped.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/gapped_main"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 0,
+      "analysis": {
+        "status": "success",
+        "source_channels": 2,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 100,
+            "raw_start_us": 1750000000000001,
+            "raw_end_us": 1750000000200001,
+            "gap_before_us": 0,
+            "complete_windows": 0,
+            "status": "short_segment",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 0,
+            "tail_end_idx": 100,
+            "tail_samples": 100,
+            "unwindowed_samples": 100,
+            "nonfinite_samples": 0,
+            "metric_row_range": null
+          },
+          {
+            "segment_id": 1,
+            "raw_start_idx": 100,
+            "raw_end_idx": 5100,
+            "raw_start_us": 1750000020200001,
+            "raw_end_us": 1750000030200001,
+            "gap_before_us": 20000000,
+            "complete_windows": 1,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 100,
+            "excluded_prefix_end_idx": 2500,
+            "tail_start_idx": 5000,
+            "tail_end_idx": 5100,
+            "tail_samples": 100,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              0,
+              1
+            ]
+          },
+          {
+            "segment_id": 2,
+            "raw_start_idx": 5100,
+            "raw_end_idx": 12600,
+            "raw_start_us": 1750000030206001,
+            "raw_end_us": 1750000045206001,
+            "gap_before_us": 6000,
+            "complete_windows": 2,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 5100,
+            "excluded_prefix_end_idx": 7500,
+            "tail_start_idx": 12500,
+            "tail_end_idx": 12600,
+            "tail_samples": 100,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 1,
+            "metric_row_range": [
+              1,
+              3
+            ]
+          },
+          {
+            "segment_id": 3,
+            "raw_start_idx": 12600,
+            "raw_end_idx": 17600,
+            "raw_start_us": 1750000055206001,
+            "raw_end_us": 1750000065206001,
+            "gap_before_us": 10000000,
+            "complete_windows": 1,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 12600,
+            "excluded_prefix_end_idx": 15000,
+            "tail_start_idx": 17500,
+            "tail_end_idx": 17600,
+            "tail_samples": 100,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              3,
+              4
+            ]
+          }
+        ],
+        "excluded_grid_windows": [
+          {
+            "window_start_idx": 0,
+            "window_end_idx": 2500,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 5000,
+            "window_end_idx": 7500,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 12500,
+            "window_end_idx": 15000,
+            "status": "crosses_gap"
+          }
+        ],
+        "candidate_windows": 4,
+        "finite_windows": 3,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": 0.42861325936778,
+            "std": 0.036914366330568125
+          },
+          "flow": {
+            "mean": -0.5678011481213637,
+            "std": 0.03322541367515088
+          },
+          "calm": {
+            "mean": -0.5332342109508327,
+            "std": 0.03010141335706972
+          },
+          "relaxation": {
+            "mean": 0.2849693294306932,
+            "std": 0.03871280672955692
+          }
+        },
+        "window_status_counts": {
+          "computed": 3,
+          "nonfinite_window": 1
+        },
+        "excluded_window_audit": [
+          {
+            "metric_row": 1,
+            "status": "nonfinite_window",
+            "nonfinite_samples": 1
+          }
+        ]
+      },
+      "error": null,
+      "artifacts": {
+        "gapped_qeeg_ch1.csv": "4ba53bd36ca87074602dbb70554a2b1d89d6405d6c1ca91bb2d3f1c3292e32c6",
+        "gapped_qeeg_ch1.csv.meta.json": "60cc20e05af553572c41172b89e64598a5dbef8d5ea0426520502953b3518ab3",
+        "gapped_qeeg_ch1.png": "2a910725c02bf307d824c230736bf4be0fcb245c2377da4d3d533aa9d947ca2d"
+      }
+    },
+    "gapped_shim": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "qeeg_indices.py",
+        "--csv",
+        "/tmp/lilia-stage14/final/gapped.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/gapped_shim"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 0,
+      "analysis": {
+        "status": "success",
+        "source_channels": 2,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 100,
+            "raw_start_us": 1750000000000001,
+            "raw_end_us": 1750000000200001,
+            "gap_before_us": 0,
+            "complete_windows": 0,
+            "status": "short_segment",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 0,
+            "tail_end_idx": 100,
+            "tail_samples": 100,
+            "unwindowed_samples": 100,
+            "nonfinite_samples": 0,
+            "metric_row_range": null
+          },
+          {
+            "segment_id": 1,
+            "raw_start_idx": 100,
+            "raw_end_idx": 5100,
+            "raw_start_us": 1750000020200001,
+            "raw_end_us": 1750000030200001,
+            "gap_before_us": 20000000,
+            "complete_windows": 1,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 100,
+            "excluded_prefix_end_idx": 2500,
+            "tail_start_idx": 5000,
+            "tail_end_idx": 5100,
+            "tail_samples": 100,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              0,
+              1
+            ]
+          },
+          {
+            "segment_id": 2,
+            "raw_start_idx": 5100,
+            "raw_end_idx": 12600,
+            "raw_start_us": 1750000030206001,
+            "raw_end_us": 1750000045206001,
+            "gap_before_us": 6000,
+            "complete_windows": 2,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 5100,
+            "excluded_prefix_end_idx": 7500,
+            "tail_start_idx": 12500,
+            "tail_end_idx": 12600,
+            "tail_samples": 100,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 1,
+            "metric_row_range": [
+              1,
+              3
+            ]
+          },
+          {
+            "segment_id": 3,
+            "raw_start_idx": 12600,
+            "raw_end_idx": 17600,
+            "raw_start_us": 1750000055206001,
+            "raw_end_us": 1750000065206001,
+            "gap_before_us": 10000000,
+            "complete_windows": 1,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 12600,
+            "excluded_prefix_end_idx": 15000,
+            "tail_start_idx": 17500,
+            "tail_end_idx": 17600,
+            "tail_samples": 100,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              3,
+              4
+            ]
+          }
+        ],
+        "excluded_grid_windows": [
+          {
+            "window_start_idx": 0,
+            "window_end_idx": 2500,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 5000,
+            "window_end_idx": 7500,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 12500,
+            "window_end_idx": 15000,
+            "status": "crosses_gap"
+          }
+        ],
+        "candidate_windows": 4,
+        "finite_windows": 3,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": 0.42861325936778,
+            "std": 0.036914366330568125
+          },
+          "flow": {
+            "mean": -0.5678011481213637,
+            "std": 0.03322541367515088
+          },
+          "calm": {
+            "mean": -0.5332342109508327,
+            "std": 0.03010141335706972
+          },
+          "relaxation": {
+            "mean": 0.2849693294306932,
+            "std": 0.03871280672955692
+          }
+        },
+        "window_status_counts": {
+          "computed": 3,
+          "nonfinite_window": 1
+        },
+        "excluded_window_audit": [
+          {
+            "metric_row": 1,
+            "status": "nonfinite_window",
+            "nonfinite_samples": 1
+          }
+        ]
+      },
+      "error": null,
+      "artifacts": {
+        "gapped_qeeg_ch1.csv": "4ba53bd36ca87074602dbb70554a2b1d89d6405d6c1ca91bb2d3f1c3292e32c6",
+        "gapped_qeeg_ch1.csv.meta.json": "60cc20e05af553572c41172b89e64598a5dbef8d5ea0426520502953b3518ab3",
+        "gapped_qeeg_ch1.png": "2a910725c02bf307d824c230736bf4be0fcb245c2377da4d3d533aa9d947ca2d"
+      }
+    },
+    "gapped_bundle": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/tmp/lilia-stage14/final/gapped.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/gapped_bundle"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis/plot_index_vs_raw_bundle",
+      "exit": 0,
+      "analysis": {
+        "status": "success",
+        "source_channels": 2,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 100,
+            "raw_start_us": 1750000000000001,
+            "raw_end_us": 1750000000200001,
+            "gap_before_us": 0,
+            "complete_windows": 0,
+            "status": "short_segment",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 0,
+            "tail_end_idx": 100,
+            "tail_samples": 100,
+            "unwindowed_samples": 100,
+            "nonfinite_samples": 0,
+            "metric_row_range": null
+          },
+          {
+            "segment_id": 1,
+            "raw_start_idx": 100,
+            "raw_end_idx": 5100,
+            "raw_start_us": 1750000020200001,
+            "raw_end_us": 1750000030200001,
+            "gap_before_us": 20000000,
+            "complete_windows": 1,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 100,
+            "excluded_prefix_end_idx": 2500,
+            "tail_start_idx": 5000,
+            "tail_end_idx": 5100,
+            "tail_samples": 100,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              0,
+              1
+            ]
+          },
+          {
+            "segment_id": 2,
+            "raw_start_idx": 5100,
+            "raw_end_idx": 12600,
+            "raw_start_us": 1750000030206001,
+            "raw_end_us": 1750000045206001,
+            "gap_before_us": 6000,
+            "complete_windows": 2,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 5100,
+            "excluded_prefix_end_idx": 7500,
+            "tail_start_idx": 12500,
+            "tail_end_idx": 12600,
+            "tail_samples": 100,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 1,
+            "metric_row_range": [
+              1,
+              3
+            ]
+          },
+          {
+            "segment_id": 3,
+            "raw_start_idx": 12600,
+            "raw_end_idx": 17600,
+            "raw_start_us": 1750000055206001,
+            "raw_end_us": 1750000065206001,
+            "gap_before_us": 10000000,
+            "complete_windows": 1,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 12600,
+            "excluded_prefix_end_idx": 15000,
+            "tail_start_idx": 17500,
+            "tail_end_idx": 17600,
+            "tail_samples": 100,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              3,
+              4
+            ]
+          }
+        ],
+        "excluded_grid_windows": [
+          {
+            "window_start_idx": 0,
+            "window_end_idx": 2500,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 5000,
+            "window_end_idx": 7500,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 12500,
+            "window_end_idx": 15000,
+            "status": "crosses_gap"
+          }
+        ],
+        "candidate_windows": 4,
+        "finite_windows": 3,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": 0.42861325936778,
+            "std": 0.036914366330568125
+          },
+          "flow": {
+            "mean": -0.5678011481213637,
+            "std": 0.03322541367515088
+          },
+          "calm": {
+            "mean": -0.5332342109508327,
+            "std": 0.03010141335706972
+          },
+          "relaxation": {
+            "mean": 0.2849693294306932,
+            "std": 0.03871280672955692
+          }
+        },
+        "window_status_counts": {
+          "computed": 3,
+          "nonfinite_window": 1
+        },
+        "excluded_window_audit": [
+          {
+            "metric_row": 1,
+            "status": "nonfinite_window",
+            "nonfinite_samples": 1
+          }
+        ]
+      },
+      "error": null,
+      "artifacts": {
+        "gapped_qeeg_ch1.csv": "4ba53bd36ca87074602dbb70554a2b1d89d6405d6c1ca91bb2d3f1c3292e32c6",
+        "gapped_qeeg_ch1.csv.meta.json": "60cc20e05af553572c41172b89e64598a5dbef8d5ea0426520502953b3518ab3",
+        "gapped_qeeg_ch1.png": "2a910725c02bf307d824c230736bf4be0fcb245c2377da4d3d533aa9d947ca2d"
+      }
+    },
+    "gapped_channel2": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/tmp/lilia-stage14/final/gapped.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/gapped_channel2",
+        "--ch",
+        "2"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 0,
+      "analysis": {
+        "status": "success",
+        "source_channels": 2,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 100,
+            "raw_start_us": 1750000000000001,
+            "raw_end_us": 1750000000200001,
+            "gap_before_us": 0,
+            "complete_windows": 0,
+            "status": "short_segment",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 0,
+            "tail_end_idx": 100,
+            "tail_samples": 100,
+            "unwindowed_samples": 100,
+            "nonfinite_samples": 0,
+            "metric_row_range": null
+          },
+          {
+            "segment_id": 1,
+            "raw_start_idx": 100,
+            "raw_end_idx": 5100,
+            "raw_start_us": 1750000020200001,
+            "raw_end_us": 1750000030200001,
+            "gap_before_us": 20000000,
+            "complete_windows": 1,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 100,
+            "excluded_prefix_end_idx": 2500,
+            "tail_start_idx": 5000,
+            "tail_end_idx": 5100,
+            "tail_samples": 100,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              0,
+              1
+            ]
+          },
+          {
+            "segment_id": 2,
+            "raw_start_idx": 5100,
+            "raw_end_idx": 12600,
+            "raw_start_us": 1750000030206001,
+            "raw_end_us": 1750000045206001,
+            "gap_before_us": 6000,
+            "complete_windows": 2,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 5100,
+            "excluded_prefix_end_idx": 7500,
+            "tail_start_idx": 12500,
+            "tail_end_idx": 12600,
+            "tail_samples": 100,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              1,
+              3
+            ]
+          },
+          {
+            "segment_id": 3,
+            "raw_start_idx": 12600,
+            "raw_end_idx": 17600,
+            "raw_start_us": 1750000055206001,
+            "raw_end_us": 1750000065206001,
+            "gap_before_us": 10000000,
+            "complete_windows": 1,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 12600,
+            "excluded_prefix_end_idx": 15000,
+            "tail_start_idx": 17500,
+            "tail_end_idx": 17600,
+            "tail_samples": 100,
+            "unwindowed_samples": 2500,
+            "nonfinite_samples": 0,
+            "metric_row_range": [
+              3,
+              4
+            ]
+          }
+        ],
+        "excluded_grid_windows": [
+          {
+            "window_start_idx": 0,
+            "window_end_idx": 2500,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 5000,
+            "window_end_idx": 7500,
+            "status": "crosses_gap"
+          },
+          {
+            "window_start_idx": 12500,
+            "window_end_idx": 15000,
+            "status": "crosses_gap"
+          }
+        ],
+        "candidate_windows": 4,
+        "finite_windows": 4,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": 0.48217325173118275,
+            "std": 0.08675174600469872
+          },
+          "flow": {
+            "mean": -0.6255989515807828,
+            "std": 0.08088911633294978
+          },
+          "calm": {
+            "mean": -0.5893826853207231,
+            "std": 0.07474816538591007
+          },
+          "relaxation": {
+            "mean": 0.21603851910213917,
+            "std": 0.10425813537042848
+          }
+        },
+        "window_status_counts": {
+          "computed": 4
+        },
+        "excluded_window_audit": []
+      },
+      "error": null,
+      "artifacts": {
+        "gapped_qeeg_ch2.csv": "8600afd78474ffdb68452c3f1ea9aff78f91b4f7168427fe83402027a65c6328",
+        "gapped_qeeg_ch2.csv.meta.json": "0e1c50feaefbee0f062988b1e31e9fb597e59f1407cde5c691f2124de83582cd",
+        "gapped_qeeg_ch2.png": "a4d76ca6579acc9c6f72e1a0aece09a1fd747fd1aaf5e1b78c116a782e51177d"
+      }
+    },
+    "all_short": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/tmp/lilia-stage14/final/all_short.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/all_short"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 1,
+      "analysis": {
+        "status": "no_complete_windows",
+        "source_channels": 1,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 7,
+            "raw_start_us": 1750000000000001,
+            "raw_end_us": 1750000000014001,
+            "gap_before_us": 0,
+            "complete_windows": 0,
+            "status": "short_segment",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 0,
+            "tail_end_idx": 7,
+            "tail_samples": 7,
+            "unwindowed_samples": 7,
+            "nonfinite_samples": 0,
+            "metric_row_range": null
+          }
+        ],
+        "excluded_grid_windows": [],
+        "candidate_windows": 0,
+        "finite_windows": 0,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": null,
+            "std": null
+          },
+          "flow": {
+            "mean": null,
+            "std": null
+          },
+          "calm": {
+            "mean": null,
+            "std": null
+          },
+          "relaxation": {
+            "mean": null,
+            "std": null
+          }
+        },
+        "window_status_counts": {},
+        "excluded_window_audit": []
+      },
+      "error": "ValueError: no_complete_windows",
+      "artifacts": {}
+    },
+    "all_excluded": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/tmp/lilia-stage14/final/all_excluded.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/all_excluded"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 1,
+      "analysis": {
+        "status": "all_windows_excluded",
+        "source_channels": 1,
+        "segments": [
+          {
+            "segment_id": 0,
+            "raw_start_idx": 0,
+            "raw_end_idx": 2500,
+            "raw_start_us": 1750000000000001,
+            "raw_end_us": 1750000005000001,
+            "gap_before_us": 0,
+            "complete_windows": 1,
+            "status": "windowed",
+            "excluded_prefix_start_idx": 0,
+            "excluded_prefix_end_idx": 0,
+            "tail_start_idx": 2500,
+            "tail_end_idx": 2500,
+            "tail_samples": 0,
+            "unwindowed_samples": 0,
+            "nonfinite_samples": 2500,
+            "metric_row_range": [
+              0,
+              1
+            ]
+          }
+        ],
+        "excluded_grid_windows": [],
+        "candidate_windows": 1,
+        "finite_windows": 0,
+        "quality_state": "disabled",
+        "summary": {
+          "focus": {
+            "mean": null,
+            "std": null
+          },
+          "flow": {
+            "mean": null,
+            "std": null
+          },
+          "calm": {
+            "mean": null,
+            "std": null
+          },
+          "relaxation": {
+            "mean": null,
+            "std": null
+          }
+        },
+        "window_status_counts": {
+          "nonfinite_window": 1
+        },
+        "excluded_window_audit": [
+          {
+            "metric_row": 0,
+            "status": "nonfinite_window",
+            "nonfinite_samples": 2500
+          }
+        ]
+      },
+      "error": "ValueError: all_windows_excluded",
+      "artifacts": {
+        "all_excluded_qeeg_ch1.csv": "3248d82696e277de16f4b8fe8af1cf1141215451a87b291836848cee70e19813",
+        "all_excluded_qeeg_ch1.csv.meta.json": "4a022039111def31333f608493f6364260c738061a3126a49ca606e8f4ed5b42",
+        "all_excluded_qeeg_ch1.png": "7d5b1c10651dd95d3489fd64f81910cc228ad7d8c9ba2e5af01b0866ecfaf426"
+      }
+    },
+    "wrong_channel": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/tmp/lilia-stage14/final/gapped.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/wrong_channel",
+        "--ch",
+        "3"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 1,
+      "analysis": null,
+      "error": "ValueError: channel 3 not found (file has 2 channels)",
+      "artifacts": {}
+    },
+    "invalid_window": {
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "-m",
+        "lilia.qeeg",
+        "--csv",
+        "/tmp/lilia-stage14/final/gapped.csv",
+        "--out",
+        "/tmp/lilia-stage14/final/invalid_window",
+        "--win",
+        ".01"
+      ],
+      "cwd": "/home/bps-yichin/lilia_analysis",
+      "exit": 1,
+      "analysis": null,
+      "error": "ValueError: qEEG needs at least 8 samples per window",
+      "artifacts": {}
+    }
+  },
+  "comparisons": {
+    "continuous_0": {
+      "theta": 8.326672684688674e-17,
+      "alpha": 8.326672684688674e-17,
+      "beta": 1.1102230246251565e-16,
+      "focus": 2.220446049250313e-16,
+      "flow": 4.440892098500626e-16,
+      "calm": 2.220446049250313e-16,
+      "relaxation": 2.7755575615628914e-16
+    },
+    "continuous_1": {
+      "theta": 1.0408340855860843e-16,
+      "alpha": 1.6653345369377348e-16,
+      "beta": 1.1102230246251565e-16,
+      "focus": 2.220446049250313e-16,
+      "flow": 3.3306690738754696e-16,
+      "calm": 2.220446049250313e-16,
+      "relaxation": 2.220446049250313e-16
+    },
+    "continuous_2": {
+      "theta": 0.0,
+      "alpha": 0.0,
+      "beta": 0.0,
+      "focus": 0.0,
+      "flow": 0.0,
+      "calm": 0.0,
+      "relaxation": 0.0
+    },
+    "real_continuous": {
+      "theta": 8.326672684688674e-17,
+      "alpha": 5.551115123125783e-17,
+      "beta": 5.551115123125783e-17,
+      "focus": 1.1102230246251565e-16,
+      "flow": 8.326672684688674e-17,
+      "calm": 9.71445146547012e-17,
+      "relaxation": 4.163336342344337e-17
+    },
+    "hardy_main": {
+      "theta": 9.71445146547012e-17,
+      "alpha": 9.71445146547012e-17,
+      "beta": 1.1102230246251565e-16,
+      "focus": 1.1102230246251565e-16,
+      "flow": 2.220446049250313e-16,
+      "calm": 9.71445146547012e-17,
+      "relaxation": 1.1102230246251565e-16
+    },
+    "hardy_shim": {
+      "theta": 9.71445146547012e-17,
+      "alpha": 9.71445146547012e-17,
+      "beta": 1.1102230246251565e-16,
+      "focus": 1.1102230246251565e-16,
+      "flow": 2.220446049250313e-16,
+      "calm": 9.71445146547012e-17,
+      "relaxation": 1.1102230246251565e-16
+    },
+    "hardy_bundle": {
+      "theta": 9.71445146547012e-17,
+      "alpha": 9.71445146547012e-17,
+      "beta": 1.1102230246251565e-16,
+      "focus": 1.1102230246251565e-16,
+      "flow": 2.220446049250313e-16,
+      "calm": 9.71445146547012e-17,
+      "relaxation": 1.1102230246251565e-16
+    }
+  },
+  "fixture_hashes": {
+    "qeeg_cli_continuous_reference.json": "693358303c8b59c54df2e87962950bd59da25ba3aca37c55b677e66ef1c4a98c",
+    "qeeg_cli_continuous_reference.npz": "29a8f669139567842b510570dd0f2cd14e250e6a4a67aa90885b98c1efa17671",
+    "qeeg_hardy_reference.json": "752283beac18694205d3f78948b354223463909cdd73172dbbc8f92412949555",
+    "qeeg_hardy_reference.npz": "edba9124a37cdba30745d1e876b2f7fa441c5d246cd30b81b4d53681232cfafb"
+  },
+  "hardy_time": {
+    "last_elapsed_seconds": 4788.420551,
+    "old_sample_count_seconds": 4247.5,
+    "last_center_us": 1778571036919144,
+    "last_time_difference_seconds": 540.9205510000002,
+    "old_naive_windows": 850,
+    "retained_windows": 845,
+    "old_naive_summary": {
+      "focus": {
+        "mean": -0.17608133799892378,
+        "std": 0.45609840673309243
+      },
+      "flow": {
+        "mean": -0.08402073484108381,
+        "std": 0.359884802828615
+      },
+      "calm": {
+        "mean": -0.14464896420070236,
+        "std": 0.31846313453429737
+      },
+      "relaxation": {
+        "mean": 0.4945468113490474,
+        "std": 0.37737068953883707
+      }
+    }
+  },
+  "tables_verified": 12,
+  "hashes_recorded": 75,
+  "source_py_sha256": {
+    "lilia/qeeg.py": "9739cc6a212df82705e7eca7b5db29021d569f7e2b53c3fe2550c7c1a53d1afa",
+    "lilia/qeeg_raw.py": "38dc65ce42a376465a9865d21c1e59c620203be364b10ec221fd4d87de14fe45",
+    "lilia/qeeg_io.py": "b0a4d82d02ca80a3e2d63a667a14f0e7f7531962ca355cf6f094e5a41ea18147",
+    "tools/refactor_check.py": "62fe05ec78df73e234bc7bda9940bd0d1ebde271e228a9c712f8d02c6cf970c3"
+  },
+  "hardy_summary_mean_delta_from_naive_helper": {
+    "focus": -0.00040373127788520535,
+    "flow": 8.78335885043241e-05,
+    "calm": 0.00012690805674533956,
+    "relaxation": 0.00025950210532810214
+  },
+  "full_run_output": "/tmp/lilia-stage14/final",
+  "full_validation": "/tmp/lilia-stage14/final/validation.json",
+  "full_checks": "/tmp/lilia-refactor-mv_51qhv/summary.json",
+  "evidence_checks": "/tmp/lilia-refactor-6zca0qbh/summary.json",
+  "visual_review": {
+    "status": "passed",
+    "reviewed": [
+      {
+        "path": "/tmp/lilia-stage14/before/continuous_qeeg_ch1.png",
+        "finding": "Old continuous two-panel shape captured before implementation",
+        "sha256": "1a738f5ce76539f97e4547a78d7e2708acad58ca385253b23e07e28d50188636"
+      },
+      {
+        "path": "/tmp/lilia-stage14/runs/continuous_0/continuous_qeeg_ch1.png",
+        "finding": "Same curves, explicitly elapsed axis and visible window markers",
+        "sha256": "391c163c11cfe7a6bf015c23629a254edbbb2eeccd7760585669e3f91a7faf24"
+      },
+      {
+        "path": "/tmp/lilia-stage14/final/hardy_bundle/merged_qeeg_ch1.png",
+        "finding": "Both panels break across gaps and use complete source elapsed range",
+        "sha256": "18456962c34c4ce7462d04729648e40e7e83d4aa46b9dc82bceaf446860b7ab7"
+      },
+      {
+        "path": "/tmp/lilia-stage14/final/gapped_main/gapped_qeeg_ch1.png",
+        "finding": "All three finite singleton windows visible; NaN row and gap runs not bridged",
+        "sha256": "2a910725c02bf307d824c230736bf4be0fcb245c2377da4d3d533aa9d947ca2d"
+      },
+      {
+        "path": "/tmp/lilia-stage14/runs/gapped_channel2/gapped_qeeg_ch2.png",
+        "finding": "Only same-segment adjacent windows connected; alternate channel remains finite",
+        "sha256": "bddfc6c4ec0dec5fbf30eaf9cb281688ff58306b76ca7b2695b67a301c2e9b6d"
+      },
+      {
+        "path": "/tmp/lilia-stage14/final/all_excluded/all_excluded_qeeg_ch1.png",
+        "finding": "Explicit no finite windows message; correct 0 to 5 second source range",
+        "sha256": "7d5b1c10651dd95d3489fd64f81910cc228ad7d8c9ba2e5af01b0866ecfaf426"
+      }
+    ]
+  },
+  "resolved_validation_issues": [
+    "First direct invocation of the new standalone evidence script failed to import lilia; fixed repository sys.path before final checks.",
+    "Visual review found default time axes on fully excluded PNG; added source time limits and missing-data message, then regenerated and revalidated final outputs."
+  ],
+  "limitations": [
+    "Timestamp gaps use existing > 3 nominal periods contract; no interpolation or reset of source lattice.",
+    "Finite means mathematically computable; quality is disabled and no baseline or model is applied.",
+    "Timestamp-free helper retains old behaviour and remains inappropriate for gapped recordings without the new CLI adapter.",
+    "CSV and sidecar use existing validated pair publication, not atomic publication of all artifacts.",
+    "Existing package eager import can emit a runpy warning for python -m lilia.qeeg; all three CLI results verified identical.",
+    "Full logs and large outputs in /tmp may expire; persistent fixtures, hashes and summaries remain in repository."
+  ]
+}

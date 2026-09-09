@@ -1,0 +1,13 @@
+{
+  "source_path": "iBrainCenter/Hardy(SN036)/merged.csv",
+  "source_sha256": "f97546964329d124335ed26596899360d333c56a66a30810f6911f988439862a",
+  "old_code_sha256": "c98f2937f86b567cb86b9a7796a70ac9b203d5a3ea14b8519d4f21f8e4efb0e6",
+  "samples": 2126712,
+  "segments": 6,
+  "fs": 500.0,
+  "win_sec": 5.0,
+  "channel": 1,
+  "reference": "Old helper on concatenated raw; compare only retained source-lattice windows. Old CLI rejects gaps.",
+  "continuous_samples": 30017,
+  "continuous_source_sha256": "918115ea48858b89662978a6ae6572ec072e87c9f897269e927a9512ebb03618"
+}

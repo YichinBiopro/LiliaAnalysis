@@ -1,0 +1,29 @@
+{
+  "seed": 1409,
+  "shape": [
+    30017,
+    2
+  ],
+  "epoch_us": 1750000000000001,
+  "code_sha256": "c98f2937f86b567cb86b9a7796a70ac9b203d5a3ea14b8519d4f21f8e4efb0e6",
+  "source_sha256": "d40a9f18ef0bd7d0aa523fb5cf36d88e4515fe8a848b639588a0c6170b431eff",
+  "cases": [
+    {
+      "win_sec": 5.0,
+      "window_samples": 2500,
+      "rows": 12
+    },
+    {
+      "win_sec": 1.0019,
+      "window_samples": 500,
+      "rows": 60
+    },
+    {
+      "win_sec": 0.018,
+      "window_samples": 9,
+      "rows": 3335
+    }
+  ],
+  "cli_stdout": "Loading: /tmp/lilia-stage14/continuous.csv\nComputing qEEG indices \u2014 ch1, win=5.0s, fs=500Hz\nSaved: /tmp/lilia-stage14/before/continuous_qeeg_ch1.png\n\nSummary (mean \u00b1 std):\n  focus       : +0.485 \u00b1 0.144\n  flow        : -0.615 \u00b1 0.129\n  calm        : -0.577 \u00b1 0.116\n  relaxation  : +0.140 \u00b1 0.223\n",
+  "png_sha256": "1a738f5ce76539f97e4547a78d7e2708acad58ca385253b23e07e28d50188636"
+}

@@ -1,0 +1,418 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/qeeg_cli_continuous_reference.json",
+      "sha256": "693358303c8b59c54df2e87962950bd59da25ba3aca37c55b677e66ef1c4a98c"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/qeeg_cli_continuous_reference.npz",
+      "sha256": "29a8f669139567842b510570dd0f2cd14e250e6a4a67aa90885b98c1efa17671"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/qeeg_hardy_reference.json",
+      "sha256": "752283beac18694205d3f78948b354223463909cdd73172dbbc8f92412949555"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/qeeg_hardy_reference.npz",
+      "sha256": "edba9124a37cdba30745d1e876b2f7fa441c5d246cd30b81b4d53681232cfafb"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous.csv",
+      "sha256": "7117b3b31e04caf83c5cfa2ef82c902f1155594458af6af331ab7758dbc89c12"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_0/continuous_qeeg_ch1.csv",
+      "sha256": "59732f392b01d51af8d2111a495309fb7be4d0236624788a60b1c5ba8a6743f0"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_0/continuous_qeeg_ch1.csv.meta.json",
+      "sha256": "9891b7bd7a57e01a753e49dc86ab4179b1a07248e1e7fc5f5a748ed95df579bf"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_0/continuous_qeeg_ch1.png",
+      "sha256": "a830b5ae7f847a7b9691611aabc1e4c63bf55385571fa5f308e94d8dd1b8e5e5"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_0/continuous_qeeg_ch1_analysis_audit.json",
+      "sha256": "ac11f73854d38334f33765ca51fff8ec2ce77b8e194f49f5d7ca29e37792eac4"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_0_actual.npz",
+      "sha256": "c9ea19220ee8dc83cd4c74e016d3a941614b94353fb2e56c60b03aaacae8d800"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_0_expected.npz",
+      "sha256": "2c041338b8977ab40fe5950387ec24ee92e678d411e5ab0357892e519f351b52"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_1/continuous_qeeg_ch1.csv",
+      "sha256": "e1b7d02a62764fab054c55e4a420d9d94e7d572b4ca8d1e8430f1b76d79a0f9a"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_1/continuous_qeeg_ch1.csv.meta.json",
+      "sha256": "361a3d52f630c9228eed23d07ab485f2ab710e1b2a112443f73ce64c1975cd35"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_1/continuous_qeeg_ch1.png",
+      "sha256": "f50c93f40b9b3775aecc3ba5c4d39cea9ea33045725c229032b544d81279c60b"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_1/continuous_qeeg_ch1_analysis_audit.json",
+      "sha256": "3c0c58662ed0210ce55898c228c998603f8731224c8f2fa9dd0f9cfdcdfda4af"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_1_actual.npz",
+      "sha256": "401f7f8329d379573adcbc931b382d17beca9653c434f3356cfb20322bc509c1"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_1_expected.npz",
+      "sha256": "f6792e025050fb88e98bef30a3a20fac428cd66b9945b95205e8c7d0d87bd79b"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_2/continuous_qeeg_ch1.csv",
+      "sha256": "2af9aebd80ad9ae40f165278ab53121b7749b052cb8b257debc1a0141c2329d9"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_2/continuous_qeeg_ch1.csv.meta.json",
+      "sha256": "47033464467f713a2a1909c9e26ac6bee23bbbb3a2a88af35edd4d683e1abd02"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_2/continuous_qeeg_ch1.png",
+      "sha256": "601661e3a31df0fabdccef79b1ec8df3be2d8ef2adf3799a0cbfe3d7134ec6f1"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_2/continuous_qeeg_ch1_analysis_audit.json",
+      "sha256": "34cce7bc319aa61358801c5be70ccb2fb2f2cc648d3fc06b9aaec5a5abe1ec12"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_2_actual.npz",
+      "sha256": "0bc8d43f485c8a15f4963baee3e8c8fb4533722d180884da2ca04e44bc6177ce"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_2_expected.npz",
+      "sha256": "0bc8d43f485c8a15f4963baee3e8c8fb4533722d180884da2ca04e44bc6177ce"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/iBrainCenter/Hardy(SN036)/merged.csv",
+      "sha256": "f97546964329d124335ed26596899360d333c56a66a30810f6911f988439862a"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/real_continuous.csv",
+      "sha256": "aeb5ca80b7530ceed754feaa5c77d882b550178de87e899460498501b607ddad"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/real_continuous/real_continuous_qeeg_ch1.csv",
+      "sha256": "ccd8de581d2f68a3072129c2d9361253edfba41d059021b08332c21a4078371a"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/real_continuous/real_continuous_qeeg_ch1.csv.meta.json",
+      "sha256": "390eef60a107c7d510bcdcb74d8773850275eb89881be2af728ca7f20777ed72"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/real_continuous/real_continuous_qeeg_ch1.png",
+      "sha256": "4d9563f97fa29d5147094a9e2173d38bb14cece3ac59b86becdb9dbbdf99393c"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/real_continuous/real_continuous_qeeg_ch1_analysis_audit.json",
+      "sha256": "9a14ccb706d8b3728ac8341e1fa20dc7ee199d24f341d0f255ab0da910bc563f"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/real_continuous_actual.npz",
+      "sha256": "bba839b405bc2c60651122cc5172e1f23a862efb87f0d6c98e67f4783eca5650"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/real_continuous_expected.npz",
+      "sha256": "4772c06a3444aae7e6a5825026e9783958b6c41014b71916d86bf457ecf37781"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_main/merged_qeeg_ch1.csv",
+      "sha256": "9eab0ea287f553cae681382a1d8407d269799f07406187185d91c98f7be927ed"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_main/merged_qeeg_ch1.csv.meta.json",
+      "sha256": "ff8c3e59a7aacb13fc71346ea1cd4d88a835992e333a25250f245f7a9540cc50"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_main/merged_qeeg_ch1.png",
+      "sha256": "af28b0904cf8f7b87e8eab77336d7ab8992b33fa778be2a1342430bce6fe166a"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_main/merged_qeeg_ch1_analysis_audit.json",
+      "sha256": "e70947a80250df12c8b539d4c1851c4d340abb14df50f906f3c1b166ca3a4d46"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_main_actual.npz",
+      "sha256": "7814cf294959cfce725336cb8b2d27fa6663f191a0f8979dea8da741ee0a2ddb"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_main_expected.npz",
+      "sha256": "1dc02ad0df5305d4060ba3b4db21e43588988fcea9aad20c920fcb33fe7bdca0"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_shim/merged_qeeg_ch1.csv",
+      "sha256": "9eab0ea287f553cae681382a1d8407d269799f07406187185d91c98f7be927ed"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_shim/merged_qeeg_ch1.csv.meta.json",
+      "sha256": "ff8c3e59a7aacb13fc71346ea1cd4d88a835992e333a25250f245f7a9540cc50"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_shim/merged_qeeg_ch1.png",
+      "sha256": "af28b0904cf8f7b87e8eab77336d7ab8992b33fa778be2a1342430bce6fe166a"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_shim/merged_qeeg_ch1_analysis_audit.json",
+      "sha256": "e70947a80250df12c8b539d4c1851c4d340abb14df50f906f3c1b166ca3a4d46"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_shim_actual.npz",
+      "sha256": "7814cf294959cfce725336cb8b2d27fa6663f191a0f8979dea8da741ee0a2ddb"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_shim_expected.npz",
+      "sha256": "1dc02ad0df5305d4060ba3b4db21e43588988fcea9aad20c920fcb33fe7bdca0"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_bundle/merged_qeeg_ch1.csv",
+      "sha256": "9eab0ea287f553cae681382a1d8407d269799f07406187185d91c98f7be927ed"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_bundle/merged_qeeg_ch1.csv.meta.json",
+      "sha256": "ff8c3e59a7aacb13fc71346ea1cd4d88a835992e333a25250f245f7a9540cc50"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_bundle/merged_qeeg_ch1.png",
+      "sha256": "af28b0904cf8f7b87e8eab77336d7ab8992b33fa778be2a1342430bce6fe166a"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_bundle/merged_qeeg_ch1_analysis_audit.json",
+      "sha256": "e70947a80250df12c8b539d4c1851c4d340abb14df50f906f3c1b166ca3a4d46"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_bundle_actual.npz",
+      "sha256": "7814cf294959cfce725336cb8b2d27fa6663f191a0f8979dea8da741ee0a2ddb"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_bundle_expected.npz",
+      "sha256": "1dc02ad0df5305d4060ba3b4db21e43588988fcea9aad20c920fcb33fe7bdca0"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped.csv",
+      "sha256": "27061ccffe815dc46bd821b21efd48c1ea360a296da18c0e92218f60de3f1638"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_main/gapped_qeeg_ch1.csv",
+      "sha256": "4ba53bd36ca87074602dbb70554a2b1d89d6405d6c1ca91bb2d3f1c3292e32c6"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_main/gapped_qeeg_ch1.csv.meta.json",
+      "sha256": "0b22b730a4513afc1423fe66811b21bfa5acaa02d7a318a13ebee1b489a0b726"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_main/gapped_qeeg_ch1.png",
+      "sha256": "6565a52e46e64bd55d1d52bc10fa61620b603dc45dddb8b97c5674790b800163"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_main/gapped_qeeg_ch1_analysis_audit.json",
+      "sha256": "25f025daeb1c8f8cdf4789b0ca8afdedfd258d2eb70d0fbe5d5ae5501e926c09"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_shim/gapped_qeeg_ch1.csv",
+      "sha256": "4ba53bd36ca87074602dbb70554a2b1d89d6405d6c1ca91bb2d3f1c3292e32c6"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_shim/gapped_qeeg_ch1.csv.meta.json",
+      "sha256": "0b22b730a4513afc1423fe66811b21bfa5acaa02d7a318a13ebee1b489a0b726"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_shim/gapped_qeeg_ch1.png",
+      "sha256": "6565a52e46e64bd55d1d52bc10fa61620b603dc45dddb8b97c5674790b800163"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_shim/gapped_qeeg_ch1_analysis_audit.json",
+      "sha256": "25f025daeb1c8f8cdf4789b0ca8afdedfd258d2eb70d0fbe5d5ae5501e926c09"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_bundle/gapped_qeeg_ch1.csv",
+      "sha256": "4ba53bd36ca87074602dbb70554a2b1d89d6405d6c1ca91bb2d3f1c3292e32c6"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_bundle/gapped_qeeg_ch1.csv.meta.json",
+      "sha256": "0b22b730a4513afc1423fe66811b21bfa5acaa02d7a318a13ebee1b489a0b726"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_bundle/gapped_qeeg_ch1.png",
+      "sha256": "6565a52e46e64bd55d1d52bc10fa61620b603dc45dddb8b97c5674790b800163"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_bundle/gapped_qeeg_ch1_analysis_audit.json",
+      "sha256": "25f025daeb1c8f8cdf4789b0ca8afdedfd258d2eb70d0fbe5d5ae5501e926c09"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_channel2/gapped_qeeg_ch2.csv",
+      "sha256": "8600afd78474ffdb68452c3f1ea9aff78f91b4f7168427fe83402027a65c6328"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_channel2/gapped_qeeg_ch2.csv.meta.json",
+      "sha256": "3c2c04d3c2d17db162ca7f39fb10c3b6e0fa5eccc3840ef9646d5bba0c4820b1"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_channel2/gapped_qeeg_ch2.png",
+      "sha256": "8b0e729951e5d065df18affa385e0af730b98ba8544d33b136c85e44e62940ec"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_channel2/gapped_qeeg_ch2_analysis_audit.json",
+      "sha256": "eb57cc750ea55874c1845438e532d506d816ec4d9e7e8dc3c2bef4b761f5b289"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/all_short.csv",
+      "sha256": "96ec185f67a47f5c557ef06ae7d338b28b0f8044f854a8874e194d97e40d6ead"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/all_short/all_short_qeeg_ch1_analysis_audit.json",
+      "sha256": "a299df6915fb8a4ab1b67bcc2010124397f1feeaf23908a86929578eb3b0eba0"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/all_excluded.csv",
+      "sha256": "e6f9c56f62e68bafa89c89b795bead01c799a66d1894a6259089f9889c8a46ea"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/all_excluded/all_excluded_qeeg_ch1.csv",
+      "sha256": "3248d82696e277de16f4b8fe8af1cf1141215451a87b291836848cee70e19813"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/all_excluded/all_excluded_qeeg_ch1.csv.meta.json",
+      "sha256": "81cd773e048e05c8dfff71a19d97cf9080970b8b84af81a3c059341eb6653a6b"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/all_excluded/all_excluded_qeeg_ch1.png",
+      "sha256": "470a1e0fa24aef6ec35f10279ddfb614265a08ead51a0eceefaae5c36c90b152"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/all_excluded/all_excluded_qeeg_ch1_analysis_audit.json",
+      "sha256": "17a413f5f68ee45b649a9e11ba90c3543b30ea5f66a7c83df56451545c330cc4"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/wrong_channel/gapped_qeeg_ch3_analysis_audit.json",
+      "sha256": "c03b04da8ae01f792f7b207c69e6b0a631b1336c88dbef5764a4e889e83d3450"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/invalid_window/gapped_qeeg_ch1_analysis_audit.json",
+      "sha256": "b0e2918c4b580be47420d8593c9a490be5cdecd82d0be8a4208292580f049313"
+    }
+  ],
+  "tables": [
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_0/continuous_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "raw_csv": "/tmp/lilia-stage14-review/continuous.csv"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_1/continuous_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "raw_csv": "/tmp/lilia-stage14-review/continuous.csv"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/continuous_2/continuous_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "raw_csv": "/tmp/lilia-stage14-review/continuous.csv"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/real_continuous/real_continuous_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "raw_csv": "/tmp/lilia-stage14-review/real_continuous.csv"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_main/merged_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/iBrainCenter/Hardy(SN036)/merged.csv"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_shim/merged_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/iBrainCenter/Hardy(SN036)/merged.csv"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/hardy_bundle/merged_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/iBrainCenter/Hardy(SN036)/merged.csv"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_main/gapped_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "raw_csv": "/tmp/lilia-stage14-review/gapped.csv"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_shim/gapped_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "raw_csv": "/tmp/lilia-stage14-review/gapped.csv"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_bundle/gapped_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "raw_csv": "/tmp/lilia-stage14-review/gapped.csv"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/gapped_channel2/gapped_qeeg_ch2.csv",
+      "kind": "raw_qeeg",
+      "raw_csv": "/tmp/lilia-stage14-review/gapped.csv"
+    },
+    {
+      "path": "/tmp/lilia-stage14-review/all_excluded/all_excluded_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "raw_csv": "/tmp/lilia-stage14-review/all_excluded.csv"
+    }
+  ],
+  "comparisons": [
+    {
+      "actual": "/tmp/lilia-stage14-review/continuous_0_actual.npz",
+      "expected": "/tmp/lilia-stage14-review/continuous_0_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage14-review/continuous_1_actual.npz",
+      "expected": "/tmp/lilia-stage14-review/continuous_1_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage14-review/continuous_2_actual.npz",
+      "expected": "/tmp/lilia-stage14-review/continuous_2_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage14-review/real_continuous_actual.npz",
+      "expected": "/tmp/lilia-stage14-review/real_continuous_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage14-review/hardy_main_actual.npz",
+      "expected": "/tmp/lilia-stage14-review/hardy_main_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage14-review/hardy_shim_actual.npz",
+      "expected": "/tmp/lilia-stage14-review/hardy_shim_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage14-review/hardy_bundle_actual.npz",
+      "expected": "/tmp/lilia-stage14-review/hardy_bundle_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false
+    }
+  ]
+}

@@ -1,0 +1,672 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-08T10:40:31.347620+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/qeeg_cli_continuous_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/qeeg_cli_continuous_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/qeeg_hardy_reference.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/qeeg_hardy_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_0/continuous_qeeg_ch1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_0/continuous_qeeg_ch1.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_0/continuous_qeeg_ch1.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_0/continuous_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_0_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_0_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_1/continuous_qeeg_ch1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_1/continuous_qeeg_ch1.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_1/continuous_qeeg_ch1.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_1/continuous_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_1_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_1_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_2/continuous_qeeg_ch1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_2/continuous_qeeg_ch1.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_2/continuous_qeeg_ch1.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_2/continuous_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_2_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/continuous_2_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/iBrainCenter/Hardy(SN036)/merged.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/real_continuous.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/real_continuous/real_continuous_qeeg_ch1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/real_continuous/real_continuous_qeeg_ch1.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/real_continuous/real_continuous_qeeg_ch1.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/real_continuous/real_continuous_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/real_continuous_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/real_continuous_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_main/merged_qeeg_ch1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_main/merged_qeeg_ch1.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_main/merged_qeeg_ch1.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_main/merged_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_main_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_main_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_shim/merged_qeeg_ch1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_shim/merged_qeeg_ch1.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_shim/merged_qeeg_ch1.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_shim/merged_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_shim_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_shim_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_bundle/merged_qeeg_ch1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_bundle/merged_qeeg_ch1.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_bundle/merged_qeeg_ch1.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_bundle/merged_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_bundle_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/hardy_bundle_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_main/gapped_qeeg_ch1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_main/gapped_qeeg_ch1.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_main/gapped_qeeg_ch1.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_main/gapped_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_shim/gapped_qeeg_ch1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_shim/gapped_qeeg_ch1.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_shim/gapped_qeeg_ch1.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_shim/gapped_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_bundle/gapped_qeeg_ch1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_bundle/gapped_qeeg_ch1.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_bundle/gapped_qeeg_ch1.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_bundle/gapped_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_channel2/gapped_qeeg_ch2.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_channel2/gapped_qeeg_ch2.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_channel2/gapped_qeeg_ch2.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/gapped_channel2/gapped_qeeg_ch2_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/all_short.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/all_short/all_short_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/all_excluded.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/all_excluded/all_excluded_qeeg_ch1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/all_excluded/all_excluded_qeeg_ch1.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/all_excluded/all_excluded_qeeg_ch1.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/all_excluded/all_excluded_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/wrong_channel/gapped_qeeg_ch3_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage14/final/invalid_window/gapped_qeeg_ch1_analysis_audit.json",
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage14/final/continuous_0/continuous_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage14/final/continuous_1/continuous_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "rows": 60,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage14/final/continuous_2/continuous_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "rows": 3335,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage14/final/real_continuous/real_continuous_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage14/final/hardy_main/merged_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "rows": 845,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage14/final/hardy_shim/merged_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "rows": 845,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage14/final/hardy_bundle/merged_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "rows": 845,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage14/final/gapped_main/gapped_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "rows": 4,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage14/final/gapped_shim/gapped_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "rows": 4,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage14/final/gapped_bundle/gapped_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "rows": 4,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage14/final/gapped_channel2/gapped_qeeg_ch2.csv",
+      "kind": "raw_qeeg",
+      "rows": 4,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage14/final/all_excluded/all_excluded_qeeg_ch1.csv",
+      "kind": "raw_qeeg",
+      "rows": 1,
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage14/final/continuous_0_actual.npz",
+      "expected": "/tmp/lilia-stage14/final/continuous_0_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "alpha": 8.326672684688674e-17,
+        "beta": 1.1102230246251565e-16,
+        "calm": 2.220446049250313e-16,
+        "flow": 4.440892098500626e-16,
+        "focus": 2.220446049250313e-16,
+        "relaxation": 2.7755575615628914e-16,
+        "theta": 8.326672684688674e-17
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage14/final/continuous_1_actual.npz",
+      "expected": "/tmp/lilia-stage14/final/continuous_1_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "alpha": 1.6653345369377348e-16,
+        "beta": 1.1102230246251565e-16,
+        "calm": 2.220446049250313e-16,
+        "flow": 3.3306690738754696e-16,
+        "focus": 2.220446049250313e-16,
+        "relaxation": 2.220446049250313e-16,
+        "theta": 1.0408340855860843e-16
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage14/final/continuous_2_actual.npz",
+      "expected": "/tmp/lilia-stage14/final/continuous_2_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "alpha": 0.0,
+        "beta": 0.0,
+        "calm": 0.0,
+        "flow": 0.0,
+        "focus": 0.0,
+        "relaxation": 0.0,
+        "theta": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage14/final/real_continuous_actual.npz",
+      "expected": "/tmp/lilia-stage14/final/real_continuous_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "alpha": 5.551115123125783e-17,
+        "beta": 5.551115123125783e-17,
+        "calm": 9.71445146547012e-17,
+        "flow": 8.326672684688674e-17,
+        "focus": 1.1102230246251565e-16,
+        "relaxation": 4.163336342344337e-17,
+        "theta": 8.326672684688674e-17
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage14/final/hardy_main_actual.npz",
+      "expected": "/tmp/lilia-stage14/final/hardy_main_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "alpha": 9.71445146547012e-17,
+        "beta": 1.1102230246251565e-16,
+        "calm": 9.71445146547012e-17,
+        "flow": 2.220446049250313e-16,
+        "focus": 1.1102230246251565e-16,
+        "relaxation": 1.1102230246251565e-16,
+        "theta": 9.71445146547012e-17
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage14/final/hardy_shim_actual.npz",
+      "expected": "/tmp/lilia-stage14/final/hardy_shim_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "alpha": 9.71445146547012e-17,
+        "beta": 1.1102230246251565e-16,
+        "calm": 9.71445146547012e-17,
+        "flow": 2.220446049250313e-16,
+        "focus": 1.1102230246251565e-16,
+        "relaxation": 1.1102230246251565e-16,
+        "theta": 9.71445146547012e-17
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage14/final/hardy_bundle_actual.npz",
+      "expected": "/tmp/lilia-stage14/final/hardy_bundle_expected.npz",
+      "rtol": 1e-12,
+      "atol": 1e-12,
+      "equal_nan": false,
+      "max_abs_errors": {
+        "alpha": 9.71445146547012e-17,
+        "beta": 1.1102230246251565e-16,
+        "calm": 9.71445146547012e-17,
+        "flow": 2.220446049250313e-16,
+        "focus": 1.1102230246251565e-16,
+        "relaxation": 1.1102230246251565e-16,
+        "theta": 9.71445146547012e-17
+      },
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/iBrainCenter/Hardy(SN036)/merged.csv": "f97546964329d124335ed26596899360d333c56a66a30810f6911f988439862a",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/qeeg_cli_continuous_reference.json": "693358303c8b59c54df2e87962950bd59da25ba3aca37c55b677e66ef1c4a98c",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/qeeg_cli_continuous_reference.npz": "29a8f669139567842b510570dd0f2cd14e250e6a4a67aa90885b98c1efa17671",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/qeeg_hardy_reference.json": "752283beac18694205d3f78948b354223463909cdd73172dbbc8f92412949555",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/qeeg_hardy_reference.npz": "edba9124a37cdba30745d1e876b2f7fa441c5d246cd30b81b4d53681232cfafb",
+    "/tmp/lilia-stage14/final/all_excluded/all_excluded_qeeg_ch1.csv": "3248d82696e277de16f4b8fe8af1cf1141215451a87b291836848cee70e19813",
+    "/tmp/lilia-stage14/final/all_excluded/all_excluded_qeeg_ch1.csv.meta.json": "4a022039111def31333f608493f6364260c738061a3126a49ca606e8f4ed5b42",
+    "/tmp/lilia-stage14/final/all_excluded/all_excluded_qeeg_ch1.png": "7d5b1c10651dd95d3489fd64f81910cc228ad7d8c9ba2e5af01b0866ecfaf426",
+    "/tmp/lilia-stage14/final/all_excluded/all_excluded_qeeg_ch1_analysis_audit.json": "9d27c8df5f91f4bf99f72e0a1b8b6a7031943a828c57182803997fa3496683c8",
+    "/tmp/lilia-stage14/final/all_excluded.csv": "e6f9c56f62e68bafa89c89b795bead01c799a66d1894a6259089f9889c8a46ea",
+    "/tmp/lilia-stage14/final/all_short/all_short_qeeg_ch1_analysis_audit.json": "c33362c498d532fdb1acee2a41af8b03957fd5858a8f37d7f5a0c559ec81a219",
+    "/tmp/lilia-stage14/final/all_short.csv": "96ec185f67a47f5c557ef06ae7d338b28b0f8044f854a8874e194d97e40d6ead",
+    "/tmp/lilia-stage14/final/continuous.csv": "7117b3b31e04caf83c5cfa2ef82c902f1155594458af6af331ab7758dbc89c12",
+    "/tmp/lilia-stage14/final/continuous_0/continuous_qeeg_ch1.csv": "59732f392b01d51af8d2111a495309fb7be4d0236624788a60b1c5ba8a6743f0",
+    "/tmp/lilia-stage14/final/continuous_0/continuous_qeeg_ch1.csv.meta.json": "f4d95910fd826ca46299af4a156823bb9da7c137c69b511855f25e23cd550525",
+    "/tmp/lilia-stage14/final/continuous_0/continuous_qeeg_ch1.png": "b634755ec722ad66f333664496c4af9f9e364f1e98c842ed10c4881a319efe94",
+    "/tmp/lilia-stage14/final/continuous_0/continuous_qeeg_ch1_analysis_audit.json": "3c35a32e87dbf45c5535e18a68d9df1d43d222e40837fafa64199c9cdd1149e1",
+    "/tmp/lilia-stage14/final/continuous_0_actual.npz": "c9ea19220ee8dc83cd4c74e016d3a941614b94353fb2e56c60b03aaacae8d800",
+    "/tmp/lilia-stage14/final/continuous_0_expected.npz": "2c041338b8977ab40fe5950387ec24ee92e678d411e5ab0357892e519f351b52",
+    "/tmp/lilia-stage14/final/continuous_1/continuous_qeeg_ch1.csv": "e1b7d02a62764fab054c55e4a420d9d94e7d572b4ca8d1e8430f1b76d79a0f9a",
+    "/tmp/lilia-stage14/final/continuous_1/continuous_qeeg_ch1.csv.meta.json": "0bff046d9c4ea89e981b01ad56ab0a3ceb2c74087bfbcf147e8a5ae865fdee0b",
+    "/tmp/lilia-stage14/final/continuous_1/continuous_qeeg_ch1.png": "a14ea1b47d4cb9687b7fdd7be7f6a725708352a18b2804557ce3bb5a5677f0b4",
+    "/tmp/lilia-stage14/final/continuous_1/continuous_qeeg_ch1_analysis_audit.json": "ee12f591b112ff6239559097e5ad352c176eee1f326da0d4b2e033c842485481",
+    "/tmp/lilia-stage14/final/continuous_1_actual.npz": "401f7f8329d379573adcbc931b382d17beca9653c434f3356cfb20322bc509c1",
+    "/tmp/lilia-stage14/final/continuous_1_expected.npz": "f6792e025050fb88e98bef30a3a20fac428cd66b9945b95205e8c7d0d87bd79b",
+    "/tmp/lilia-stage14/final/continuous_2/continuous_qeeg_ch1.csv": "2af9aebd80ad9ae40f165278ab53121b7749b052cb8b257debc1a0141c2329d9",
+    "/tmp/lilia-stage14/final/continuous_2/continuous_qeeg_ch1.csv.meta.json": "9154603105725b16f42e19b2074e55cc313aef526ab780220a2542d03b8b423b",
+    "/tmp/lilia-stage14/final/continuous_2/continuous_qeeg_ch1.png": "77b38b5ba878ab8dfde9f62e6a3af57cfb17308a0ca963a6d3e403b964e1de3c",
+    "/tmp/lilia-stage14/final/continuous_2/continuous_qeeg_ch1_analysis_audit.json": "15c8c701627e821b4b6703fbde26bfdb03cae11d814edb01aabd023904ee0b26",
+    "/tmp/lilia-stage14/final/continuous_2_actual.npz": "0bc8d43f485c8a15f4963baee3e8c8fb4533722d180884da2ca04e44bc6177ce",
+    "/tmp/lilia-stage14/final/continuous_2_expected.npz": "0bc8d43f485c8a15f4963baee3e8c8fb4533722d180884da2ca04e44bc6177ce",
+    "/tmp/lilia-stage14/final/evidence.json": "4e1104b39a3a98f715a35dba703d3cf29110ae5afb68e09a9970ff89332046b7",
+    "/tmp/lilia-stage14/final/gapped.csv": "27061ccffe815dc46bd821b21efd48c1ea360a296da18c0e92218f60de3f1638",
+    "/tmp/lilia-stage14/final/gapped_bundle/gapped_qeeg_ch1.csv": "4ba53bd36ca87074602dbb70554a2b1d89d6405d6c1ca91bb2d3f1c3292e32c6",
+    "/tmp/lilia-stage14/final/gapped_bundle/gapped_qeeg_ch1.csv.meta.json": "60cc20e05af553572c41172b89e64598a5dbef8d5ea0426520502953b3518ab3",
+    "/tmp/lilia-stage14/final/gapped_bundle/gapped_qeeg_ch1.png": "2a910725c02bf307d824c230736bf4be0fcb245c2377da4d3d533aa9d947ca2d",
+    "/tmp/lilia-stage14/final/gapped_bundle/gapped_qeeg_ch1_analysis_audit.json": "39992760dc5029356b8f572c257329d873b00ea53b17656bd961b5f832ea1afd",
+    "/tmp/lilia-stage14/final/gapped_channel2/gapped_qeeg_ch2.csv": "8600afd78474ffdb68452c3f1ea9aff78f91b4f7168427fe83402027a65c6328",
+    "/tmp/lilia-stage14/final/gapped_channel2/gapped_qeeg_ch2.csv.meta.json": "0e1c50feaefbee0f062988b1e31e9fb597e59f1407cde5c691f2124de83582cd",
+    "/tmp/lilia-stage14/final/gapped_channel2/gapped_qeeg_ch2.png": "a4d76ca6579acc9c6f72e1a0aece09a1fd747fd1aaf5e1b78c116a782e51177d",
+    "/tmp/lilia-stage14/final/gapped_channel2/gapped_qeeg_ch2_analysis_audit.json": "a7a6cb260839bc6968a5023fbb15ecb4f973413da2d5365613f7da21271e19a6",
+    "/tmp/lilia-stage14/final/gapped_main/gapped_qeeg_ch1.csv": "4ba53bd36ca87074602dbb70554a2b1d89d6405d6c1ca91bb2d3f1c3292e32c6",
+    "/tmp/lilia-stage14/final/gapped_main/gapped_qeeg_ch1.csv.meta.json": "60cc20e05af553572c41172b89e64598a5dbef8d5ea0426520502953b3518ab3",
+    "/tmp/lilia-stage14/final/gapped_main/gapped_qeeg_ch1.png": "2a910725c02bf307d824c230736bf4be0fcb245c2377da4d3d533aa9d947ca2d",
+    "/tmp/lilia-stage14/final/gapped_main/gapped_qeeg_ch1_analysis_audit.json": "39992760dc5029356b8f572c257329d873b00ea53b17656bd961b5f832ea1afd",
+    "/tmp/lilia-stage14/final/gapped_shim/gapped_qeeg_ch1.csv": "4ba53bd36ca87074602dbb70554a2b1d89d6405d6c1ca91bb2d3f1c3292e32c6",
+    "/tmp/lilia-stage14/final/gapped_shim/gapped_qeeg_ch1.csv.meta.json": "60cc20e05af553572c41172b89e64598a5dbef8d5ea0426520502953b3518ab3",
+    "/tmp/lilia-stage14/final/gapped_shim/gapped_qeeg_ch1.png": "2a910725c02bf307d824c230736bf4be0fcb245c2377da4d3d533aa9d947ca2d",
+    "/tmp/lilia-stage14/final/gapped_shim/gapped_qeeg_ch1_analysis_audit.json": "39992760dc5029356b8f572c257329d873b00ea53b17656bd961b5f832ea1afd",
+    "/tmp/lilia-stage14/final/hardy_bundle/merged_qeeg_ch1.csv": "9eab0ea287f553cae681382a1d8407d269799f07406187185d91c98f7be927ed",
+    "/tmp/lilia-stage14/final/hardy_bundle/merged_qeeg_ch1.csv.meta.json": "768afd0a26a363d70432d8f2a426c90a8b80a2ba966978cdd619f18e50aa9d9d",
+    "/tmp/lilia-stage14/final/hardy_bundle/merged_qeeg_ch1.png": "18456962c34c4ce7462d04729648e40e7e83d4aa46b9dc82bceaf446860b7ab7",
+    "/tmp/lilia-stage14/final/hardy_bundle/merged_qeeg_ch1_analysis_audit.json": "7421f69cb05e49842de7154ec5cbaafdcb02ffea5e82b63dcefde4958133c647",
+    "/tmp/lilia-stage14/final/hardy_bundle_actual.npz": "7814cf294959cfce725336cb8b2d27fa6663f191a0f8979dea8da741ee0a2ddb",
+    "/tmp/lilia-stage14/final/hardy_bundle_expected.npz": "1dc02ad0df5305d4060ba3b4db21e43588988fcea9aad20c920fcb33fe7bdca0",
+    "/tmp/lilia-stage14/final/hardy_main/merged_qeeg_ch1.csv": "9eab0ea287f553cae681382a1d8407d269799f07406187185d91c98f7be927ed",
+    "/tmp/lilia-stage14/final/hardy_main/merged_qeeg_ch1.csv.meta.json": "768afd0a26a363d70432d8f2a426c90a8b80a2ba966978cdd619f18e50aa9d9d",
+    "/tmp/lilia-stage14/final/hardy_main/merged_qeeg_ch1.png": "18456962c34c4ce7462d04729648e40e7e83d4aa46b9dc82bceaf446860b7ab7",
+    "/tmp/lilia-stage14/final/hardy_main/merged_qeeg_ch1_analysis_audit.json": "7421f69cb05e49842de7154ec5cbaafdcb02ffea5e82b63dcefde4958133c647",
+    "/tmp/lilia-stage14/final/hardy_main_actual.npz": "7814cf294959cfce725336cb8b2d27fa6663f191a0f8979dea8da741ee0a2ddb",
+    "/tmp/lilia-stage14/final/hardy_main_expected.npz": "1dc02ad0df5305d4060ba3b4db21e43588988fcea9aad20c920fcb33fe7bdca0",
+    "/tmp/lilia-stage14/final/hardy_shim/merged_qeeg_ch1.csv": "9eab0ea287f553cae681382a1d8407d269799f07406187185d91c98f7be927ed",
+    "/tmp/lilia-stage14/final/hardy_shim/merged_qeeg_ch1.csv.meta.json": "768afd0a26a363d70432d8f2a426c90a8b80a2ba966978cdd619f18e50aa9d9d",
+    "/tmp/lilia-stage14/final/hardy_shim/merged_qeeg_ch1.png": "18456962c34c4ce7462d04729648e40e7e83d4aa46b9dc82bceaf446860b7ab7",
+    "/tmp/lilia-stage14/final/hardy_shim/merged_qeeg_ch1_analysis_audit.json": "7421f69cb05e49842de7154ec5cbaafdcb02ffea5e82b63dcefde4958133c647",
+    "/tmp/lilia-stage14/final/hardy_shim_actual.npz": "7814cf294959cfce725336cb8b2d27fa6663f191a0f8979dea8da741ee0a2ddb",
+    "/tmp/lilia-stage14/final/hardy_shim_expected.npz": "1dc02ad0df5305d4060ba3b4db21e43588988fcea9aad20c920fcb33fe7bdca0",
+    "/tmp/lilia-stage14/final/invalid_window/gapped_qeeg_ch1_analysis_audit.json": "97346b09402e1b90dfabf509f2aa6ee49c246cb9f0b99727d5bfde4690c4b895",
+    "/tmp/lilia-stage14/final/real_continuous/real_continuous_qeeg_ch1.csv": "ccd8de581d2f68a3072129c2d9361253edfba41d059021b08332c21a4078371a",
+    "/tmp/lilia-stage14/final/real_continuous/real_continuous_qeeg_ch1.csv.meta.json": "fd46058378e10f7cc1b9dde71f00f6a24db84b86a0695face6c97b6e5541e1ec",
+    "/tmp/lilia-stage14/final/real_continuous/real_continuous_qeeg_ch1.png": "344998ce29ce29c2426be432f36b5fa16c2b4385c7bf41893d626377c3f91d22",
+    "/tmp/lilia-stage14/final/real_continuous/real_continuous_qeeg_ch1_analysis_audit.json": "6f2fbdbfd6951bc50fa95c0df6d78818f7b56921fd34e47053d4c605eaff6b54",
+    "/tmp/lilia-stage14/final/real_continuous.csv": "aeb5ca80b7530ceed754feaa5c77d882b550178de87e899460498501b607ddad",
+    "/tmp/lilia-stage14/final/real_continuous_actual.npz": "bba839b405bc2c60651122cc5172e1f23a862efb87f0d6c98e67f4783eca5650",
+    "/tmp/lilia-stage14/final/real_continuous_expected.npz": "4772c06a3444aae7e6a5825026e9783958b6c41014b71916d86bf457ecf37781",
+    "/tmp/lilia-stage14/final/wrong_channel/gapped_qeeg_ch3_analysis_audit.json": "fce2656790ffc76021e1e46025c818c16416ff45c6db8deea88807de1213e459"
+  },
+  "log": "/tmp/lilia-refactor-6zca0qbh/evidence.log"
+}
