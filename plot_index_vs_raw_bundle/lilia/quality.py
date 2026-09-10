@@ -13,6 +13,9 @@ slope, not separate alpha-DPR, line-noise or low-frequency penalties.
 
 from __future__ import annotations
 
+import hashlib
+import json
+
 from typing import Dict, Mapping, Optional
 
 import numpy as np
@@ -244,6 +247,7 @@ def get_eeg_quality_index_v2_parametric(
     data,
     fs: int = 200,
     params: Optional[Mapping[str, float]] = None,
+    *, stage: str = "unspecified",
 ):
     """
     Score one EEG segment of shape (n_channels, n_samples).
@@ -255,15 +259,41 @@ def get_eeg_quality_index_v2_parametric(
     Returns:
         {
             "overall": np.ndarray shape (n_channels,),
-            "detail": {<component>: np.ndarray, ...}  # active components only
+            "detail": {<component>: np.ndarray, ...},  # active components only
+            "valid", "invalid_reasons", "component_valid", "component_reasons",
+            "usable_overall", "context"
         }
+
+    Legacy overall/detail values and fallback numbers are preserved. `valid`
+    describes whether the active components were evaluated without fallback;
+    it is NOT a quality threshold. Consumers can opt into `usable_overall`,
+    which masks invalid scores with NaN. The flat activity loop retains its
+    exclusive stop; exactly half a second contains no activity subwindow.
+    `stage` is a caller-supplied label; unspecified never guesses raw vs filtered.
     """
     params = _resolve_eeg_quality_v2_params(params)
+    if not isinstance(stage, str) or not stage.strip():
+        raise ValueError('stage must be a nonempty explicit label or unspecified')
+    if not np.isfinite(fs) or fs <= 0:
+        raise ValueError('fs must be finite and positive')
     data = np.asarray(data, dtype=np.float64)
     if data.ndim != 2:
         raise ValueError("data must have shape (n_channels, n_samples)")
 
     n_channels, n_samples = data.shape
+    if n_channels == 0:
+        raise ValueError('data must contain at least one channel')
+    reasons = {key: [[] for _ in range(n_channels)] for key in ('input', 'flat', 'spectrum', 'kurtosis', 'corr')}
+
+    def note(component, channel, reason):
+        if reason not in reasons[component][channel]:
+            reasons[component][channel].append(reason)
+
+    for channel in range(n_channels):
+        if n_samples == 0:
+            note('input', channel, 'empty_input')
+        elif not np.isfinite(data[channel]).all():
+            note('input', channel, 'nonfinite_input')
 
     weights = {
         "flat": max(float(params["flat_weight"]), 0.0),
@@ -272,7 +302,9 @@ def get_eeg_quality_index_v2_parametric(
         "corr": max(float(params["corr_weight"]), 0.0),
     }
 
-    def check_flat_and_sat_v2(ch_data: np.ndarray) -> float:
+    def check_flat_and_sat_v2(ch_data: np.ndarray, channel: int) -> float:
+        if n_samples <= max(int(0.5 * fs), 1):
+            note('flat', channel, 'no_activity_subwindows')
         if ch_data is None or np.size(ch_data) == 0:
             return 0.0
         if np.ptp(ch_data) < 1e-6:
@@ -288,6 +320,7 @@ def get_eeg_quality_index_v2_parametric(
             win_stds.append(np.std(win))
 
         if not win_stds:
+            note('flat', channel, 'no_activity_subwindows')
             return 0.0
 
         win_stds = np.array(win_stds)
@@ -365,7 +398,7 @@ def get_eeg_quality_index_v2_parametric(
 
         return max(score, 0.0)
 
-    def check_spectrum_v2(ch_data: np.ndarray) -> float:
+    def check_spectrum_v2(ch_data: np.ndarray, channel: int) -> float:
         try:
             f, psd = sp_signal.welch(ch_data, fs, nperseg=fs * 2)
             # Upper fit edge is configurable so it can be pulled below the
@@ -374,11 +407,14 @@ def get_eeg_quality_index_v2_parametric(
             fit_hi = float(params["spectrum_fit_hi"])
             mask = (f > 1) & (f < fit_hi)
             if np.sum(mask) < 2:
+                note('spectrum', channel, 'insufficient_fit_bins')
                 return 0.5
 
             log_f = np.log10(f[mask])
             log_psd = np.log10(psd[mask] + 1e-10)
             slope, _ = np.polyfit(log_f, log_psd, 1)
+            if not np.isfinite(slope):
+                note('spectrum', channel, 'nonfinite_slope')
 
             good_low = float(params["slope_good_low"])
             good_high = float(params["slope_good_high"])
@@ -402,13 +438,15 @@ def get_eeg_quality_index_v2_parametric(
                     slope_edge_score - slope_outer_floor
                 ) * min(((slope - good_high) / half_span), 1.0)
             return float(np.clip(slope_score, slope_outer_floor, 1.0))
-        except Exception:
+        except Exception as exc:
+            note('spectrum', channel, 'exception:' + type(exc).__name__)
             return 0.5
 
-    def check_kurt_v2(ch_data: np.ndarray) -> float:
+    def check_kurt_v2(ch_data: np.ndarray, channel: int) -> float:
         try:
             k = kurtosis(ch_data, fisher=False)
             if not np.isfinite(k):
+                note('kurtosis', channel, 'nonfinite_kurtosis')
                 return float(params["kurtosis_floor"])
             good_low = float(params["kurtosis_good_low"])
             good_high = float(params["kurtosis_good_high"])
@@ -435,7 +473,8 @@ def get_eeg_quality_index_v2_parametric(
                 kurt_score = floor + 0.05 * np.exp(-8.0 * excess)
 
             return float(np.clip(kurt_score, floor, 1.0))
-        except Exception:
+        except Exception as exc:
+            note('kurtosis', channel, 'exception:' + type(exc).__name__)
             return 0.5
 
     def check_corr_v2() -> np.ndarray:
@@ -443,9 +482,14 @@ def get_eeg_quality_index_v2_parametric(
             return np.ones(n_channels, dtype=np.float64)
         try:
             corr_matrix = np.abs(np.corrcoef(data))
-        except Exception:
+        except Exception as exc:
+            for channel in range(n_channels):
+                note('corr', channel, 'exception:' + type(exc).__name__)
             corr_matrix = np.eye(n_channels)
         mean_abs_corr = (np.sum(corr_matrix, axis=1) - 1) / (n_channels - 1)
+        for channel in range(n_channels):
+            if not np.isfinite(mean_abs_corr[channel]):
+                note('corr', channel, 'nonfinite_correlation')
         return np.array(
             [_piecewise_linear_correlation_score(c, params) for c in mean_abs_corr]
         )
@@ -453,24 +497,59 @@ def get_eeg_quality_index_v2_parametric(
     detail: Dict[str, np.ndarray] = {}
     if weights["flat"] > 0:
         detail["flat"] = np.array(
-            [check_flat_and_sat_v2(data[i]) for i in range(n_channels)]
+            [check_flat_and_sat_v2(data[i], i) for i in range(n_channels)]
         )
     if weights["spectrum"] > 0:
         detail["spectrum"] = np.array(
-            [check_spectrum_v2(data[i]) for i in range(n_channels)]
+            [check_spectrum_v2(data[i], i) for i in range(n_channels)]
         )
     if weights["kurtosis"] > 0:
         detail["kurtosis"] = np.array(
-            [check_kurt_v2(data[i]) for i in range(n_channels)]
+            [check_kurt_v2(data[i], i) for i in range(n_channels)]
         )
     if weights["corr"] > 0:
         detail["corr"] = check_corr_v2()
 
     overall_quality = _weighted_geometric_quality(detail, weights)
 
+    component_valid = {}
+    invalid_reasons = [list(items) for items in reasons['input']]
+    for component, scores in detail.items():
+        for channel, score in enumerate(scores):
+            if not np.isfinite(score) or not 0 <= score <= 1:
+                note(component, channel, 'nonfinite_or_out_of_range_score')
+            # Input pollution invalidates even a finite fallback. Correlation's
+            # peer effects are separately recorded by nonfinite_correlation.
+            invalid_reasons[channel].extend(f'{component}:{reason}' for reason in reasons[component][channel])
+        component_valid[component] = np.array([
+            not reasons['input'][i] and not reasons[component][i] for i in range(n_channels)], dtype=bool)
+    valid = np.array([not items for items in invalid_reasons], dtype=bool)
+    presets = {
+        'default': get_default_eeg_quality_v2_params(),
+        'mean_abs_corr': _resolve_eeg_quality_v2_params(BEST_EEG_QUALITY_V2_MEAN_ABS_CORR_PARAMS),
+        'flat_spectrum_only': _resolve_eeg_quality_v2_params(get_best_eeg_quality_v2_flat_spectrum_only_params()),
+        'ibrain_device': get_ibrain_device_eeg_quality_v2_params(),
+    }
+    preset = next((name for name, value in presets.items() if params == value), 'custom')
+    # Metadata is JSON-safe for finite supported configuration values.
+    context = {'profile': 'legacy_v2', 'preset': preset, 'stage': stage, 'fs': float(fs),
+               'parameters': {key: float(value) for key, value in params.items()},
+               'active_components': list(detail), 'n_channels': n_channels, 'n_samples': n_samples,
+               'fallback_policy': 'preserve_legacy_values_and_mark_invalid',
+               'flat_window_policy': 'legacy_exclusive_stop',
+               'corr_single_channel_policy': 'identity',
+               'deprecated_parameters': sorted(DEPRECATED_QUALITY_PARAMETERS)}
+    config = {key: context[key] for key in ('profile', 'preset', 'stage', 'fs', 'parameters')}
+    context['config_id'] = hashlib.sha256(json.dumps(config, sort_keys=True, allow_nan=False).encode()).hexdigest()
     return {
-        "overall": overall_quality,
-        "detail": detail,
+        'overall': overall_quality,
+        'detail': detail,
+        'valid': valid,
+        'invalid_reasons': invalid_reasons,
+        'component_valid': component_valid,
+        'component_reasons': {key: reasons[key] for key in detail},
+        'usable_overall': np.where(valid, overall_quality, np.nan),
+        'context': context,
     }
 
 

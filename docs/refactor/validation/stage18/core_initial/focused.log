@@ -1,0 +1,15 @@
+test_activity_boundary_preserves_legacy_exclusive_stop (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_all_frozen_arrays_exact_including_invalid_values (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_context_stage_preset_and_configuration_identity (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_correlation_exception_and_single_channel_identity (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_disabled_components_do_not_invalidate (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_empty_single_sample_and_no_channels (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_insufficient_bins_and_nonfinite_fit_are_distinct (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_kurtosis_exception_and_constant_floor (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_nonfinite_pollution_and_correlation_peer_effect (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_spectrum_exception_retains_fallback_but_masks_usable (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 1.728s
+
+OK

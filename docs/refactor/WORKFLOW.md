@@ -71,3 +71,5 @@ NPZ 對照要求相同 keys、非空相同 shape；整數 indices／timestamps �
 第十七階段新增 `jenqwei_dataset` reader，不需要模型；sidecar 使用片段所在目錄的 `dataset.json`。核對完整來源切片計畫、檔案涵蓋範圍、hash 與逐列微秒；`lilia.jenqwei_dataset.load_manifest` 另驗證整份 manifest 並回讀所有片段。此 reader 不重新濾波，獨立舊基準數值、短段／污染及目視見 [第十七階段報告](STAGE17_REPORT_2026-09-10.md)。
 
 真實資料的生成命令、專屬分析參數及必要的特殊比較仍由任務記錄；共用工具處理機械性核對。完整報告只貼摘要與失敗項目；持久保存重要 JSON／manifest，原始大型產物留指定資料目錄。不要為補證據覆寫正式來源。
+
+第十八階段核心診斷以 `tools/validate_quality_stage18.py --out /path/to/new-directory` 對照四 presets 的舊分數；`valid` 與 `usable_overall` 是新增介面，不自動取代呼叫端原有品質政策。呼叫端遷移仍在任務 18，詳見 [核心增量報告](STAGE18_CORE_REPORT_2026-09-10.md)。

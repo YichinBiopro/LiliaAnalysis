@@ -1,6 +1,6 @@
 # 階段任務單
 
-只讀當前卡片。14–17 已完成；下一工作單元為品質 scorer，待盤點、尚未編號。
+只讀當前卡片。14–17 已完成；當前為 18 品質 scorer，核心診斷增量已實作，呼叫端遷移待完成。
 所有任務共用 [WORKFLOW](WORKFLOW.md) 的驗證與收尾規則。方法校準另立任務，勿混入等價搬移。
 
 <a id="stage-14"></a>
@@ -37,7 +37,7 @@
 - 通道：顯示索引 0/1 比較真正來源 ch1/2；2/3 僅顯示來源 ch3/4 Before，After 明示不存在。STFT 顯示 ≤128 點時明示省略，未改方法。
 - Guard：分段 main 已驗收可接受缺口，舊 `run_pipeline` 的 continuity guard 保留；不影響其他入口 guard。
 - 專屬測試：`tests/test_jenqwei_pipeline_regression.py`、`tests/test_jenqwei_output_regression.py`；完整實跑 `tools/validate_jenqwei_stage16.py --out /path/to/new-directory`。
-- 歷史：[起步報告](STAGE16_REPORT_2026-09-09.md) 已提交 `e8ebe18`；本次 CLI／IO／繪圖／驗收修改未提交，未 push。
+- 歷史：[起步報告](STAGE16_REPORT_2026-09-09.md) 已提交 `e8ebe18`；CLI／IO／繪圖／驗收後續已提交 `ef9eada`，代表圖補提交 `23aa2df`；未 push。
 
 <a id="stage-17"></a>
 ## 17：Jenqwei 資料集 — 已完成（2026-09-10）
@@ -49,13 +49,23 @@
 - 邊界：22 項專屬測試，含窗口錨點、短段／padlen、污染、同名來源、上採樣、manifest 缺漏／錯序及來源／產物篡改；全排除仍失敗。三張診斷圖目視通過。
 - Guard：入口已完成分段遷移與驗收，可接受缺口；不改其他入口 guard。`--allow-short-drop` 才允許排除；既有輸出不覆寫。
 - 實跑：`python tools/validate_jenqwei_dataset_stage17.py --out /path/to/new-directory`；專屬測試 `tests/test_jenqwei_dataset_regression.py`。
-- Git：本階段與第十六階段後半修改尚未提交，未 push。下一工作單元為下表品質 scorer，尚未開始。
+- Git：第十六階段後半及第十七階段已提交 `ef9eada`；代表圖／manifest 補提交 `23aa2df`，未 push。下一工作單元為第十八階段品質 scorer。
 
-## 入口遷移後的待辦（尚未編號）
+<a id="stage-18"></a>
+## 18：品質 scorer — 進行中（核心診斷增量）
+
+- 目標：`lilia/quality.py` 與品質呼叫端／audit／圖形；[盤點與契約](STAGE18_QUALITY_INVENTORY.md)。
+- 已實作：保留 legacy overall／detail，新增 valid／invalid reasons、component diagnostics、usable_overall、preset／stage／config context；主版與兩份 bundle 同步。
+- 舊基準：`23aa2df` 的四 presets、五真實來源 raw／BP 118 窗口，加合成邊界共 130 輸入／520 評分／1,950 陣列；數值與 NaN 位置精確一致。
+- 本增量：[報告](STAGE18_CORE_REPORT_2026-09-10.md)；未變更呼叫端品質門檻及篩選行為，不能把核心測試通過當整階段完成。
+- 下一步：逐入口傳遞 raw／filtered stage 與 diagnostics 到 audit／輸出 reader，核對是否採用 usable_overall 的窗口差異；處理圖形無效／低分辨識。
+- 起始測試：`python tools/refactor_check.py check --tests tests/test_quality_diagnostics_regression.py tests/test_event_qeeg_regression.py tests/test_subject_comparison_regression.py tests/test_tflite_baseline_regression.py`
+- 完成條件：callers／readers／圖形與 preset／stage 全程可追蹤；真實數值、短窗／污染／fallback、接受排除差異、目視及完整檢查。尚未完成。
+
+## 入口遷移後的其餘待辦（尚未編號）
 
 | 工作單元 | 接手範圍／完成依據 |
 | --- | --- |
-| 品質 scorer | 短窗、非有限與例外 fallback；invalid reason、preset／stage 可追蹤與數值案例。 |
 | 方法校準 | baseline policies、PSD profiles、Goertzel 門檻／normalization、MI estimator／surrogates；保留舊 profile 及比較證據。 |
 | 架構與 F19 | 大入口拆分、移除計算對繪圖私有函式的依賴、明示 deprecated 參數的相容策略。 |
 | 批次與產物 | 批次失敗報告、來源／設定追蹤、CSV／sidecar／圖形成套原子發佈。 |

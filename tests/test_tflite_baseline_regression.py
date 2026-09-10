@@ -181,7 +181,10 @@ class TFLiteBaselineTests(unittest.TestCase):
             self.run_plot(invalid, on_insufficient='skip')
         audit = json.loads((self.root / 'out/Demo_S1_tflite_analysis.json').read_text())
         self.assertEqual(audit['baselines'][0]['status'], 'excluded')
-        frame = pd.read_csv(self.root / 'out/Demo_S1_tflite_metrics.csv')
+        # Identity hashes are strings: numeric inference on an exponent-like
+        # SHA-256 can crash the installed pandas C parser. Use the real reader.
+        frame, _ = load_tflite_table(self.root / 'out/Demo_S1_tflite_metrics.csv',
+                                     self.root / 'Demo/merged.csv', summary.TFLITE_MODEL_PATH)
         self.assertFalse(frame.quality_valid.any())
         self.assertTrue(frame.focus_ch1.isna().all())
 

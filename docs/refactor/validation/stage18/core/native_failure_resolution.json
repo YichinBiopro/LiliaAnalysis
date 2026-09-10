@@ -1,0 +1,9 @@
+{
+  "status": "resolved",
+  "original_exit_code": -11,
+  "location": "tests/test_tflite_baseline_regression.py: direct pandas.read_csv",
+  "reproducer": "config_id\\n0e55543158260b8a30afd2b8efb9522035188112308be06a61a0a2cbd834a49e\\n",
+  "cause": "Installed pandas C parser crashes during numeric inference on exponent-like SHA-256 text.",
+  "fix": "Use existing load_tflite_table with explicit string identities and full source/schema verification.",
+  "validation": "The nine TFLite baseline tests passed after the reader change; full-suite result is recorded separately."
+}

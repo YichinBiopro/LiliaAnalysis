@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "scope": "scorer additive diagnostics; caller migration pending",
+  "inputs": 130,
+  "real_inputs": 118,
+  "presets": 4,
+  "evaluations": 520,
+  "arrays_compared": 1950,
+  "max_abs_error": 0.0,
+  "valid_channels": 1973,
+  "invalid_channels": 95,
+  "note": "NaN locations also match. Existing legacy fallbacks and thresholds were not changed."
+}

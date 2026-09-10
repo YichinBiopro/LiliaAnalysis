@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "date": "2026-09-10",
+  "path": "diagnostics.png",
+  "sha256": "8a9ef78062154fb85f5f999451e1c9b98bd52f614db4a27e27c6b9487a42b404",
+  "finding": "目視確認200 Hz的100點exclusive-stop邊界；8至100點標為無activity子窗，101點起有有效計算值；藍線保留舊分數，低分與無效分開。這是核心診斷圖，未宣稱呼叫端圖形已遷移。"
+}
