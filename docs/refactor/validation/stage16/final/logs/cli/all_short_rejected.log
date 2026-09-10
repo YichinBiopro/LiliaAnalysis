@@ -1,0 +1,3 @@
+failed: /tmp/lilia-stage16-final-v1/all_short.csv — audit /tmp/lilia-stage16-final-v1/all_short_rejected/all_short_analysis_audit.json
+FAILED /tmp/lilia-stage16-final-v1/all_short.csv: No source segment contains a complete TFLite window after resampling
+0 sources succeeded, 1 failed.

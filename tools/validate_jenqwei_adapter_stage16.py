@@ -1,6 +1,6 @@
 """Verify the stage-16 processing increment against frozen continuous/segment baselines.
 
-This validates processing only; the CLI and plots remain on the guarded legacy path.
+This validates processing only; full CLI/plot acceptance uses validate_jenqwei_stage16.py.
 """
 import argparse
 import json
@@ -26,8 +26,8 @@ def main():
     out = parser.parse_args().out.resolve()
     out.mkdir(parents=True, exist_ok=False)
     manifest = {'schema_version': 1, 'files': [], 'comparisons': []}
-    analysis = {'scope': 'stage16_processing_increment', 'cli_guard': 'retained',
-                'plots': 'legacy_not_migrated', 'cases': {}}
+    analysis = {'scope': 'stage16_processing_increment', 'cli_guard': 'legacy_run_pipeline_only',
+                'plots': 'not_validated_by_this_script', 'cases': {}}
 
     def remember(path, expected=None):
         actual = file_sha256(path)

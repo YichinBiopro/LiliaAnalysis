@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-10T03:00:24.044207+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage17/final/real_splits.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage17/final/gapped_splits.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage17/final/fractional_splits.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage17/final/visual_review.json",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage17/final/fractional_splits.png": "012271dbfa36fdd84e95a10792df5718b415c7ffee2a7326071f77f275d7c8c2",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage17/final/gapped_splits.png": "eb4fce73c0bc70b8d5816c21b14410d22f3fbb519ea2f7da41e033bbdfb83d0b",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage17/final/real_splits.png": "e2da01c253e834e70a7792162d48a2f963435bb510ade199c6dbe12ada253ba0",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage17/final/visual_evidence.json": "9168ade50bc2efb884cdd32611955028c4d971511ba13176c2b0d24de53f4bfd",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage17/final/visual_review.json": "b95699ee02dd65f5596cd25b441f75ce5815174f7ba97b212a0c89d65538569a"
+  },
+  "log": "/tmp/lilia-stage17-visual-v1/evidence.log"
+}

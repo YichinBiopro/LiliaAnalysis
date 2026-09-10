@@ -1,0 +1,22 @@
+[
+  {
+    "path": "/tmp/lilia-stage16-final-v1/details/small_gap_detail_ch1_pipeline_comparison.png",
+    "sha256": "04a8e0064edadf62a8bcf546d5efc7d6ba05c9705e76d37408dd7ce069564925",
+    "xlim_s": [
+      11.975,
+      12.025
+    ]
+  },
+  {
+    "path": "/tmp/lilia-stage16-final-v1/details/short_prefix_detail_ch1_pipeline_comparison.png",
+    "sha256": "960f98df0b8edf092216af035e343d1d7a950f59abf579e4eacd795b6cb9dade",
+    "xlim_s": [
+      0.0,
+      0.04
+    ]
+  },
+  {
+    "path": "/tmp/lilia-stage16-final-v1/render_details.py",
+    "sha256": "1a45885fe06466b1583f2f0b79fdb4ec1cafde25c5d3d2ba2a3e71b095836ab0"
+  }
+]

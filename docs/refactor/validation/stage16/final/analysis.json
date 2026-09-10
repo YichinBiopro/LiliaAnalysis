@@ -1,0 +1,1549 @@
+{
+  "scope": "stage16_final_acceptance",
+  "commands": [
+    {
+      "name": "processing",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/tools/validate_jenqwei_adapter_stage16.py",
+        "--out",
+        "/tmp/lilia-stage16-final-v1/processing"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0
+    },
+    {
+      "name": "real_all",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+        "--csv",
+        "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+        "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+        "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+        "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+        "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+        "--outdir",
+        "/tmp/lilia-stage16-final-v1/real_all",
+        "--channels",
+        "0",
+        "1",
+        "--max-sec",
+        "60.0"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0
+    },
+    {
+      "name": "synthetic_cli",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+        "--csv",
+        "/tmp/lilia-stage16-final-v1/synthetic.csv",
+        "--outdir",
+        "/tmp/lilia-stage16-final-v1/synthetic_cli",
+        "--channels",
+        "0",
+        "1",
+        "2",
+        "3",
+        "--max-sec",
+        "60.0"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0
+    },
+    {
+      "name": "short_display",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+        "--csv",
+        "/tmp/lilia-stage16-final-v1/synthetic.csv",
+        "--outdir",
+        "/tmp/lilia-stage16-final-v1/short_display",
+        "--channels",
+        "0",
+        "--max-sec",
+        "0.5"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0
+    },
+    {
+      "name": "real_gapped_cli",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+        "--csv",
+        "/tmp/lilia-stage16-final-v1/real_gapped.csv",
+        "--outdir",
+        "/tmp/lilia-stage16-final-v1/real_gapped_cli",
+        "--channels",
+        "0",
+        "1",
+        "2",
+        "3",
+        "--max-sec",
+        "60.0"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0
+    },
+    {
+      "name": "small_gap_cli",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+        "--csv",
+        "/tmp/lilia-stage16-final-v1/small_gap.csv",
+        "--outdir",
+        "/tmp/lilia-stage16-final-v1/small_gap_cli",
+        "--channels",
+        "0",
+        "1",
+        "--max-sec",
+        "60.0"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0
+    },
+    {
+      "name": "all_short_rejected",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+        "--csv",
+        "/tmp/lilia-stage16-final-v1/all_short.csv",
+        "--outdir",
+        "/tmp/lilia-stage16-final-v1/all_short_rejected",
+        "--channels",
+        "0",
+        "1",
+        "--max-sec",
+        "60.0"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1
+    },
+    {
+      "name": "pollution_rejected",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+        "--csv",
+        "/tmp/lilia-stage16-final-v1/polluted_short.csv",
+        "--outdir",
+        "/tmp/lilia-stage16-final-v1/pollution_rejected",
+        "--channels",
+        "0",
+        "1",
+        "--max-sec",
+        "60.0"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1
+    },
+    {
+      "name": "missing_rejected",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+        "--csv",
+        "/tmp/lilia-stage16-final-v1/missing.csv",
+        "--outdir",
+        "/tmp/lilia-stage16-final-v1/missing_rejected",
+        "--channels",
+        "0",
+        "1",
+        "--max-sec",
+        "60.0"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1
+    },
+    {
+      "name": "channel_rejected",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+        "--csv",
+        "/tmp/lilia-stage16-final-v1/small_gap.csv",
+        "--outdir",
+        "/tmp/lilia-stage16-final-v1/channel_rejected",
+        "--channels",
+        "4",
+        "--max-sec",
+        "60.0"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1
+    },
+    {
+      "name": "display_rejected",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+        "--csv",
+        "/tmp/lilia-stage16-final-v1/small_gap.csv",
+        "--outdir",
+        "/tmp/lilia-stage16-final-v1/display_rejected",
+        "--channels",
+        "0",
+        "1",
+        "--max-sec",
+        "nan"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1
+    },
+    {
+      "name": "collision",
+      "command": [
+        "/home/bps/.pyenv/versions/3.10.12/bin/python",
+        "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+        "--csv",
+        "/tmp/lilia-stage16-final-v1/small_gap.csv",
+        "--outdir",
+        "/tmp/lilia-stage16-final-v1/small_gap_cli"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1
+    }
+  ],
+  "cases": {
+    "move_head": {
+      "before_rows": 11994,
+      "after_rows": 11600,
+      "max_absolute_errors": {
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "tfl_time_us_200": 0.0,
+        "time_us_200": 0.0
+      },
+      "plot_timeline": {
+        "time_axis": "elapsed_from_source_epoch",
+        "source_epoch_us": 0,
+        "xlim_s": [
+          0.0,
+          59.968
+        ],
+        "channels": [
+          {
+            "before_source_channel": 1,
+            "after_source_channel": 1
+          },
+          {
+            "before_source_channel": 2,
+            "after_source_channel": 2
+          }
+        ],
+        "excluded_spans": [],
+        "missing_spans": [],
+        "after_tails": [
+          {
+            "segment_id": 0,
+            "start_s": 58.0,
+            "end_s": 59.968,
+            "trimmed_samples": 394
+          }
+        ],
+        "psd": {
+          "method": "Welch density per source segment, no cross-segment average",
+          "fs": 200,
+          "nperseg": "min(800, before_segment_samples, branch_segment_samples)",
+          "window": "hann",
+          "overlap": "half",
+          "detrend": "constant"
+        },
+        "stft": {
+          "fs": 200,
+          "nperseg": "min(256, displayed_segment_samples)",
+          "noverlap": 128,
+          "window": "hann",
+          "boundary": "zeros",
+          "padded": true,
+          "fmax": 50,
+          "scale": "20*log10(abs(z)+1e-8)",
+          "short_display": "omit_if_at_most_128_samples",
+          "display_limit": "floor(max_sec*200)/200 elapsed; no packed-gap truncation"
+        },
+        "display_max_sec": 60.0
+      },
+      "spectral_coverage": {
+        "0": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 11994,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 59.968
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 11600,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 58.0
+          }
+        ],
+        "1": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 11994,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 59.968
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 11600,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 58.0
+          }
+        ]
+      }
+    },
+    "talk": {
+      "before_rows": 12260,
+      "after_rows": 12000,
+      "max_absolute_errors": {
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "tfl_time_us_200": 0.0,
+        "time_us_200": 0.0
+      },
+      "plot_timeline": {
+        "time_axis": "elapsed_from_source_epoch",
+        "source_epoch_us": 0,
+        "xlim_s": [
+          0.0,
+          60.0
+        ],
+        "channels": [
+          {
+            "before_source_channel": 1,
+            "after_source_channel": 1
+          },
+          {
+            "before_source_channel": 2,
+            "after_source_channel": 2
+          }
+        ],
+        "excluded_spans": [],
+        "missing_spans": [],
+        "after_tails": [
+          {
+            "segment_id": 0,
+            "start_s": 60.0,
+            "end_s": 61.296,
+            "trimmed_samples": 260
+          }
+        ],
+        "psd": {
+          "method": "Welch density per source segment, no cross-segment average",
+          "fs": 200,
+          "nperseg": "min(800, before_segment_samples, branch_segment_samples)",
+          "window": "hann",
+          "overlap": "half",
+          "detrend": "constant"
+        },
+        "stft": {
+          "fs": 200,
+          "nperseg": "min(256, displayed_segment_samples)",
+          "noverlap": 128,
+          "window": "hann",
+          "boundary": "zeros",
+          "padded": true,
+          "fmax": 50,
+          "scale": "20*log10(abs(z)+1e-8)",
+          "short_display": "omit_if_at_most_128_samples",
+          "display_limit": "floor(max_sec*200)/200 elapsed; no packed-gap truncation"
+        },
+        "display_max_sec": 60.0
+      },
+      "spectral_coverage": {
+        "0": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          }
+        ],
+        "1": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          }
+        ]
+      }
+    },
+    "vibration_level1": {
+      "before_rows": 12391,
+      "after_rows": 12000,
+      "max_absolute_errors": {
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "tfl_time_us_200": 0.0,
+        "time_us_200": 0.0
+      },
+      "plot_timeline": {
+        "time_axis": "elapsed_from_source_epoch",
+        "source_epoch_us": 0,
+        "xlim_s": [
+          0.0,
+          60.0
+        ],
+        "channels": [
+          {
+            "before_source_channel": 1,
+            "after_source_channel": 1
+          },
+          {
+            "before_source_channel": 2,
+            "after_source_channel": 2
+          }
+        ],
+        "excluded_spans": [],
+        "missing_spans": [],
+        "after_tails": [
+          {
+            "segment_id": 0,
+            "start_s": 60.0,
+            "end_s": 61.952,
+            "trimmed_samples": 391
+          }
+        ],
+        "psd": {
+          "method": "Welch density per source segment, no cross-segment average",
+          "fs": 200,
+          "nperseg": "min(800, before_segment_samples, branch_segment_samples)",
+          "window": "hann",
+          "overlap": "half",
+          "detrend": "constant"
+        },
+        "stft": {
+          "fs": 200,
+          "nperseg": "min(256, displayed_segment_samples)",
+          "noverlap": 128,
+          "window": "hann",
+          "boundary": "zeros",
+          "padded": true,
+          "fmax": 50,
+          "scale": "20*log10(abs(z)+1e-8)",
+          "short_display": "omit_if_at_most_128_samples",
+          "display_limit": "floor(max_sec*200)/200 elapsed; no packed-gap truncation"
+        },
+        "display_max_sec": 60.0
+      },
+      "spectral_coverage": {
+        "0": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          }
+        ],
+        "1": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          }
+        ]
+      }
+    },
+    "vibration_level2": {
+      "before_rows": 12925,
+      "after_rows": 12800,
+      "max_absolute_errors": {
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "tfl_time_us_200": 0.0,
+        "time_us_200": 0.0
+      },
+      "plot_timeline": {
+        "time_axis": "elapsed_from_source_epoch",
+        "source_epoch_us": 0,
+        "xlim_s": [
+          0.0,
+          60.0
+        ],
+        "channels": [
+          {
+            "before_source_channel": 1,
+            "after_source_channel": 1
+          },
+          {
+            "before_source_channel": 2,
+            "after_source_channel": 2
+          }
+        ],
+        "excluded_spans": [],
+        "missing_spans": [],
+        "after_tails": [
+          {
+            "segment_id": 0,
+            "start_s": 64.0,
+            "end_s": 64.624,
+            "trimmed_samples": 125
+          }
+        ],
+        "psd": {
+          "method": "Welch density per source segment, no cross-segment average",
+          "fs": 200,
+          "nperseg": "min(800, before_segment_samples, branch_segment_samples)",
+          "window": "hann",
+          "overlap": "half",
+          "detrend": "constant"
+        },
+        "stft": {
+          "fs": 200,
+          "nperseg": "min(256, displayed_segment_samples)",
+          "noverlap": 128,
+          "window": "hann",
+          "boundary": "zeros",
+          "padded": true,
+          "fmax": 50,
+          "scale": "20*log10(abs(z)+1e-8)",
+          "short_display": "omit_if_at_most_128_samples",
+          "display_limit": "floor(max_sec*200)/200 elapsed; no packed-gap truncation"
+        },
+        "display_max_sec": 60.0
+      },
+      "spectral_coverage": {
+        "0": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          }
+        ],
+        "1": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          }
+        ]
+      }
+    },
+    "vibration_level3": {
+      "before_rows": 12260,
+      "after_rows": 12000,
+      "max_absolute_errors": {
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "tfl_time_us_200": 0.0,
+        "time_us_200": 0.0
+      },
+      "plot_timeline": {
+        "time_axis": "elapsed_from_source_epoch",
+        "source_epoch_us": 0,
+        "xlim_s": [
+          0.0,
+          60.0
+        ],
+        "channels": [
+          {
+            "before_source_channel": 1,
+            "after_source_channel": 1
+          },
+          {
+            "before_source_channel": 2,
+            "after_source_channel": 2
+          }
+        ],
+        "excluded_spans": [],
+        "missing_spans": [],
+        "after_tails": [
+          {
+            "segment_id": 0,
+            "start_s": 60.0,
+            "end_s": 61.296,
+            "trimmed_samples": 260
+          }
+        ],
+        "psd": {
+          "method": "Welch density per source segment, no cross-segment average",
+          "fs": 200,
+          "nperseg": "min(800, before_segment_samples, branch_segment_samples)",
+          "window": "hann",
+          "overlap": "half",
+          "detrend": "constant"
+        },
+        "stft": {
+          "fs": 200,
+          "nperseg": "min(256, displayed_segment_samples)",
+          "noverlap": 128,
+          "window": "hann",
+          "boundary": "zeros",
+          "padded": true,
+          "fmax": 50,
+          "scale": "20*log10(abs(z)+1e-8)",
+          "short_display": "omit_if_at_most_128_samples",
+          "display_limit": "floor(max_sec*200)/200 elapsed; no packed-gap truncation"
+        },
+        "display_max_sec": 60.0
+      },
+      "spectral_coverage": {
+        "0": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          }
+        ],
+        "1": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 12000,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 60.0
+          }
+        ]
+      }
+    },
+    "synthetic": {
+      "before_rows": 1002,
+      "after_rows": 800,
+      "max_absolute_errors": {
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "tfl_time_us_200": 0.0,
+        "time_us_200": 0.0
+      },
+      "plot_timeline": {
+        "time_axis": "elapsed_from_source_epoch",
+        "source_epoch_us": 1234567,
+        "xlim_s": [
+          0.0,
+          5.006
+        ],
+        "channels": [
+          {
+            "before_source_channel": 1,
+            "after_source_channel": 1
+          },
+          {
+            "before_source_channel": 2,
+            "after_source_channel": 2
+          },
+          {
+            "before_source_channel": 3,
+            "after_source_channel": null
+          },
+          {
+            "before_source_channel": 4,
+            "after_source_channel": null
+          }
+        ],
+        "excluded_spans": [],
+        "missing_spans": [],
+        "after_tails": [
+          {
+            "segment_id": 0,
+            "start_s": 4.0,
+            "end_s": 5.006,
+            "trimmed_samples": 202
+          }
+        ],
+        "psd": {
+          "method": "Welch density per source segment, no cross-segment average",
+          "fs": 200,
+          "nperseg": "min(800, before_segment_samples, branch_segment_samples)",
+          "window": "hann",
+          "overlap": "half",
+          "detrend": "constant"
+        },
+        "stft": {
+          "fs": 200,
+          "nperseg": "min(256, displayed_segment_samples)",
+          "noverlap": 128,
+          "window": "hann",
+          "boundary": "zeros",
+          "padded": true,
+          "fmax": 50,
+          "scale": "20*log10(abs(z)+1e-8)",
+          "short_display": "omit_if_at_most_128_samples",
+          "display_limit": "floor(max_sec*200)/200 elapsed; no packed-gap truncation"
+        },
+        "display_max_sec": 60.0
+      },
+      "spectral_coverage": {
+        "0": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 1002,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 5.006
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 800,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 4.0
+          }
+        ],
+        "1": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 1002,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 5.006
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 800,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 4.0
+          }
+        ],
+        "2": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 1002,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 5.006
+          }
+        ],
+        "3": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 1002,
+            "stft_status": "computed",
+            "clip_start_s": 0.0,
+            "clip_end_s": 5.006
+          }
+        ]
+      }
+    },
+    "short_display": {
+      "before_rows": 1002,
+      "after_rows": 800,
+      "max_absolute_errors": {
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "tfl_time_us_200": 0.0,
+        "time_us_200": 0.0
+      },
+      "plot_timeline": {
+        "time_axis": "elapsed_from_source_epoch",
+        "source_epoch_us": 1234567,
+        "xlim_s": [
+          0.0,
+          0.5
+        ],
+        "channels": [
+          {
+            "before_source_channel": 1,
+            "after_source_channel": 1
+          }
+        ],
+        "excluded_spans": [],
+        "missing_spans": [],
+        "after_tails": [
+          {
+            "segment_id": 0,
+            "start_s": 4.0,
+            "end_s": 5.006,
+            "trimmed_samples": 202
+          }
+        ],
+        "psd": {
+          "method": "Welch density per source segment, no cross-segment average",
+          "fs": 200,
+          "nperseg": "min(800, before_segment_samples, branch_segment_samples)",
+          "window": "hann",
+          "overlap": "half",
+          "detrend": "constant"
+        },
+        "stft": {
+          "fs": 200,
+          "nperseg": "min(256, displayed_segment_samples)",
+          "noverlap": 128,
+          "window": "hann",
+          "boundary": "zeros",
+          "padded": true,
+          "fmax": 50,
+          "scale": "20*log10(abs(z)+1e-8)",
+          "short_display": "omit_if_at_most_128_samples",
+          "display_limit": "floor(max_sec*200)/200 elapsed; no packed-gap truncation"
+        },
+        "display_max_sec": 0.5
+      },
+      "spectral_coverage": {
+        "0": [
+          {
+            "segment_id": 0,
+            "branch": "before",
+            "stft_samples": 100,
+            "stft_status": "too_short_for_128_overlap",
+            "clip_start_s": 0.0,
+            "clip_end_s": 0.5
+          },
+          {
+            "segment_id": 0,
+            "branch": "after",
+            "stft_samples": 100,
+            "stft_status": "too_short_for_128_overlap",
+            "clip_start_s": 0.0,
+            "clip_end_s": 0.5
+          }
+        ]
+      }
+    },
+    "real_gapped": {
+      "before_rows": 1403,
+      "after_rows": 1200,
+      "max_absolute_errors": {
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "tfl_time_us_200": 0.0,
+        "time_us_200": 0.0
+      },
+      "plot_timeline": {
+        "time_axis": "elapsed_from_source_epoch",
+        "source_epoch_us": 9000000000000001,
+        "xlim_s": [
+          0.0,
+          31.994
+        ],
+        "channels": [
+          {
+            "before_source_channel": 1,
+            "after_source_channel": 1
+          },
+          {
+            "before_source_channel": 2,
+            "after_source_channel": 2
+          },
+          {
+            "before_source_channel": 3,
+            "after_source_channel": null
+          },
+          {
+            "before_source_channel": 4,
+            "after_source_channel": null
+          }
+        ],
+        "excluded_spans": [
+          {
+            "segment_id": 0,
+            "start_s": 0.0,
+            "end_s": 0.02,
+            "reason": "shorter_than_model_window"
+          },
+          {
+            "segment_id": 3,
+            "start_s": 30.0,
+            "end_s": 31.994,
+            "reason": "shorter_than_model_window"
+          }
+        ],
+        "missing_spans": [
+          {
+            "start_s": 0.02,
+            "end_s": 10.0
+          },
+          {
+            "start_s": 13.006,
+            "end_s": 20.0
+          },
+          {
+            "start_s": 24.002,
+            "end_s": 30.0
+          }
+        ],
+        "after_tails": [
+          {
+            "segment_id": 1,
+            "start_s": 12.0,
+            "end_s": 13.006,
+            "trimmed_samples": 202
+          },
+          {
+            "segment_id": 2,
+            "start_s": 24.0,
+            "end_s": 24.002,
+            "trimmed_samples": 1
+          }
+        ],
+        "psd": {
+          "method": "Welch density per source segment, no cross-segment average",
+          "fs": 200,
+          "nperseg": "min(800, before_segment_samples, branch_segment_samples)",
+          "window": "hann",
+          "overlap": "half",
+          "detrend": "constant"
+        },
+        "stft": {
+          "fs": 200,
+          "nperseg": "min(256, displayed_segment_samples)",
+          "noverlap": 128,
+          "window": "hann",
+          "boundary": "zeros",
+          "padded": true,
+          "fmax": 50,
+          "scale": "20*log10(abs(z)+1e-8)",
+          "short_display": "omit_if_at_most_128_samples",
+          "display_limit": "floor(max_sec*200)/200 elapsed; no packed-gap truncation"
+        },
+        "display_max_sec": 60.0
+      },
+      "spectral_coverage": {
+        "0": [
+          {
+            "segment_id": 1,
+            "branch": "before",
+            "stft_samples": 602,
+            "stft_status": "computed",
+            "clip_start_s": 10.0,
+            "clip_end_s": 13.006
+          },
+          {
+            "segment_id": 1,
+            "branch": "after",
+            "stft_samples": 400,
+            "stft_status": "computed",
+            "clip_start_s": 10.0,
+            "clip_end_s": 12.0
+          },
+          {
+            "segment_id": 2,
+            "branch": "before",
+            "stft_samples": 801,
+            "stft_status": "computed",
+            "clip_start_s": 20.0,
+            "clip_end_s": 24.002
+          },
+          {
+            "segment_id": 2,
+            "branch": "after",
+            "stft_samples": 800,
+            "stft_status": "computed",
+            "clip_start_s": 20.0,
+            "clip_end_s": 24.0
+          }
+        ],
+        "1": [
+          {
+            "segment_id": 1,
+            "branch": "before",
+            "stft_samples": 602,
+            "stft_status": "computed",
+            "clip_start_s": 10.0,
+            "clip_end_s": 13.006
+          },
+          {
+            "segment_id": 1,
+            "branch": "after",
+            "stft_samples": 400,
+            "stft_status": "computed",
+            "clip_start_s": 10.0,
+            "clip_end_s": 12.0
+          },
+          {
+            "segment_id": 2,
+            "branch": "before",
+            "stft_samples": 801,
+            "stft_status": "computed",
+            "clip_start_s": 20.0,
+            "clip_end_s": 24.002
+          },
+          {
+            "segment_id": 2,
+            "branch": "after",
+            "stft_samples": 800,
+            "stft_status": "computed",
+            "clip_start_s": 20.0,
+            "clip_end_s": 24.0
+          }
+        ],
+        "2": [
+          {
+            "segment_id": 1,
+            "branch": "before",
+            "stft_samples": 602,
+            "stft_status": "computed",
+            "clip_start_s": 10.0,
+            "clip_end_s": 13.006
+          },
+          {
+            "segment_id": 2,
+            "branch": "before",
+            "stft_samples": 801,
+            "stft_status": "computed",
+            "clip_start_s": 20.0,
+            "clip_end_s": 24.002
+          }
+        ],
+        "3": [
+          {
+            "segment_id": 1,
+            "branch": "before",
+            "stft_samples": 602,
+            "stft_status": "computed",
+            "clip_start_s": 10.0,
+            "clip_end_s": 13.006
+          },
+          {
+            "segment_id": 2,
+            "branch": "before",
+            "stft_samples": 801,
+            "stft_status": "computed",
+            "clip_start_s": 20.0,
+            "clip_end_s": 24.002
+          }
+        ]
+      }
+    },
+    "small_gap": {
+      "before_rows": 800,
+      "after_rows": 800,
+      "max_absolute_errors": {
+        "pre_data_200": 0.0,
+        "tfl_data_200": 0.0,
+        "tfl_time_us_200": 0.0,
+        "time_us_200": 0.0
+      },
+      "plot_timeline": {
+        "time_axis": "elapsed_from_source_epoch",
+        "source_epoch_us": 9000000000000001,
+        "xlim_s": [
+          0.0,
+          21.994
+        ],
+        "channels": [
+          {
+            "before_source_channel": 1,
+            "after_source_channel": 1
+          },
+          {
+            "before_source_channel": 2,
+            "after_source_channel": 2
+          }
+        ],
+        "excluded_spans": [
+          {
+            "segment_id": 0,
+            "start_s": 0.0,
+            "end_s": 0.02,
+            "reason": "shorter_than_model_window"
+          },
+          {
+            "segment_id": 3,
+            "start_s": 20.0,
+            "end_s": 21.994,
+            "reason": "shorter_than_model_window"
+          }
+        ],
+        "missing_spans": [
+          {
+            "start_s": 0.02,
+            "end_s": 10.0
+          },
+          {
+            "start_s": 11.996,
+            "end_s": 12.002
+          },
+          {
+            "start_s": 13.998,
+            "end_s": 20.0
+          }
+        ],
+        "after_tails": [],
+        "psd": {
+          "method": "Welch density per source segment, no cross-segment average",
+          "fs": 200,
+          "nperseg": "min(800, before_segment_samples, branch_segment_samples)",
+          "window": "hann",
+          "overlap": "half",
+          "detrend": "constant"
+        },
+        "stft": {
+          "fs": 200,
+          "nperseg": "min(256, displayed_segment_samples)",
+          "noverlap": 128,
+          "window": "hann",
+          "boundary": "zeros",
+          "padded": true,
+          "fmax": 50,
+          "scale": "20*log10(abs(z)+1e-8)",
+          "short_display": "omit_if_at_most_128_samples",
+          "display_limit": "floor(max_sec*200)/200 elapsed; no packed-gap truncation"
+        },
+        "display_max_sec": 60.0
+      },
+      "spectral_coverage": {
+        "0": [
+          {
+            "segment_id": 1,
+            "branch": "before",
+            "stft_samples": 400,
+            "stft_status": "computed",
+            "clip_start_s": 10.0,
+            "clip_end_s": 11.996
+          },
+          {
+            "segment_id": 1,
+            "branch": "after",
+            "stft_samples": 400,
+            "stft_status": "computed",
+            "clip_start_s": 10.0,
+            "clip_end_s": 11.996
+          },
+          {
+            "segment_id": 2,
+            "branch": "before",
+            "stft_samples": 400,
+            "stft_status": "computed",
+            "clip_start_s": 12.002,
+            "clip_end_s": 13.998
+          },
+          {
+            "segment_id": 2,
+            "branch": "after",
+            "stft_samples": 400,
+            "stft_status": "computed",
+            "clip_start_s": 12.002,
+            "clip_end_s": 13.998
+          }
+        ],
+        "1": [
+          {
+            "segment_id": 1,
+            "branch": "before",
+            "stft_samples": 400,
+            "stft_status": "computed",
+            "clip_start_s": 10.0,
+            "clip_end_s": 11.996
+          },
+          {
+            "segment_id": 1,
+            "branch": "after",
+            "stft_samples": 400,
+            "stft_status": "computed",
+            "clip_start_s": 10.0,
+            "clip_end_s": 11.996
+          },
+          {
+            "segment_id": 2,
+            "branch": "before",
+            "stft_samples": 400,
+            "stft_status": "computed",
+            "clip_start_s": 12.002,
+            "clip_end_s": 13.998
+          },
+          {
+            "segment_id": 2,
+            "branch": "after",
+            "stft_samples": 400,
+            "stft_status": "computed",
+            "clip_start_s": 12.002,
+            "clip_end_s": 13.998
+          }
+        ]
+      }
+    },
+    "all_short_rejected": {
+      "status": "failed",
+      "stage": "process_segments",
+      "error": {
+        "type": "ValueError",
+        "message": "No source segment contains a complete TFLite window after resampling"
+      }
+    },
+    "pollution_rejected": {
+      "status": "failed",
+      "stage": "process_segments",
+      "error": {
+        "type": "ValueError",
+        "message": "Jenqwei input contains non-finite samples, including excluded segments"
+      }
+    },
+    "missing_rejected": {
+      "status": "failed",
+      "stage": "load_source",
+      "error": {
+        "type": "FileNotFoundError",
+        "message": "[Errno 2] No such file or directory: '/tmp/lilia-stage16-final-v1/missing.csv'"
+      }
+    },
+    "channel_rejected": {
+      "status": "failed",
+      "stage": "preflight",
+      "error": {
+        "type": "ValueError",
+        "message": "Display channels must be distinct indices in 0..3; only 0/1 have model After"
+      }
+    },
+    "display_rejected": {
+      "status": "failed",
+      "stage": "preflight",
+      "error": {
+        "type": "ValueError",
+        "message": "max_display_sec must be finite and positive"
+      }
+    },
+    "collision": {
+      "status": "failed",
+      "preserved_previous_artifacts": true
+    }
+  },
+  "spectra": {
+    "move_head": {
+      "ch0_after_s0_psd": 0.0,
+      "ch0_after_s0_psd_f": 0.0,
+      "ch0_after_s0_stft_db": 0.0,
+      "ch0_after_s0_stft_f": 0.0,
+      "ch0_after_s0_stft_t": 7.105427357601002e-15,
+      "ch0_before_s0_psd": 0.0,
+      "ch0_before_s0_psd_f": 0.0,
+      "ch0_before_s0_stft_db": 0.0,
+      "ch0_before_s0_stft_f": 0.0,
+      "ch0_before_s0_stft_t": 7.105427357601002e-15,
+      "ch1_after_s0_psd": 0.0,
+      "ch1_after_s0_psd_f": 0.0,
+      "ch1_after_s0_stft_db": 0.0,
+      "ch1_after_s0_stft_f": 0.0,
+      "ch1_after_s0_stft_t": 7.105427357601002e-15,
+      "ch1_before_s0_psd": 0.0,
+      "ch1_before_s0_psd_f": 0.0,
+      "ch1_before_s0_stft_db": 0.0,
+      "ch1_before_s0_stft_f": 0.0,
+      "ch1_before_s0_stft_t": 7.105427357601002e-15
+    },
+    "talk": {
+      "ch0_after_s0_psd": 0.0,
+      "ch0_after_s0_psd_f": 0.0,
+      "ch0_after_s0_stft_db": 0.0,
+      "ch0_after_s0_stft_f": 0.0,
+      "ch0_after_s0_stft_t": 7.105427357601002e-15,
+      "ch0_before_s0_psd": 0.0,
+      "ch0_before_s0_psd_f": 0.0,
+      "ch0_before_s0_stft_db": 0.0,
+      "ch0_before_s0_stft_f": 0.0,
+      "ch0_before_s0_stft_t": 7.105427357601002e-15,
+      "ch1_after_s0_psd": 0.0,
+      "ch1_after_s0_psd_f": 0.0,
+      "ch1_after_s0_stft_db": 0.0,
+      "ch1_after_s0_stft_f": 0.0,
+      "ch1_after_s0_stft_t": 7.105427357601002e-15,
+      "ch1_before_s0_psd": 0.0,
+      "ch1_before_s0_psd_f": 0.0,
+      "ch1_before_s0_stft_db": 0.0,
+      "ch1_before_s0_stft_f": 0.0,
+      "ch1_before_s0_stft_t": 7.105427357601002e-15
+    },
+    "vibration_level1": {
+      "ch0_after_s0_psd": 0.0,
+      "ch0_after_s0_psd_f": 0.0,
+      "ch0_after_s0_stft_db": 0.0,
+      "ch0_after_s0_stft_f": 0.0,
+      "ch0_after_s0_stft_t": 7.105427357601002e-15,
+      "ch0_before_s0_psd": 0.0,
+      "ch0_before_s0_psd_f": 0.0,
+      "ch0_before_s0_stft_db": 0.0,
+      "ch0_before_s0_stft_f": 0.0,
+      "ch0_before_s0_stft_t": 7.105427357601002e-15,
+      "ch1_after_s0_psd": 0.0,
+      "ch1_after_s0_psd_f": 0.0,
+      "ch1_after_s0_stft_db": 0.0,
+      "ch1_after_s0_stft_f": 0.0,
+      "ch1_after_s0_stft_t": 7.105427357601002e-15,
+      "ch1_before_s0_psd": 0.0,
+      "ch1_before_s0_psd_f": 0.0,
+      "ch1_before_s0_stft_db": 0.0,
+      "ch1_before_s0_stft_f": 0.0,
+      "ch1_before_s0_stft_t": 7.105427357601002e-15
+    },
+    "vibration_level2": {
+      "ch0_after_s0_psd": 0.0,
+      "ch0_after_s0_psd_f": 0.0,
+      "ch0_after_s0_stft_db": 0.0,
+      "ch0_after_s0_stft_f": 0.0,
+      "ch0_after_s0_stft_t": 7.105427357601002e-15,
+      "ch0_before_s0_psd": 0.0,
+      "ch0_before_s0_psd_f": 0.0,
+      "ch0_before_s0_stft_db": 0.0,
+      "ch0_before_s0_stft_f": 0.0,
+      "ch0_before_s0_stft_t": 7.105427357601002e-15,
+      "ch1_after_s0_psd": 0.0,
+      "ch1_after_s0_psd_f": 0.0,
+      "ch1_after_s0_stft_db": 0.0,
+      "ch1_after_s0_stft_f": 0.0,
+      "ch1_after_s0_stft_t": 7.105427357601002e-15,
+      "ch1_before_s0_psd": 0.0,
+      "ch1_before_s0_psd_f": 0.0,
+      "ch1_before_s0_stft_db": 0.0,
+      "ch1_before_s0_stft_f": 0.0,
+      "ch1_before_s0_stft_t": 7.105427357601002e-15
+    },
+    "vibration_level3": {
+      "ch0_after_s0_psd": 0.0,
+      "ch0_after_s0_psd_f": 0.0,
+      "ch0_after_s0_stft_db": 0.0,
+      "ch0_after_s0_stft_f": 0.0,
+      "ch0_after_s0_stft_t": 7.105427357601002e-15,
+      "ch0_before_s0_psd": 0.0,
+      "ch0_before_s0_psd_f": 0.0,
+      "ch0_before_s0_stft_db": 0.0,
+      "ch0_before_s0_stft_f": 0.0,
+      "ch0_before_s0_stft_t": 7.105427357601002e-15,
+      "ch1_after_s0_psd": 0.0,
+      "ch1_after_s0_psd_f": 0.0,
+      "ch1_after_s0_stft_db": 0.0,
+      "ch1_after_s0_stft_f": 0.0,
+      "ch1_after_s0_stft_t": 7.105427357601002e-15,
+      "ch1_before_s0_psd": 0.0,
+      "ch1_before_s0_psd_f": 0.0,
+      "ch1_before_s0_stft_db": 0.0,
+      "ch1_before_s0_stft_f": 0.0,
+      "ch1_before_s0_stft_t": 7.105427357601002e-15
+    },
+    "synthetic": {
+      "ch0_after_s0_psd": 0.0,
+      "ch0_after_s0_psd_f": 0.0,
+      "ch0_after_s0_stft_db": 0.0,
+      "ch0_after_s0_stft_f": 0.0,
+      "ch0_after_s0_stft_t": 4.440892098500626e-16,
+      "ch0_before_s0_psd": 0.0,
+      "ch0_before_s0_psd_f": 0.0,
+      "ch0_before_s0_stft_db": 0.0,
+      "ch0_before_s0_stft_f": 0.0,
+      "ch0_before_s0_stft_t": 8.881784197001252e-16,
+      "ch1_after_s0_psd": 0.0,
+      "ch1_after_s0_psd_f": 0.0,
+      "ch1_after_s0_stft_db": 0.0,
+      "ch1_after_s0_stft_f": 0.0,
+      "ch1_after_s0_stft_t": 4.440892098500626e-16,
+      "ch1_before_s0_psd": 0.0,
+      "ch1_before_s0_psd_f": 0.0,
+      "ch1_before_s0_stft_db": 0.0,
+      "ch1_before_s0_stft_f": 0.0,
+      "ch1_before_s0_stft_t": 8.881784197001252e-16,
+      "ch2_before_s0_psd": 0.0,
+      "ch2_before_s0_psd_f": 0.0,
+      "ch2_before_s0_stft_db": 0.0,
+      "ch2_before_s0_stft_f": 0.0,
+      "ch2_before_s0_stft_t": 8.881784197001252e-16,
+      "ch3_before_s0_psd": 0.0,
+      "ch3_before_s0_psd_f": 0.0,
+      "ch3_before_s0_stft_db": 0.0,
+      "ch3_before_s0_stft_f": 0.0,
+      "ch3_before_s0_stft_t": 8.881784197001252e-16
+    },
+    "real_gapped": {
+      "ch0_after_s1_psd": 0.0,
+      "ch0_after_s1_psd_f": 0.0,
+      "ch0_after_s1_stft_db": 0.0,
+      "ch0_after_s1_stft_f": 0.0,
+      "ch0_after_s1_stft_t": 1.7763568394002505e-15,
+      "ch0_after_s2_psd": 0.0,
+      "ch0_after_s2_psd_f": 0.0,
+      "ch0_after_s2_stft_db": 0.0,
+      "ch0_after_s2_stft_f": 0.0,
+      "ch0_after_s2_stft_t": 0.0,
+      "ch0_before_s1_psd": 0.0,
+      "ch0_before_s1_psd_f": 0.0,
+      "ch0_before_s1_stft_db": 0.0,
+      "ch0_before_s1_stft_f": 0.0,
+      "ch0_before_s1_stft_t": 1.7763568394002505e-15,
+      "ch0_before_s2_psd": 0.0,
+      "ch0_before_s2_psd_f": 0.0,
+      "ch0_before_s2_stft_db": 0.0,
+      "ch0_before_s2_stft_f": 0.0,
+      "ch0_before_s2_stft_t": 0.0,
+      "ch1_after_s1_psd": 0.0,
+      "ch1_after_s1_psd_f": 0.0,
+      "ch1_after_s1_stft_db": 0.0,
+      "ch1_after_s1_stft_f": 0.0,
+      "ch1_after_s1_stft_t": 1.7763568394002505e-15,
+      "ch1_after_s2_psd": 0.0,
+      "ch1_after_s2_psd_f": 0.0,
+      "ch1_after_s2_stft_db": 0.0,
+      "ch1_after_s2_stft_f": 0.0,
+      "ch1_after_s2_stft_t": 0.0,
+      "ch1_before_s1_psd": 0.0,
+      "ch1_before_s1_psd_f": 0.0,
+      "ch1_before_s1_stft_db": 0.0,
+      "ch1_before_s1_stft_f": 0.0,
+      "ch1_before_s1_stft_t": 1.7763568394002505e-15,
+      "ch1_before_s2_psd": 0.0,
+      "ch1_before_s2_psd_f": 0.0,
+      "ch1_before_s2_stft_db": 0.0,
+      "ch1_before_s2_stft_f": 0.0,
+      "ch1_before_s2_stft_t": 0.0,
+      "ch2_before_s1_psd": 0.0,
+      "ch2_before_s1_psd_f": 0.0,
+      "ch2_before_s1_stft_db": 0.0,
+      "ch2_before_s1_stft_f": 0.0,
+      "ch2_before_s1_stft_t": 1.7763568394002505e-15,
+      "ch2_before_s2_psd": 0.0,
+      "ch2_before_s2_psd_f": 0.0,
+      "ch2_before_s2_stft_db": 0.0,
+      "ch2_before_s2_stft_f": 0.0,
+      "ch2_before_s2_stft_t": 0.0,
+      "ch3_before_s1_psd": 0.0,
+      "ch3_before_s1_psd_f": 0.0,
+      "ch3_before_s1_stft_db": 0.0,
+      "ch3_before_s1_stft_f": 0.0,
+      "ch3_before_s1_stft_t": 1.7763568394002505e-15,
+      "ch3_before_s2_psd": 0.0,
+      "ch3_before_s2_psd_f": 0.0,
+      "ch3_before_s2_stft_db": 0.0,
+      "ch3_before_s2_stft_f": 0.0,
+      "ch3_before_s2_stft_t": 0.0
+    },
+    "small_gap": {
+      "ch0_after_s1_psd": 0.0,
+      "ch0_after_s1_psd_f": 0.0,
+      "ch0_after_s1_stft_db": 0.0,
+      "ch0_after_s1_stft_f": 0.0,
+      "ch0_after_s1_stft_t": 1.7763568394002505e-15,
+      "ch0_after_s2_psd": 0.0,
+      "ch0_after_s2_psd_f": 0.0,
+      "ch0_after_s2_stft_db": 0.0,
+      "ch0_after_s2_stft_f": 0.0,
+      "ch0_after_s2_stft_t": 1.7763568394002505e-15,
+      "ch0_before_s1_psd": 0.0,
+      "ch0_before_s1_psd_f": 0.0,
+      "ch0_before_s1_stft_db": 0.0,
+      "ch0_before_s1_stft_f": 0.0,
+      "ch0_before_s1_stft_t": 1.7763568394002505e-15,
+      "ch0_before_s2_psd": 0.0,
+      "ch0_before_s2_psd_f": 0.0,
+      "ch0_before_s2_stft_db": 0.0,
+      "ch0_before_s2_stft_f": 0.0,
+      "ch0_before_s2_stft_t": 1.7763568394002505e-15,
+      "ch1_after_s1_psd": 0.0,
+      "ch1_after_s1_psd_f": 0.0,
+      "ch1_after_s1_stft_db": 0.0,
+      "ch1_after_s1_stft_f": 0.0,
+      "ch1_after_s1_stft_t": 1.7763568394002505e-15,
+      "ch1_after_s2_psd": 0.0,
+      "ch1_after_s2_psd_f": 0.0,
+      "ch1_after_s2_stft_db": 0.0,
+      "ch1_after_s2_stft_f": 0.0,
+      "ch1_after_s2_stft_t": 1.7763568394002505e-15,
+      "ch1_before_s1_psd": 0.0,
+      "ch1_before_s1_psd_f": 0.0,
+      "ch1_before_s1_stft_db": 0.0,
+      "ch1_before_s1_stft_f": 0.0,
+      "ch1_before_s1_stft_t": 1.7763568394002505e-15,
+      "ch1_before_s2_psd": 0.0,
+      "ch1_before_s2_psd_f": 0.0,
+      "ch1_before_s2_stft_db": 0.0,
+      "ch1_before_s2_stft_f": 0.0,
+      "ch1_before_s2_stft_t": 1.7763568394002505e-15
+    }
+  },
+  "visual_review": "required_separately",
+  "legacy_run_pipeline_guard": "retained"
+}

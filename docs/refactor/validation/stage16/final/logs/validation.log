@@ -1,0 +1,24 @@
+processing: exit=0
+real_all: exit=0
+synthetic_cli: exit=0
+short_display: exit=0
+real_gapped_cli: exit=0
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789007527.540807      56 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789007528.353451      56 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+small_gap_cli: exit=0
+all_short_rejected: exit=1
+pollution_rejected: exit=1
+missing_rejected: exit=1
+channel_rejected: exit=1
+display_rejected: exit=1
+collision: exit=1
+PASS final stage-16 CLI/numerical acceptance: /tmp/lilia-stage16-final-v1/analysis.json

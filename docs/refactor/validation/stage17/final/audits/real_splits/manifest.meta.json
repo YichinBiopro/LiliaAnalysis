@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "jenqwei_dataset_manifest",
+  "parameters": {
+    "n_splits": 5,
+    "fs_in": 500.0,
+    "fs_out": 200.0,
+    "bp_low": 0.5,
+    "bp_high": 45.0,
+    "n_ch": 4,
+    "tflite_win": 400,
+    "allow_short_drop": false,
+    "one_window_per_file": false
+  },
+  "sources": [
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv"
+  ],
+  "manifest_sha256": "e3733f9216b30d1577e92e5f9f8dfc7288955e128a7930092d2f0019605e520a",
+  "audits": [
+    {
+      "path": "/tmp/lilia-stage17-final-v2/real_splits/2026-06-18-lilia-move head_f2a97a7face9/dataset.json",
+      "sha256": "8885a310ea830142e56da7a707a6d068875536f7bc028d6c1e645100683ae981"
+    },
+    {
+      "path": "/tmp/lilia-stage17-final-v2/real_splits/2026-06-18-lilia-talk_089b851fa1cc/dataset.json",
+      "sha256": "d95bb7173095086e634b4c3580e5cc0e67e80680f722dd973c6c6c6d45b7fb3a"
+    },
+    {
+      "path": "/tmp/lilia-stage17-final-v2/real_splits/2026-06-18-lilia-vibration-level1_4ef02e2b8abd/dataset.json",
+      "sha256": "a77f698c23785f6dd51909158d05f7e6ea7fd51e0f3d2eff60277f63274feee7"
+    },
+    {
+      "path": "/tmp/lilia-stage17-final-v2/real_splits/2026-06-18-lilia-vibration-level2_2b183c472ddc/dataset.json",
+      "sha256": "e123290e229c90f5891a6cf9180e20ff328963594f98b0d88865fb06716df29a"
+    },
+    {
+      "path": "/tmp/lilia-stage17-final-v2/real_splits/2026-06-18-lilia-vibration-level3_583d6e1d2075/dataset.json",
+      "sha256": "286fed240c5dd02d663bccdb4d58a56e63f770373e856fd341c356e8d0a4f7fa"
+    }
+  ]
+}

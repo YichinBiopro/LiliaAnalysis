@@ -1,0 +1,528 @@
+{
+  "schema_version": 1,
+  "kind": "jenqwei_analysis",
+  "status": "success",
+  "stage": "complete",
+  "source_path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+  "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+  "quality_state": "disabled",
+  "continuity_guard": "segmented_main; legacy_run_pipeline_guard_retained",
+  "inference_status": "completed",
+  "tables_verified": true,
+  "plotting_status": "complete",
+  "artifacts": [
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_before.csv",
+      "sha256": "6ba0a66ec0e792f661690a0b0acc064b078d44a386657ec2341f838848510c29"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_before.csv.meta.json",
+      "sha256": "3a0a78007523f0244463f3861acb4b312cefb91d0d61201f7b98ab0a9b0062d2"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_after.csv",
+      "sha256": "7d5b5c4f0926f52000424a614afab1c91768691931d92033e5145e672d535caa"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_after.csv.meta.json",
+      "sha256": "29af174d1085c469bf6065990ce000fed494b1ffde2316bcf6504d7f611f0915"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_ch1_pipeline_comparison.png",
+      "sha256": "33644fcd34a25fef8bee9b5d4c0c8d1c38fc3b03b6fe1452da8699d043751785"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_ch2_pipeline_comparison.png",
+      "sha256": "ca31695482ca4e907b5226a4ea14dee8074aa38167e4b37595bbe31285c204aa"
+    }
+  ],
+  "requested_channels": [
+    0,
+    1
+  ],
+  "max_display_sec": 60.0,
+  "source_id": "07cf89ba2216be66a09195c884a565498d802bf193432f21a7be27b0b9320d8b",
+  "inference": {
+    "segments": [
+      {
+        "segment_id": 0,
+        "raw_start_idx": 0,
+        "raw_end_idx": 30648,
+        "raw_start_us": 0,
+        "raw_end_us": 61296000,
+        "resampled_samples": 12260,
+        "retained_samples": 12000,
+        "trimmed_samples": 260,
+        "ratio_up": 2,
+        "ratio_down": 5,
+        "status": "retained",
+        "reason": "",
+        "output_start_idx": 0,
+        "output_end_idx": 12000
+      }
+    ],
+    "model_windows": [
+      {
+        "model_window_id": 0,
+        "segment_id": 0,
+        "output_start_idx": 0,
+        "output_end_idx": 400,
+        "window_start_us": 0,
+        "window_end_us": 2000000,
+        "raw_start_idx": 0,
+        "raw_end_idx": 1000
+      },
+      {
+        "model_window_id": 1,
+        "segment_id": 0,
+        "output_start_idx": 400,
+        "output_end_idx": 800,
+        "window_start_us": 2000000,
+        "window_end_us": 4000000,
+        "raw_start_idx": 1000,
+        "raw_end_idx": 2000
+      },
+      {
+        "model_window_id": 2,
+        "segment_id": 0,
+        "output_start_idx": 800,
+        "output_end_idx": 1200,
+        "window_start_us": 4000000,
+        "window_end_us": 6000000,
+        "raw_start_idx": 2000,
+        "raw_end_idx": 3000
+      },
+      {
+        "model_window_id": 3,
+        "segment_id": 0,
+        "output_start_idx": 1200,
+        "output_end_idx": 1600,
+        "window_start_us": 6000000,
+        "window_end_us": 8000000,
+        "raw_start_idx": 3000,
+        "raw_end_idx": 4000
+      },
+      {
+        "model_window_id": 4,
+        "segment_id": 0,
+        "output_start_idx": 1600,
+        "output_end_idx": 2000,
+        "window_start_us": 8000000,
+        "window_end_us": 10000000,
+        "raw_start_idx": 4000,
+        "raw_end_idx": 5000
+      },
+      {
+        "model_window_id": 5,
+        "segment_id": 0,
+        "output_start_idx": 2000,
+        "output_end_idx": 2400,
+        "window_start_us": 10000000,
+        "window_end_us": 12000000,
+        "raw_start_idx": 5000,
+        "raw_end_idx": 6000
+      },
+      {
+        "model_window_id": 6,
+        "segment_id": 0,
+        "output_start_idx": 2400,
+        "output_end_idx": 2800,
+        "window_start_us": 12000000,
+        "window_end_us": 14000000,
+        "raw_start_idx": 6000,
+        "raw_end_idx": 7000
+      },
+      {
+        "model_window_id": 7,
+        "segment_id": 0,
+        "output_start_idx": 2800,
+        "output_end_idx": 3200,
+        "window_start_us": 14000000,
+        "window_end_us": 16000000,
+        "raw_start_idx": 7000,
+        "raw_end_idx": 8000
+      },
+      {
+        "model_window_id": 8,
+        "segment_id": 0,
+        "output_start_idx": 3200,
+        "output_end_idx": 3600,
+        "window_start_us": 16000000,
+        "window_end_us": 18000000,
+        "raw_start_idx": 8000,
+        "raw_end_idx": 9000
+      },
+      {
+        "model_window_id": 9,
+        "segment_id": 0,
+        "output_start_idx": 3600,
+        "output_end_idx": 4000,
+        "window_start_us": 18000000,
+        "window_end_us": 20000000,
+        "raw_start_idx": 9000,
+        "raw_end_idx": 10000
+      },
+      {
+        "model_window_id": 10,
+        "segment_id": 0,
+        "output_start_idx": 4000,
+        "output_end_idx": 4400,
+        "window_start_us": 20000000,
+        "window_end_us": 22000000,
+        "raw_start_idx": 10000,
+        "raw_end_idx": 11000
+      },
+      {
+        "model_window_id": 11,
+        "segment_id": 0,
+        "output_start_idx": 4400,
+        "output_end_idx": 4800,
+        "window_start_us": 22000000,
+        "window_end_us": 24000000,
+        "raw_start_idx": 11000,
+        "raw_end_idx": 12000
+      },
+      {
+        "model_window_id": 12,
+        "segment_id": 0,
+        "output_start_idx": 4800,
+        "output_end_idx": 5200,
+        "window_start_us": 24000000,
+        "window_end_us": 26000000,
+        "raw_start_idx": 12000,
+        "raw_end_idx": 13000
+      },
+      {
+        "model_window_id": 13,
+        "segment_id": 0,
+        "output_start_idx": 5200,
+        "output_end_idx": 5600,
+        "window_start_us": 26000000,
+        "window_end_us": 28000000,
+        "raw_start_idx": 13000,
+        "raw_end_idx": 14000
+      },
+      {
+        "model_window_id": 14,
+        "segment_id": 0,
+        "output_start_idx": 5600,
+        "output_end_idx": 6000,
+        "window_start_us": 28000000,
+        "window_end_us": 30000000,
+        "raw_start_idx": 14000,
+        "raw_end_idx": 15000
+      },
+      {
+        "model_window_id": 15,
+        "segment_id": 0,
+        "output_start_idx": 6000,
+        "output_end_idx": 6400,
+        "window_start_us": 30000000,
+        "window_end_us": 32000000,
+        "raw_start_idx": 15000,
+        "raw_end_idx": 16000
+      },
+      {
+        "model_window_id": 16,
+        "segment_id": 0,
+        "output_start_idx": 6400,
+        "output_end_idx": 6800,
+        "window_start_us": 32000000,
+        "window_end_us": 34000000,
+        "raw_start_idx": 16000,
+        "raw_end_idx": 17000
+      },
+      {
+        "model_window_id": 17,
+        "segment_id": 0,
+        "output_start_idx": 6800,
+        "output_end_idx": 7200,
+        "window_start_us": 34000000,
+        "window_end_us": 36000000,
+        "raw_start_idx": 17000,
+        "raw_end_idx": 18000
+      },
+      {
+        "model_window_id": 18,
+        "segment_id": 0,
+        "output_start_idx": 7200,
+        "output_end_idx": 7600,
+        "window_start_us": 36000000,
+        "window_end_us": 38000000,
+        "raw_start_idx": 18000,
+        "raw_end_idx": 19000
+      },
+      {
+        "model_window_id": 19,
+        "segment_id": 0,
+        "output_start_idx": 7600,
+        "output_end_idx": 8000,
+        "window_start_us": 38000000,
+        "window_end_us": 40000000,
+        "raw_start_idx": 19000,
+        "raw_end_idx": 20000
+      },
+      {
+        "model_window_id": 20,
+        "segment_id": 0,
+        "output_start_idx": 8000,
+        "output_end_idx": 8400,
+        "window_start_us": 40000000,
+        "window_end_us": 42000000,
+        "raw_start_idx": 20000,
+        "raw_end_idx": 21000
+      },
+      {
+        "model_window_id": 21,
+        "segment_id": 0,
+        "output_start_idx": 8400,
+        "output_end_idx": 8800,
+        "window_start_us": 42000000,
+        "window_end_us": 44000000,
+        "raw_start_idx": 21000,
+        "raw_end_idx": 22000
+      },
+      {
+        "model_window_id": 22,
+        "segment_id": 0,
+        "output_start_idx": 8800,
+        "output_end_idx": 9200,
+        "window_start_us": 44000000,
+        "window_end_us": 46000000,
+        "raw_start_idx": 22000,
+        "raw_end_idx": 23000
+      },
+      {
+        "model_window_id": 23,
+        "segment_id": 0,
+        "output_start_idx": 9200,
+        "output_end_idx": 9600,
+        "window_start_us": 46000000,
+        "window_end_us": 48000000,
+        "raw_start_idx": 23000,
+        "raw_end_idx": 24000
+      },
+      {
+        "model_window_id": 24,
+        "segment_id": 0,
+        "output_start_idx": 9600,
+        "output_end_idx": 10000,
+        "window_start_us": 48000000,
+        "window_end_us": 50000000,
+        "raw_start_idx": 24000,
+        "raw_end_idx": 25000
+      },
+      {
+        "model_window_id": 25,
+        "segment_id": 0,
+        "output_start_idx": 10000,
+        "output_end_idx": 10400,
+        "window_start_us": 50000000,
+        "window_end_us": 52000000,
+        "raw_start_idx": 25000,
+        "raw_end_idx": 26000
+      },
+      {
+        "model_window_id": 26,
+        "segment_id": 0,
+        "output_start_idx": 10400,
+        "output_end_idx": 10800,
+        "window_start_us": 52000000,
+        "window_end_us": 54000000,
+        "raw_start_idx": 26000,
+        "raw_end_idx": 27000
+      },
+      {
+        "model_window_id": 27,
+        "segment_id": 0,
+        "output_start_idx": 10800,
+        "output_end_idx": 11200,
+        "window_start_us": 54000000,
+        "window_end_us": 56000000,
+        "raw_start_idx": 27000,
+        "raw_end_idx": 28000
+      },
+      {
+        "model_window_id": 28,
+        "segment_id": 0,
+        "output_start_idx": 11200,
+        "output_end_idx": 11600,
+        "window_start_us": 56000000,
+        "window_end_us": 58000000,
+        "raw_start_idx": 28000,
+        "raw_end_idx": 29000
+      },
+      {
+        "model_window_id": 29,
+        "segment_id": 0,
+        "output_start_idx": 11600,
+        "output_end_idx": 12000,
+        "window_start_us": 58000000,
+        "window_end_us": 60000000,
+        "raw_start_idx": 29000,
+        "raw_end_idx": 30000
+      }
+    ],
+    "source_samples": 30648,
+    "source_epoch_us": 0,
+    "fs_in": 500.0,
+    "fs_out": 200.0,
+    "model_window": 400
+  },
+  "nonfinite_input": [],
+  "parameters": {
+    "input_fs": 500,
+    "fs": 200,
+    "input_channels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "output_channels": [
+      1,
+      2
+    ],
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "filter_order": 4,
+    "filter_dtype": "float32",
+    "resampling": "scipy.signal.resample_poly default",
+    "model_window": 400,
+    "model_sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "normalization": "window RMS(float64) + 1e-8; scale float32",
+    "model_padding": "none",
+    "before_tail": "retain_all_resampled_samples_of_retained_segments",
+    "after_tail": "trim_each_segment_to_complete_400_sample_windows",
+    "short_segments": "exclude_from_both_branches",
+    "nonfinite_input": "fail_including_excluded",
+    "max_samples": null,
+    "truncation": "filter_full_source_segment_then_truncate_raw_prefix",
+    "quality_state": "disabled"
+  },
+  "code_sha256": {
+    "analyze_jenqwei_pipeline.py": "a057447896dfce72e26521fb65968d7ca64eae976fb37bd81ef551af8ec6ecaa",
+    "lilia/jenqwei_io.py": "b4cdf38814cf519ca0347fdbe898a76cbd726243a72fd77077b456eef5659eb6",
+    "lilia/jenqwei_plot.py": "60e95c5ed1773779e20a224a4775e5476641925b4ad756d70cd06c59fc0234c9",
+    "lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+    "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+    "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+    "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+    "plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029"
+  },
+  "segments": [
+    {
+      "segment_id": 0,
+      "raw_start_idx": 0,
+      "raw_end_idx": 30648,
+      "raw_start_us": 0,
+      "raw_end_us": 61296000,
+      "resampled_samples": 12260,
+      "retained_samples": 12000,
+      "trimmed_samples": 260,
+      "ratio_up": 2,
+      "ratio_down": 5,
+      "status": "retained",
+      "reason": "",
+      "output_start_idx": 0,
+      "output_end_idx": 12000,
+      "filter_context_start_idx": 0,
+      "filter_context_end_idx": 30648,
+      "packed_raw_start_idx": 0,
+      "packed_raw_end_idx": 30648,
+      "before_start_idx": 0,
+      "before_end_idx": 12260
+    }
+  ],
+  "plot_timeline": {
+    "time_axis": "elapsed_from_source_epoch",
+    "source_epoch_us": 0,
+    "xlim_s": [
+      0.0,
+      60.0
+    ],
+    "channels": [
+      {
+        "before_source_channel": 1,
+        "after_source_channel": 1
+      },
+      {
+        "before_source_channel": 2,
+        "after_source_channel": 2
+      }
+    ],
+    "excluded_spans": [],
+    "missing_spans": [],
+    "after_tails": [
+      {
+        "segment_id": 0,
+        "start_s": 60.0,
+        "end_s": 61.296,
+        "trimmed_samples": 260
+      }
+    ],
+    "psd": {
+      "method": "Welch density per source segment, no cross-segment average",
+      "fs": 200,
+      "nperseg": "min(800, before_segment_samples, branch_segment_samples)",
+      "window": "hann",
+      "overlap": "half",
+      "detrend": "constant"
+    },
+    "stft": {
+      "fs": 200,
+      "nperseg": "min(256, displayed_segment_samples)",
+      "noverlap": 128,
+      "window": "hann",
+      "boundary": "zeros",
+      "padded": true,
+      "fmax": 50,
+      "scale": "20*log10(abs(z)+1e-8)",
+      "short_display": "omit_if_at_most_128_samples",
+      "display_limit": "floor(max_sec*200)/200 elapsed; no packed-gap truncation"
+    },
+    "display_max_sec": 60.0
+  },
+  "spectral_coverage": {
+    "0": [
+      {
+        "segment_id": 0,
+        "branch": "before",
+        "stft_samples": 12000,
+        "stft_status": "computed",
+        "clip_start_s": 0.0,
+        "clip_end_s": 60.0
+      },
+      {
+        "segment_id": 0,
+        "branch": "after",
+        "stft_samples": 12000,
+        "stft_status": "computed",
+        "clip_start_s": 0.0,
+        "clip_end_s": 60.0
+      }
+    ],
+    "1": [
+      {
+        "segment_id": 0,
+        "branch": "before",
+        "stft_samples": 12000,
+        "stft_status": "computed",
+        "clip_start_s": 0.0,
+        "clip_end_s": 60.0
+      },
+      {
+        "segment_id": 0,
+        "branch": "after",
+        "stft_samples": 12000,
+        "stft_status": "computed",
+        "clip_start_s": 0.0,
+        "clip_end_s": 60.0
+      }
+    ]
+  },
+  "before_samples": 12260,
+  "after_samples": 12000
+}

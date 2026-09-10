@@ -1,0 +1,75 @@
+{
+  "cases": [
+    {
+      "case": "real_splits",
+      "files": 25,
+      "windows": 145,
+      "samples": 58000,
+      "sources": 5
+    },
+    {
+      "case": "real_windows",
+      "files": 145,
+      "windows": 145,
+      "samples": 58000,
+      "sources": 5
+    },
+    {
+      "case": "synthetic_splits",
+      "files": 5,
+      "windows": 5,
+      "samples": 2000,
+      "sources": 1
+    },
+    {
+      "case": "synthetic_windows",
+      "files": 5,
+      "windows": 5,
+      "samples": 2000,
+      "sources": 1
+    },
+    {
+      "case": "fractional_splits",
+      "files": 5,
+      "windows": 5,
+      "samples": 2000,
+      "sources": 1
+    },
+    {
+      "case": "fractional_windows",
+      "files": 5,
+      "windows": 5,
+      "samples": 2000,
+      "sources": 1
+    },
+    {
+      "case": "gapped_splits",
+      "files": 4,
+      "windows": 8,
+      "samples": 3200,
+      "sources": 1
+    },
+    {
+      "case": "gapped_windows",
+      "files": 8,
+      "windows": 8,
+      "samples": 3200,
+      "sources": 1
+    }
+  ],
+  "expected_failures": [
+    {
+      "case": "strict_short",
+      "reason": "Cannot form windows; excluded (segment, split, reason): [(2, 1, 'filter_too_short'), (2, 2, 'filter_too_short')]"
+    },
+    {
+      "case": "all_dropped",
+      "reason": "No complete dataset windows; all splits excluded"
+    },
+    {
+      "case": "polluted_tail",
+      "reason": "Non-finite EEG samples: /tmp/lilia-stage17-final-v2/polluted.csv"
+    }
+  ],
+  "numerics": "All CSV float32 values and int64 microseconds match exactly; gapped references filter each full segment independently."
+}

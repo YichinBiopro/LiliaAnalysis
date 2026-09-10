@@ -1,0 +1,988 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_move_head_reference.npz",
+      "sha256": "131af32eb34890916e8c7565536093c1d32bf2a6381c39d2a324b8985861b241"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_move_head_reference.json",
+      "sha256": "497edfe7648800d0901554900b8f432ae2d7505b9b9bb6c6bdc4b5c605b56984"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+      "sha256": "fd291cbc7f9ee7c24561751c9c70793e067d161be24459801868f0727d2d8540"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_move_head_reference_actual.npz",
+      "sha256": "230cced58831f852fc22f382bfb37830bbd4331c57a9bb641d5ee414fa2bfa7e"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_move_head_reference_expected.npz",
+      "sha256": "397824eb704ede538acc771bff7a62e432d214b00b28ce74a209f2987fe0c2f0"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_reference.npz",
+      "sha256": "d3a7a0c330618bde3c4fd8f8c0e4079f8afa06b6f16b99da23301ee0a459bc00"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_reference.json",
+      "sha256": "c4b9ccdebc088008663ebc56c05e7861c09d09541791baf9914bd5082c7182c1"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_synthetic_reference_actual.npz",
+      "sha256": "64bd7af2dbae4be468a0f429aefef5e571610f32e17feb9e132b3324e43817cb"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_synthetic_reference_expected.npz",
+      "sha256": "64bd7af2dbae4be468a0f429aefef5e571610f32e17feb9e132b3324e43817cb"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_truncated_reference.npz",
+      "sha256": "15e1bf161062d4bcdc396865591449a5ec27027f0668f32d437326d0c853b1f1"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_synthetic_truncated_reference.json",
+      "sha256": "111207b081b8292049a1791bb4b14a00694b7429f5760d7b1c735b6c45974b31"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_synthetic_truncated_reference_actual.npz",
+      "sha256": "68fe3d32bf93370016fecd816f40750b419cebf06ef639a9197ac59b057d3a4c"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_synthetic_truncated_reference_expected.npz",
+      "sha256": "253ef219eae06d0a468b44384c3f7b957b930b9215047c13dcbee254b2f884d2"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_talk_reference.npz",
+      "sha256": "d006ce25868b1c4a592b6f3611776bd93ab6439445952ac2c7298b444a5053c4"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_talk_reference.json",
+      "sha256": "02063d1380f0684799e8329a860f1d2302e491a84027d9022f87bdb7152f81ac"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "sha256": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_talk_reference_actual.npz",
+      "sha256": "d0d4ae058456f25c1be62ddd92684db732558c2abf7ff5016f895a445edf07e2"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_talk_reference_expected.npz",
+      "sha256": "2610d11ea0b7fdce85129bd4ad61f0c3c59265b9e69146a95f7283c0115e2776"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level1_reference.npz",
+      "sha256": "bb804a86d56b62eed9e070eb570533280584922238d759ed85424d6f5c0fc22c"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level1_reference.json",
+      "sha256": "b568c514b2d3a182ccac042e01cc5ab08d35346f02dd8c00ea0f6ae1fec49fce"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+      "sha256": "248dda71a06a6c4f76a4082fd734961383b80b464d8b8fbe9278cae23866d91a"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_vibration_level1_reference_actual.npz",
+      "sha256": "b88aedfefe9b29393fd6ff15af574557850ba8237ba1fb29609a4b56bfa12c14"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_vibration_level1_reference_expected.npz",
+      "sha256": "ebea7f817fedf57e472a67ce23579e5e2356f7889d6d3dd87383796fb8031fc0"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level2_reference.npz",
+      "sha256": "10f109e8f62f6081a940402026f255bdee751a5c19c12bf43962188ace0852fb"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level2_reference.json",
+      "sha256": "892c2e392b838594163064223b3b4c9a2ba1a32298b97be05cafd024308c13f0"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+      "sha256": "3ecea3ac6d6393849157cd57b5a97e69af15a84e2bf124178fc469ac728503c0"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_vibration_level2_reference_actual.npz",
+      "sha256": "3bb430125e6cc46f7b698e00d554a94c91baf84a9b428c8d92ced24361078ea0"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_vibration_level2_reference_expected.npz",
+      "sha256": "e3b96b9b14436783b6abeebd35e32dedc315b1cd19d01c66d344eadcc91262e5"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level3_reference.npz",
+      "sha256": "2d85ca1511906acb6af31d7147c508ae1ffc830e38a266fdd3015717beacfa8d"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/jenqwei_vibration_level3_reference.json",
+      "sha256": "07c6492bb2a70fa6079ccaaf2e06a25da8395f44e537c3b2e2a0c25bee1b6475"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+      "sha256": "07cf89ba2216be66a09195c884a565498d802bf193432f21a7be27b0b9320d8b"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_vibration_level3_reference_actual.npz",
+      "sha256": "30dc0a3e6926960b06c1ce836fcd6e48b975f7dc7959b270a0eb8dafe6127503"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/jenqwei_vibration_level3_reference_expected.npz",
+      "sha256": "835dc2f1abcd11b7d5e94479cd602261c531a97b9d9c39bfe9776bcf28c305bf"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage16/baseline_legacy_entry.py.txt",
+      "sha256": "29235cad630d7636397299d94c5131c4cc44effa541efc72bb25a0973ee022fa"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/segmented_source.npz",
+      "sha256": "7583715dbbb2fdf0019b5a562beeb33002201e8ab6faffd8eb89293e59860026"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/real_segmented_actual.npz",
+      "sha256": "d82bd7ee3c91b876a29fade4810a45547286d9c51d6be9513bb9a0df298789fa"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/real_segmented_expected.npz",
+      "sha256": "d82bd7ee3c91b876a29fade4810a45547286d9c51d6be9513bb9a0df298789fa"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tools/validate_jenqwei_adapter_stage16.py",
+      "sha256": "b7549e8ad053540e94f0b69a814d72396371ec53870b03f690e1ce44a079d500"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/analyze_jenqwei_pipeline.py",
+      "sha256": "a057447896dfce72e26521fb65968d7ca64eae976fb37bd81ef551af8ec6ecaa"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/processing/analysis.json",
+      "sha256": "51e40ea082d6d92104de25f2903beabc43dbe89d1e64d9fd9490a4ad528f4c2f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all.log",
+      "sha256": "49b5beb47206c5ec1064c9ad50c451c1fd0e2565a634320afea186b9672c3e29"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-move head_analysis_audit.json",
+      "sha256": "3cf4fb994cc6efc94b4cbfff680c39c70b4a3c9e67903f7b7fa80575c40a136e"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-move head_before.csv",
+      "sha256": "a24e5be7f5dcc3ee83a3a45ba7b310c6c09986adacf2f6fb90c35c3a94339574"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-move head_before.csv.meta.json",
+      "sha256": "330f155348b842317f40be7b6d8183e262f185b260d2442ee138abd72af52cfa"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-move head_after.csv",
+      "sha256": "e1378f73cc766e999700ee261dfdb95224168fd6867c62f591f8c7b6ab7d2d63"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-move head_after.csv.meta.json",
+      "sha256": "bdab6d99d321051ea2512eafa0b02982696f4fe8466e2be2724a63f6e6adf565"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-move head_ch1_pipeline_comparison.png",
+      "sha256": "6b5a9a19f7b934d830b9f1f60ed0afdccf8c7233909b896cf65b04db7cf30b87"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-move head_ch2_pipeline_comparison.png",
+      "sha256": "bd8f8e603dcd9e4bc16e2c150b022866b1d066ba6f80eae09949bd75da8381a5"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/move_head_signals_actual.npz",
+      "sha256": "808b973ec76f57238d14aca052ed0e987f36d514d8b761035937f001713aea9a"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/move_head_signals_expected.npz",
+      "sha256": "80643460562e7fcc6cf6317904619d69e50decdc0e89e7636eb0d2506e2bf74c"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/move_head_spectra_actual.npz",
+      "sha256": "4f4f345b4c579b177c49788457780fb71f71d33859003d1d9710008d8a13a504"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/move_head_spectra_expected.npz",
+      "sha256": "e23652951404681f6abd70e6b926aeafae7f8e691818f1b6a9fd5701fc7f576f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-talk_analysis_audit.json",
+      "sha256": "3ef6674133cb1101ed1055b7789c827f3f6de7dbfdd54f23a39fc1764a545b4b"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-talk_before.csv",
+      "sha256": "a943c59dd0be81c9d27123f9db69772eca3f0eba1eacdb2d58994b24437535c0"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-talk_before.csv.meta.json",
+      "sha256": "2be39e9f7b0c323b99f46b893b19a831318cf226627a9d9ee44cb6d66604ad0f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-talk_after.csv",
+      "sha256": "d79fb84860aaffad15de2d4fe8a79e33cf27cfaf437f7f941ac3af3b7307813f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-talk_after.csv.meta.json",
+      "sha256": "3582a3a640a45fe94db7c7389d86144d15577750c59446022c686f9aeaca2438"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-talk_ch1_pipeline_comparison.png",
+      "sha256": "8b4032aab2811a67a7214ac447113bbf219fddfd144bf718ed8b88790612898b"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-talk_ch2_pipeline_comparison.png",
+      "sha256": "4fdeffc973d824730a1294651cd003f4bbdb89a6d7fa743595d30c6457d449af"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/talk_signals_actual.npz",
+      "sha256": "ec6021c551e2ab657cef302b495f79786e073df6bd3d59cf35e02dbc655db48d"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/talk_signals_expected.npz",
+      "sha256": "0be80c3bd3612f99fb081488717b068cbc84524bdb2ac4eb2534293740467d41"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/talk_spectra_actual.npz",
+      "sha256": "5b6af7fa876346a83e5504caba4b8cb2113fde4c027bc8686aa8fa9f7b53f057"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/talk_spectra_expected.npz",
+      "sha256": "f7d167c064400288e2cfee8da4a4e3ce53a5ee32ca8b09537d38b5e1632ee4b8"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level1_analysis_audit.json",
+      "sha256": "a2cc23fcfe56c2351f8625d8dccfe2d3c00875862780b3700b5de916f946da88"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level1_before.csv",
+      "sha256": "64ffcba0dd2bb22dd873139f1d4c7fc6c1f9104d5a01d3371777c71d78c46fda"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level1_before.csv.meta.json",
+      "sha256": "d0e66dda035502457c38585e978306e6dd694d91a3b6401ac9f80043385c73c7"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level1_after.csv",
+      "sha256": "893fa18573e05b4c364de36d96f96cbeb0e485279abb53e49ffe35be71cbb14f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level1_after.csv.meta.json",
+      "sha256": "8da2f55505531585dd7032d1de0db7d4fd905f1c150ea2563afe42310e3c2721"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level1_ch1_pipeline_comparison.png",
+      "sha256": "0e9bc4ff768810204174579ea38d5a037fb7938398b189bfe1db65a5b7d84ee2"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level1_ch2_pipeline_comparison.png",
+      "sha256": "0b010aa4f670ac19550579af1ceb0a0596ed494493ad9d1d98636bb40ee23291"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/vibration_level1_signals_actual.npz",
+      "sha256": "874e2c6173bf46f9a2b1b542e1c9d1222ae4c3361d0b897a2be5705661591978"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/vibration_level1_signals_expected.npz",
+      "sha256": "7a39374b77d1ce888d75d72d19402a8d3b48280734d2abdb79cf8c67bc89e63a"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/vibration_level1_spectra_actual.npz",
+      "sha256": "77813420571ab28e29db1dc8aa3e5180e3f12ef803fa6826b4dae928f9b0b0da"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/vibration_level1_spectra_expected.npz",
+      "sha256": "daacdf016a5ea5017f32e6f59f87332fb4dac980740a9d645d823e2f16196070"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level2_analysis_audit.json",
+      "sha256": "65ea8ff63c0af3a8da874adc39c252d09cfe802d472db6f6357a4eae4fe66195"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level2_before.csv",
+      "sha256": "92264fc474816746cc93341b411bb1b73d81211021cdd122f4bb863ceb26ee86"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level2_before.csv.meta.json",
+      "sha256": "874d4258564b1c041efeaee423a8c458ec320f52bdeebd49e74b258b5be5935d"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level2_after.csv",
+      "sha256": "41b45250739759dfbb947ddbbbdb04c2df1d9c8e6f11fa7d3b9a21961ad337cf"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level2_after.csv.meta.json",
+      "sha256": "1afdad04cfa040d19289156a1b9bbfe48cd94513faf9b27b1afe0c9e412d8f98"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level2_ch1_pipeline_comparison.png",
+      "sha256": "81cb5c2c44317daf0dc0375433b7ce615cfb14bfc99a91fc3d78fb2c23cbe58f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level2_ch2_pipeline_comparison.png",
+      "sha256": "d1c622bf208470adf0285b083a8c64157a0f6ee9a5f3f7a2add4314d9cf7d052"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/vibration_level2_signals_actual.npz",
+      "sha256": "6894f6ff220f84b19b08b4f6416abc95c13dfc30dee904eea7dbbf54e2a33e7d"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/vibration_level2_signals_expected.npz",
+      "sha256": "86b274627cae61d8d7621b4b7b0a3c3d6ec024cbd6a390e02174a426e6f3f4e3"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/vibration_level2_spectra_actual.npz",
+      "sha256": "680979e34f051384f56e56051bda2e63c3148666262704be24790dbe1efc0a2b"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/vibration_level2_spectra_expected.npz",
+      "sha256": "95c2bfc644ebe57064de42462e6b9953557278d7bf2ef193dd801eb5865f630c"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_analysis_audit.json",
+      "sha256": "b660fb77a171d2d008264ed87cfd887bc2cbad7a536fa50bc69d161d634920cf"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_before.csv",
+      "sha256": "6ba0a66ec0e792f661690a0b0acc064b078d44a386657ec2341f838848510c29"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_before.csv.meta.json",
+      "sha256": "3a0a78007523f0244463f3861acb4b312cefb91d0d61201f7b98ab0a9b0062d2"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_after.csv",
+      "sha256": "7d5b5c4f0926f52000424a614afab1c91768691931d92033e5145e672d535caa"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_after.csv.meta.json",
+      "sha256": "29af174d1085c469bf6065990ce000fed494b1ffde2316bcf6504d7f611f0915"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_ch1_pipeline_comparison.png",
+      "sha256": "33644fcd34a25fef8bee9b5d4c0c8d1c38fc3b03b6fe1452da8699d043751785"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_ch2_pipeline_comparison.png",
+      "sha256": "ca31695482ca4e907b5226a4ea14dee8074aa38167e4b37595bbe31285c204aa"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/vibration_level3_signals_actual.npz",
+      "sha256": "4905da828db531a8bf56968f1e2ce006b1f91d6addbe84ab2e5c725cbd81a6cd"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/vibration_level3_signals_expected.npz",
+      "sha256": "140dd385e0dbd691ab2c80afbbc91759c85630d0d99e176d21c6149996a0d45a"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/vibration_level3_spectra_actual.npz",
+      "sha256": "c61d44aaa433078fa9a3cb895e51da765949bcea67bb24ffeee287311757eb48"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/vibration_level3_spectra_expected.npz",
+      "sha256": "cfdfcab7836297dedf2b98b933aa1bac5beed08664a03b0ca1e47efd80bd4ac4"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic.csv",
+      "sha256": "450a60be455edea9813411ae03b4a4f1e38fc4215093eda65f47bd4b15601c8d"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli.log",
+      "sha256": "45fda562261425ad2006a70f941b3a07ebd9dce378f8259756b1a00d8204918c"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_analysis_audit.json",
+      "sha256": "e59d35b0855146e61b29575b57415ff34be92b81e093b13c1150e88e12cc497d"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_before.csv",
+      "sha256": "d703f00bf016bd8632b6f9a83e4e318aa1637e758c1e440d9a8f668d637ee10f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_before.csv.meta.json",
+      "sha256": "dd92ef7f23db98b0e7ef66f77b96ee1bef3433966e2304caa94f3f20f9a0691a"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_after.csv",
+      "sha256": "7ab685443b76da8b13daf02e3ea63f58207e82ac7e3fa4c5cb93de77fc4799f8"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_after.csv.meta.json",
+      "sha256": "c9e773ffc1331952b449c9aa8b2a91e85f8e46b5cece46b248c2aeddbd123bc6"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_ch1_pipeline_comparison.png",
+      "sha256": "4be6cb45eb2c35dc5188bcf47a1a78a33d13a8992a9fe37e3d464f5330eac256"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_ch2_pipeline_comparison.png",
+      "sha256": "d94b1872e8266c732e572480f98d071e51f886b256a5b5aacad6772910b21e13"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_ch3_pipeline_comparison.png",
+      "sha256": "2e75bc3a5a857062a7d7d423a06fcf7ad47660a9d620d0a3a94a54c18aa12c40"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_ch4_pipeline_comparison.png",
+      "sha256": "eaf2bd37fe11c1c5ab55d42901dede57216f83e35ac0f2a05996a0ed5c3aa292"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_signals_actual.npz",
+      "sha256": "ee5cefd47c5f3d36146f425cc6a38a06a5204624ba95a4360d2d7e80f68ec7a8"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_signals_expected.npz",
+      "sha256": "ed74fb64b09c02845ddb21762221aa89ec4ba1df094668278298c56fdd74b6f6"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_spectra_actual.npz",
+      "sha256": "71c10332ba9a35a905a43feb9467a4d95852ee9f983ccf63f383fae88ec6a65e"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_spectra_expected.npz",
+      "sha256": "e9a7f3af5e6b6f34839e9481f4a131dfbd00e1b2ee60c249b50bd125989ede2e"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/short_display.log",
+      "sha256": "916146d473fa02589b4ee0810728b567d520b606cef615f5b297258fa52ea1bd"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/short_display/synthetic_analysis_audit.json",
+      "sha256": "df545a667279fd2a35999d54ca1cc7242eec27a7adebe647fd27dfc037ea187f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/short_display/synthetic_before.csv",
+      "sha256": "d703f00bf016bd8632b6f9a83e4e318aa1637e758c1e440d9a8f668d637ee10f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/short_display/synthetic_before.csv.meta.json",
+      "sha256": "dd92ef7f23db98b0e7ef66f77b96ee1bef3433966e2304caa94f3f20f9a0691a"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/short_display/synthetic_after.csv",
+      "sha256": "7ab685443b76da8b13daf02e3ea63f58207e82ac7e3fa4c5cb93de77fc4799f8"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/short_display/synthetic_after.csv.meta.json",
+      "sha256": "c9e773ffc1331952b449c9aa8b2a91e85f8e46b5cece46b248c2aeddbd123bc6"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/short_display/synthetic_ch1_pipeline_comparison.png",
+      "sha256": "942d2d248b708cff6ccb86fb606b152be08f08b43778f0cd0dec2c8bb826de86"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/short_display_signals_actual.npz",
+      "sha256": "ee5cefd47c5f3d36146f425cc6a38a06a5204624ba95a4360d2d7e80f68ec7a8"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/short_display_signals_expected.npz",
+      "sha256": "ed74fb64b09c02845ddb21762221aa89ec4ba1df094668278298c56fdd74b6f6"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped.csv",
+      "sha256": "81702186caf427a288ea0b85d6158776e7ea5e8bef3374a8960207b80920c532"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_cli.log",
+      "sha256": "6b521502125d8a4c036845502b32fb805da61a922ff3b6b1f0c8fdfed38b8a9d"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_cli/real_gapped_analysis_audit.json",
+      "sha256": "317306619934688d11da0962510611b2db14c22b38f166703b9731fe055b4c99"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_cli/real_gapped_before.csv",
+      "sha256": "2c0f9d4e7c53d29f517c815fd8dbe79228523383da9edc9fc8cfb16c5f7e9bb2"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_cli/real_gapped_before.csv.meta.json",
+      "sha256": "53ecb3514efc4276668a17585ee9b824b242538e1de257c1f90d65b8c7db9285"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_cli/real_gapped_after.csv",
+      "sha256": "916400ca78a8a70faad0fad58c1ce5012b81f7c9efaeb0e8398b9ef6f057c108"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_cli/real_gapped_after.csv.meta.json",
+      "sha256": "dd5f873ded406a1fd6bc82a5c34a73f53533b425e073d2b07f995565cefe90b6"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_cli/real_gapped_ch1_pipeline_comparison.png",
+      "sha256": "b3dd1e49b132499ae9b7feb34ec12a4a92db02a1d54834bd17206b025e3af754"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_cli/real_gapped_ch2_pipeline_comparison.png",
+      "sha256": "a53a69f0233b488a4855ec1d33f76acca2e57c53e90088532dca7dea6d844c79"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_cli/real_gapped_ch3_pipeline_comparison.png",
+      "sha256": "07a179cda8cfd5d9256745173045e073f0d63d2894e5904af75c6d46d93973d7"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_cli/real_gapped_ch4_pipeline_comparison.png",
+      "sha256": "c77146da3652f49a54b4111bc50150a04e19a9f40a9bfc7e90513d6448c95fef"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_signals_actual.npz",
+      "sha256": "f7ed6deaa952c351d9a388e70eabc6cb4953358e1ea0c17448b53a2ccc29226e"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_signals_expected.npz",
+      "sha256": "80ec7ea62002c1d0b18c07bf55ee68de419dc20f7ec335c7fd7b0d49ba6c55ce"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_spectra_actual.npz",
+      "sha256": "fc22af4fdad9f680f3cfb39228014186fc81e8fd4416d6f3cfc7b7edae1d4851"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_spectra_expected.npz",
+      "sha256": "da5f6122656cccf346f6fb3adc577fd0fcd79cce87dcc6dbdc446f7ef4569016"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap.csv",
+      "sha256": "87e40a408796b634b3598f479e09437a2e764c791eb1779f0311dcd047d7aa83"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_cli.log",
+      "sha256": "5ccdf92fa431660a6549e9447c127581d6d54168ffcd12517888ed60b6109fb3"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_cli/small_gap_analysis_audit.json",
+      "sha256": "0e07c2cfc4a8d28202ea37a755b7512cef1b6809611a71999ef3b4bb6079aa26"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_cli/small_gap_before.csv",
+      "sha256": "1c1c509f11b9a7b70d6b15d986d58db0ca9ee8a42e38ad4e682e4f804017ccf3"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_cli/small_gap_before.csv.meta.json",
+      "sha256": "e83696f0b2daa5a4b37ac391a7f802b07cafd6edd2b3e914dc38beac2953c352"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_cli/small_gap_after.csv",
+      "sha256": "4f50a8a887a31482d83463f558d39bec8642818a51ad384cc41d87b7b6ace540"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_cli/small_gap_after.csv.meta.json",
+      "sha256": "887e047238a6f7f6a75f2f669f10036808af6de87229d6441ee47eda3154dc38"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_cli/small_gap_ch1_pipeline_comparison.png",
+      "sha256": "6a06915038e6885e103940235bec8d0a033caf8da5dbcc3103b4b37b235a1748"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_cli/small_gap_ch2_pipeline_comparison.png",
+      "sha256": "13e31bb4baad53f411a0b5b4d7f57f90742b78272b49ea153e9c715cd56ce72f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_signals_actual.npz",
+      "sha256": "be1533c8c3689079e05c333ed226bf89440cab719e16cda6072ed63702963552"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_signals_expected.npz",
+      "sha256": "a50cd4183fd04fac5604743ee5798d9c2b16c8ccff44236a60df75191c48c610"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_spectra_actual.npz",
+      "sha256": "9bfec2ede6df2af821fa891a3b548ee5451238a8683f0b5a45a127ed4c195d78"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_spectra_expected.npz",
+      "sha256": "9a149fd03be07f3a3a2991e6c1ba47ec195482f6d9b50cefd3dea427a3b82530"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/all_short.csv",
+      "sha256": "4dfdcf70fb88b58aeb230446e95ffc19557709987129c859eda61ce7b4ec0139"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/polluted_short.csv",
+      "sha256": "c70e21a07161b75fe4a4c791e73f37474c8fdbf4d46e0b92ea5b3f0a9fb360a3"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/all_short_rejected.log",
+      "sha256": "a5fab60274c701feb6f50d25c6a86e40b3b9e6ceb25f7f44d55b9f16af14ed7e"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/all_short_rejected/all_short_analysis_audit.json",
+      "sha256": "7282de55f33fa9312655074a787874d3ded7090a0df93e9f3385bb813cbe3375"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/pollution_rejected.log",
+      "sha256": "67dac76b2e33022cb2b3d96b095b2e6a383efb14c4a0ed3e2c3ac9eb97f33bab"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/pollution_rejected/polluted_short_analysis_audit.json",
+      "sha256": "6041bf12df7e3d8f0193677c249ccffa66aa63ce2315a2c4d475e7f8f49bfb5f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/missing_rejected.log",
+      "sha256": "98c6916e8ac2a0d1e0a973d43884fa6835fe79fadb4cf18931c1f9c6b78e3728"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/missing_rejected/missing_analysis_audit.json",
+      "sha256": "0337b1c9999a69cd22b2c01369e4c8b2f01de41b82a90779a0a948df6571cae7"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/channel_rejected.log",
+      "sha256": "0538e0f23f8b38fed913af7e193fe91b02377cd361c7872f7cc39b31e51ca45c"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/channel_rejected/small_gap_analysis_audit.json",
+      "sha256": "0e73d952a973324c7671dd89d2b99a20ce82a0889e46be8b5d45d0f32bd2847e"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/display_rejected.log",
+      "sha256": "a5b0e62756eacc874505e6726d87cc54bc96fe76aad968450246e645514da0ab"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/display_rejected/small_gap_analysis_audit.json",
+      "sha256": "f9f82acf943a9f04ffdd97ceff5cb32ee6868a0fece8525c1b4924b1c80d368f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/collision.log",
+      "sha256": "4ac40395d3763291e689402159a73a4af40ceffcf3aee26608750ac64bed7157"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_cli/small_gap_analysis_audit_effb29478ac74df19bbf0e35ae0af8ff.json",
+      "sha256": "d7fb46da352bdb4a3631b8151dcb8b62d03eb767398fb1beabc6a0ea5b7389c1"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tools/validate_jenqwei_stage16.py",
+      "sha256": "824bd2419123dc6ebf6d707e931903ec42f2892305f161dcfaf4babf5f5745d2"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/jenqwei_io.py",
+      "sha256": "b4cdf38814cf519ca0347fdbe898a76cbd726243a72fd77077b456eef5659eb6"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/jenqwei_plot.py",
+      "sha256": "60e95c5ed1773779e20a224a4775e5476641925b4ad756d70cd06c59fc0234c9"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tools/refactor_check.py",
+      "sha256": "cbe013b5c8e44ddd635cf65eb67ef07e7ef04b470282687869fc6044546a1097"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/analysis.json",
+      "sha256": "ecc8986358d0ec3ef5c673a0830548f7ff13178b23385f7b96bff911b293efa7"
+    }
+  ],
+  "comparisons": [
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/processing/jenqwei_move_head_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/processing/jenqwei_move_head_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/processing/jenqwei_synthetic_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/processing/jenqwei_synthetic_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/processing/jenqwei_synthetic_truncated_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/processing/jenqwei_synthetic_truncated_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/processing/jenqwei_talk_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/processing/jenqwei_talk_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/processing/jenqwei_vibration_level1_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/processing/jenqwei_vibration_level1_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/processing/jenqwei_vibration_level2_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/processing/jenqwei_vibration_level2_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/processing/jenqwei_vibration_level3_reference_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/processing/jenqwei_vibration_level3_reference_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/processing/real_segmented_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/processing/real_segmented_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/move_head_signals_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/move_head_signals_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/move_head_spectra_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/move_head_spectra_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/talk_signals_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/talk_signals_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/talk_spectra_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/talk_spectra_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/vibration_level1_signals_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/vibration_level1_signals_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/vibration_level1_spectra_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/vibration_level1_spectra_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/vibration_level2_signals_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/vibration_level2_signals_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/vibration_level2_spectra_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/vibration_level2_spectra_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/vibration_level3_signals_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/vibration_level3_signals_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/vibration_level3_spectra_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/vibration_level3_spectra_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/synthetic_signals_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/synthetic_signals_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/synthetic_spectra_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/synthetic_spectra_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/short_display_signals_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/short_display_signals_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/real_gapped_signals_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/real_gapped_signals_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/real_gapped_spectra_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/real_gapped_spectra_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/small_gap_signals_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/small_gap_signals_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    },
+    {
+      "actual": "/tmp/lilia-stage16-final-v1/small_gap_spectra_actual.npz",
+      "expected": "/tmp/lilia-stage16-final-v1/small_gap_spectra_expected.npz",
+      "rtol": 1e-06,
+      "atol": 1e-06,
+      "equal_nan": false
+    }
+  ],
+  "tables": [
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-move head_before.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-move head_after.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-talk_before.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-talk_after.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level1_before.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level1_after.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level2_before.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level2_after.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_before.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_all/2026-06-18-lilia-vibration-level3_after.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_before.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/tmp/lilia-stage16-final-v1/synthetic.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_after.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/tmp/lilia-stage16-final-v1/synthetic.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/short_display/synthetic_before.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/tmp/lilia-stage16-final-v1/synthetic.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/short_display/synthetic_after.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/tmp/lilia-stage16-final-v1/synthetic.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_cli/real_gapped_before.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/tmp/lilia-stage16-final-v1/real_gapped.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/real_gapped_cli/real_gapped_after.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/tmp/lilia-stage16-final-v1/real_gapped.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_cli/small_gap_before.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/tmp/lilia-stage16-final-v1/small_gap.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/small_gap_cli/small_gap_after.csv",
+      "kind": "jenqwei_signal",
+      "raw_csv": "/tmp/lilia-stage16-final-v1/small_gap.csv",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+"""Extra acceptance zooms through the production plot path, with viewport clipping."""
+import json
+from pathlib import Path
+import sys
+from unittest.mock import patch
+
+ROOT=Path('/home/bps-yichin/lilia_analysis')
+sys.path.insert(0,str(ROOT))
+from matplotlib.figure import Figure
+from matplotlib.patches import Rectangle
+import analyze_jenqwei_pipeline as entry
+from lilia.jenqwei_io import load_signal_table
+from lilia.jenqwei_plot import plot_result
+from lilia.provenance import file_sha256
+from lilia.tflite import build_tflite_timeline
+
+out=Path(__file__).resolve().parent
+source=out/'small_gap.csv'
+directory=out/'small_gap_cli'
+manifest=json.loads((out/'evidence.json').read_text())
+expected={item['path']:item['sha256'] for item in manifest['files']}
+for path in (source, directory/'small_gap_before.csv',directory/'small_gap_after.csv',ROOT/'lilia/jenqwei_plot.py'):
+    assert file_sha256(path)==expected[str(path)]
+before,bmeta=load_signal_table(directory/'small_gap_before.csv',source,model_path=entry.TFLITE_MODEL_PATH)
+after,_=load_signal_table(directory/'small_gap_after.csv',source,model_path=entry.TFLITE_MODEL_PATH)
+t,_=entry.load_raw_csv(source)
+result={'timeline':build_tflite_timeline(t),'segments':bmeta['segments'],
+        'time_us_200':before['Time[us]'].to_numpy(),'tfl_time_us_200':after['Time[us]'].to_numpy(),
+        'pre_data_200':before[['ch1','ch2','ch3','ch4']].to_numpy(),
+        'tfl_data_200':after[['ch1','ch2']].to_numpy()}
+original_save=Figure.savefig
+records=[]
+(out/'details').mkdir(exist_ok=False)
+for name,limits in [('small_gap_detail',(11.975,12.025)),('short_prefix_detail',(0.,.04))]:
+    def save(fig,path,**kwargs):
+        for ax in fig.axes:
+            if ax.get_xlabel()!='Elapsed time (s)':
+                continue
+            clips=[mesh.get_clip_box().transformed(ax.transData.inverted()).extents for mesh in ax.collections]
+            ax.set_xlim(limits)
+            ax.ticklabel_format(axis='x',style='plain',useOffset=False)
+            for mesh,bounds in zip(ax.collections,clips):
+                lo,hi=max(bounds[0],limits[0]),min(bounds[2],limits[1])
+                if hi<=lo:
+                    mesh.set_visible(False)
+                else:
+                    mesh.set_clip_path(Rectangle((lo,0),hi-lo,50,transform=ax.transData))
+        fig.suptitle(fig._suptitle.get_text()+'\nAcceptance detail: elapsed viewport only; PSD unchanged')
+        original_save(fig,path,**kwargs)
+    with patch.object(Figure,'savefig',save):
+        path=plot_result(result,out/'details',name,0,60.)
+    records.append({'path':str(path),'sha256':file_sha256(path),'xlim_s':list(limits)})
+records.append({'path':str(Path(__file__)),'sha256':file_sha256(__file__)})
+(out/'detail_artifacts.json').write_text(json.dumps(records,indent=2)+'\n')
+print(json.dumps(records,indent=2))

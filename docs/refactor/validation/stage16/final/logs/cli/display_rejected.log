@@ -1,0 +1,3 @@
+failed: /tmp/lilia-stage16-final-v1/small_gap.csv — audit /tmp/lilia-stage16-final-v1/display_rejected/small_gap_analysis_audit.json
+FAILED /tmp/lilia-stage16-final-v1/small_gap.csv: max_display_sec must be finite and positive
+0 sources succeeded, 1 failed.

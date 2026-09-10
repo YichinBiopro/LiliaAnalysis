@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-10T03:00:24.051836+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage17/legacy_entry.py.txt",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/io.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/signal.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/windowing.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/provenance.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_fractional_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_move_head_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_synthetic_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_talk_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_vibration_level1_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_vibration_level2_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_vibration_level3_reference.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage17/final/baseline_evidence.json": "cda9d5c21917c40032cc98873a3843a6707a734997ad0bc521eb24b87eac2022",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage17/legacy_entry.py.txt": "53826e27fb4296240a388f14e2aa2a09be01b33c9ff0882fcce3dce1249e7534",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv": "fd291cbc7f9ee7c24561751c9c70793e067d161be24459801868f0727d2d8540",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv": "248dda71a06a6c4f76a4082fd734961383b80b464d8b8fbe9278cae23866d91a",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv": "3ecea3ac6d6393849157cd57b5a97e69af15a84e2bf124178fc469ac728503c0",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv": "07cf89ba2216be66a09195c884a565498d802bf193432f21a7be27b0b9320d8b",
+    "/home/bps-yichin/lilia_analysis/lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+    "/home/bps-yichin/lilia_analysis/lilia/provenance.py": "f901537aed78eb3e2941ee4f898b7f4389649e44e9d5f91dac1ef11d5894a6d5",
+    "/home/bps-yichin/lilia_analysis/lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+    "/home/bps-yichin/lilia_analysis/lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_fractional_reference.npz": "acd7ecff5fb080b008f53f80fa76a75f7b626f010e256b9eed5fcc1d430c6e29",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_move_head_reference.npz": "e734fede2a55ad1f847c8a3c49989afb648611a4cb081d7473e808b5f16f3156",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_synthetic_reference.npz": "ecca533c14a2fb70216d2cc4bd7f4915cd2a871903633652d6c9a5510eea8cc2",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_talk_reference.npz": "3757395c8de5f42677ff57d9c48f3e9ab3ffb21d0bbe26f7cce6f2c8dc226d68",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_vibration_level1_reference.npz": "3e8573a88db2e83c152f33bb11a93367dd0d22b1b7ad61dc57dde2cb99a6060b",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_vibration_level2_reference.npz": "ff384d41a9588a2bfc21dd35e1effea5d3dd3fee8f2ddaf5622c701eb9610962",
+    "/home/bps-yichin/lilia_analysis/tests/fixtures/dataset_jenqwei_vibration_level3_reference.npz": "8cd5a198a4f226c5a6308d330ccbb02dc2b61683b44e00928c257a0bf7d0b81f"
+  },
+  "log": "/tmp/lilia-stage17-baseline-evidence-v1/evidence.log"
+}

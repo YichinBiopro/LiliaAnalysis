@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "kind": "jenqwei_dataset_manifest",
+  "parameters": {
+    "n_splits": 5,
+    "fs_in": 500.0,
+    "fs_out": 200.0,
+    "bp_low": 0.5,
+    "bp_high": 45.0,
+    "n_ch": 4,
+    "tflite_win": 400,
+    "allow_short_drop": false,
+    "one_window_per_file": true
+  },
+  "sources": [
+    "/tmp/lilia-stage17-final-v2/synthetic.csv"
+  ],
+  "manifest_sha256": "433373e9e406e43862f9bb982a4fc5f4a1a8f525e0e59cd6a4db67bb2cf68ba3",
+  "audits": [
+    {
+      "path": "/tmp/lilia-stage17-final-v2/synthetic_windows/synthetic_e63edcc11830/dataset.json",
+      "sha256": "8a0ed0233f9945c697d3856caf1196bde0284a19da91b2926d94c0e9bf901a5a"
+    }
+  ]
+}

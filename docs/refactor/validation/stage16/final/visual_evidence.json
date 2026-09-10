@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "figures/2026-06-18-lilia-move head_ch1_pipeline_comparison.png",
+      "sha256": "6b5a9a19f7b934d830b9f1f60ed0afdccf8c7233909b896cf65b04db7cf30b87"
+    },
+    {
+      "path": "figures/2026-06-18-lilia-talk_ch2_pipeline_comparison.png",
+      "sha256": "4fdeffc973d824730a1294651cd003f4bbdb89a6d7fa743595d30c6457d449af"
+    },
+    {
+      "path": "figures/2026-06-18-lilia-vibration-level1_ch1_pipeline_comparison.png",
+      "sha256": "0e9bc4ff768810204174579ea38d5a037fb7938398b189bfe1db65a5b7d84ee2"
+    },
+    {
+      "path": "figures/2026-06-18-lilia-vibration-level2_ch2_pipeline_comparison.png",
+      "sha256": "d1c622bf208470adf0285b083a8c64157a0f6ee9a5f3f7a2add4314d9cf7d052"
+    },
+    {
+      "path": "figures/2026-06-18-lilia-vibration-level3_ch1_pipeline_comparison.png",
+      "sha256": "33644fcd34a25fef8bee9b5d4c0c8d1c38fc3b03b6fe1452da8699d043751785"
+    },
+    {
+      "path": "figures/real_gapped_ch1_pipeline_comparison.png",
+      "sha256": "b3dd1e49b132499ae9b7feb34ec12a4a92db02a1d54834bd17206b025e3af754"
+    },
+    {
+      "path": "figures/real_gapped_ch3_pipeline_comparison.png",
+      "sha256": "07a179cda8cfd5d9256745173045e073f0d63d2894e5904af75c6d46d93973d7"
+    },
+    {
+      "path": "figures/synthetic_ch2_pipeline_comparison.png",
+      "sha256": "d94b1872e8266c732e572480f98d071e51f886b256a5b5aacad6772910b21e13"
+    },
+    {
+      "path": "figures/synthetic_ch1_pipeline_comparison.png",
+      "sha256": "942d2d248b708cff6ccb86fb606b152be08f08b43778f0cd0dec2c8bb826de86"
+    },
+    {
+      "path": "figures/small_gap_ch1_pipeline_comparison.png",
+      "sha256": "6a06915038e6885e103940235bec8d0a033caf8da5dbcc3103b4b37b235a1748"
+    },
+    {
+      "path": "figures/small_gap_detail_ch1_pipeline_comparison.png",
+      "sha256": "04a8e0064edadf62a8bcf546d5efc7d6ba05c9705e76d37408dd7ce069564925"
+    },
+    {
+      "path": "figures/short_prefix_detail_ch1_pipeline_comparison.png",
+      "sha256": "960f98df0b8edf092216af035e343d1d7a950f59abf579e4eacd795b6cb9dade"
+    },
+    {
+      "path": "render_details.py.txt",
+      "sha256": "1a45885fe06466b1583f2f0b79fdb4ec1cafde25c5d3d2ba2a3e71b095836ab0"
+    }
+  ]
+}

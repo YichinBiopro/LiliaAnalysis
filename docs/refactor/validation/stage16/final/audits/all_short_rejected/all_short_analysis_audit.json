@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "kind": "jenqwei_analysis",
+  "status": "failed",
+  "stage": "process_segments",
+  "source_path": "/tmp/lilia-stage16-final-v1/all_short.csv",
+  "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+  "quality_state": "disabled",
+  "continuity_guard": "segmented_main; legacy_run_pipeline_guard_retained",
+  "inference_status": "planned_not_processed",
+  "tables_verified": false,
+  "plotting_status": "not_started",
+  "artifacts": [],
+  "requested_channels": [
+    0,
+    1
+  ],
+  "max_display_sec": 60.0,
+  "source_id": "4dfdcf70fb88b58aeb230446e95ffc19557709987129c859eda61ce7b4ec0139",
+  "inference": {
+    "segments": [
+      {
+        "segment_id": 0,
+        "raw_start_idx": 0,
+        "raw_end_idx": 997,
+        "raw_start_us": 0,
+        "raw_end_us": 1994000,
+        "resampled_samples": 399,
+        "retained_samples": 0,
+        "trimmed_samples": 399,
+        "ratio_up": 2,
+        "ratio_down": 5,
+        "status": "excluded",
+        "reason": "shorter_than_model_window"
+      }
+    ],
+    "model_windows": [],
+    "source_samples": 997,
+    "source_epoch_us": 0,
+    "fs_in": 500.0,
+    "fs_out": 200.0,
+    "model_window": 400
+  },
+  "nonfinite_input": [],
+  "parameters": {
+    "input_fs": 500,
+    "fs": 200,
+    "input_channels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "output_channels": [
+      1,
+      2
+    ],
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "filter_order": 4,
+    "filter_dtype": "float32",
+    "resampling": "scipy.signal.resample_poly default",
+    "model_window": 400,
+    "model_sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "normalization": "window RMS(float64) + 1e-8; scale float32",
+    "model_padding": "none",
+    "before_tail": "retain_all_resampled_samples_of_retained_segments",
+    "after_tail": "trim_each_segment_to_complete_400_sample_windows",
+    "short_segments": "exclude_from_both_branches",
+    "nonfinite_input": "fail_including_excluded",
+    "max_samples": null,
+    "truncation": "filter_full_source_segment_then_truncate_raw_prefix",
+    "quality_state": "disabled"
+  },
+  "code_sha256": {
+    "analyze_jenqwei_pipeline.py": "a057447896dfce72e26521fb65968d7ca64eae976fb37bd81ef551af8ec6ecaa",
+    "lilia/jenqwei_io.py": "b4cdf38814cf519ca0347fdbe898a76cbd726243a72fd77077b456eef5659eb6",
+    "lilia/jenqwei_plot.py": "60e95c5ed1773779e20a224a4775e5476641925b4ad756d70cd06c59fc0234c9",
+    "lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+    "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+    "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+    "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+    "plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029"
+  },
+  "error": {
+    "type": "ValueError",
+    "message": "No source segment contains a complete TFLite window after resampling"
+  }
+}

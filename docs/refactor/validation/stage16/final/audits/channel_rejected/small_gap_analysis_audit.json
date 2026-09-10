@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "kind": "jenqwei_analysis",
+  "status": "failed",
+  "stage": "preflight",
+  "source_path": "/tmp/lilia-stage16-final-v1/small_gap.csv",
+  "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+  "quality_state": "disabled",
+  "continuity_guard": "segmented_main; legacy_run_pipeline_guard_retained",
+  "inference_status": "not_started",
+  "tables_verified": false,
+  "plotting_status": "not_started",
+  "artifacts": [],
+  "requested_channels": [
+    4
+  ],
+  "max_display_sec": 60.0,
+  "error": {
+    "type": "ValueError",
+    "message": "Display channels must be distinct indices in 0..3; only 0/1 have model After"
+  }
+}

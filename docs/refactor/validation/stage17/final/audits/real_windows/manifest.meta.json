@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "jenqwei_dataset_manifest",
+  "parameters": {
+    "n_splits": 5,
+    "fs_in": 500.0,
+    "fs_out": 200.0,
+    "bp_low": 0.5,
+    "bp_high": 45.0,
+    "n_ch": 4,
+    "tflite_win": 400,
+    "allow_short_drop": false,
+    "one_window_per_file": true
+  },
+  "sources": [
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv"
+  ],
+  "manifest_sha256": "6141faa02dbf9bf26066afd22f635306f91646c509038c245635d6b137c59929",
+  "audits": [
+    {
+      "path": "/tmp/lilia-stage17-final-v2/real_windows/2026-06-18-lilia-move head_94e3438eef21/dataset.json",
+      "sha256": "81e85f1d14dd1a2249c04c571be2ec1443160ea0bc949cbcb789428a450b05fb"
+    },
+    {
+      "path": "/tmp/lilia-stage17-final-v2/real_windows/2026-06-18-lilia-talk_9ee1575b61e7/dataset.json",
+      "sha256": "55daeacba7af94188dd9c130e69cc84779ce183770681f294bf20a280ee3a4c2"
+    },
+    {
+      "path": "/tmp/lilia-stage17-final-v2/real_windows/2026-06-18-lilia-vibration-level1_e08cf12876ee/dataset.json",
+      "sha256": "2605d3ff7ac3d68a7389f8b37ab2ea22f6cc15d50d513e31e5c592a46b26b2b8"
+    },
+    {
+      "path": "/tmp/lilia-stage17-final-v2/real_windows/2026-06-18-lilia-vibration-level2_489d702d7923/dataset.json",
+      "sha256": "bbbab37de0cf6c86d9308e0fe2381627b0dbd4e8d242086aa2b9d7e2ded02ed7"
+    },
+    {
+      "path": "/tmp/lilia-stage17-final-v2/real_windows/2026-06-18-lilia-vibration-level3_8da26f11ab88/dataset.json",
+      "sha256": "e1ec9e0a1800bdf1edcf03868de50d87236f92969b4fbe95209ee9e3897415ef"
+    }
+  ]
+}

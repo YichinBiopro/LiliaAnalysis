@@ -1,0 +1,41 @@
+test_collision_does_not_overwrite_prior_outputs_or_audit (test_jenqwei_output_regression.JenqweiOutputTests) ... failed: /tmp/tmpmaoowlsl/source.csv — audit /tmp/tmpmaoowlsl/collision/source_analysis_audit_9880391780a545f7a8b9f88f0be5b0db.json
+ok
+test_main_processes_each_source_once_and_returns_failure_when_any_source_fails (test_jenqwei_output_regression.JenqweiOutputTests) ... FAILED second.csv: failed
+1 sources succeeded, 1 failed.
+ok
+test_metadata_source_model_and_header_tampering_fail (test_jenqwei_output_regression.JenqweiOutputTests) ... ok
+test_missing_invalid_short_and_polluted_short_fail_with_audit (test_jenqwei_output_regression.JenqweiOutputTests) ... failed: /tmp/tmplgs4lkaf/missing.csv — audit /tmp/tmplgs4lkaf/missing/missing_analysis_audit.json
+failed: /tmp/tmplgs4lkaf/source.csv — audit /tmp/tmplgs4lkaf/channels/source_analysis_audit.json
+failed: /tmp/tmplgs4lkaf/source.csv — audit /tmp/tmplgs4lkaf/display/source_analysis_audit.json
+failed: /tmp/tmplgs4lkaf/source.csv — audit /tmp/tmplgs4lkaf/short/source_analysis_audit.json
+failed: /tmp/tmplgs4lkaf/source.csv — audit /tmp/tmplgs4lkaf/polluted/source_analysis_audit.json
+failed: /tmp/tmplgs4lkaf/source.csv — audit /tmp/tmplgs4lkaf/missing_model/source_analysis_audit.json
+ok
+test_model_and_plot_failures_save_context_without_reporting_success (test_jenqwei_output_regression.JenqweiOutputTests) ... failed: /tmp/tmp1_gpq5ek/source.csv — audit /tmp/tmp1_gpq5ek/model/source_analysis_audit.json
+failed: /tmp/tmp1_gpq5ek/source.csv — audit /tmp/tmp1_gpq5ek/plot/source_analysis_audit.json
+ok
+test_multiple_display_channels_share_one_processing_result (test_jenqwei_output_regression.JenqweiOutputTests) ... success: /tmp/tmppyqhj3wy/source.csv — audit /tmp/tmppyqhj3wy/run/source_analysis_audit.json
+ok
+test_roundtrip_preserves_distinct_indexes_tails_epoch_and_complete_mapping (test_jenqwei_output_regression.JenqweiOutputTests) ... ok
+test_table_tampering_is_rejected_even_when_table_hash_is_refreshed (test_jenqwei_output_regression.JenqweiOutputTests) ... ERROR
+test_continuous_panels_match_all_frozen_psd_and_stft_arrays (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_psd_and_stft_are_independent_per_segment_and_exclude_gap_from_spectrum (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_rendered_source_channel3_has_no_fabricated_after_and_short_views_are_explicit (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_rendered_td_breaks_and_stft_clips_before_after_tails_separately (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+
+======================================================================
+ERROR: test_table_tampering_is_rejected_even_when_table_hash_is_refreshed (test_jenqwei_output_regression.JenqweiOutputTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/tests/test_jenqwei_output_regression.py", line 85, in test_table_tampering_is_rejected_even_when_table_hash_is_refreshed
+    self.load('after')
+  File "/home/bps-yichin/lilia_analysis/tests/test_jenqwei_output_regression.py", line 48, in load
+    return load_signal_table(self.root / f'source_{branch}.csv', self.source, model_path=entry.TFLITE_MODEL_PATH)
+  File "/home/bps-yichin/lilia_analysis/lilia/jenqwei_io.py", line 130, in load_signal_table
+    raise ValueError('Jenqwei schema, kind or table fingerprint mismatch')
+ValueError: Jenqwei schema, kind or table fingerprint mismatch
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.311s
+
+FAILED (errors=1)

@@ -1,0 +1,51 @@
+[
+  {
+    "case": "move_head",
+    "samples": 11994,
+    "splits": 5,
+    "windows": 25,
+    "sha256": "e734fede2a55ad1f847c8a3c49989afb648611a4cb081d7473e808b5f16f3156"
+  },
+  {
+    "case": "talk",
+    "samples": 12260,
+    "splits": 5,
+    "windows": 30,
+    "sha256": "3757395c8de5f42677ff57d9c48f3e9ab3ffb21d0bbe26f7cce6f2c8dc226d68"
+  },
+  {
+    "case": "vibration_level1",
+    "samples": 12391,
+    "splits": 5,
+    "windows": 30,
+    "sha256": "3e8573a88db2e83c152f33bb11a93367dd0d22b1b7ad61dc57dde2cb99a6060b"
+  },
+  {
+    "case": "vibration_level2",
+    "samples": 12925,
+    "splits": 5,
+    "windows": 30,
+    "sha256": "ff384d41a9588a2bfc21dd35e1effea5d3dd3fee8f2ddaf5622c701eb9610962"
+  },
+  {
+    "case": "vibration_level3",
+    "samples": 12260,
+    "splits": 5,
+    "windows": 30,
+    "sha256": "8cd5a198a4f226c5a6308d330ccbb02dc2b61683b44e00928c257a0bf7d0b81f"
+  },
+  {
+    "case": "synthetic",
+    "samples": 3002,
+    "splits": 5,
+    "windows": 5,
+    "sha256": "ecca533c14a2fb70216d2cc4bd7f4915cd2a871903633652d6c9a5510eea8cc2"
+  },
+  {
+    "case": "fractional",
+    "samples": 2994,
+    "splits": 5,
+    "windows": 5,
+    "sha256": "acd7ecff5fb080b008f53f80fa76a75f7b626f010e256b9eed5fcc1d430c6e29"
+  }
+]

@@ -66,4 +66,8 @@ NPZ 對照要求相同 keys、非空相同 shape；整數 indices／timestamps �
 
 第十五階段新增 `eye_model_signal` reader，必須提供 `model_path`；核對保留四行 header 的 CSV、來源／模型／固定設定、完整 inference 與逐列來源映射。reader 不重跑模型，數值對照仍需獨立舊基準；第十五階段已完成分段繪圖／CLI／目視及完整驗收，眼開閉 CLI guard 已解除，詳見 [驗收報告](STAGE15_ACCEPTANCE_REPORT_2026-09-09.md)；表重讀仍不取代數值與目視驗證。
 
+第十六階段新增 `jenqwei_signal` reader，需提供 `model_path`；分開核對 Before／After 表的來源／模型、完整段與 filter context、原始 fractional index、After-to-Before 映射、裁尾、整數微秒與 table hash。表重讀不重跑模型；[完整驗收](STAGE16_ACCEPTANCE_REPORT_2026-09-10.md) 另含舊模型／PSD／STFT 數值與目視。分段 main 已可接受缺口，舊 `run_pipeline` guard 保留。
+
+第十七階段新增 `jenqwei_dataset` reader，不需要模型；sidecar 使用片段所在目錄的 `dataset.json`。核對完整來源切片計畫、檔案涵蓋範圍、hash 與逐列微秒；`lilia.jenqwei_dataset.load_manifest` 另驗證整份 manifest 並回讀所有片段。此 reader 不重新濾波，獨立舊基準數值、短段／污染及目視見 [第十七階段報告](STAGE17_REPORT_2026-09-10.md)。
+
 真實資料的生成命令、專屬分析參數及必要的特殊比較仍由任務記錄；共用工具處理機械性核對。完整報告只貼摘要與失敗項目；持久保存重要 JSON／manifest，原始大型產物留指定資料目錄。不要為補證據覆寫正式來源。

@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "parameters": {
+    "n_splits": 2,
+    "fs_in": 500.0,
+    "fs_out": 200.0,
+    "bp_low": 0.5,
+    "bp_high": 45.0,
+    "n_ch": 4,
+    "tflite_win": 400,
+    "allow_short_drop": false,
+    "one_window_per_file": false
+  },
+  "sources": [
+    "/tmp/lilia-stage17-final-v2/gapped.csv"
+  ],
+  "completed": [],
+  "failed": {
+    "error_type": "DatasetPlanError",
+    "reason": "Cannot form windows; excluded (segment, split, reason): [(2, 1, 'filter_too_short'), (2, 2, 'filter_too_short')]",
+    "plan": {
+      "policy": "equal_splits_per_source_segment_then_window_trim",
+      "gap_factor": 3.0,
+      "filter_order": 4,
+      "filter_padlen": 27,
+      "filter_dtype": "float32",
+      "resampling": "scipy.signal.resample_poly default",
+      "index_space": "packed_resampled_including_exclusions",
+      "quality_state": "disabled",
+      "model_inference": false,
+      "segments": [
+        {
+          "segment_id": 0,
+          "raw_start_idx": 0,
+          "raw_end_idx": 3503,
+          "resampled_start_idx": 0,
+          "resampled_end_idx": 1402,
+          "splits": [
+            {
+              "split_index": 1,
+              "local_start_idx": 0,
+              "local_end_idx": 701,
+              "retained_end_idx": 400,
+              "retained_samples": 400,
+              "excluded_samples": 301,
+              "reason": "window_tail"
+            },
+            {
+              "split_index": 2,
+              "local_start_idx": 701,
+              "local_end_idx": 1402,
+              "retained_end_idx": 1101,
+              "retained_samples": 400,
+              "excluded_samples": 301,
+              "reason": "window_tail"
+            }
+          ]
+        },
+        {
+          "segment_id": 1,
+          "raw_start_idx": 3503,
+          "raw_end_idx": 10006,
+          "resampled_start_idx": 1402,
+          "resampled_end_idx": 4004,
+          "splits": [
+            {
+              "split_index": 1,
+              "local_start_idx": 0,
+              "local_end_idx": 1301,
+              "retained_end_idx": 1200,
+              "retained_samples": 1200,
+              "excluded_samples": 101,
+              "reason": "window_tail"
+            },
+            {
+              "split_index": 2,
+              "local_start_idx": 1301,
+              "local_end_idx": 2602,
+              "retained_end_idx": 2501,
+              "retained_samples": 1200,
+              "excluded_samples": 101,
+              "reason": "window_tail"
+            }
+          ]
+        },
+        {
+          "segment_id": 2,
+          "raw_start_idx": 10006,
+          "raw_end_idx": 10026,
+          "resampled_start_idx": 4004,
+          "resampled_end_idx": 4012,
+          "splits": [
+            {
+              "split_index": 1,
+              "local_start_idx": 0,
+              "local_end_idx": 4,
+              "retained_end_idx": 0,
+              "retained_samples": 0,
+              "excluded_samples": 4,
+              "reason": "filter_too_short"
+            },
+            {
+              "split_index": 2,
+              "local_start_idx": 4,
+              "local_end_idx": 8,
+              "retained_end_idx": 4,
+              "retained_samples": 0,
+              "excluded_samples": 4,
+              "reason": "filter_too_short"
+            }
+          ]
+        }
+      ],
+      "fragments": [
+        {
+          "split_index": 1,
+          "split_count": 2,
+          "window_index_in_split": 1,
+          "window_count_in_split": 1,
+          "start_idx_200hz": 0,
+          "end_idx_200hz": 400,
+          "n_samples_200hz": 400,
+          "duration_sec": 2.0,
+          "segment_id": 0,
+          "raw_start_idx": 0,
+          "raw_end_idx": 3503,
+          "resampled_start_idx": 0,
+          "resampled_end_idx": 400,
+          "segment_local_start_idx": 0,
+          "segment_local_end_idx": 400,
+          "raw_fractional_first_idx": 0.0,
+          "raw_fractional_last_idx": 997.5,
+          "model_window_start_in_split": 0,
+          "model_window_count": 1,
+          "split_model_window_count": 1,
+          "fs_out": 200.0
+        },
+        {
+          "split_index": 2,
+          "split_count": 2,
+          "window_index_in_split": 1,
+          "window_count_in_split": 1,
+          "start_idx_200hz": 701,
+          "end_idx_200hz": 1101,
+          "n_samples_200hz": 400,
+          "duration_sec": 2.0,
+          "segment_id": 0,
+          "raw_start_idx": 0,
+          "raw_end_idx": 3503,
+          "resampled_start_idx": 701,
+          "resampled_end_idx": 1101,
+          "segment_local_start_idx": 701,
+          "segment_local_end_idx": 1101,
+          "raw_fractional_first_idx": 1752.5,
+          "raw_fractional_last_idx": 2750.0,
+          "model_window_start_in_split": 0,
+          "model_window_count": 1,
+          "split_model_window_count": 1,
+          "fs_out": 200.0
+        },
+        {
+          "split_index": 1,
+          "split_count": 2,
+          "window_index_in_split": 1,
+          "window_count_in_split": 1,
+          "start_idx_200hz": 1402,
+          "end_idx_200hz": 2602,
+          "n_samples_200hz": 1200,
+          "duration_sec": 6.0,
+          "segment_id": 1,
+          "raw_start_idx": 3503,
+          "raw_end_idx": 10006,
+          "resampled_start_idx": 1402,
+          "resampled_end_idx": 2602,
+          "segment_local_start_idx": 0,
+          "segment_local_end_idx": 1200,
+          "raw_fractional_first_idx": 3503.0,
+          "raw_fractional_last_idx": 6500.5,
+          "model_window_start_in_split": 0,
+          "model_window_count": 3,
+          "split_model_window_count": 3,
+          "fs_out": 200.0
+        },
+        {
+          "split_index": 2,
+          "split_count": 2,
+          "window_index_in_split": 1,
+          "window_count_in_split": 1,
+          "start_idx_200hz": 2703,
+          "end_idx_200hz": 3903,
+          "n_samples_200hz": 1200,
+          "duration_sec": 6.0,
+          "segment_id": 1,
+          "raw_start_idx": 3503,
+          "raw_end_idx": 10006,
+          "resampled_start_idx": 2703,
+          "resampled_end_idx": 3903,
+          "segment_local_start_idx": 1301,
+          "segment_local_end_idx": 2501,
+          "raw_fractional_first_idx": 6755.5,
+          "raw_fractional_last_idx": 9753.0,
+          "model_window_start_in_split": 0,
+          "model_window_count": 3,
+          "split_model_window_count": 3,
+          "fs_out": 200.0
+        }
+      ]
+    }
+  }
+}

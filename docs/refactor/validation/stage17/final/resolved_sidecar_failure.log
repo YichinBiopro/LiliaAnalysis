@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/tools/refactor_check.py", line 268, in main
+    rows, inputs = evidence(args.manifest)
+  File "/home/bps-yichin/lilia_analysis/tools/refactor_check.py", line 198, in evidence
+    meta = json.loads(sidecar.read_text())
+  File "/home/bps/.pyenv/versions/3.10.12/lib/python3.10/pathlib.py", line 1134, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/home/bps/.pyenv/versions/3.10.12/lib/python3.10/pathlib.py", line 1119, in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/lilia-stage17-final-v2/real_splits/2026-06-18-lilia-move head_f2a97a7face9/2026-06-18-lilia-move head_f2a97a7face9_split01-of-05_200Hz_bp.csv.meta.json'

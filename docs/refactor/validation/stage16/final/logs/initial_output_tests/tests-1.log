@@ -1,0 +1,53 @@
+test_collision_does_not_overwrite_prior_outputs_or_audit (test_jenqwei_output_regression.JenqweiOutputTests) ... failed: /tmp/tmpb6rx5g54/source.csv — audit /tmp/tmpb6rx5g54/collision/source_analysis_audit_4188d5196759432087390a57cd21ec69.json
+ok
+test_main_processes_each_source_once_and_returns_failure_when_any_source_fails (test_jenqwei_output_regression.JenqweiOutputTests) ... FAILED second.csv: failed
+1 sources succeeded, 1 failed.
+ok
+test_metadata_source_model_and_header_tampering_fail (test_jenqwei_output_regression.JenqweiOutputTests) ... ok
+test_missing_invalid_short_and_polluted_short_fail_with_audit (test_jenqwei_output_regression.JenqweiOutputTests) ... failed: /tmp/tmpvkh0l8hs/missing.csv — audit /tmp/tmpvkh0l8hs/missing/missing_analysis_audit.json
+failed: /tmp/tmpvkh0l8hs/source.csv — audit /tmp/tmpvkh0l8hs/channels/source_analysis_audit.json
+failed: /tmp/tmpvkh0l8hs/source.csv — audit /tmp/tmpvkh0l8hs/display/source_analysis_audit.json
+failed: /tmp/tmpvkh0l8hs/source.csv — audit /tmp/tmpvkh0l8hs/short/source_analysis_audit.json
+failed: /tmp/tmpvkh0l8hs/source.csv — audit /tmp/tmpvkh0l8hs/polluted/source_analysis_audit.json
+failed: /tmp/tmpvkh0l8hs/source.csv — audit /tmp/tmpvkh0l8hs/missing_model/source_analysis_audit.json
+ok
+test_model_and_plot_failures_save_context_without_reporting_success (test_jenqwei_output_regression.JenqweiOutputTests) ... failed: /tmp/tmp5vrx6ynd/source.csv — audit /tmp/tmp5vrx6ynd/model/source_analysis_audit.json
+failed: /tmp/tmp5vrx6ynd/source.csv — audit /tmp/tmp5vrx6ynd/plot/source_analysis_audit.json
+ok
+test_multiple_display_channels_share_one_processing_result (test_jenqwei_output_regression.JenqweiOutputTests) ... success: /tmp/tmpucl4kwvr/source.csv — audit /tmp/tmpucl4kwvr/run/source_analysis_audit.json
+ok
+test_roundtrip_preserves_distinct_indexes_tails_epoch_and_complete_mapping (test_jenqwei_output_regression.JenqweiOutputTests) ... ok
+test_table_tampering_is_rejected_even_when_table_hash_is_refreshed (test_jenqwei_output_regression.JenqweiOutputTests) ... ok
+test_truncated_table_rebuilds_full_filter_context_and_used_prefix (test_jenqwei_output_regression.JenqweiOutputTests) ... ok
+test_continuous_panels_match_all_frozen_psd_and_stft_arrays (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_jittered_stft_centers_follow_source_time_without_changing_spectrum (test_jenqwei_output_regression.JenqweiPlotTests) ... FAIL
+test_psd_and_stft_are_independent_per_segment_and_exclude_gap_from_spectrum (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_real_save_failure_closes_figure (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_rendered_source_channel3_has_no_fabricated_after_and_short_views_are_explicit (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_rendered_td_breaks_and_stft_clips_before_after_tails_separately (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+
+======================================================================
+FAIL: test_jittered_stft_centers_follow_source_time_without_changing_spectrum (test_jenqwei_output_regression.JenqweiPlotTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/tests/test_jenqwei_output_regression.py", line 275, in test_jittered_stft_centers_follow_source_time_without_changing_spectrum
+    np.testing.assert_array_equal(panel['stft'][1][inside],panel['elapsed'][indices[inside]])
+  File "/home/bps-yichin/.local/lib/python3.10/site-packages/numpy/_utils/__init__.py", line 86, in wrapper
+    return fun(*args, **kwargs)
+  File "/home/bps-yichin/.local/lib/python3.10/site-packages/numpy/testing/_private/utils.py", line 1057, in assert_array_equal
+    assert_array_compare(operator.__eq__, actual, desired, err_msg=err_msg,
+  File "/home/bps-yichin/.local/lib/python3.10/site-packages/numpy/testing/_private/utils.py", line 921, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Arrays are not equal
+
+Mismatched elements: 1 / 5 (20%)
+Max absolute difference among violations: 2.22044605e-16
+Max relative difference among violations: 1.73336928e-16
+ ACTUAL: array([0.   , 0.64 , 1.281, 1.921, 2.561])
+ DESIRED: array([0.   , 0.64 , 1.281, 1.921, 2.561])
+
+----------------------------------------------------------------------
+Ran 15 tests in 1.414s
+
+FAILED (failures=1)

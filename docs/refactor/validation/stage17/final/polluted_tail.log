@@ -1,0 +1,13 @@
+[PROCESS] /tmp/lilia-stage17-final-v2/polluted.csv
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/build_jenqwei_tflite_dataset.py", line 168, in <module>
+    main()
+  File "/home/bps-yichin/lilia_analysis/build_jenqwei_tflite_dataset.py", line 150, in main
+    rows = process_source(source, out, params)
+  File "/home/bps-yichin/lilia_analysis/lilia/jenqwei_dataset.py", line 177, in process_source
+    t, raw, plan = source_contract(source, params)
+  File "/home/bps-yichin/lilia_analysis/lilia/jenqwei_dataset.py", line 138, in source_contract
+    time_us, data = load_merged_csv(csv_path)
+  File "/home/bps-yichin/lilia_analysis/lilia/io.py", line 75, in load_merged_csv
+    raise ValueError(f'Non-finite EEG samples: {path}')
+ValueError: Non-finite EEG samples: /tmp/lilia-stage17-final-v2/polluted.csv

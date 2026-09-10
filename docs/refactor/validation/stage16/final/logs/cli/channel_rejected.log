@@ -1,0 +1,3 @@
+failed: /tmp/lilia-stage16-final-v1/small_gap.csv — audit /tmp/lilia-stage16-final-v1/channel_rejected/small_gap_analysis_audit.json
+FAILED /tmp/lilia-stage16-final-v1/small_gap.csv: Display channels must be distinct indices in 0..3; only 0/1 have model After
+0 sources succeeded, 1 failed.

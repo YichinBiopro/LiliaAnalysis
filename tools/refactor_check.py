@@ -20,6 +20,8 @@ sys.path.insert(0, str(ROOT))
 SOURCE_DIRS = ('lilia', 'tests', 'tools', 'plot_index_vs_raw_bundle', 'signal_quality_package')
 # Only known readers; a manifest cannot select arbitrary Python code.
 READERS = {
+    'jenqwei_dataset': ('jenqwei_dataset', 'load_fragment', False),
+    'jenqwei_signal': ('jenqwei_io', 'load_signal_table', True),
     'eye_model_signal': ('eye_io', 'load_signal_table', True),
     'raw_qeeg': ('qeeg_io', 'load_qeeg_table', False),
     'band_entropy': ('entropy_io', 'load_entropy_table', False),
@@ -192,7 +194,8 @@ def evidence(manifest_path):
         rows.append({'name': 'hash', 'path': str(path), 'passed': True})
     for entry in manifest.get('tables', []):
         path, raw = resolve(entry['path']), resolve(entry['raw_csv'])
-        sidecar = resolve(str(path) + '.meta.json')
+        sidecar = resolve(str(path.parent / 'dataset.json') if entry['kind'] == 'jenqwei_dataset'
+                          else str(path) + '.meta.json')
         meta = json.loads(sidecar.read_text())
         kind = meta['kind']
         if kind != entry['kind'] or kind not in READERS:

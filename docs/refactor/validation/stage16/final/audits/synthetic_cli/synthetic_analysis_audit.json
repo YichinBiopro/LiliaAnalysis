@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "kind": "jenqwei_analysis",
+  "status": "success",
+  "stage": "complete",
+  "source_path": "/tmp/lilia-stage16-final-v1/synthetic.csv",
+  "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+  "quality_state": "disabled",
+  "continuity_guard": "segmented_main; legacy_run_pipeline_guard_retained",
+  "inference_status": "completed",
+  "tables_verified": true,
+  "plotting_status": "complete",
+  "artifacts": [
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_before.csv",
+      "sha256": "d703f00bf016bd8632b6f9a83e4e318aa1637e758c1e440d9a8f668d637ee10f"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_before.csv.meta.json",
+      "sha256": "dd92ef7f23db98b0e7ef66f77b96ee1bef3433966e2304caa94f3f20f9a0691a"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_after.csv",
+      "sha256": "7ab685443b76da8b13daf02e3ea63f58207e82ac7e3fa4c5cb93de77fc4799f8"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_after.csv.meta.json",
+      "sha256": "c9e773ffc1331952b449c9aa8b2a91e85f8e46b5cece46b248c2aeddbd123bc6"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_ch1_pipeline_comparison.png",
+      "sha256": "4be6cb45eb2c35dc5188bcf47a1a78a33d13a8992a9fe37e3d464f5330eac256"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_ch2_pipeline_comparison.png",
+      "sha256": "d94b1872e8266c732e572480f98d071e51f886b256a5b5aacad6772910b21e13"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_ch3_pipeline_comparison.png",
+      "sha256": "2e75bc3a5a857062a7d7d423a06fcf7ad47660a9d620d0a3a94a54c18aa12c40"
+    },
+    {
+      "path": "/tmp/lilia-stage16-final-v1/synthetic_cli/synthetic_ch4_pipeline_comparison.png",
+      "sha256": "eaf2bd37fe11c1c5ab55d42901dede57216f83e35ac0f2a05996a0ed5c3aa292"
+    }
+  ],
+  "requested_channels": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "max_display_sec": 60.0,
+  "source_id": "450a60be455edea9813411ae03b4a4f1e38fc4215093eda65f47bd4b15601c8d",
+  "inference": {
+    "segments": [
+      {
+        "segment_id": 0,
+        "raw_start_idx": 0,
+        "raw_end_idx": 2503,
+        "raw_start_us": 1234567,
+        "raw_end_us": 6240567,
+        "resampled_samples": 1002,
+        "retained_samples": 800,
+        "trimmed_samples": 202,
+        "ratio_up": 2,
+        "ratio_down": 5,
+        "status": "retained",
+        "reason": "",
+        "output_start_idx": 0,
+        "output_end_idx": 800
+      }
+    ],
+    "model_windows": [
+      {
+        "model_window_id": 0,
+        "segment_id": 0,
+        "output_start_idx": 0,
+        "output_end_idx": 400,
+        "window_start_us": 1234567,
+        "window_end_us": 3234567,
+        "raw_start_idx": 0,
+        "raw_end_idx": 1000
+      },
+      {
+        "model_window_id": 1,
+        "segment_id": 0,
+        "output_start_idx": 400,
+        "output_end_idx": 800,
+        "window_start_us": 3234567,
+        "window_end_us": 5234567,
+        "raw_start_idx": 1000,
+        "raw_end_idx": 2000
+      }
+    ],
+    "source_samples": 2503,
+    "source_epoch_us": 1234567,
+    "fs_in": 500.0,
+    "fs_out": 200.0,
+    "model_window": 400
+  },
+  "nonfinite_input": [],
+  "parameters": {
+    "input_fs": 500,
+    "fs": 200,
+    "input_channels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "output_channels": [
+      1,
+      2
+    ],
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "filter_order": 4,
+    "filter_dtype": "float32",
+    "resampling": "scipy.signal.resample_poly default",
+    "model_window": 400,
+    "model_sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "normalization": "window RMS(float64) + 1e-8; scale float32",
+    "model_padding": "none",
+    "before_tail": "retain_all_resampled_samples_of_retained_segments",
+    "after_tail": "trim_each_segment_to_complete_400_sample_windows",
+    "short_segments": "exclude_from_both_branches",
+    "nonfinite_input": "fail_including_excluded",
+    "max_samples": null,
+    "truncation": "filter_full_source_segment_then_truncate_raw_prefix",
+    "quality_state": "disabled"
+  },
+  "code_sha256": {
+    "analyze_jenqwei_pipeline.py": "a057447896dfce72e26521fb65968d7ca64eae976fb37bd81ef551af8ec6ecaa",
+    "lilia/jenqwei_io.py": "b4cdf38814cf519ca0347fdbe898a76cbd726243a72fd77077b456eef5659eb6",
+    "lilia/jenqwei_plot.py": "60e95c5ed1773779e20a224a4775e5476641925b4ad756d70cd06c59fc0234c9",
+    "lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+    "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+    "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+    "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+    "plot_event_markers.py": "389903206301d9d8a9bc00152bc97a5be0b1f0ca89e86ec8de475dff54b42029"
+  },
+  "segments": [
+    {
+      "segment_id": 0,
+      "raw_start_idx": 0,
+      "raw_end_idx": 2503,
+      "raw_start_us": 1234567,
+      "raw_end_us": 6240567,
+      "resampled_samples": 1002,
+      "retained_samples": 800,
+      "trimmed_samples": 202,
+      "ratio_up": 2,
+      "ratio_down": 5,
+      "status": "retained",
+      "reason": "",
+      "output_start_idx": 0,
+      "output_end_idx": 800,
+      "filter_context_start_idx": 0,
+      "filter_context_end_idx": 2503,
+      "packed_raw_start_idx": 0,
+      "packed_raw_end_idx": 2503,
+      "before_start_idx": 0,
+      "before_end_idx": 1002
+    }
+  ],
+  "plot_timeline": {
+    "time_axis": "elapsed_from_source_epoch",
+    "source_epoch_us": 1234567,
+    "xlim_s": [
+      0.0,
+      5.006
+    ],
+    "channels": [
+      {
+        "before_source_channel": 1,
+        "after_source_channel": 1
+      },
+      {
+        "before_source_channel": 2,
+        "after_source_channel": 2
+      },
+      {
+        "before_source_channel": 3,
+        "after_source_channel": null
+      },
+      {
+        "before_source_channel": 4,
+        "after_source_channel": null
+      }
+    ],
+    "excluded_spans": [],
+    "missing_spans": [],
+    "after_tails": [
+      {
+        "segment_id": 0,
+        "start_s": 4.0,
+        "end_s": 5.006,
+        "trimmed_samples": 202
+      }
+    ],
+    "psd": {
+      "method": "Welch density per source segment, no cross-segment average",
+      "fs": 200,
+      "nperseg": "min(800, before_segment_samples, branch_segment_samples)",
+      "window": "hann",
+      "overlap": "half",
+      "detrend": "constant"
+    },
+    "stft": {
+      "fs": 200,
+      "nperseg": "min(256, displayed_segment_samples)",
+      "noverlap": 128,
+      "window": "hann",
+      "boundary": "zeros",
+      "padded": true,
+      "fmax": 50,
+      "scale": "20*log10(abs(z)+1e-8)",
+      "short_display": "omit_if_at_most_128_samples",
+      "display_limit": "floor(max_sec*200)/200 elapsed; no packed-gap truncation"
+    },
+    "display_max_sec": 60.0
+  },
+  "spectral_coverage": {
+    "0": [
+      {
+        "segment_id": 0,
+        "branch": "before",
+        "stft_samples": 1002,
+        "stft_status": "computed",
+        "clip_start_s": 0.0,
+        "clip_end_s": 5.006
+      },
+      {
+        "segment_id": 0,
+        "branch": "after",
+        "stft_samples": 800,
+        "stft_status": "computed",
+        "clip_start_s": 0.0,
+        "clip_end_s": 4.0
+      }
+    ],
+    "1": [
+      {
+        "segment_id": 0,
+        "branch": "before",
+        "stft_samples": 1002,
+        "stft_status": "computed",
+        "clip_start_s": 0.0,
+        "clip_end_s": 5.006
+      },
+      {
+        "segment_id": 0,
+        "branch": "after",
+        "stft_samples": 800,
+        "stft_status": "computed",
+        "clip_start_s": 0.0,
+        "clip_end_s": 4.0
+      }
+    ],
+    "2": [
+      {
+        "segment_id": 0,
+        "branch": "before",
+        "stft_samples": 1002,
+        "stft_status": "computed",
+        "clip_start_s": 0.0,
+        "clip_end_s": 5.006
+      }
+    ],
+    "3": [
+      {
+        "segment_id": 0,
+        "branch": "before",
+        "stft_samples": 1002,
+        "stft_status": "computed",
+        "clip_start_s": 0.0,
+        "clip_end_s": 5.006
+      }
+    ]
+  },
+  "before_samples": 1002,
+  "after_samples": 800
+}

@@ -1,0 +1,13 @@
+[PROCESS] /tmp/lilia-stage17-final-v2/gapped.csv
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/build_jenqwei_tflite_dataset.py", line 168, in <module>
+    main()
+  File "/home/bps-yichin/lilia_analysis/build_jenqwei_tflite_dataset.py", line 150, in main
+    rows = process_source(source, out, params)
+  File "/home/bps-yichin/lilia_analysis/lilia/jenqwei_dataset.py", line 177, in process_source
+    t, raw, plan = source_contract(source, params)
+  File "/home/bps-yichin/lilia_analysis/lilia/jenqwei_dataset.py", line 142, in source_contract
+    check_plan(plan, params)
+  File "/home/bps-yichin/lilia_analysis/lilia/jenqwei_dataset.py", line 132, in check_plan
+    raise DatasetPlanError(f'Cannot form windows; excluded (segment, split, reason): {dropped}', plan)
+lilia.jenqwei_dataset.DatasetPlanError: Cannot form windows; excluded (segment, split, reason): [(2, 1, 'filter_too_short'), (2, 2, 'filter_too_short')]
