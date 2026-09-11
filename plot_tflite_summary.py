@@ -38,6 +38,9 @@ from lilia.tflite_baseline import score_baseline_windows, select_tflite_baseline
 from lilia.provenance import file_sha256
 from lilia.tflite_io import write_tflite_table
 from lilia.quality import get_eeg_quality_index_v2_parametric
+from lilia.quality_audit import (POLICY, capture_diagnostics, pending_diagnostics, json_value,
+                                diagnostic_summary, diagnostic_label, plot_diagnostic_markers)
+from lilia.tflite_quality import score_windows, STAGES, VERIFICATION
 
 # 直接沿用 plot_event_markers 的常數與工具函式（單一事實來源 single source of truth）
 from plot_event_markers import (
@@ -111,13 +114,14 @@ def _session_tflite(time_us_full, data_filt_full, *, return_timeline=False):
 
 def compute_quality_windowed_fs(time_us: np.ndarray, data: np.ndarray,
                                 fs: float,
-                                win_sec: float = QUALITY_WIN_SEC, windows=None):
+                                win_sec: float = QUALITY_WIN_SEC, windows=None, *,
+                                return_audit=False, stage='unspecified'):
     """以非重疊視窗計算 EEG 品質指標（可指定取樣率 *fs*）。
 
     plot_event_markers 內建的 ``compute_quality_windowed`` 將 fs 寫死為 500，
-    而本腳本要對 TFLite 輸出（200 Hz）也評分，故另外提供可帶 fs 的版本，
-    使「處理前(500Hz)」與「處理後(200Hz)」採用一致的演算法與視窗長度，
-    才能做公平的品質比較。
+    本腳本的處理前比較是濾波並重採樣後的 200 Hz 兩通道；處理後是同格點
+    的 200 Hz 模型輸出。baseline 另用濾波後的 500 Hz 四通道。
+    return_audit=True 另回傳逐窗診斷；舊二元回傳與未指定 stage 的 API 保留。
 
     Returns
     -------
@@ -126,17 +130,13 @@ def compute_quality_windowed_fs(time_us: np.ndarray, data: np.ndarray,
     """
     win = int(win_sec * fs)
     n   = len(data)
-    q_dt, q_overall = [], []
     if windows is not None:
         windows.validate(n, fs, win, win)
     starts = windows.starts if windows is not None else range(0, n - win + 1, win)
-    for start in starts:
-        seg = data[start:start + win]
-        res = get_eeg_quality_index_v2_parametric(
-            seg.T.astype(np.float64), fs=fs, params=QUALITY_PARAMS)
-        q_dt.append(us_to_local_dt(int(time_us[start + win // 2])))
-        q_overall.append(res["overall"])
-    return q_dt, np.array(q_overall)
+    q_overall, rows = score_windows(data, starts, win, scorer=get_eeg_quality_index_v2_parametric,
+                                    fs=fs, params=QUALITY_PARAMS, stage=stage)
+    q_dt = [us_to_local_dt(int(time_us[start + win // 2])) for start in starts]
+    return (q_dt, q_overall, rows) if return_audit else (q_dt, q_overall)
 
 
 # ── 核心：事件前基線微分段建構 ──────────────────────────────────────────────────
@@ -227,20 +227,30 @@ def _sample_clean_epochs(time_us_full: np.ndarray, data_filt_full: np.ndarray,
     in_win  = np.where((time_us_full >= lo_us) & (time_us_full < hi_us))[0]
 
     clean_segments, clean_starts, n_total_ep, n_saturated = [], [], 0, 0
+    quality_audit = []
     if in_win.size >= epoch_n:
         i0, i1 = in_win[0], in_win[-1] + 1
         for s in range(i0, i1 - epoch_n + 1, epoch_n):
             seg = data_filt_full[s:s + epoch_n]          # (epoch_n, n_ch)
             n_total_ep += 1
+            request = dict(fs=fs, params=QUALITY_PARAMS, n_channels=seg.shape[1],
+                           n_samples=len(seg), stage='filtered')
+            audit = dict(raw_start_idx=int(s), raw_end_idx=int(s + epoch_n),
+                         quality_overall=None, accepted=False)
+            quality_audit.append(audit)
             # (1) ADC 飽和篩選：在原始（未濾波）視窗上偵測，避免帶通遮蔽削波。
             if data_raw_full is not None:
                 if _saturation_frac(data_raw_full[s:s + epoch_n]) > SAT_FRAC_MAX:
                     n_saturated += 1
+                    audit['quality_diagnostics'] = pending_diagnostics(**request, reasons=['raw_saturation'])
                     continue
             # (2) 假影/雜訊篩選：以 eeg_quality_v2 評分，通道中位數 >= 門檻才算乾淨
             res = get_eeg_quality_index_v2_parametric(
                 seg.T.astype(np.float64), fs=fs, params=QUALITY_PARAMS)
+            audit.update(quality_overall=json_value(res['overall']),
+                         quality_diagnostics=capture_diagnostics(res, **request))
             if float(np.median(res["overall"])) >= quality_threshold:
+                audit['accepted'] = True
                 clean_segments.append(seg)
                 clean_starts.append(int(s))
 
@@ -265,6 +275,8 @@ def _sample_clean_epochs(time_us_full: np.ndarray, data_filt_full: np.ndarray,
         'required_sec': required_sec,
         'selected_starts_us': [int(time_us_full[clean_starts[i]]) for i in sel],
         'random_seed': random_seed,
+        'quality_score_policy': POLICY, 'quality_diagnostics_version': 1,
+        'quality_audit': quality_audit,
     }
     return baseline_data.astype(np.float32), meta
 
@@ -363,10 +375,10 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
     tfl_time_us = pre_time_us = timeline.time_us
     grid = timeline.grid(QEEG_WIN_SEC)
     # Both channel sets and sample windows are identical in the comparison.
-    qb_dt, qb_overall = compute_quality_windowed_fs(pre_time_us, pre_data[:, :2], fs=TFLITE_FS,
-                                                    win_sec=QEEG_WIN_SEC, windows=grid)
-    qa_dt, qa_overall = compute_quality_windowed_fs(tfl_time_us, tfl_data, fs=TFLITE_FS,
-                                                    win_sec=QEEG_WIN_SEC, windows=grid)
+    qb_dt, qb_overall, qb_audit = compute_quality_windowed_fs(pre_time_us, pre_data[:, :2], fs=TFLITE_FS,
+        win_sec=QEEG_WIN_SEC, windows=grid, return_audit=True, stage=STAGES['before'])
+    qa_dt, qa_overall, qa_audit = compute_quality_windowed_fs(tfl_time_us, tfl_data, fs=TFLITE_FS,
+        win_sec=QEEG_WIN_SEC, windows=grid, return_audit=True, stage=STAGES['after'])
     qb_dt, qa_dt = np.array(qb_dt), np.array(qa_dt)
     qb_med, qa_med = np.median(qb_overall, axis=1), np.median(qa_overall, axis=1)
     qeeg_tfl_dt, qeeg_tfl = compute_qeeg_windowed(tfl_time_us, tfl_data, fs=TFLITE_FS, windows=grid)
@@ -489,12 +501,17 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
     # ── 依模式渲染（'session' / 'pre-event'，'both' 則兩張都出） ────────────────
     os.makedirs(outdir, exist_ok=True)
     audit_path = os.path.join(outdir, f'{name}_{info["sn"]}_tflite_analysis.json')
+    quality_analysis = dict(score_policy=POLICY, reader_verification=VERIFICATION,
+                            before=qb_audit, after=qa_audit, baseline_catalog=catalog, baselines=baseline_audit)
     with open(audit_path, 'w', encoding='utf-8') as handle:
         json.dump({'source_id': file_sha256(merged), 'model_id': file_sha256(TFLITE_MODEL_PATH),
                    'source_path': os.path.abspath(merged), 'inference': timeline.metadata(),
                    'baseline_quality_epoch_sec': epoch_sec, 'quality_threshold': quality_ratio,
                    'baseline_catalog': catalog, 'baselines': baseline_audit,
                    'heatmap_bins': bin_audit,
+                   'quality_diagnostics_version': 1, 'quality_analysis': quality_analysis,
+                   'quality_summary': {'before': diagnostic_summary(qb_audit), 'after': diagnostic_summary(qa_audit),
+                        'baseline_subepochs': diagnostic_summary([sub for row in catalog for sub in row['quality_subepochs']])},
                    'code_sha256': file_sha256(__file__)}, handle, indent=2, allow_nan=False)
     metric_frame = pd.DataFrame(dict(grid.columns))
     metric_frame['quality_before'] = qb_med
@@ -506,17 +523,19 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
     code_paths = [__file__, os.path.join(os.path.dirname(__file__), 'plot_event_markers.py'),
                   *[os.path.join(os.path.dirname(__file__), 'lilia', filename)
                   for filename in ('tflite.py', 'tflite_baseline.py', 'tflite_io.py', 'signal.py',
-                                   'windowing.py', 'quality.py', 'qeeg.py', 'entropy_io.py')]]
+                                   'windowing.py', 'quality.py', 'quality_audit.py', 'tflite_quality.py',
+                                   'qeeg.py', 'entropy_io.py')]]
     code_id = hashlib.sha256(''.join(file_sha256(p) for p in code_paths).encode()).hexdigest()
     parameters = {'input_fs': FS, 'fs': TFLITE_FS, 'model_window': TFLITE_WIN,
                   'win_sec': QEEG_WIN_SEC, 'step_sec': QEEG_WIN_SEC,
                   'channels': [1, 2], 'input_channels': [1, 2, 3, 4],
                   'bandpass': [BP_LOW, BP_HIGH], 'quality_threshold': quality_ratio,
                   'quality_params': QUALITY_PARAMS, 'quality_reduction': 'two-channel median',
+                  'baseline_screening': {'epoch_sec': epoch_sec, 'rail': RAIL_VALUE, 'max_saturation': SAT_FRAC_MAX},
                   'index_space': 'retained_tflite_output', 'model_sha256': file_sha256(TFLITE_MODEL_PATH),
                   'code_sha256': code_id}
     write_tflite_table(os.path.join(outdir, f'{name}_{info["sn"]}_tflite_metrics.csv'),
-                      merged, metric_frame, grid, parameters, code_id, timeline)
+                      merged, metric_frame, grid, parameters, code_id, timeline, quality_analysis=quality_analysis)
     if not event_baseline_ref:
         modes = [m for m in modes if m != 'pre-event']
     if not modes:
@@ -631,10 +650,13 @@ def plot_subject_tflite_summary(name: str, info: dict, outdir: str,
                          label=f'After TFLite ({TFLITE_FS}Hz, ch median)')
         ax_qual.axhline(quality_ratio, color='k', lw=0.8, ls=':',
                         alpha=0.6, label=f'quality_ratio {quality_ratio:.2f}')
+        plot_diagnostic_markers(ax_qual, qb_dt, qb_audit, qb_overall, label_prefix='Before: ')
+        plot_diagnostic_markers(ax_qual, qa_dt, qa_audit, qa_overall, label_prefix='After: ', invalid_marker='+')
         _overlay_events(ax_qual, evt_list, cone_stage_dt)
         ax_qual.set_ylim(0, 1.05)
         ax_qual.set_ylabel('EEG Quality\n(before vs after)', fontsize=9)
-        ax_qual.set_title('Signal-quality comparison: TFLite processing before vs after',
+        ax_qual.set_title('Signal-quality comparison: filtered/resampled → model output\n'
+                          f'Before: {diagnostic_label(qb_audit)}; After: {diagnostic_label(qa_audit)}',
                           fontsize=10, loc='left')
         ax_qual.legend(loc='lower right', fontsize=8, ncol=3, framealpha=0.85)
         plt.setp(ax_qual.get_xticklabels(), visible=False)

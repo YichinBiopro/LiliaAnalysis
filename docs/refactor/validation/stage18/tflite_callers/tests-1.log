@@ -1,0 +1,839 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789093335.767178      59 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789093336.628273      59 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+test_cli_failure_records_audit_and_raises (test_app_nuc_regression.AppNucRegression) ... ok
+test_continuous_real_model_matches_saved_pre_refactor_values (test_app_nuc_regression.AppNucRegression) ... ok
+test_elapsed_pairing_preserves_gaps_and_ignores_absolute_epoch (test_app_nuc_regression.AppNucRegression) ... ok
+test_gapped_cli_tables_preserve_short_prefix_epoch_and_source_ids (test_app_nuc_regression.AppNucRegression) ... ok
+test_invalid_retained_segment_and_all_repair_anchors_fail (test_app_nuc_regression.AppNucRegression) ... ok
+test_lag_uses_only_longest_common_segment (test_app_nuc_regression.AppNucRegression) ... ok
+test_planted_lag_and_continuous_alignment_match_legacy (test_app_nuc_regression.AppNucRegression) ... ok
+test_qeeg_plot_keeps_isolated_segment_visible (test_app_nuc_regression.AppNucRegression) ... ok
+test_segment_psd_pooling_and_stft_centers (test_app_nuc_regression.AppNucRegression) ... ok
+test_sidecars_reject_inference_and_lag_reference_changes (test_app_nuc_regression.AppNucRegression) ... ok
+test_small_gap_filter_repair_and_ola_do_not_borrow_samples (test_app_nuc_regression.AppNucRegression) ... ok
+test_tables_reject_changed_source_checkpoint_and_rehashed_mapping (test_app_nuc_regression.AppNucRegression) ... ok
+test_time_plot_contains_nan_break_at_small_source_gap (test_app_nuc_regression.AppNucRegression) ... ok
+test_custom_output_rerun_is_idempotent_and_preserves_collisions (test_csv_contract_regression.CSVContractTests) ... ok
+test_extra_columns_never_shift_time_and_channels (test_csv_contract_regression.CSVContractTests) ... ok
+test_invalid_and_empty_time_are_explicit (test_csv_contract_regression.CSVContractTests) ... ok
+test_schema_failure_does_not_overwrite_existing_output (test_csv_contract_regression.CSVContractTests) ... ok
+test_continuous_numerics_match_pre_refactor_fixture (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_disabled_quality_requires_explicit_plot_override (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_gap_break_retains_first_post_gap_point_and_smoothing_is_separate (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_grid_mismatch_and_no_complete_segment_are_rejected (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_hash_identity_is_text_even_with_large_exponent_or_leading_zeros (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_invalid_quality_masks_metrics_but_retains_metadata_rows (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_legacy_gap_guards_stay_for_unmigrated_modes_and_tables (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_metadata_checks_indexes_against_timestamps_even_if_table_rehashed (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_metadata_rejects_wrong_source_channel_and_partial_schema (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_non_grid_gap_and_jitter_keep_true_sample_centres (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_renderer_smoothing_and_lines_do_not_join_segments (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_session_renderer_uses_metadata_instead_of_cli_defaults_or_row_positions (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_short_segment_skipped_before_filter_without_poisoning_other_segments (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_all_excluded_and_no_complete_windows_save_audit (test_event_qeeg_regression.EventQEEGTests) ... ok
+test_batch_continues_after_failure_and_exits_nonzero (test_event_qeeg_regression.EventQEEGTests) ... ok
+test_gap_grids_raw_quality_mapping_and_independent_filter_numerics (test_event_qeeg_regression.EventQEEGTests) ... ok
+test_heatmap_rectangles_use_actual_bin_edges (test_event_qeeg_regression.EventQEEGTests) ... ok
+test_invalid_and_failed_quality_remain_missing_through_smoothing (test_event_qeeg_regression.EventQEEGTests) ... ok
+test_jitter_does_not_give_bp_quality_an_extra_sample (test_event_qeeg_regression.EventQEEGTests) ... ok
+test_metadata_rejects_rehashed_quality_mapping_and_inference (test_event_qeeg_regression.EventQEEGTests) ... ok
+test_plot_exports_verifiable_tables_and_does_not_bridge_gaps (test_event_qeeg_regression.EventQEEGTests) ... ok
+test_pre_event_no_rest_and_missing_baseline_never_fall_back_or_zero_fill (test_event_qeeg_regression.EventQEEGTests) ... ok
+test_real_continuous_bp_model_quality_and_summary_match_reference (test_event_qeeg_regression.EventQEEGTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+ok
+test_requested_model_failure_is_reported_after_bp_audit (test_event_qeeg_regression.EventQEEGTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+ok
+test_session_baseline_is_shared_and_event_windows_are_fully_contained (test_event_qeeg_regression.EventQEEGTests) ... ok
+test_small_gap_ids_and_nonfinite_segments_are_retained_in_audit (test_event_qeeg_regression.EventQEEGTests) ... ok
+test_cli_gap_success_and_exclusion_audit_on_failure (test_event_windows_regression.EventWindowTests) ... ok
+test_continuous_numerics_match_pre_refactor (test_event_windows_regression.EventWindowTests) ... ok
+test_filter_hilbert_never_borrow_across_gap (test_event_windows_regression.EventWindowTests) ... ok
+test_gap_onset_pre_post_and_incomplete_intervals (test_event_windows_regression.EventWindowTests) ... ok
+test_half_open_true_time_after_gap_and_between_samples (test_event_windows_regression.EventWindowTests) ... ok
+test_invalid_timestamps_and_lengths_rejected (test_event_windows_regression.EventWindowTests) ... ok
+test_nonfinite_channel_is_excluded_and_quality_not_claimed (test_event_windows_regression.EventWindowTests) ... ok
+test_participation_and_legacy_index_interfaces_use_real_time (test_event_windows_regression.EventWindowTests) ... ok
+test_pre_onset_histograms_use_complete_physical_intervals (test_event_windows_regression.EventWindowTests) ... ok
+test_short_unused_segment_and_per_duration_eligibility (test_event_windows_regression.EventWindowTests) ... ok
+test_all_short_has_partial_raw_plot_and_audit_without_table (test_event_zoom_regression.EventZoomTests) ... ok
+test_complete_window_policy_changes_non_aligned_baseline_and_event (test_event_zoom_regression.EventZoomTests) ... ok
+test_continuous_real_quality_metrics_and_aligned_baseline_match_old (test_event_zoom_regression.EventZoomTests) ... ok
+test_draw_keeps_runs_disconnected_and_boundary_bins_missing (test_event_zoom_regression.EventZoomTests) ... ok
+test_gap_crop_retains_first_last_indices_and_true_bin_edges (test_event_zoom_regression.EventZoomTests) ... ok
+test_invalid_ds_unknown_event_and_missing_source_save_failed_audit (test_event_zoom_regression.EventZoomTests) ... ok
+test_no_pre_event_rest_does_not_fallback (test_event_zoom_regression.EventZoomTests) ... ok
+test_nonfinite_source_segment_excludes_event_but_keeps_baseline (test_event_zoom_regression.EventZoomTests) ... ok
+test_nonparticipation_and_outside_recording_are_audited (test_event_zoom_regression.EventZoomTests) ... ok
+test_quality_nan_error_and_low_values_exclude_baseline (test_event_zoom_regression.EventZoomTests) ... ok
+test_rehashed_crop_summary_mapping_and_raw_changes_are_rejected (test_event_zoom_regression.EventZoomTests) ... ok
+test_short_event_never_falls_back_to_other_bins (test_event_zoom_regression.EventZoomTests) ... ok
+test_gapped_main_runs_all_plots_and_retains_source_ids (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_gapped_table_roundtrip_keeps_short_segments_epoch_and_all_sample_maps (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_main_collision_preserves_previous_artifacts_and_audit (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_main_failure_audits_preserve_short_nonfinite_and_model_context (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_main_uses_adapter_exact_timestamps_and_verifies_outputs (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_metadata_tampering_rejected_even_with_valid_table_hash (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_plot_failure_preserves_verified_signal_and_failed_audit (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_polluted_short_segment_and_missing_model_fail_with_audit (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_source_model_and_signal_hash_mismatch_rejected (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_table_timestamp_header_width_and_nonfinite_tampering_rejected (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_writer_preserves_existing_table_and_rejects_nonfinite (test_eye_open_close_regression.EyeOutputTests) ... ok
+test_all_short_fails_before_loading_model (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_bad_channel_shape_and_timestamps_fail (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_failed_second_group_reports_segment_and_never_returns_partial_output (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_group_mapping_and_gap_processing_equal_independent_segments (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_minimum_model_length_and_small_raw_gap_are_explicit (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_nonfinite_even_in_short_segments_fails_before_inference (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_real_and_synthetic_models_match_frozen_continuous_baseline (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_short_segments_keep_source_id_epoch_and_complete_resampled_tail (test_eye_open_close_regression.EyeProcessingTests) ... ok
+test_rendered_comparison_uses_ch5_6_and_never_draws_across_small_gap (test_eye_plot_regression.EyePlotTests) ... ok
+test_rendered_output_keeps_short_spans_and_closes_on_save_failure (test_eye_plot_regression.EyePlotTests) ... ok
+test_segmented_stft_preserves_frozen_real_and_synthetic_values (test_eye_plot_regression.EyePlotTests) ... ok
+test_short_prefix_tail_and_large_epoch_keep_source_elapsed_extent (test_eye_plot_regression.EyePlotTests) ... ok
+test_small_gap_has_two_independent_stfts_and_padding_is_clipped (test_eye_plot_regression.EyePlotTests) ... ok
+test_stft_centers_follow_timestamp_jitter_without_changing_spectrum (test_eye_plot_regression.EyePlotTests) ... ok
+test_collect_group_data_filters_rows (test_goertzel_distribution_regression.GoertzelDistributionRegressionTests) ... ok
+test_common_db_edges_shape (test_goertzel_distribution_regression.GoertzelDistributionRegressionTests) ... ok
+test_with_aggregates_adds_channel_and_all_channels (test_goertzel_distribution_regression.GoertzelDistributionRegressionTests) ... ok
+test_collect_candidates_per_subject_prefers_quality_final_and_excludes_hard_clip (test_goertzel_sampling_regression.GoertzelSamplingRegressionTests) ... ok
+test_collect_matches_global_filters_by_tolerance_and_quality (test_goertzel_sampling_regression.GoertzelSamplingRegressionTests) ... ok
+test_sample_rows_is_reproducible (test_goertzel_sampling_regression.GoertzelSamplingRegressionTests) ... ok
+test_all_short_or_all_invalid_cli_persists_failure (test_hardy2_regression.Hardy2Tests) ... ok
+test_cli_round_trip_includes_all_candidates_and_period_audit (test_hardy2_regression.Hardy2Tests) ... ok
+test_explicit_cli_source_and_missing_file_failure_audit (test_hardy2_regression.Hardy2Tests) ... ok
+test_filter_failure_and_invalid_metric_output_stay_nan (test_hardy2_regression.Hardy2Tests) ... ok
+test_gap_grid_and_filter_do_not_borrow_from_other_segment (test_hardy2_regression.Hardy2Tests) ... ok
+test_invalid_settings_timestamps_and_compatibility_adapter (test_hardy2_regression.Hardy2Tests) ... ok
+test_nonfinite_filtered_segment_and_raw_window_have_explicit_exclusions (test_hardy2_regression.Hardy2Tests) ... ok
+test_period_boundary_crossing_is_excluded_instead_of_center_assigned (test_hardy2_regression.Hardy2Tests) ... ok
+test_period_spans_and_smoothing_break_at_invalid_rows_and_source_ids (test_hardy2_regression.Hardy2Tests) ... ok
+test_plot_preserves_small_gap_points_and_segment_shading (test_hardy2_regression.Hardy2Tests) ... ok
+test_rehashed_period_or_segment_audit_tamper_rejected (test_hardy2_regression.Hardy2Tests) ... ok
+test_saved_continuous_raw_and_bp_metrics_smoothing_and_period_means (test_hardy2_regression.Hardy2Tests) ... ok
+test_source_and_rehashed_window_or_smoothing_tamper_rejected (test_hardy2_regression.Hardy2Tests) ... ok
+test_all_dropped_is_error (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_channel_contract_and_invalid_parameters (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_cli_failed_audit_and_no_empty_success (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_custom_window_channel_and_upsampling (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_evidence_uses_shared_audit_and_rejects_kind_and_signal_tamper (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_float_timestamp_plan_rejected (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_fragment_timestamp_tamper_even_with_updated_hash (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_frozen_continuous_and_fractional_both_modes (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_gap_threshold_and_nonmonotonic (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_incomplete_manifest_refused_before_publication (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_manifest_missing_duplicate_and_reordered_rows_even_rehashed (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_missing_extra_fragment_and_mapping_tamper (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_partial_short_splits_are_audited (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_pollution_in_dropped_and_unused_channels_rejected (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_repeat_does_not_overwrite (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_same_basename_different_sources_do_not_collide (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_segment_filter_independence_and_window_coordinates (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_short_segment_drop_and_filter_pad_boundary (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_short_split_strict_rejects_before_writing (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_source_change_rejected (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_source_mutation_during_processing_detected (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_splits_before_trimming_and_true_window_count (test_jenqwei_dataset_regression.DatasetRegression) ... ok
+test_collision_does_not_overwrite_prior_outputs_or_audit (test_jenqwei_output_regression.JenqweiOutputTests) ...   → /tmp/tmpgyt_6768/custom.csv  (2 files, 3 rows, 0.0 s)
+  → /tmp/tmpgyt_6768/custom.csv  (2 files, 3 rows, 0.0 s)
+  [skip] ch1 @ 5s — too few usable sub-epochs.
+  [skip] ch1 @ 10s — too few usable sub-epochs.
+Saved and verified processed CSV: /tmp/tmpdeajsxlj/run/source_tinyv4_output.csv
+Saved analysis audit: /tmp/tmpdeajsxlj/run/source_analysis_audit.json
+Saved analysis audit: /tmp/tmpyy8_52_5/run/source_analysis_audit_83f6a0345db0452b95c3ee554c1dce34.json
+Saved analysis audit: /tmp/tmpulk8kea3/short/source_analysis_audit.json
+Saved analysis audit: /tmp/tmpulk8kea3/nonfinite/source_analysis_audit.json
+Saved analysis audit: /tmp/tmpulk8kea3/model/source_analysis_audit.json
+Saved analysis audit: /tmp/tmpulk8kea3/missing/source_analysis_audit.json
+Saved analysis audit: /tmp/tmpulk8kea3/invalid_fmax/source_analysis_audit.json
+Saved and verified processed CSV: /tmp/tmp_xnwnmdj/run/source_tinyv4_output.csv
+Saved analysis audit: /tmp/tmp_xnwnmdj/run/source_analysis_audit.json
+Saved and verified processed CSV: /tmp/tmp_8m83ews/run/source_tinyv4_output.csv
+Saved analysis audit: /tmp/tmp_8m83ews/run/source_analysis_audit.json
+Saved analysis audit: /tmp/tmpyd7iurv1/polluted/source_analysis_audit.json
+Saved analysis audit: /tmp/tmpyd7iurv1/missing_model/source_analysis_audit.json
+failed: /tmp/tmp5pgjdyqk/source.csv — audit /tmp/tmp5pgjdyqk/collision/source_analysis_audit_b712baec57394bfcadb8694331d21654.json
+ok
+test_main_processes_each_source_once_and_returns_failure_when_any_source_fails (test_jenqwei_output_regression.JenqweiOutputTests) ... FAILED second.csv: failed
+1 sources succeeded, 1 failed.
+ok
+test_metadata_source_model_and_header_tampering_fail (test_jenqwei_output_regression.JenqweiOutputTests) ... ok
+test_missing_invalid_short_and_polluted_short_fail_with_audit (test_jenqwei_output_regression.JenqweiOutputTests) ... failed: /tmp/tmpn9146mzg/missing.csv — audit /tmp/tmpn9146mzg/missing/missing_analysis_audit.json
+failed: /tmp/tmpn9146mzg/source.csv — audit /tmp/tmpn9146mzg/channels/source_analysis_audit.json
+failed: /tmp/tmpn9146mzg/source.csv — audit /tmp/tmpn9146mzg/display/source_analysis_audit.json
+failed: /tmp/tmpn9146mzg/source.csv — audit /tmp/tmpn9146mzg/short/source_analysis_audit.json
+failed: /tmp/tmpn9146mzg/source.csv — audit /tmp/tmpn9146mzg/polluted/source_analysis_audit.json
+failed: /tmp/tmpn9146mzg/source.csv — audit /tmp/tmpn9146mzg/missing_model/source_analysis_audit.json
+ok
+test_model_and_plot_failures_save_context_without_reporting_success (test_jenqwei_output_regression.JenqweiOutputTests) ... failed: /tmp/tmptnn408i2/source.csv — audit /tmp/tmptnn408i2/model/source_analysis_audit.json
+failed: /tmp/tmptnn408i2/source.csv — audit /tmp/tmptnn408i2/plot/source_analysis_audit.json
+ok
+test_multiple_display_channels_share_one_processing_result (test_jenqwei_output_regression.JenqweiOutputTests) ... success: /tmp/tmp1f_odhzt/source.csv — audit /tmp/tmp1f_odhzt/run/source_analysis_audit.json
+ok
+test_roundtrip_preserves_distinct_indexes_tails_epoch_and_complete_mapping (test_jenqwei_output_regression.JenqweiOutputTests) ... ok
+test_table_tampering_is_rejected_even_when_table_hash_is_refreshed (test_jenqwei_output_regression.JenqweiOutputTests) ... ok
+test_truncated_table_rebuilds_full_filter_context_and_used_prefix (test_jenqwei_output_regression.JenqweiOutputTests) ... ok
+test_continuous_panels_match_all_frozen_psd_and_stft_arrays (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_jittered_stft_centers_follow_source_time_without_changing_spectrum (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_psd_and_stft_are_independent_per_segment_and_exclude_gap_from_spectrum (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_real_save_failure_closes_figure (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_rendered_source_channel3_has_no_fabricated_after_and_short_views_are_explicit (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_rendered_td_breaks_and_stft_clips_before_after_tails_separately (test_jenqwei_output_regression.JenqweiPlotTests) ... ok
+test_all_short_and_polluted_short_segments_fail_before_inference (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_failed_model_in_second_segment_has_source_context (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_five_real_and_two_synthetic_cases_match_frozen_model_and_spectra (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+ok
+test_gaps_preserve_distinct_before_and_after_tails_and_source_positions (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_invalid_shape_timestamp_limit_and_legacy_gap_guard (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_max_samples_filters_full_segment_before_truncating (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_segment_filter_and_model_are_isolated_from_other_segments (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_small_gap_is_not_lost_at_output_rate_and_tail_positions_extrapolate (test_jenqwei_pipeline_regression.JenqweiPipelineTests) ... ok
+test_baseline_and_joint_mi_modes_cannot_be_combined (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_cli_quality_nan_mask_and_metadata_keep_all_window_rows (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_continuous_mi_quality_and_surrogates_match_reference (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_joint_windows_use_actual_timestamps_and_original_sample_grid (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_metadata_rejects_wrong_source_pair_kind_or_rehashed_indexes (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_missing_quality_or_count_mismatch_fails (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_nonfinite_samples_invalidate_windows_without_dropping_rows (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_peri_event_interpolation_does_not_fill_recording_or_quality_gaps (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_series_plot_preserves_first_point_after_gap_and_smooths_per_run (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_short_segment_excluded_from_summary_and_filtering_is_independent (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_surrogate_rolls_each_segment_independently (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_allshort_or_empty_crop_preserves_failure_audit (test_meditation_regression.MeditationTests) ... ok
+test_continuous_actual_four_channel_bp_and_model_match_old_main (test_meditation_regression.MeditationTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+ok
+test_crop_maps_global_raw_indices_segment_ids_and_epoch (test_meditation_regression.MeditationTests) ... ok
+test_disabled_model_is_successful_and_not_quality_accepted (test_meditation_regression.MeditationTests) ... ok
+test_filter_is_local_to_crop_and_segment (test_meditation_regression.MeditationTests) ... ok
+test_half_open_crop_excludes_endpoint_and_caps_model_support (test_meditation_regression.MeditationTests) ... ok
+test_model_runtime_failure_retains_bp_and_requested_checkpoint_mapping (test_meditation_regression.MeditationTests) ... ok
+test_no_baseline_never_uses_zero_and_audits_unbinned_tails (test_meditation_regression.MeditationTests) ... ok
+test_outputs_reconstruct_crop_model_summary_and_display (test_meditation_regression.MeditationTests) ... ok
+test_polluted_crop_segment_excludes_bp_and_fails_model_explicitly (test_meditation_regression.MeditationTests) ... ok
+test_raw_heatmap_and_colorbar_keep_time_positions_aligned (test_meditation_regression.MeditationTests) ... ok
+test_requested_missing_model_keeps_bp_tables_and_failure_plot (test_meditation_regression.MeditationTests) ... ok
+test_table_rejects_rehashed_crop_inference_summary_and_wrong_model (test_meditation_regression.MeditationTests) ... ok
+test_cli_output_metadata_verifies_inference_axis_not_raw_grid (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_denoise_rejects_disabling_required_filters (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_fractional_rate_jitter_mapping_and_end_cap (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_invalid_time_and_failed_model_output_are_rejected (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_metadata_rejects_mapping_or_rehashed_window_changes (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_overlap_add_identity_preserves_real_edges_and_rejects_short (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_real_model_matches_correct_resampling_old_ola_reference (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_segment_filtering_inference_and_input_fs_are_independent (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_short_segment_preserves_raw_epoch_and_original_id (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_small_gap_survives_resampling_and_grid_restarts_per_segment (test_neural_timeline_regression.NeuralTimelineTests) ... ok
+test_core_quality_imports (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_data_analysis (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_filter_hard_artifacts (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_goertzel_histograms (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_goertzel_resample_wrapper (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_goertzel_sampling (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_goertzel_summary (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_plot_goertzel_vs_raw (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_plot_raw_eeg (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_plot_tyy_meditation (test_phase_smoke.PhaseSmokeTests) ... ok
+test_help_smoke_quality_check (test_phase_smoke.PhaseSmokeTests) ... ok
+test_import_convert_to_tflite (test_phase_smoke.PhaseSmokeTests) ... ok
+test_project_root_exists (test_phase_smoke.PhaseSmokeTests) ... ok
+test_signal_quality_package_imports (test_phase_smoke.PhaseSmokeTests) ... ok
+test_custom_markers_at_200hz_apply_quality_in_aligned_windows (test_pipeline_output_regression.PipelineOutputTests) ... ok
+test_event_selection_preserves_prior_event_baseline_anchor (test_pipeline_output_regression.PipelineOutputTests) ... ok
+test_eye_output_header_matches_resampled_channels_and_time (test_pipeline_output_regression.PipelineOutputTests) ... ok
+test_negative_entropy_delta_remains_visible (test_pipeline_output_regression.PipelineOutputTests) ... ok
+test_all_short_and_all_excluded_cli_save_failure_audit (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_cli_keeps_integer_microseconds_and_old_summary (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_empty_plot_keeps_source_time_and_labels_missing_values (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_exact_minimum_short_and_unaligned_segment_boundaries (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_frozen_continuous_numbers_odd_and_truncated_windows (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_gap_threshold_and_timestamp_jitter_use_actual_centres (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_gaps_preserve_original_grid_segments_and_excluded_coverage (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_invalid_channel_and_settings_cli_audit (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_invalid_settings_shape_and_time_fail (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_metric_exception_and_nonfinite_result_leave_no_partial_values (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_nonfinite_tail_and_prefix_are_audited_without_excluding_valid_window (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_nonfinite_window_does_not_shift_rows_or_poison_other_channels (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_table_rejects_source_channel_metadata_and_rehashed_tampering (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_timestamp_free_helper_and_shim_retain_legacy_contract (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_two_panels_break_at_gaps_and_keep_isolated_windows (test_qeeg_cli_regression.RawQeegTests) ... ok
+test_finite_fallback_still_uses_legacy_selection_and_is_verifiable (test_quality_audit_regression.QualityAuditTests) ... ok
+test_legacy_injected_signature_is_unavailable_not_assumed_valid (test_quality_audit_regression.QualityAuditTests) ... ok
+test_legacy_tables_explicitly_lack_diagnostic_version (test_quality_audit_regression.QualityAuditTests) ... ok
+test_plot_label_uses_actual_components_and_preset (test_quality_audit_regression.QualityAuditTests) ... ok
+test_plot_marks_invalid_finite_scores_and_external_unavailable (test_quality_audit_regression.QualityAuditTests) ... ok
+test_real_scorer_raw_context_and_both_branch_mappings (test_quality_audit_regression.QualityAuditTests) ... ok
+test_rehashed_stage_reason_context_and_coverage_tamper_rejected (test_quality_audit_regression.QualityAuditTests) ... ok
+test_scorer_error_is_distinct_and_legacy_invalid_output_is_unavailable (test_quality_audit_regression.QualityAuditTests) ... ok
+test_short_window_diagnostics_do_not_change_legacy_scores (test_quality_audit_regression.QualityAuditTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+ok
+test_activity_boundary_preserves_legacy_exclusive_stop (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_all_frozen_arrays_exact_including_invalid_values (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_context_stage_preset_and_configuration_identity (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_correlation_exception_and_single_channel_identity (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_disabled_components_do_not_invalidate (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_empty_single_sample_and_no_channels (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_insufficient_bins_and_nonfinite_fit_are_distinct (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_kurtosis_exception_and_constant_floor (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_nonfinite_pollution_and_correlation_peer_effect (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_spectrum_exception_retains_fallback_but_masks_usable (test_quality_diagnostics_regression.QualityDiagnosticsTests) ... ok
+test_hash_manifest_rejects_tamper_empty_and_unknown_schema (test_refactor_validation.RefactorValidationTests) ... ok
+test_keys_shape_empty_and_tolerance_rejected (test_refactor_validation.RefactorValidationTests) ... ok
+test_large_integer_timestamps_are_exact (test_refactor_validation.RefactorValidationTests) ... ok
+test_nonzero_exit_is_not_a_pass (test_refactor_validation.RefactorValidationTests) ... FAIL failure — /tmp/tmphd5vsh34/failure.log
+ok
+test_numeric_difference_and_nan_policy (test_refactor_validation.RefactorValidationTests) ... ok
+test_snapshot_detects_fixture_model_and_external_input_changes (test_refactor_validation.RefactorValidationTests) ... ok
+test_status_missing_input_returns_unusable_result (test_refactor_validation.RefactorValidationTests) ... ok
+test_unknown_table_kind_cannot_silently_downgrade (test_refactor_validation.RefactorValidationTests) ... ok
+test_zero_test_run_is_not_a_pass (test_refactor_validation.RefactorValidationTests) ... FAIL zero (0 tests, 0 skipped) — /tmp/tmp8f5szos0/zero.log
+ok
+test_cache_rejects_changes_and_legacy_without_metadata (test_safety_regression.SafetyRegressionTests) ... ok
+test_goertzel_windows_after_gap_preserve_indices_and_wall_time (test_safety_regression.SafetyRegressionTests) ... ok
+test_mi_onsets_exclude_nonparticipants (test_safety_regression.SafetyRegressionTests) ... ok
+test_quality_policy_rejects_nonfinite_and_hard_artifacts (test_safety_regression.SafetyRegressionTests) ... ok
+test_validation_shell_propagates_each_failure_stage (test_safety_regression.SafetyRegressionTests) ... ok
+test_non_overlapping_property (test_segment_sampling_regression.SegmentSamplingRegressionTests) ... ok
+test_reproducible_with_seed (test_segment_sampling_regression.SegmentSamplingRegressionTests) ... ok
+test_short_recording_returns_empty (test_segment_sampling_regression.SegmentSamplingRegressionTests) ... ok
+test_filter_does_not_mix_disconnected_segments (test_signal_contract_regression.SignalContractTests) ... ok
+test_fractional_rate_is_not_truncated (test_signal_contract_regression.SignalContractTests) ... ok
+test_fully_packed_sampling_always_finds_capacity (test_signal_contract_regression.SignalContractTests) ... ok
+test_gap_windows_and_legacy_guard (test_signal_contract_regression.SignalContractTests) ... ok
+test_integer_microsecond_api_rejects_seconds (test_signal_contract_regression.SignalContractTests) ... ok
+test_resampling_preserves_epoch_gap_and_segment_values (test_signal_contract_regression.SignalContractTests) ... ok
+test_seconds_call_site_keeps_fractional_time (test_signal_contract_regression.SignalContractTests) ... ok
+test_short_welch_windows_are_finite_and_long_profile_unchanged (test_signal_contract_regression.SignalContractTests) ... ok
+test_summary_resampling_branch_resolves_import (test_signal_contract_regression.SignalContractTests) ... ok
+test_tflite_trims_each_segment_and_keeps_true_timestamps (test_signal_contract_regression.SignalContractTests) ... ok
+test_all_excluded_and_empty_interval_still_save_verifiable_audit (test_state_entropy_regression.StateEntropyTests) ... ok
+test_clean_audits_quality_nonfinite_saturation_and_no_cross_gap (test_state_entropy_regression.StateEntropyTests) ... ok
+test_continuous_ordinary_and_real_quality_match_saved_reference (test_state_entropy_regression.StateEntropyTests) ... ok
+test_failed_scorer_is_audited_and_clean_step_is_explicit (test_state_entropy_regression.StateEntropyTests) ... ok
+test_filter_only_contributing_segments_and_keep_finite_channel (test_state_entropy_regression.StateEntropyTests) ... ok
+test_gapped_cli_matches_independent_segment_filter_and_psds (test_state_entropy_regression.StateEntropyTests) ... ok
+test_half_open_fractional_boundaries_and_short_segments (test_state_entropy_regression.StateEntropyTests) ... ok
+test_interval_crossing_gap_pools_only_independent_complete_windows (test_state_entropy_regression.StateEntropyTests) ... ok
+test_metadata_rejects_source_channel_config_and_rehashed_geometry (test_state_entropy_regression.StateEntropyTests) ... ok
+test_nonfinite_filter_context_and_too_short_filter_are_audited (test_state_entropy_regression.StateEntropyTests) ... ok
+test_all_missing_combined_annotations_stay_inside_subject_axis (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_cli_continues_groups_after_missing_subject_and_returns_nonzero (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_complete_event_windows_and_nonparticipation_preserve_baseline_anchor (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_disabled_model_is_distinct_from_failure (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_metric_exception_and_nonfinite_output_retain_excluded_windows (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_missing_zero_and_nonparticipating_bars_are_visually_distinct (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_model_failure_or_missing_model_preserves_bp_and_reports_failure (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_model_trimmed_segment_does_not_shift_later_quality_rows (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_no_baseline_or_event_rows_and_allshort_audit_are_explicit (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_quality_nan_shape_error_or_low_score_never_becomes_accepted (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_quality_scored_against_each_actual_window_not_truncated_rows (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_real_continuous_quality_bp_tflite_and_both_deltas_match_reference (test_subject_comparison_regression.SubjectComparisonTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+ok
+test_rehashed_summary_and_inference_tamper_are_rejected (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_session_baseline_counts_candidates_before_quality_no_fallback (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_small_gap_grids_and_quality_raw_indexes_survive_tflite_trim (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_tables_reject_source_model_and_rehashed_quality_mapping_changes (test_subject_comparison_regression.SubjectComparisonTests) ... ok
+test_iter_group_merged_csvs_returns_group_subject_path (test_subject_discovery_regression.SubjectDiscoveryRegressionTests) ... ok
+test_iter_subject_dirs_filters_missing_merged (test_subject_discovery_regression.SubjectDiscoveryRegressionTests) ... ok
+test_all_invalid_quality_cannot_produce_a_zero_baseline (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_baseline_uses_complete_output_blocks_without_inference_or_psd_concat (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_each_source_segment_trims_separately_and_keeps_small_gaps (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_pre_event_search_requires_entire_window_and_retains_buffer (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_quality_invalid_or_saturated_half_rejects_whole_model_window (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_real_continuous_inference_matches_reference (test_tflite_baseline_regression.TFLiteBaselineTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+ok
+test_resampling_propagates_ids_to_existing_tflite_adapter (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_short_segments_and_bad_model_outputs_fail_explicitly (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_summary_gaps_metadata_and_heatmap_physical_bounds (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_baseline_records_filtered_stage_and_preserves_short_circuit (test_tflite_quality_regression.TFLiteQualityTests) ... ok
+test_csv_score_tampering_rejected_after_rehash_and_legacy_tables_readable (test_tflite_quality_regression.TFLiteQualityTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+ok
+test_legacy_helper_preserves_tuple_and_sampler_selection (test_tflite_quality_regression.TFLiteQualityTests) ... ok
+test_rehashed_channel_mapping_and_reduction_are_rejected (test_tflite_quality_regression.TFLiteQualityTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+ok
+test_rehashed_diagnostic_stage_preset_coverage_and_baseline_tampering_fail (test_tflite_quality_regression.TFLiteQualityTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+ok
+test_short_subepoch_is_not_scored_and_scorer_errors_still_propagate (test_tflite_quality_regression.TFLiteQualityTests) ... ok
+test_summary_three_stages_fallback_markers_and_source_reader (test_tflite_quality_regression.TFLiteQualityTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+ok
+test_hhmm_to_local_dt (test_time_utils_regression.TimeUtilsRegressionTests) ... ok
+test_hhmm_to_utc_us_matches_expected (test_time_utils_regression.TimeUtilsRegressionTests) ... ok
+test_round_trip_local_dt_and_utc_us (test_time_utils_regression.TimeUtilsRegressionTests) ... ok
+test_entire_label_horizon_stays_in_its_split (test_twse_contract_regression.TWSEContractTests) ... ok
+test_missing_volume_does_not_drop_every_feature_row (test_twse_contract_regression.TWSEContractTests) ... ok
+test_zero_price_produces_no_infinite_features (test_twse_contract_regression.TWSEContractTests) ... ok
+
+----------------------------------------------------------------------
+Ran 317 tests in 41.964s
+
+OK

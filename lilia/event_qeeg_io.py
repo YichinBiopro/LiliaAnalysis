@@ -11,6 +11,7 @@ from lilia.entropy_io import _write_window_table, _load_window_table, config_id
 from lilia.event_qeeg import INDEX_KEYS, raw_quality_mapping, summarize_branch
 from lilia.io import read_lilia_frame
 from lilia.provenance import file_sha256
+from lilia.quality_audit import attach_diagnostic_columns, validate_diagnostics
 from lilia.tflite import build_tflite_timeline
 from lilia.windowing import build_window_grid
 
@@ -38,8 +39,9 @@ def write_event_qeeg_table(path, source, branch, parameters, code_id, timeline=N
             frame[f'{key}_ch{channel+1}'] = np.where(branch['valid'], branch['scores'][key][:, channel], np.nan)
     for key in ('quality_status', 'metric_status'):
         frame[key] = [row[key] for row in branch['window_audit']]
+    attach_diagnostic_columns(frame, branch['window_audit'])
     analysis = json_safe({'summary': branch['summary'], 'window_audit': branch['window_audit']})
-    info = {'analysis': analysis, 'analysis_id': config_id(analysis)}
+    info = {'analysis': analysis, 'analysis_id': config_id(analysis), 'quality_diagnostics_version': 1}
     kind = 'event_marker_bp' if timeline is None else 'event_marker_tflite'
     if timeline is not None:
         info.update(inference=timeline.metadata(), source_samples=timeline.source_samples,
@@ -59,6 +61,7 @@ def load_event_qeeg_table(path, raw_csv=None, model_path=None):
         raise ValueError('Event qEEG index space or analysis fingerprint mismatch')
     if model_path is not None and params.get('model_sha256') != file_sha256(model_path):
         raise ValueError('TFLite model differs from event qEEG source')
+    raw = None
     if raw_csv is not None:
         if file_sha256(raw_csv) != meta['source_id']:
             raise ValueError('Raw recording differs from event qEEG source')
@@ -93,4 +96,5 @@ def load_event_qeeg_table(path, raw_csv=None, model_path=None):
             for key in ('baseline_metric_rows', 'event_metric_rows', 'baseline_bins', 'event_bins'):
                 if actual.get(key) != expected.get(key):
                     raise ValueError('Event qEEG baseline mapping differs from source')
+    validate_diagnostics(frame, meta, None if raw is None else raw.iloc[:, 1:].to_numpy(dtype=np.float32))
     return frame, meta

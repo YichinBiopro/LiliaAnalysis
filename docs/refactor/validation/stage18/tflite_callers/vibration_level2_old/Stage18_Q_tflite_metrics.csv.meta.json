@@ -1,0 +1,429 @@
+{
+  "kind": "tflite_qeeg",
+  "schema_version": 1,
+  "source_id": "bb1e243ad8c25c2769c51e88d79c0ed83fa7a756857ee0fd3ecd279c71ba36d5",
+  "source_path": "/tmp/lilia-stage18-tflite-real-v2/inputs/vibration_level2/merged.csv",
+  "source_samples": 32312,
+  "source_epoch_us": 0,
+  "config_id": "f98fad514b4e814cf659bcddc72f365a39bfbdf2d16bbe21ca6f7090d489b425",
+  "parameters": {
+    "input_fs": 500,
+    "fs": 200,
+    "model_window": 400,
+    "win_sec": 5.0,
+    "step_sec": 5.0,
+    "channels": [
+      1,
+      2
+    ],
+    "input_channels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "quality_threshold": 0.5,
+    "quality_params": {
+      "target_score": 0.8,
+      "flat_activity_k": 0.35,
+      "spectrum_fit_hi": 40.0,
+      "flat_ratio_start": 0.3,
+      "flat_penalty_floor": 0.2,
+      "spike_ratio_start": 0.0001,
+      "spike_ratio_end": 0.0015,
+      "spike_penalty_floor": 0.2,
+      "clip_ratio_start": 0.001,
+      "clip_ratio_end": 0.01,
+      "clip_penalty_floor": 0.2,
+      "range_start": 6.0,
+      "range_end": 12.0,
+      "range_penalty_floor": 0.3,
+      "slope_good_low": -2.5,
+      "slope_center": -1.0,
+      "slope_good_high": -0.2,
+      "slope_edge_score": 0.7,
+      "slope_outer_floor": 0.2,
+      "alpha_dpr_good": 0.55,
+      "alpha_dpr_bad": 0.8,
+      "alpha_artifact_floor": 0.5,
+      "nonalpha_dpr_good": 0.25,
+      "nonalpha_dpr_bad": 0.5,
+      "nonalpha_artifact_floor": 0.1,
+      "low_freq_penalty_floor": 0.3,
+      "low_freq_penalty_ceiling": 0.7,
+      "line_noise_penalty_floor": 0.4,
+      "line_noise_penalty_ceiling": 0.7,
+      "kurtosis_good_low": 2.0,
+      "kurtosis_good_high": 8.0,
+      "kurtosis_bad_high": 15.0,
+      "kurtosis_floor": 0.2,
+      "corr_low": 0.2,
+      "corr_mid": 0.4,
+      "corr_high": 0.9,
+      "corr_floor": 0.3,
+      "corr_low_score": 0.75,
+      "corr_mid_score": 0.9,
+      "flat_weight": 1.0,
+      "spectrum_weight": 0.9,
+      "kurtosis_weight": 0.0,
+      "corr_weight": 0.0
+    },
+    "quality_reduction": "two-channel median",
+    "index_space": "retained_tflite_output",
+    "model_sha256": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "code_sha256": "031ffd10d327e547b3da129ff62567d5ebd1e789bb843baa9cd0930b677a8719"
+  },
+  "code_sha256": "031ffd10d327e547b3da129ff62567d5ebd1e789bb843baa9cd0930b677a8719",
+  "table_sha256": "5a1b0e348216b592334c0134caea54b666cf6af55da2de8ec20a4b065ca2f8a7",
+  "inference": {
+    "segments": [
+      {
+        "segment_id": 0,
+        "raw_start_idx": 0,
+        "raw_end_idx": 32312,
+        "raw_start_us": 0,
+        "raw_end_us": 64624000,
+        "resampled_samples": 12925,
+        "retained_samples": 12800,
+        "trimmed_samples": 125,
+        "ratio_up": 2,
+        "ratio_down": 5,
+        "status": "retained",
+        "reason": "",
+        "output_start_idx": 0,
+        "output_end_idx": 12800
+      }
+    ],
+    "model_windows": [
+      {
+        "model_window_id": 0,
+        "segment_id": 0,
+        "output_start_idx": 0,
+        "output_end_idx": 400,
+        "window_start_us": 0,
+        "window_end_us": 2000000,
+        "raw_start_idx": 0,
+        "raw_end_idx": 1000
+      },
+      {
+        "model_window_id": 1,
+        "segment_id": 0,
+        "output_start_idx": 400,
+        "output_end_idx": 800,
+        "window_start_us": 2000000,
+        "window_end_us": 4000000,
+        "raw_start_idx": 1000,
+        "raw_end_idx": 2000
+      },
+      {
+        "model_window_id": 2,
+        "segment_id": 0,
+        "output_start_idx": 800,
+        "output_end_idx": 1200,
+        "window_start_us": 4000000,
+        "window_end_us": 6000000,
+        "raw_start_idx": 2000,
+        "raw_end_idx": 3000
+      },
+      {
+        "model_window_id": 3,
+        "segment_id": 0,
+        "output_start_idx": 1200,
+        "output_end_idx": 1600,
+        "window_start_us": 6000000,
+        "window_end_us": 8000000,
+        "raw_start_idx": 3000,
+        "raw_end_idx": 4000
+      },
+      {
+        "model_window_id": 4,
+        "segment_id": 0,
+        "output_start_idx": 1600,
+        "output_end_idx": 2000,
+        "window_start_us": 8000000,
+        "window_end_us": 10000000,
+        "raw_start_idx": 4000,
+        "raw_end_idx": 5000
+      },
+      {
+        "model_window_id": 5,
+        "segment_id": 0,
+        "output_start_idx": 2000,
+        "output_end_idx": 2400,
+        "window_start_us": 10000000,
+        "window_end_us": 12000000,
+        "raw_start_idx": 5000,
+        "raw_end_idx": 6000
+      },
+      {
+        "model_window_id": 6,
+        "segment_id": 0,
+        "output_start_idx": 2400,
+        "output_end_idx": 2800,
+        "window_start_us": 12000000,
+        "window_end_us": 14000000,
+        "raw_start_idx": 6000,
+        "raw_end_idx": 7000
+      },
+      {
+        "model_window_id": 7,
+        "segment_id": 0,
+        "output_start_idx": 2800,
+        "output_end_idx": 3200,
+        "window_start_us": 14000000,
+        "window_end_us": 16000000,
+        "raw_start_idx": 7000,
+        "raw_end_idx": 8000
+      },
+      {
+        "model_window_id": 8,
+        "segment_id": 0,
+        "output_start_idx": 3200,
+        "output_end_idx": 3600,
+        "window_start_us": 16000000,
+        "window_end_us": 18000000,
+        "raw_start_idx": 8000,
+        "raw_end_idx": 9000
+      },
+      {
+        "model_window_id": 9,
+        "segment_id": 0,
+        "output_start_idx": 3600,
+        "output_end_idx": 4000,
+        "window_start_us": 18000000,
+        "window_end_us": 20000000,
+        "raw_start_idx": 9000,
+        "raw_end_idx": 10000
+      },
+      {
+        "model_window_id": 10,
+        "segment_id": 0,
+        "output_start_idx": 4000,
+        "output_end_idx": 4400,
+        "window_start_us": 20000000,
+        "window_end_us": 22000000,
+        "raw_start_idx": 10000,
+        "raw_end_idx": 11000
+      },
+      {
+        "model_window_id": 11,
+        "segment_id": 0,
+        "output_start_idx": 4400,
+        "output_end_idx": 4800,
+        "window_start_us": 22000000,
+        "window_end_us": 24000000,
+        "raw_start_idx": 11000,
+        "raw_end_idx": 12000
+      },
+      {
+        "model_window_id": 12,
+        "segment_id": 0,
+        "output_start_idx": 4800,
+        "output_end_idx": 5200,
+        "window_start_us": 24000000,
+        "window_end_us": 26000000,
+        "raw_start_idx": 12000,
+        "raw_end_idx": 13000
+      },
+      {
+        "model_window_id": 13,
+        "segment_id": 0,
+        "output_start_idx": 5200,
+        "output_end_idx": 5600,
+        "window_start_us": 26000000,
+        "window_end_us": 28000000,
+        "raw_start_idx": 13000,
+        "raw_end_idx": 14000
+      },
+      {
+        "model_window_id": 14,
+        "segment_id": 0,
+        "output_start_idx": 5600,
+        "output_end_idx": 6000,
+        "window_start_us": 28000000,
+        "window_end_us": 30000000,
+        "raw_start_idx": 14000,
+        "raw_end_idx": 15000
+      },
+      {
+        "model_window_id": 15,
+        "segment_id": 0,
+        "output_start_idx": 6000,
+        "output_end_idx": 6400,
+        "window_start_us": 30000000,
+        "window_end_us": 32000000,
+        "raw_start_idx": 15000,
+        "raw_end_idx": 16000
+      },
+      {
+        "model_window_id": 16,
+        "segment_id": 0,
+        "output_start_idx": 6400,
+        "output_end_idx": 6800,
+        "window_start_us": 32000000,
+        "window_end_us": 34000000,
+        "raw_start_idx": 16000,
+        "raw_end_idx": 17000
+      },
+      {
+        "model_window_id": 17,
+        "segment_id": 0,
+        "output_start_idx": 6800,
+        "output_end_idx": 7200,
+        "window_start_us": 34000000,
+        "window_end_us": 36000000,
+        "raw_start_idx": 17000,
+        "raw_end_idx": 18000
+      },
+      {
+        "model_window_id": 18,
+        "segment_id": 0,
+        "output_start_idx": 7200,
+        "output_end_idx": 7600,
+        "window_start_us": 36000000,
+        "window_end_us": 38000000,
+        "raw_start_idx": 18000,
+        "raw_end_idx": 19000
+      },
+      {
+        "model_window_id": 19,
+        "segment_id": 0,
+        "output_start_idx": 7600,
+        "output_end_idx": 8000,
+        "window_start_us": 38000000,
+        "window_end_us": 40000000,
+        "raw_start_idx": 19000,
+        "raw_end_idx": 20000
+      },
+      {
+        "model_window_id": 20,
+        "segment_id": 0,
+        "output_start_idx": 8000,
+        "output_end_idx": 8400,
+        "window_start_us": 40000000,
+        "window_end_us": 42000000,
+        "raw_start_idx": 20000,
+        "raw_end_idx": 21000
+      },
+      {
+        "model_window_id": 21,
+        "segment_id": 0,
+        "output_start_idx": 8400,
+        "output_end_idx": 8800,
+        "window_start_us": 42000000,
+        "window_end_us": 44000000,
+        "raw_start_idx": 21000,
+        "raw_end_idx": 22000
+      },
+      {
+        "model_window_id": 22,
+        "segment_id": 0,
+        "output_start_idx": 8800,
+        "output_end_idx": 9200,
+        "window_start_us": 44000000,
+        "window_end_us": 46000000,
+        "raw_start_idx": 22000,
+        "raw_end_idx": 23000
+      },
+      {
+        "model_window_id": 23,
+        "segment_id": 0,
+        "output_start_idx": 9200,
+        "output_end_idx": 9600,
+        "window_start_us": 46000000,
+        "window_end_us": 48000000,
+        "raw_start_idx": 23000,
+        "raw_end_idx": 24000
+      },
+      {
+        "model_window_id": 24,
+        "segment_id": 0,
+        "output_start_idx": 9600,
+        "output_end_idx": 10000,
+        "window_start_us": 48000000,
+        "window_end_us": 50000000,
+        "raw_start_idx": 24000,
+        "raw_end_idx": 25000
+      },
+      {
+        "model_window_id": 25,
+        "segment_id": 0,
+        "output_start_idx": 10000,
+        "output_end_idx": 10400,
+        "window_start_us": 50000000,
+        "window_end_us": 52000000,
+        "raw_start_idx": 25000,
+        "raw_end_idx": 26000
+      },
+      {
+        "model_window_id": 26,
+        "segment_id": 0,
+        "output_start_idx": 10400,
+        "output_end_idx": 10800,
+        "window_start_us": 52000000,
+        "window_end_us": 54000000,
+        "raw_start_idx": 26000,
+        "raw_end_idx": 27000
+      },
+      {
+        "model_window_id": 27,
+        "segment_id": 0,
+        "output_start_idx": 10800,
+        "output_end_idx": 11200,
+        "window_start_us": 54000000,
+        "window_end_us": 56000000,
+        "raw_start_idx": 27000,
+        "raw_end_idx": 28000
+      },
+      {
+        "model_window_id": 28,
+        "segment_id": 0,
+        "output_start_idx": 11200,
+        "output_end_idx": 11600,
+        "window_start_us": 56000000,
+        "window_end_us": 58000000,
+        "raw_start_idx": 28000,
+        "raw_end_idx": 29000
+      },
+      {
+        "model_window_id": 29,
+        "segment_id": 0,
+        "output_start_idx": 11600,
+        "output_end_idx": 12000,
+        "window_start_us": 58000000,
+        "window_end_us": 60000000,
+        "raw_start_idx": 29000,
+        "raw_end_idx": 30000
+      },
+      {
+        "model_window_id": 30,
+        "segment_id": 0,
+        "output_start_idx": 12000,
+        "output_end_idx": 12400,
+        "window_start_us": 60000000,
+        "window_end_us": 62000000,
+        "raw_start_idx": 30000,
+        "raw_end_idx": 31000
+      },
+      {
+        "model_window_id": 31,
+        "segment_id": 0,
+        "output_start_idx": 12400,
+        "output_end_idx": 12800,
+        "window_start_us": 62000000,
+        "window_end_us": 64000000,
+        "raw_start_idx": 31000,
+        "raw_end_idx": 32000
+      }
+    ],
+    "source_samples": 32312,
+    "source_epoch_us": 0,
+    "fs_in": 500.0,
+    "fs_out": 200.0,
+    "model_window": 400
+  }
+}

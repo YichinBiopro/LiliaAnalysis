@@ -36,6 +36,7 @@ import matplotlib.ticker as mticker
 from lilia.windowing import continuous_slices, plot_breaks, finite_runs
 import numpy as np
 import pandas as pd
+from lilia.quality_audit import plot_diagnostic_markers, diagnostic_summary, diagnostic_label
 from lilia.quality import (
     get_eeg_quality_index_v2_parametric,
     get_ibrain_device_eeg_quality_v2_params,
@@ -712,7 +713,9 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
                               result['timeline'] if branch_name == 'tflite' else None)
         analysis['branches'][branch_name] = {'table': os.path.basename(table),
             'table_sha256': file_sha256(table), 'valid_windows': int(branch['valid'].sum()),
-            'total_windows': len(branch['grid'].starts), 'summary': branch['summary']}
+            'total_windows': len(branch['grid'].starts), 'summary': branch['summary'],
+            'quality_diagnostics': diagnostic_summary(branch['window_audit']),
+            'window_audit': branch['window_audit']}
     if result['timeline'] is not None:
         analysis['inference'] = result['timeline'].metadata()
     audit_path = stem + '_analysis.json'
@@ -786,7 +789,7 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
     evt_note = 'Event Marker Verification' if with_events else 'EEG Overview'
     fig.suptitle(
         f'{group_label} — {info["sn"]}  |  {evt_note}{tflite_note}\n'
-        f'EEG display: every {ds} samples plus segment endpoints  |  Raw quality: flat+spectrum, '
+        f'EEG display: every {ds} samples plus segment endpoints  |  Raw quality: {diagnostic_label(bp["window_audit"])}, '
         f'{QUALITY_WIN_SEC:.0f}s windows @ {FS}Hz  |  '
         f'qEEG: BP {BP_LOW}–{BP_HIGH}Hz, ch median, {QEEG_WIN_SEC:.0f}s windows',
         fontsize=12, fontweight='bold',
@@ -827,6 +830,7 @@ def plot_subject(name: str, info: dict, outdir: str, ds: int,
                                us_to_local_dt(bp['grid'].columns['window_end_us'][i]), color='red', alpha=.18)
         ax_quality.axhline(QUALITY_THRESHOLD, color='k', lw=.8, ls='--', alpha=.5,
                            label=f'threshold {QUALITY_THRESHOLD:.2f}')
+    plot_diagnostic_markers(ax_quality, q_arr, bp['window_audit'], q_overall)
     _overlay_events(ax_quality, evt_list, cone_stage_dt)
     ax_quality.set_ylim(0, 1.05)
     ax_quality.set_ylabel('Quality\n(ch median)', fontsize=8)

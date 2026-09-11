@@ -6,6 +6,7 @@ import pandas as pd
 
 from lilia.io import bandpass_filter
 from lilia.qeeg import compute_qeeg_indices
+from lilia.quality_audit import pending_diagnostics, capture_diagnostics
 from lilia.tflite import build_tflite_timeline, run_tflite_recording
 from lilia.windowing import build_window_grid, continuous_slices, transform_runs
 
@@ -31,11 +32,17 @@ def score_branch(time_us, raw, data, grid, fs, raw_fs, scorer, params, threshold
         a, b = (int(mapping[k][i]) for k in ('quality_raw_start_idx', 'quality_raw_end_idx'))
         row = {'metric_row': i, 'quality_status': 'not_scored', 'metric_status': 'not_computed'}
         segment = raw[a:b]
+        request = dict(fs=raw_fs, params=params, n_channels=raw.shape[1], n_samples=b-a, stage='raw')
+        row['quality_diagnostics'] = pending_diagnostics(**request)
         if len(segment) < 8 or not np.isfinite(segment).all():
             row['quality_status'] = 'nonfinite_or_short_raw'
+            row['quality_diagnostics']['reasons'] = (['short_raw'] if len(segment) < 8 else []) + (
+                ['nonfinite_raw'] if not np.isfinite(segment).all() else [])
         else:
             try:
-                q = np.asarray(scorer(segment.T.astype(np.float64), fs=raw_fs, params=params)['overall'])
+                scored = scorer(segment.T.astype(np.float64), fs=raw_fs, params=params)
+                q = np.asarray(scored['overall'])
+                row['quality_diagnostics'] = capture_diagnostics(scored, **request)
                 if q.shape != (raw.shape[1],) or not np.isfinite(q).all() or np.any((q < 0) | (q > 1)):
                     row['quality_status'] = 'invalid_quality'
                 else:
@@ -43,6 +50,8 @@ def score_branch(time_us, raw, data, grid, fs, raw_fs, scorer, params, threshold
                     row['quality_status'] = 'accepted' if np.median(q) >= threshold else 'low_quality'
             except Exception as exc:
                 row.update(quality_status='quality_error', quality_error=str(exc))
+                row['quality_diagnostics'] = pending_diagnostics(**request, state='error',
+                    reasons=['scorer_exception:' + type(exc).__name__])
         window = data[start:start + grid.win]
         if not np.isfinite(window).all():
             row['metric_status'] = 'nonfinite_filtered_segment'

@@ -22,6 +22,7 @@ from matplotlib.colors import LinearSegmentedColormap, Normalize
 import numpy as np
 
 import plot_event_markers as pem
+from lilia.quality_audit import diagnostic_summary
 from lilia.event_qeeg import analyze_recording, summarize_branch
 from lilia.event_qeeg_io import json_safe
 from lilia.event_zoom import select_zoom, zoom_values
@@ -162,7 +163,9 @@ def run_zoom(name, info, source, outdir, event='Mindfulness Meditation', ds=10, 
             write_zoom_table(table, source, branch, parameters, code_id, selection, result['segments'])
             for p in (table, Path(str(table)+'.meta.json')):
                 audit['artifacts'][p.name] = file_sha256(p)
-            audit.update(candidate_windows=len(branch['valid']), accepted_windows=int(branch['valid'].sum()))
+            audit.update(candidate_windows=len(branch['valid']), accepted_windows=int(branch['valid'].sum()),
+                         quality_diagnostics=diagnostic_summary(branch['window_audit']),
+                         window_audit=branch['window_audit'])
         outpath = Path(str(stem)+'.png')
         draw_zoom(t, raw, branch, selection, name, info, ds, outpath)
         for p in (outpath, outpath.with_suffix('.svg')):

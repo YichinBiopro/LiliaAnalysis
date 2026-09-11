@@ -1,0 +1,162 @@
+{
+  "status": "passed",
+  "scope": "event qEEG, zoom and subject comparison raw-quality caller increment",
+  "cases": [
+    {
+      "source": "move_head_first4",
+      "branch": "bp",
+      "windows": 11,
+      "accepted": 10,
+      "diagnostic_states": {
+        "valid": 11
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "move_head_first4",
+      "branch": "tflite",
+      "windows": 11,
+      "accepted": 10,
+      "diagnostic_states": {
+        "valid": 11
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "move_head_all8",
+      "branch": "bp",
+      "windows": 11,
+      "accepted": 11,
+      "diagnostic_states": {
+        "valid": 11
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "talk_first4",
+      "branch": "bp",
+      "windows": 12,
+      "accepted": 12,
+      "diagnostic_states": {
+        "valid": 12
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "talk_first4",
+      "branch": "tflite",
+      "windows": 12,
+      "accepted": 12,
+      "diagnostic_states": {
+        "valid": 12
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "talk_all8",
+      "branch": "bp",
+      "windows": 12,
+      "accepted": 12,
+      "diagnostic_states": {
+        "valid": 12
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "vibration_level1_first4",
+      "branch": "bp",
+      "windows": 12,
+      "accepted": 12,
+      "diagnostic_states": {
+        "valid": 12
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "vibration_level1_first4",
+      "branch": "tflite",
+      "windows": 12,
+      "accepted": 12,
+      "diagnostic_states": {
+        "valid": 12
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "vibration_level1_all8",
+      "branch": "bp",
+      "windows": 12,
+      "accepted": 12,
+      "diagnostic_states": {
+        "valid": 12
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "vibration_level2_first4",
+      "branch": "bp",
+      "windows": 12,
+      "accepted": 12,
+      "diagnostic_states": {
+        "valid": 12
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "vibration_level2_first4",
+      "branch": "tflite",
+      "windows": 12,
+      "accepted": 12,
+      "diagnostic_states": {
+        "valid": 12
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "vibration_level2_all8",
+      "branch": "bp",
+      "windows": 12,
+      "accepted": 12,
+      "diagnostic_states": {
+        "valid": 12
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "vibration_level3_first4",
+      "branch": "bp",
+      "windows": 12,
+      "accepted": 12,
+      "diagnostic_states": {
+        "valid": 12
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "vibration_level3_first4",
+      "branch": "tflite",
+      "windows": 12,
+      "accepted": 12,
+      "diagnostic_states": {
+        "valid": 12
+      },
+      "comparison_read": true
+    },
+    {
+      "source": "vibration_level3_all8",
+      "branch": "bp",
+      "windows": 12,
+      "accepted": 12,
+      "diagnostic_states": {
+        "valid": 12
+      },
+      "comparison_read": true
+    }
+  ],
+  "max_abs_error": 0,
+  "changed_selected_windows": 0,
+  "policy": "legacy_overall; validity diagnostics do not change threshold masks",
+  "comparison_tables_read": 15,
+  "event_tables_read": 17,
+  "zoom_tables_read": 1
+}

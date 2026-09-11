@@ -34,6 +34,7 @@ from lilia.io import read_lilia_frame
 from lilia.event_qeeg import analyze_recording
 from lilia.event_qeeg_io import json_safe
 from lilia.subject_comparison import summarize_comparison, legacy_results
+from lilia.quality_audit import diagnostic_summary
 from lilia.subject_comparison_io import write_comparison_table
 from lilia.provenance import file_sha256
 from lilia.time_utils import local_dt_to_utc_us
@@ -217,7 +218,8 @@ def process_subject(name, info, base_dir, events, outdir=None, use_tflite=True):
             summary = branch['summary']
             audit['branches'][tag] = {'status':'computed','parameters':params,
                 'candidate_windows':len(branch['valid']),'accepted_windows':int(branch['valid'].sum()),
-                'window_audit':branch['window_audit'],'summary':summary}
+                'window_audit':branch['window_audit'],'summary':summary,
+                'quality_diagnostics':diagnostic_summary(branch['window_audit'])}
             timeline = analysis['timeline'] if tag=='tflite' else None
             if timeline is not None:
                 audit['branches'][tag]['inference'] = timeline.metadata()

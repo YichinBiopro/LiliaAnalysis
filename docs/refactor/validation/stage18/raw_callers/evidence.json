@@ -1,0 +1,774 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/io.py",
+      "sha256": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/signal.py",
+      "sha256": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/windowing.py",
+      "sha256": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/qeeg.py",
+      "sha256": "0943e90d793cd8106f8b6262be2342333c89d873675cf0c586e0e7364f35507a"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/tflite.py",
+      "sha256": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/quality.py",
+      "sha256": "9b80325a917c2d82629457c55dc94cd8d014c1534598987553a94c72217ab765"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/inputs/move_head_first4.csv",
+      "sha256": "806341bc9ad41ab9342876cfbb113257b363c9f842174bcc6b81a0250076f9fd"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+      "sha256": "fd291cbc7f9ee7c24561751c9c70793e067d161be24459801868f0727d2d8540"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/inputs/talk_first4.csv",
+      "sha256": "477ead0010d5d2360ef578ee096ba543eed0e2301cf43eb1bc933c06def85f73"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "sha256": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level1_first4.csv",
+      "sha256": "6bd61772bb3edff0d59a0b94e525e4c91bc267a1ff04e00ea513bcfe7ca8c0a9"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+      "sha256": "248dda71a06a6c4f76a4082fd734961383b80b464d8b8fbe9278cae23866d91a"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level2_first4.csv",
+      "sha256": "bb1e243ad8c25c2769c51e88d79c0ed83fa7a756857ee0fd3ecd279c71ba36d5"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+      "sha256": "3ecea3ac6d6393849157cd57b5a97e69af15a84e2bf124178fc469ac728503c0"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level3_first4.csv",
+      "sha256": "5c8b9705ce0b6beb2f8434c8aaf3db7253403d7c562b1c928d346fb277e8b8fd"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+      "sha256": "07cf89ba2216be66a09195c884a565498d802bf193432f21a7be27b0b9320d8b"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/analysis.json",
+      "sha256": "3b296f58efbcdaee2b2ebcfd11a1391dc9d18026db0d1091f19875cde8106b78"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/inputs/move_head_first4.csv",
+      "sha256": "806341bc9ad41ab9342876cfbb113257b363c9f842174bcc6b81a0250076f9fd"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/inputs/talk_first4.csv",
+      "sha256": "477ead0010d5d2360ef578ee096ba543eed0e2301cf43eb1bc933c06def85f73"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level1_first4.csv",
+      "sha256": "6bd61772bb3edff0d59a0b94e525e4c91bc267a1ff04e00ea513bcfe7ca8c0a9"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level2_first4.csv",
+      "sha256": "bb1e243ad8c25c2769c51e88d79c0ed83fa7a756857ee0fd3ecd279c71ba36d5"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level3_first4.csv",
+      "sha256": "5c8b9705ce0b6beb2f8434c8aaf3db7253403d7c562b1c928d346fb277e8b8fd"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/legacy_event_qeeg.py.txt",
+      "sha256": "d18280de8be5b7166930c0d7ea4c3026f19e0354ef07281802f98426a12f815b"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_all8_actual.npz",
+      "sha256": "735663b3ba8aeb37e99317a9606240ac06f9c734424514ff1208afa6fda2aa63"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_all8_bp.csv",
+      "sha256": "ec6ff98dec8f61bfaf6e4e5b6ff60e04e23e4f249b4cb2ad00a3d30f0a5e2465"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_all8_bp.csv.meta.json",
+      "sha256": "a67fbdb474139d6e6dfb1113884600cf1421f11d9439ad0478c947d113e8eddf"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_all8_bp_comparison.csv",
+      "sha256": "775b882b220552961c1cc7ecf0708cec587a75f2d2c02b3a8ca1d7dfd16b1bbc"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_all8_bp_comparison.csv.meta.json",
+      "sha256": "be077c4f3d50a662e9f19317961acb2dd0794cab786934ece0ce00d176c8f4ef"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_all8_expected.npz",
+      "sha256": "735663b3ba8aeb37e99317a9606240ac06f9c734424514ff1208afa6fda2aa63"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_actual.npz",
+      "sha256": "59ca560651fc35be47de3d2a63e2cfe3472dc2ce5b9549ad54f954ef33cdea7c"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_bp.csv",
+      "sha256": "79b149d7217ca00b73fc931ebee62cca3158f08e030ba89135bbe033f9dc7498"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_bp.csv.meta.json",
+      "sha256": "a35fb7583fa4dfc410e90447dd86e081c773302697356b9362955190c28f7459"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_bp_comparison.csv",
+      "sha256": "aed016fb8e2637ddcb85112fd797aefe68b2791e194f2e2e489d2d42bfdc909e"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_bp_comparison.csv.meta.json",
+      "sha256": "32761506697094e196d3ccce321426ac85e7fa07a19b163050b4844ef61b7a79"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_expected.npz",
+      "sha256": "59ca560651fc35be47de3d2a63e2cfe3472dc2ce5b9549ad54f954ef33cdea7c"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_tflite.csv",
+      "sha256": "caa1033292b7bba001990741a69cee73a44bf33c0ba5359bde10f673a8c0eb65"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_tflite.csv.meta.json",
+      "sha256": "e63efa11ebed699e4c08dea2fa982919985233a8821c17b20fcb9a1e7194318c"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_tflite_comparison.csv",
+      "sha256": "1242c1d3aea6b66b280dc196a8021d425b1167496541d640f9ab4b78e861ba60"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_tflite_comparison.csv.meta.json",
+      "sha256": "e93b44e9ccdf1696683115d245ea08869e7bab9844fdaa1c69500596fa7fe169"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_fallback/Stage18_stage18_eeg_bp_session_start.png",
+      "sha256": "be39f0cb522a1e5365e84d0a241287eed4e17b0a6c28902a8664a11dad6a2589"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_fallback/Stage18_stage18_eeg_bp_session_start.svg",
+      "sha256": "c2db0735aa774807dc44fb2dc958d71230e65e49e03d94fc2d8059359f47860f"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_fallback/Stage18_stage18_eeg_bp_session_start_analysis.json",
+      "sha256": "8d01b84edbe66e3d510e521879676ff6fae43c4113d308567aba6ec5e0bb9b8d"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_fallback/Stage18_stage18_eeg_bp_session_start_bp_metrics.csv",
+      "sha256": "16e646f9b2ac4ce702a5b027807f11dc8a3347286cc440e511fb4d63aac8f91d"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_fallback/Stage18_stage18_eeg_bp_session_start_bp_metrics.csv.meta.json",
+      "sha256": "b10a80a7fdf838beb94af75b87430108c91318132307dc89cdff036937acdde7"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_real/Stage18_stage18_eeg_bp_session_start.png",
+      "sha256": "1804ddf3201d5eb8b1d08e96acea12abf41b0d46dc95d200503d52004763c52c"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_real/Stage18_stage18_eeg_bp_session_start.svg",
+      "sha256": "e8b65f026e646f76f192ad31b61a5c059a45457ffcb75776df01ba6c1b9cc456"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_real/Stage18_stage18_eeg_bp_session_start_analysis.json",
+      "sha256": "457a9884bdf76f317f41a6b046fdb4d15a889e670ff76bf02758709a4c7f8fd4"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_real/Stage18_stage18_eeg_bp_session_start_bp_metrics.csv",
+      "sha256": "0115d693a9e72796463321d4121f9d4b41aea29e3e6a436678dcd9af3476268d"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_real/Stage18_stage18_eeg_bp_session_start_bp_metrics.csv.meta.json",
+      "sha256": "ac64dc80db1b21b987cf4a37c03548b235969ba44ad12364da74fdd28b43e978"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_sources/real/merged.csv",
+      "sha256": "477ead0010d5d2360ef578ee096ba543eed0e2301cf43eb1bc933c06def85f73"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/source_inventory.json",
+      "sha256": "de2ae1dda1b37055cb7e37ba279969009a19f8e9920fd49d5a01bd6dccdb4ea1"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_all8_actual.npz",
+      "sha256": "1271ddff63814de200e3ecd849cfdd6b7a8899ce8c3f6240717ee5bd19316b32"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_all8_bp.csv",
+      "sha256": "497ca637ee129cab69ebe744dc96c0c4eedb639bda7476ddcd2b50f3f55c57a4"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_all8_bp.csv.meta.json",
+      "sha256": "fcad937cb267858c84f54058fb9e5c3420c901d335a5a09bd8b7fc8b67383af7"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_all8_bp_comparison.csv",
+      "sha256": "c7a2dd7988b241d9b51f14e8f103620e6195db27f42bca6d8c1a1fdb99e2bf0b"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_all8_bp_comparison.csv.meta.json",
+      "sha256": "032c04327fa2fa3c152ccdc432e28ec45f2975fe54af8b903fbc64b90c082afc"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_all8_expected.npz",
+      "sha256": "1271ddff63814de200e3ecd849cfdd6b7a8899ce8c3f6240717ee5bd19316b32"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_actual.npz",
+      "sha256": "60e7762519fad4a8f781327681495ac43cca19fd6f90ed53a482736ea7fc1745"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_bp.csv",
+      "sha256": "5e1caa440bd97dc612cdd3b85b51380283a9270993b4ba00a913c7cfee944f9c"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_bp.csv.meta.json",
+      "sha256": "51acfce7ee41991d5dfef77cf5401ed9062718b1651629526d36d1c3a38abb16"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_bp_comparison.csv",
+      "sha256": "78c078e3c781a6c4e615a64d099096520cba509aa0255aa21dbb8c1f4cfa27bb"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_bp_comparison.csv.meta.json",
+      "sha256": "41434a483e80515be62e78f0387d915b8409432b3a4abb0bbebe6d145ecd3b11"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_expected.npz",
+      "sha256": "60e7762519fad4a8f781327681495ac43cca19fd6f90ed53a482736ea7fc1745"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_tflite.csv",
+      "sha256": "6b8d8da29049c8456de3cb78c3e5b89b8ff1972ac067b90fdf2e962facf7e00b"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_tflite.csv.meta.json",
+      "sha256": "0053771d7ea2b3db28c665443e4afc62f06433a33e348d3e167f174c88df1a8b"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_tflite_comparison.csv",
+      "sha256": "2df532da7c335715e47bfc9b2ac7540232793376f743b518bc3261366ea437aa"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_tflite_comparison.csv.meta.json",
+      "sha256": "bf7fef7f34929c8c6378273c9cad2d7e17e06ce14401f9ecd844b77111bac615"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_all8_actual.npz",
+      "sha256": "27c9b2a710e4984ca75e7cc3195202d91ad49fa0c1813cebefb6e576cdb10c11"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_all8_bp.csv",
+      "sha256": "ff3a082c5af87efce85da55d89cbdcd0edd4764a68fa9a2f895c4f0136965f98"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_all8_bp.csv.meta.json",
+      "sha256": "c9974fbae64c9c7d8b4ec2c9c9813a2fb17dcd05632444fa9301fd340ea75b85"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_all8_bp_comparison.csv",
+      "sha256": "1918fdc8309efcaf26354a0f9c0679b35110107d6d485032a9da6bdeea008722"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_all8_bp_comparison.csv.meta.json",
+      "sha256": "fbf7737f8f9d2f7c284ad4593b10436f5cbb3ac6eab72a283f65b3c51689298f"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_all8_expected.npz",
+      "sha256": "27c9b2a710e4984ca75e7cc3195202d91ad49fa0c1813cebefb6e576cdb10c11"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_actual.npz",
+      "sha256": "2ce2c2dcd098c527a37017814b61c37113d257df11f4a4b052a5073b83d041b0"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_bp.csv",
+      "sha256": "47282d1f6227493b73f3c3c0dc05d4db98b536248535d832b12c442d7dc8fe7d"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_bp.csv.meta.json",
+      "sha256": "a1147ab28ca0c0f714ff49b0bdcf71c5f3c0d1bc87e4b6455d7de64e3ddcfe7b"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_bp_comparison.csv",
+      "sha256": "7c233ec70934fcf5993001074585b743e266ab4805c192fd0ae87e743cf5c78d"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_bp_comparison.csv.meta.json",
+      "sha256": "7333bbb10a90ec3cbc9b148b96930392d6fdcf730824de58e55052f69f028625"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_expected.npz",
+      "sha256": "2ce2c2dcd098c527a37017814b61c37113d257df11f4a4b052a5073b83d041b0"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_tflite.csv",
+      "sha256": "86e2974374cfd8f1851eae800bc088a80a81dbf604e0c24b120edfcb04a45f43"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_tflite.csv.meta.json",
+      "sha256": "ba4538ca2eb805ed55ce2b24cfcc42f413f882f0dde86e66f69df4f5011e5e0c"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_tflite_comparison.csv",
+      "sha256": "cf07332bb69752f690b80595064cb9476ad867de6ac1d6497c093834a4a7681d"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_tflite_comparison.csv.meta.json",
+      "sha256": "25c603db1b9af0d45f9326243e86e642944f5835ad264c155bbd8b378f2dc084"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_all8_actual.npz",
+      "sha256": "bfdd1b61590f0fac375ab1884b2ce6b0a88ba9e7f4481d682f7c505be1888405"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_all8_bp.csv",
+      "sha256": "5a952e2761db65dbf81916dbb10a4a0ec6ed095db10be7192046aa1994b3c4a6"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_all8_bp.csv.meta.json",
+      "sha256": "2d6df65d4a085415f6e5e986c1f9a8c6ad65b4c85997f9a68af89ff55ffe5525"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_all8_bp_comparison.csv",
+      "sha256": "3dbe56d82904ebdf82e5da83f8cc4cc1370de040502ffa9ba0c6a6aac9849a9f"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_all8_bp_comparison.csv.meta.json",
+      "sha256": "49c7e227b8e20e8fd1daf709bd950b732d0d75f70a8c831f8baa9d4cfb9d9c1f"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_all8_expected.npz",
+      "sha256": "bfdd1b61590f0fac375ab1884b2ce6b0a88ba9e7f4481d682f7c505be1888405"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_actual.npz",
+      "sha256": "aa4054cfbac1b4dd9c9aac9120e95735a5121e05ba065b6163153f13351c7980"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_bp.csv",
+      "sha256": "1bcd2976383d51c3000577d71ef36f3a238c941c316203c85e86208be6892161"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_bp.csv.meta.json",
+      "sha256": "a4f2d76e484cf7f3ed1d19268e5935dcea510564638eba89481fa620ddf4c054"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_bp_comparison.csv",
+      "sha256": "2ac1bca75efb5e95e9340a8511f679a4007853e1b58c218f82cbbc5d01198e62"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_bp_comparison.csv.meta.json",
+      "sha256": "dbce2498e495a400530088069d41fb719f459e134d4e9a4310e8628d056d50aa"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_expected.npz",
+      "sha256": "aa4054cfbac1b4dd9c9aac9120e95735a5121e05ba065b6163153f13351c7980"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_tflite.csv",
+      "sha256": "4ac6d0fe908dfaad795d9f4040b1bbbc3973f3f48d83a17caba780fdd0fa75fb"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_tflite.csv.meta.json",
+      "sha256": "a8c05a2a6e020adda0c25bd336f1b1d9fcc36e51a4c11f2f826e2963f059934f"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_tflite_comparison.csv",
+      "sha256": "c7eeae41e6992a0b1d1489276b88390e133556f8fea5f2b0fc2bfc1e49c5fbc5"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_tflite_comparison.csv.meta.json",
+      "sha256": "f71f20425b5d9fba2fa60177ef550d7b8ed2724faff1ad4d143598dd60edc6c6"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_all8_actual.npz",
+      "sha256": "d6a9722f1c1fe0e1ed45d9baaca3147dfccc5d38aff767f2f523d845484588fa"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_all8_bp.csv",
+      "sha256": "a1153549c7472d404e02d06fa70d40195c5538c7220f07a40674f434750ea47f"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_all8_bp.csv.meta.json",
+      "sha256": "5c263f070eaf16fcca08f19f8ee506d7b739047bff08fc37e1f388a394fe26ab"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_all8_bp_comparison.csv",
+      "sha256": "89d34c007c2aa9084db86b5c6a63938f1efc0b46fa80272bfdd10617f1408435"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_all8_bp_comparison.csv.meta.json",
+      "sha256": "5e06ff28db211457432fe3ec5c4ecc04473e334b7d008b8e0970e7116b91bdfb"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_all8_expected.npz",
+      "sha256": "d6a9722f1c1fe0e1ed45d9baaca3147dfccc5d38aff767f2f523d845484588fa"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_actual.npz",
+      "sha256": "2ec436a846ac61630e9d4197f1b0ef717706ca6e54f28fbdd4beb77589cf7b22"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_bp.csv",
+      "sha256": "f57a9260dcefbd48a03095aa4870061fecb34b31b9c02bc169b332b84a94ff73"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_bp.csv.meta.json",
+      "sha256": "5b56fc7671d50ff98d7cb3f4814f41bf44ccd58923ed98d9889e8e104dc47b1c"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_bp_comparison.csv",
+      "sha256": "23673e5c6f7f2610b228168e344dbcb2d180bac8aa41ce8b75c05ca305b8fa4e"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_bp_comparison.csv.meta.json",
+      "sha256": "9d16a3c2c6f1cdaa7fcb4c14f22eb26b021787e7cbdbf1ffae3a51c78ad0069b"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_expected.npz",
+      "sha256": "2ec436a846ac61630e9d4197f1b0ef717706ca6e54f28fbdd4beb77589cf7b22"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_tflite.csv",
+      "sha256": "18fec8fc34bbf12d92f45d253ea803a04119821dcabea96df140d963861315ca"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_tflite.csv.meta.json",
+      "sha256": "1335d906a7abcfe99d4bb876878c7bfd23d11f2d8efd4be44432df06720015c3"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_tflite_comparison.csv",
+      "sha256": "f851fe8db317241db6782e2b23dc97baa6a0f03254e2a28da1139fb8f9ed2e55"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_tflite_comparison.csv.meta.json",
+      "sha256": "cd83b4530f7ab20d0f0994d3f9d146b97956d8dcaea37d98462f98d0a6dc0343"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta.png",
+      "sha256": "7a0ed876096e524541ba7d886f9399a49de9d06b8c791a47ee1946179744046c"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta.svg",
+      "sha256": "ca39bd6f3a45a7839e1323c5a9975fa0a6a3797acb0c49d4f24d13578885f63b"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta_analysis.json",
+      "sha256": "d02adc7cf33103384b314236338a43d00e55409be5a076ab7e4f2f4ec6effe1e"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta_bp_metrics.csv",
+      "sha256": "46803e10c9644214c237a6066be27dddb034ac8bd6438e1f02b42e144e9eeaab"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta_bp_metrics.csv.meta.json",
+      "sha256": "23c4f09b7cde774fa2b176e56c4a4b5a8e01d300df0106aeff6327c3f58e9b27"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tools/validate_quality_callers_stage18.py",
+      "sha256": "9ea2d6c62c5a1690a294718d1f2545c4c2681a31dd34648ff9275fa28d77decf"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/quality_audit.py",
+      "sha256": "862442550c5f7fa3bad79d0dad3c36d306c49ebc150521e6ff1640c3efc3c7df"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/event_qeeg.py",
+      "sha256": "e0240170382e9d470cf16284525982552bfecc9fd3efc29b8d630cbe5b9ea282"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/event_qeeg_io.py",
+      "sha256": "3374e10179022d0711449feed997c637bb338ce799a0ea25c10b92738769ab5a"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/lilia/subject_comparison_io.py",
+      "sha256": "c8ec3338b414244d98d33e0d1015d20d65b0e78bd8fee21cbe81a6fed1faeeba"
+    }
+  ],
+  "tables": [
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_bp.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/move_head_first4.csv",
+      "kind": "event_marker_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_bp_comparison.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/move_head_first4.csv",
+      "kind": "subject_comparison_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_tflite.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/move_head_first4.csv",
+      "kind": "event_marker_tflite",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_first4_tflite_comparison.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/move_head_first4.csv",
+      "kind": "subject_comparison_tflite",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_all8_bp.csv",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+      "kind": "event_marker_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/move_head_all8_bp_comparison.csv",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+      "kind": "subject_comparison_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_bp.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/talk_first4.csv",
+      "kind": "event_marker_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_bp_comparison.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/talk_first4.csv",
+      "kind": "subject_comparison_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_tflite.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/talk_first4.csv",
+      "kind": "event_marker_tflite",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_first4_tflite_comparison.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/talk_first4.csv",
+      "kind": "subject_comparison_tflite",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_all8_bp.csv",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "kind": "event_marker_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/talk_all8_bp_comparison.csv",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "kind": "subject_comparison_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_bp.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level1_first4.csv",
+      "kind": "event_marker_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_bp_comparison.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level1_first4.csv",
+      "kind": "subject_comparison_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_tflite.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level1_first4.csv",
+      "kind": "event_marker_tflite",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_tflite_comparison.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level1_first4.csv",
+      "kind": "subject_comparison_tflite",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_all8_bp.csv",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+      "kind": "event_marker_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level1_all8_bp_comparison.csv",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+      "kind": "subject_comparison_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_bp.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level2_first4.csv",
+      "kind": "event_marker_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_bp_comparison.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level2_first4.csv",
+      "kind": "subject_comparison_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_tflite.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level2_first4.csv",
+      "kind": "event_marker_tflite",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_tflite_comparison.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level2_first4.csv",
+      "kind": "subject_comparison_tflite",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_all8_bp.csv",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+      "kind": "event_marker_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level2_all8_bp_comparison.csv",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+      "kind": "subject_comparison_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_bp.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level3_first4.csv",
+      "kind": "event_marker_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_bp_comparison.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level3_first4.csv",
+      "kind": "subject_comparison_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_tflite.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level3_first4.csv",
+      "kind": "event_marker_tflite",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_tflite_comparison.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/inputs/vibration_level3_first4.csv",
+      "kind": "subject_comparison_tflite",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_all8_bp.csv",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+      "kind": "event_marker_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/vibration_level3_all8_bp_comparison.csv",
+      "raw_csv": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+      "kind": "subject_comparison_bp",
+      "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_real/Stage18_stage18_eeg_bp_session_start_bp_metrics.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/plot_sources/real/merged.csv",
+      "kind": "event_marker_bp"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/plot_fallback/Stage18_stage18_eeg_bp_session_start_bp_metrics.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/plot_sources/real/merged.csv",
+      "kind": "event_marker_bp"
+    },
+    {
+      "path": "/tmp/lilia-stage18-callers-v3/zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta_bp_metrics.csv",
+      "raw_csv": "/tmp/lilia-stage18-callers-v3/plot_sources/real/merged.csv",
+      "kind": "event_marker_bp"
+    }
+  ],
+  "comparisons": [
+    {
+      "actual": "/tmp/lilia-stage18-callers-v3/move_head_first4_actual.npz",
+      "expected": "/tmp/lilia-stage18-callers-v3/move_head_first4_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "/tmp/lilia-stage18-callers-v3/move_head_all8_actual.npz",
+      "expected": "/tmp/lilia-stage18-callers-v3/move_head_all8_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "/tmp/lilia-stage18-callers-v3/talk_first4_actual.npz",
+      "expected": "/tmp/lilia-stage18-callers-v3/talk_first4_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "/tmp/lilia-stage18-callers-v3/talk_all8_actual.npz",
+      "expected": "/tmp/lilia-stage18-callers-v3/talk_all8_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_actual.npz",
+      "expected": "/tmp/lilia-stage18-callers-v3/vibration_level1_first4_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "/tmp/lilia-stage18-callers-v3/vibration_level1_all8_actual.npz",
+      "expected": "/tmp/lilia-stage18-callers-v3/vibration_level1_all8_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_actual.npz",
+      "expected": "/tmp/lilia-stage18-callers-v3/vibration_level2_first4_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "/tmp/lilia-stage18-callers-v3/vibration_level2_all8_actual.npz",
+      "expected": "/tmp/lilia-stage18-callers-v3/vibration_level2_all8_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_actual.npz",
+      "expected": "/tmp/lilia-stage18-callers-v3/vibration_level3_first4_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "/tmp/lilia-stage18-callers-v3/vibration_level3_all8_actual.npz",
+      "expected": "/tmp/lilia-stage18-callers-v3/vibration_level3_all8_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    }
+  ]
+}

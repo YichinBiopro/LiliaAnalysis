@@ -1,0 +1,55 @@
+test_all_invalid_quality_cannot_produce_a_zero_baseline (test_tflite_baseline_regression.TFLiteBaselineTests) ... ERROR
+test_baseline_uses_complete_output_blocks_without_inference_or_psd_concat (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_each_source_segment_trims_separately_and_keeps_small_gaps (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_pre_event_search_requires_entire_window_and_retains_buffer (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_quality_invalid_or_saturated_half_rejects_whole_model_window (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_real_continuous_inference_matches_reference (test_tflite_baseline_regression.TFLiteBaselineTests) ... WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789092926.742162     106 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1789092926.768998     106 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789092927.526901     106 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+ok
+test_resampling_propagates_ids_to_existing_tflite_adapter (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_short_segments_and_bad_model_outputs_fail_explicitly (test_tflite_baseline_regression.TFLiteBaselineTests) ... ok
+test_summary_gaps_metadata_and_heatmap_physical_bounds (test_tflite_baseline_regression.TFLiteBaselineTests) ... ERROR
+
+======================================================================
+ERROR: test_all_invalid_quality_cannot_produce_a_zero_baseline (test_tflite_baseline_regression.TFLiteBaselineTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/tests/test_tflite_baseline_regression.py", line 186, in test_all_invalid_quality_cannot_produce_a_zero_baseline
+    frame, _ = load_tflite_table(self.root / 'out/Demo_S1_tflite_metrics.csv',
+  File "/home/bps-yichin/lilia_analysis/lilia/tflite_io.py", line 52, in load_tflite_table
+    validate_quality(frame, meta, raw=signal, time_us=t, timeline=timeline)
+  File "/home/bps-yichin/lilia_analysis/lilia/tflite_quality.py", line 74, in validate_quality
+    a, b = int(frame.start_idx.iloc[i]), int(frame.end_idx.iloc[i])
+  File "/home/bps-yichin/.local/lib/python3.10/site-packages/pandas/core/generic.py", line 6321, in __getattr__
+    return object.__getattribute__(self, name)
+AttributeError: 'DataFrame' object has no attribute 'start_idx'
+
+======================================================================
+ERROR: test_summary_gaps_metadata_and_heatmap_physical_bounds (test_tflite_baseline_regression.TFLiteBaselineTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/tests/test_tflite_baseline_regression.py", line 153, in test_summary_gaps_metadata_and_heatmap_physical_bounds
+    frame, meta = load_tflite_table(table, source, summary.TFLITE_MODEL_PATH)
+  File "/home/bps-yichin/lilia_analysis/lilia/tflite_io.py", line 52, in load_tflite_table
+    validate_quality(frame, meta, raw=signal, time_us=t, timeline=timeline)
+  File "/home/bps-yichin/lilia_analysis/lilia/tflite_quality.py", line 74, in validate_quality
+    a, b = int(frame.start_idx.iloc[i]), int(frame.end_idx.iloc[i])
+  File "/home/bps-yichin/.local/lib/python3.10/site-packages/pandas/core/generic.py", line 6321, in __getattr__
+    return object.__getattribute__(self, name)
+AttributeError: 'DataFrame' object has no attribute 'start_idx'
+
+----------------------------------------------------------------------
+Ran 9 tests in 1.419s
+
+FAILED (errors=2)

@@ -1,0 +1,64 @@
+test_finite_fallback_still_uses_legacy_selection_and_is_verifiable (test_quality_audit_regression.QualityAuditTests) ... ok
+test_legacy_injected_signature_is_unavailable_not_assumed_valid (test_quality_audit_regression.QualityAuditTests) ... ok
+test_legacy_tables_explicitly_lack_diagnostic_version (test_quality_audit_regression.QualityAuditTests) ... ok
+test_plot_label_uses_actual_components_and_preset (test_quality_audit_regression.QualityAuditTests) ... ok
+test_plot_marks_invalid_finite_scores_and_external_unavailable (test_quality_audit_regression.QualityAuditTests) ... ok
+test_real_scorer_raw_context_and_both_branch_mappings (test_quality_audit_regression.QualityAuditTests) ... ok
+test_rehashed_stage_reason_context_and_coverage_tamper_rejected (test_quality_audit_regression.QualityAuditTests) ... ok
+test_scorer_error_is_distinct_and_legacy_invalid_output_is_unavailable (test_quality_audit_regression.QualityAuditTests) ... ok
+test_short_window_diagnostics_do_not_change_legacy_scores (test_quality_audit_regression.QualityAuditTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.578s
+
+OK

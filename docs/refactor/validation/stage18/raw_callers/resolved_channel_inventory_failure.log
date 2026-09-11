@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/tools/validate_quality_callers_stage18.py", line 137, in <module>
+    if __name__=='__main__':main()
+  File "/home/bps-yichin/lilia_analysis/tools/validate_quality_callers_stage18.py", line 80, in main
+    params=dict(input_fs=500.,fs=branch['grid'].fs,win_sec=5.,step_sec=5.,
+TypeError: 'NoneType' object is not subscriptable

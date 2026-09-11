@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-11T02:23:43.668920+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_gap_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_fallback_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/visual_review.json",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_fallback_new/Stage18_Q_tflite_summary_session.png": "9e1eba9984951832bbc1bb7e34dde043cf999c4c5ffd8fa2fe578a7832cf5ebe",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_gap_new/Stage18_Q_tflite_summary_session.png": "485b876882f8f4d8f116100a122b6b3d0e3db1104a1f87d75dda1164e4806ccf",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_new/Stage18_Q_tflite_summary_session.png": "968861bdc1de9322943dc9a66d0deb2a4e8fb216c8ef51587e61e804ae21640d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/visual_evidence.json": "dbfc783f86db4b8afd6846b81e8506b9e5df98d87aa5ce05804d7f947b4ecbaa",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/visual_review.json": "7b74a17cd2da403b133b87448c797861bcc4e4e6496ecfd6ef22874a8fbbd7da"
+  },
+  "log": "/tmp/lilia-stage18-tflite-visual-v1/evidence.log"
+}

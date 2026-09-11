@@ -1,0 +1,44 @@
+[
+  {
+    "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+    "source_sha256": "fd291cbc7f9ee7c24561751c9c70793e067d161be24459801868f0727d2d8540",
+    "derived": "/tmp/lilia-stage18-tflite-real-v2/inputs/move_head/merged.csv",
+    "derived_sha256": "806341bc9ad41ab9342876cfbb113257b363c9f842174bcc6b81a0250076f9fd",
+    "recipe": "first four declared channels; unchanged int64 time and float32 signal"
+  },
+  {
+    "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+    "source_sha256": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883",
+    "derived": "/tmp/lilia-stage18-tflite-real-v2/inputs/talk/merged.csv",
+    "derived_sha256": "477ead0010d5d2360ef578ee096ba543eed0e2301cf43eb1bc933c06def85f73",
+    "recipe": "first four declared channels; unchanged int64 time and float32 signal"
+  },
+  {
+    "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+    "source_sha256": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883",
+    "derived": "/tmp/lilia-stage18-tflite-real-v2/inputs/talk_gap/merged.csv",
+    "derived_sha256": "f79a4cf6140c691597b626eb988f715f7695397b947a1adad2fef6b795679f5f",
+    "recipe": "first four channels; add 100000000 us from midpoint; signal unchanged"
+  },
+  {
+    "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+    "source_sha256": "248dda71a06a6c4f76a4082fd734961383b80b464d8b8fbe9278cae23866d91a",
+    "derived": "/tmp/lilia-stage18-tflite-real-v2/inputs/vibration_level1/merged.csv",
+    "derived_sha256": "6bd61772bb3edff0d59a0b94e525e4c91bc267a1ff04e00ea513bcfe7ca8c0a9",
+    "recipe": "first four declared channels; unchanged int64 time and float32 signal"
+  },
+  {
+    "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+    "source_sha256": "3ecea3ac6d6393849157cd57b5a97e69af15a84e2bf124178fc469ac728503c0",
+    "derived": "/tmp/lilia-stage18-tflite-real-v2/inputs/vibration_level2/merged.csv",
+    "derived_sha256": "bb1e243ad8c25c2769c51e88d79c0ed83fa7a756857ee0fd3ecd279c71ba36d5",
+    "recipe": "first four declared channels; unchanged int64 time and float32 signal"
+  },
+  {
+    "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+    "source_sha256": "07cf89ba2216be66a09195c884a565498d802bf193432f21a7be27b0b9320d8b",
+    "derived": "/tmp/lilia-stage18-tflite-real-v2/inputs/vibration_level3/merged.csv",
+    "derived_sha256": "5c8b9705ce0b6beb2f8434c8aaf3db7253403d7c562b1c928d346fb277e8b8fd",
+    "recipe": "first four declared channels; unchanged int64 time and float32 signal"
+  }
+]

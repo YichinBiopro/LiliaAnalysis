@@ -1,0 +1,1343 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-11T02:23:20.805627+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/io.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/signal.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/windowing.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/qeeg.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/tflite.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/quality.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/inputs/move_head/merged.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/inputs/talk/merged.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/inputs/talk_gap/merged.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/inputs/vibration_level1/merged.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/inputs/vibration_level2/merged.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/inputs/vibration_level3/merged.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/plot_tflite_summary.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/plot_event_markers.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/tflite_baseline.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/tflite_io.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/tflite_quality.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/lilia/quality_audit.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tools/validate_tflite_quality_stage18.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/move_head_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/move_head_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/move_head_new/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/move_head_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/move_head_new/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/move_head_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/move_head_old/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/move_head_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/move_head_old/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/move_head_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/plot_tflite_summary.py.legacy.txt",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/source_inventory.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_new/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_new/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_old/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_old/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_new/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_new/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_old/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_old/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_new/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_new/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_old/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_old/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_new/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_new/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_old/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_old/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_new/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_new/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_old/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_old/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/tflite_baseline.py.legacy.txt",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_new/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_new/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_old/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_old/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_new/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_new/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_old/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_old/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_actual.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_new/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_new/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_old/Stage18_Q_tflite_analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_old/Stage18_Q_tflite_metrics.csv.meta.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/move_head_old/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 11,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/move_head_new/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 11,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_old/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_new/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_old/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_new/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_old/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_new/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_old/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_new/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_old/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_new/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_old/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_new/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_old/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_new/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_old/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "table",
+      "path": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_new/Stage18_Q_tflite_metrics.csv",
+      "kind": "tflite_qeeg",
+      "rows": 12,
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage18-tflite-real-v2/move_head_actual.npz",
+      "expected": "/tmp/lilia-stage18-tflite-real-v2/move_head_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true,
+      "max_abs_errors": {
+        "baseline_0_calm": 0.0,
+        "baseline_0_flow": 0.0,
+        "baseline_0_focus": 0.0,
+        "baseline_0_relaxation": 0.0,
+        "baseline_0_selected": 0.0,
+        "baseline_eligible": 0.0,
+        "baseline_quality_min": 0.0,
+        "model_after": 0.0,
+        "model_before": 0.0,
+        "model_time_us": 0.0,
+        "plot_0_line_0": 0.0,
+        "plot_0_line_1": 0.0,
+        "plot_0_line_2": 0.0,
+        "plot_1_line_0": 0.0,
+        "plot_1_line_1": 0.0,
+        "plot_1_line_2": 0.0,
+        "plot_2_line_0": 0.0,
+        "plot_2_line_1": 0.0,
+        "plot_2_line_2": 0.0,
+        "plot_3_line_0": 0.0,
+        "plot_3_line_1": 0.0,
+        "plot_3_line_2": 0.0,
+        "plot_4_line_0": 0.0,
+        "plot_4_line_1": 0.0,
+        "plot_4_line_2": 0.0,
+        "plot_5_collection_0": 0.0,
+        "plot_6_collection_1": 0.0,
+        "table_calm_ch1": 0.0,
+        "table_calm_ch2": 0.0,
+        "table_flow_ch1": 0.0,
+        "table_flow_ch2": 0.0,
+        "table_focus_ch1": 0.0,
+        "table_focus_ch2": 0.0,
+        "table_quality_after": 0.0,
+        "table_quality_before": 0.0,
+        "table_quality_valid": 0.0,
+        "table_relaxation_ch1": 0.0,
+        "table_relaxation_ch2": 0.0,
+        "table_segment_id": 0.0,
+        "table_time_s": 0.0,
+        "table_window_center_us": 0.0,
+        "table_window_end_idx": 0.0,
+        "table_window_end_us": 0.0,
+        "table_window_schema_version": 0.0,
+        "table_window_start_idx": 0.0,
+        "table_window_start_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage18-tflite-real-v2/talk_actual.npz",
+      "expected": "/tmp/lilia-stage18-tflite-real-v2/talk_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true,
+      "max_abs_errors": {
+        "baseline_0_calm": 0.0,
+        "baseline_0_flow": 0.0,
+        "baseline_0_focus": 0.0,
+        "baseline_0_relaxation": 0.0,
+        "baseline_0_selected": 0.0,
+        "baseline_eligible": 0.0,
+        "baseline_quality_min": 0.0,
+        "model_after": 0.0,
+        "model_before": 0.0,
+        "model_time_us": 0.0,
+        "plot_0_line_0": 0.0,
+        "plot_0_line_1": 0.0,
+        "plot_0_line_2": 0.0,
+        "plot_1_line_0": 0.0,
+        "plot_1_line_1": 0.0,
+        "plot_1_line_2": 0.0,
+        "plot_2_line_0": 0.0,
+        "plot_2_line_1": 0.0,
+        "plot_2_line_2": 0.0,
+        "plot_3_line_0": 0.0,
+        "plot_3_line_1": 0.0,
+        "plot_3_line_2": 0.0,
+        "plot_4_line_0": 0.0,
+        "plot_4_line_1": 0.0,
+        "plot_4_line_2": 0.0,
+        "plot_5_collection_0": 0.0,
+        "plot_5_collection_1": 0.0,
+        "plot_6_collection_1": 0.0,
+        "table_calm_ch1": 0.0,
+        "table_calm_ch2": 0.0,
+        "table_flow_ch1": 0.0,
+        "table_flow_ch2": 0.0,
+        "table_focus_ch1": 0.0,
+        "table_focus_ch2": 0.0,
+        "table_quality_after": 0.0,
+        "table_quality_before": 0.0,
+        "table_quality_valid": 0.0,
+        "table_relaxation_ch1": 0.0,
+        "table_relaxation_ch2": 0.0,
+        "table_segment_id": 0.0,
+        "table_time_s": 0.0,
+        "table_window_center_us": 0.0,
+        "table_window_end_idx": 0.0,
+        "table_window_end_us": 0.0,
+        "table_window_schema_version": 0.0,
+        "table_window_start_idx": 0.0,
+        "table_window_start_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_actual.npz",
+      "expected": "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true,
+      "max_abs_errors": {
+        "baseline_0_calm": 0.0,
+        "baseline_0_flow": 0.0,
+        "baseline_0_focus": 0.0,
+        "baseline_0_relaxation": 0.0,
+        "baseline_0_selected": 0.0,
+        "baseline_eligible": 0.0,
+        "baseline_quality_min": 0.0,
+        "model_after": 0.0,
+        "model_before": 0.0,
+        "model_time_us": 0.0,
+        "plot_0_line_0": 0.0,
+        "plot_0_line_1": 0.0,
+        "plot_0_line_2": 0.0,
+        "plot_1_line_0": 0.0,
+        "plot_1_line_1": 0.0,
+        "plot_1_line_2": 0.0,
+        "plot_2_line_0": 0.0,
+        "plot_2_line_1": 0.0,
+        "plot_2_line_2": 0.0,
+        "plot_3_line_0": 0.0,
+        "plot_3_line_1": 0.0,
+        "plot_3_line_2": 0.0,
+        "plot_4_line_0": 0.0,
+        "plot_4_line_1": 0.0,
+        "plot_4_line_2": 0.0,
+        "plot_5_collection_0": 0.0,
+        "plot_5_collection_1": 0.0,
+        "plot_6_collection_1": 0.0,
+        "table_calm_ch1": 0.0,
+        "table_calm_ch2": 0.0,
+        "table_flow_ch1": 0.0,
+        "table_flow_ch2": 0.0,
+        "table_focus_ch1": 0.0,
+        "table_focus_ch2": 0.0,
+        "table_quality_after": 0.0,
+        "table_quality_before": 0.0,
+        "table_quality_valid": 0.0,
+        "table_relaxation_ch1": 0.0,
+        "table_relaxation_ch2": 0.0,
+        "table_segment_id": 0.0,
+        "table_time_s": 0.0,
+        "table_window_center_us": 0.0,
+        "table_window_end_idx": 0.0,
+        "table_window_end_us": 0.0,
+        "table_window_schema_version": 0.0,
+        "table_window_start_idx": 0.0,
+        "table_window_start_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_actual.npz",
+      "expected": "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true,
+      "max_abs_errors": {
+        "baseline_0_calm": 0.0,
+        "baseline_0_flow": 0.0,
+        "baseline_0_focus": 0.0,
+        "baseline_0_relaxation": 0.0,
+        "baseline_0_selected": 0.0,
+        "baseline_eligible": 0.0,
+        "baseline_quality_min": 0.0,
+        "model_after": 0.0,
+        "model_before": 0.0,
+        "model_time_us": 0.0,
+        "plot_0_line_0": 0.0,
+        "plot_0_line_1": 0.0,
+        "plot_0_line_2": 0.0,
+        "plot_1_line_0": 0.0,
+        "plot_1_line_1": 0.0,
+        "plot_1_line_2": 0.0,
+        "plot_2_line_0": 0.0,
+        "plot_2_line_1": 0.0,
+        "plot_2_line_2": 0.0,
+        "plot_3_line_0": 0.0,
+        "plot_3_line_1": 0.0,
+        "plot_3_line_2": 0.0,
+        "plot_4_line_0": 0.0,
+        "plot_4_line_1": 0.0,
+        "plot_4_line_2": 0.0,
+        "plot_5_collection_0": 0.0,
+        "plot_5_collection_1": 0.0,
+        "plot_6_collection_1": 0.0,
+        "table_calm_ch1": 0.0,
+        "table_calm_ch2": 0.0,
+        "table_flow_ch1": 0.0,
+        "table_flow_ch2": 0.0,
+        "table_focus_ch1": 0.0,
+        "table_focus_ch2": 0.0,
+        "table_quality_after": 0.0,
+        "table_quality_before": 0.0,
+        "table_quality_valid": 0.0,
+        "table_relaxation_ch1": 0.0,
+        "table_relaxation_ch2": 0.0,
+        "table_segment_id": 0.0,
+        "table_time_s": 0.0,
+        "table_window_center_us": 0.0,
+        "table_window_end_idx": 0.0,
+        "table_window_end_us": 0.0,
+        "table_window_schema_version": 0.0,
+        "table_window_start_idx": 0.0,
+        "table_window_start_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_actual.npz",
+      "expected": "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true,
+      "max_abs_errors": {
+        "baseline_0_calm": 0.0,
+        "baseline_0_flow": 0.0,
+        "baseline_0_focus": 0.0,
+        "baseline_0_relaxation": 0.0,
+        "baseline_0_selected": 0.0,
+        "baseline_eligible": 0.0,
+        "baseline_quality_min": 0.0,
+        "model_after": 0.0,
+        "model_before": 0.0,
+        "model_time_us": 0.0,
+        "plot_0_line_0": 0.0,
+        "plot_0_line_1": 0.0,
+        "plot_0_line_2": 0.0,
+        "plot_1_line_0": 0.0,
+        "plot_1_line_1": 0.0,
+        "plot_1_line_2": 0.0,
+        "plot_2_line_0": 0.0,
+        "plot_2_line_1": 0.0,
+        "plot_2_line_2": 0.0,
+        "plot_3_line_0": 0.0,
+        "plot_3_line_1": 0.0,
+        "plot_3_line_2": 0.0,
+        "plot_4_line_0": 0.0,
+        "plot_4_line_1": 0.0,
+        "plot_4_line_2": 0.0,
+        "plot_5_collection_0": 0.0,
+        "plot_5_collection_1": 0.0,
+        "plot_6_collection_1": 0.0,
+        "table_calm_ch1": 0.0,
+        "table_calm_ch2": 0.0,
+        "table_flow_ch1": 0.0,
+        "table_flow_ch2": 0.0,
+        "table_focus_ch1": 0.0,
+        "table_focus_ch2": 0.0,
+        "table_quality_after": 0.0,
+        "table_quality_before": 0.0,
+        "table_quality_valid": 0.0,
+        "table_relaxation_ch1": 0.0,
+        "table_relaxation_ch2": 0.0,
+        "table_segment_id": 0.0,
+        "table_time_s": 0.0,
+        "table_window_center_us": 0.0,
+        "table_window_end_idx": 0.0,
+        "table_window_end_us": 0.0,
+        "table_window_schema_version": 0.0,
+        "table_window_start_idx": 0.0,
+        "table_window_start_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_actual.npz",
+      "expected": "/tmp/lilia-stage18-tflite-real-v2/talk_gap_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true,
+      "max_abs_errors": {
+        "baseline_0_calm": 0.0,
+        "baseline_0_flow": 0.0,
+        "baseline_0_focus": 0.0,
+        "baseline_0_relaxation": 0.0,
+        "baseline_0_selected": 0.0,
+        "baseline_eligible": 0.0,
+        "baseline_quality_min": 0.0,
+        "model_after": 0.0,
+        "model_before": 0.0,
+        "model_time_us": 0.0,
+        "plot_0_line_0": 0.0,
+        "plot_0_line_1": 0.0,
+        "plot_0_line_2": 0.0,
+        "plot_1_line_0": 0.0,
+        "plot_1_line_1": 0.0,
+        "plot_1_line_2": 0.0,
+        "plot_2_line_0": 0.0,
+        "plot_2_line_1": 0.0,
+        "plot_2_line_2": 0.0,
+        "plot_3_line_0": 0.0,
+        "plot_3_line_1": 0.0,
+        "plot_3_line_2": 0.0,
+        "plot_4_line_0": 0.0,
+        "plot_4_line_1": 0.0,
+        "plot_4_line_2": 0.0,
+        "plot_5_collection_0": 0.0,
+        "plot_5_collection_1": 0.0,
+        "plot_6_collection_1": 0.0,
+        "table_calm_ch1": 0.0,
+        "table_calm_ch2": 0.0,
+        "table_flow_ch1": 0.0,
+        "table_flow_ch2": 0.0,
+        "table_focus_ch1": 0.0,
+        "table_focus_ch2": 0.0,
+        "table_quality_after": 0.0,
+        "table_quality_before": 0.0,
+        "table_quality_valid": 0.0,
+        "table_relaxation_ch1": 0.0,
+        "table_relaxation_ch2": 0.0,
+        "table_segment_id": 0.0,
+        "table_time_s": 0.0,
+        "table_window_center_us": 0.0,
+        "table_window_end_idx": 0.0,
+        "table_window_end_us": 0.0,
+        "table_window_schema_version": 0.0,
+        "table_window_start_idx": 0.0,
+        "table_window_start_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_actual.npz",
+      "expected": "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true,
+      "max_abs_errors": {
+        "baseline_0_calm": 0.0,
+        "baseline_0_flow": 0.0,
+        "baseline_0_focus": 0.0,
+        "baseline_0_relaxation": 0.0,
+        "baseline_0_selected": 0.0,
+        "baseline_eligible": 0.0,
+        "baseline_quality_min": 0.0,
+        "model_after": 0.0,
+        "model_before": 0.0,
+        "model_time_us": 0.0,
+        "plot_0_line_0": 0.0,
+        "plot_0_line_1": 0.0,
+        "plot_0_line_2": 0.0,
+        "plot_1_line_0": 0.0,
+        "plot_1_line_1": 0.0,
+        "plot_1_line_2": 0.0,
+        "plot_2_line_0": 0.0,
+        "plot_2_line_1": 0.0,
+        "plot_2_line_2": 0.0,
+        "plot_3_line_0": 0.0,
+        "plot_3_line_1": 0.0,
+        "plot_3_line_2": 0.0,
+        "plot_4_line_0": 0.0,
+        "plot_4_line_1": 0.0,
+        "plot_4_line_2": 0.0,
+        "plot_5_collection_0": 0.0,
+        "plot_5_collection_1": 0.0,
+        "plot_6_collection_1": 0.0,
+        "table_calm_ch1": 0.0,
+        "table_calm_ch2": 0.0,
+        "table_flow_ch1": 0.0,
+        "table_flow_ch2": 0.0,
+        "table_focus_ch1": 0.0,
+        "table_focus_ch2": 0.0,
+        "table_quality_after": 0.0,
+        "table_quality_before": 0.0,
+        "table_quality_valid": 0.0,
+        "table_relaxation_ch1": 0.0,
+        "table_relaxation_ch2": 0.0,
+        "table_segment_id": 0.0,
+        "table_time_s": 0.0,
+        "table_window_center_us": 0.0,
+        "table_window_end_idx": 0.0,
+        "table_window_end_us": 0.0,
+        "table_window_schema_version": 0.0,
+        "table_window_start_idx": 0.0,
+        "table_window_start_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_actual.npz",
+      "expected": "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true,
+      "max_abs_errors": {
+        "baseline_eligible": 0.0,
+        "baseline_quality_min": null,
+        "model_after": 0.0,
+        "model_before": 0.0,
+        "model_time_us": 0.0,
+        "table_calm_ch1": 0.0,
+        "table_calm_ch2": 0.0,
+        "table_flow_ch1": 0.0,
+        "table_flow_ch2": 0.0,
+        "table_focus_ch1": 0.0,
+        "table_focus_ch2": 0.0,
+        "table_quality_after": 0.0,
+        "table_quality_before": 0.0,
+        "table_quality_valid": 0.0,
+        "table_relaxation_ch1": 0.0,
+        "table_relaxation_ch2": 0.0,
+        "table_segment_id": 0.0,
+        "table_time_s": 0.0,
+        "table_window_center_us": 0.0,
+        "table_window_end_idx": 0.0,
+        "table_window_end_us": 0.0,
+        "table_window_schema_version": 0.0,
+        "table_window_start_idx": 0.0,
+        "table_window_start_us": 0.0
+      },
+      "passed": true
+    },
+    {
+      "name": "comparison",
+      "actual": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_actual.npz",
+      "expected": "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true,
+      "max_abs_errors": {
+        "baseline_0_calm": 0.0,
+        "baseline_0_flow": 0.0,
+        "baseline_0_focus": 0.0,
+        "baseline_0_relaxation": 0.0,
+        "baseline_0_selected": 0.0,
+        "baseline_eligible": 0.0,
+        "baseline_quality_min": 0.0,
+        "model_after": 0.0,
+        "model_before": 0.0,
+        "model_time_us": 0.0,
+        "plot_0_line_0": 0.0,
+        "plot_0_line_1": 0.0,
+        "plot_0_line_2": 0.0,
+        "plot_1_line_0": 0.0,
+        "plot_1_line_1": 0.0,
+        "plot_1_line_2": 0.0,
+        "plot_2_line_0": 0.0,
+        "plot_2_line_1": 0.0,
+        "plot_2_line_2": 0.0,
+        "plot_3_line_0": 0.0,
+        "plot_3_line_1": 0.0,
+        "plot_3_line_2": 0.0,
+        "plot_4_line_0": 0.0,
+        "plot_4_line_1": 0.0,
+        "plot_4_line_2": 0.0,
+        "plot_5_collection_0": 0.0,
+        "plot_5_collection_1": 0.0,
+        "plot_6_collection_1": 0.0,
+        "table_calm_ch1": 0.0,
+        "table_calm_ch2": 0.0,
+        "table_flow_ch1": 0.0,
+        "table_flow_ch2": 0.0,
+        "table_focus_ch1": 0.0,
+        "table_focus_ch2": 0.0,
+        "table_quality_after": 0.0,
+        "table_quality_before": 0.0,
+        "table_quality_valid": 0.0,
+        "table_relaxation_ch1": 0.0,
+        "table_relaxation_ch2": 0.0,
+        "table_segment_id": 0.0,
+        "table_time_s": 0.0,
+        "table_window_center_us": 0.0,
+        "table_window_end_idx": 0.0,
+        "table_window_end_us": 0.0,
+        "table_window_schema_version": 0.0,
+        "table_window_start_idx": 0.0,
+        "table_window_start_us": 0.0
+      },
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv": "fd291cbc7f9ee7c24561751c9c70793e067d161be24459801868f0727d2d8540",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv": "248dda71a06a6c4f76a4082fd734961383b80b464d8b8fbe9278cae23866d91a",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv": "3ecea3ac6d6393849157cd57b5a97e69af15a84e2bf124178fc469ac728503c0",
+    "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv": "07cf89ba2216be66a09195c884a565498d802bf193432f21a7be27b0b9320d8b",
+    "/home/bps-yichin/lilia_analysis/lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+    "/home/bps-yichin/lilia_analysis/lilia/qeeg.py": "0943e90d793cd8106f8b6262be2342333c89d873675cf0c586e0e7364f35507a",
+    "/home/bps-yichin/lilia_analysis/lilia/quality.py": "9b80325a917c2d82629457c55dc94cd8d014c1534598987553a94c72217ab765",
+    "/home/bps-yichin/lilia_analysis/lilia/quality_audit.py": "19eb0f127b19452548bdb98e0597a909277fb543353f592dde7094e96f4717dc",
+    "/home/bps-yichin/lilia_analysis/lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+    "/home/bps-yichin/lilia_analysis/lilia/tflite.py": "a134c3308ccb8b18a16923a88520b015ff98f5bea8ed9631d8d83b3b8401ff5c",
+    "/home/bps-yichin/lilia_analysis/lilia/tflite_baseline.py": "739eda7bda89fee172b273dbdb567cf5408215a35f68d3c3911b2933fce0a78c",
+    "/home/bps-yichin/lilia_analysis/lilia/tflite_io.py": "dbb980920b3a17933862e208db3ceab48b67c671e1bb9940c171be5492201f24",
+    "/home/bps-yichin/lilia_analysis/lilia/tflite_quality.py": "ecd536fbc0b9ee908e9254af5f3183ec154cea25d573fd4c4881801cca8449ce",
+    "/home/bps-yichin/lilia_analysis/lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+    "/home/bps-yichin/lilia_analysis/plot_event_markers.py": "d51238453f94af442e8fb10f25c9591981fff7e501f9a85e067be235a648f3c9",
+    "/home/bps-yichin/lilia_analysis/plot_tflite_summary.py": "507b2b63362b005e2532643c0b2c342cd8c3aaa242bcd351398d07519aa431fd",
+    "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite": "8413be73fcade890ef05816a46ace8afda57b6f8a213b928085434afbb8d0b91",
+    "/home/bps-yichin/lilia_analysis/tools/validate_tflite_quality_stage18.py": "2e5982b2b243833e48465fb0c1437199af6b95b1ec027215f66cbf74f3f19ff0",
+    "/tmp/lilia-stage18-tflite-real-v2/analysis.json": "64d5a03d7d340c3e2e07d75cdd38d635c4d1f0173bc83d5dac6dca554efccb7b",
+    "/tmp/lilia-stage18-tflite-real-v2/evidence.json": "e46a3c3ac9ae884bacc6ebd9949efae1b3ffdbf40f10924a08b07c2358d90466",
+    "/tmp/lilia-stage18-tflite-real-v2/inputs/move_head/merged.csv": "806341bc9ad41ab9342876cfbb113257b363c9f842174bcc6b81a0250076f9fd",
+    "/tmp/lilia-stage18-tflite-real-v2/inputs/talk/merged.csv": "477ead0010d5d2360ef578ee096ba543eed0e2301cf43eb1bc933c06def85f73",
+    "/tmp/lilia-stage18-tflite-real-v2/inputs/talk_gap/merged.csv": "f79a4cf6140c691597b626eb988f715f7695397b947a1adad2fef6b795679f5f",
+    "/tmp/lilia-stage18-tflite-real-v2/inputs/vibration_level1/merged.csv": "6bd61772bb3edff0d59a0b94e525e4c91bc267a1ff04e00ea513bcfe7ca8c0a9",
+    "/tmp/lilia-stage18-tflite-real-v2/inputs/vibration_level2/merged.csv": "bb1e243ad8c25c2769c51e88d79c0ed83fa7a756857ee0fd3ecd279c71ba36d5",
+    "/tmp/lilia-stage18-tflite-real-v2/inputs/vibration_level3/merged.csv": "5c8b9705ce0b6beb2f8434c8aaf3db7253403d7c562b1c928d346fb277e8b8fd",
+    "/tmp/lilia-stage18-tflite-real-v2/move_head_actual.npz": "2ec0eb862ea5704b4a89668ad7d4da1dc3dba546bc0cf4e1dd574fc185f48b49",
+    "/tmp/lilia-stage18-tflite-real-v2/move_head_expected.npz": "2ec0eb862ea5704b4a89668ad7d4da1dc3dba546bc0cf4e1dd574fc185f48b49",
+    "/tmp/lilia-stage18-tflite-real-v2/move_head_new/Stage18_Q_tflite_analysis.json": "48ec89e01390e61a0fcb85e862b43ae99e6dd81ec96e49fd70b62fa993253098",
+    "/tmp/lilia-stage18-tflite-real-v2/move_head_new/Stage18_Q_tflite_metrics.csv": "573f8219011936d0cdde9eb48b8e04f76cd725c33ff112c47703004f6864f898",
+    "/tmp/lilia-stage18-tflite-real-v2/move_head_new/Stage18_Q_tflite_metrics.csv.meta.json": "07ec323a504b3f32728e6664fc7ab9783642d718e9b171859d4f637454e4cf1c",
+    "/tmp/lilia-stage18-tflite-real-v2/move_head_new/Stage18_Q_tflite_summary_session.png": "1a403ac4e5de9f08940054c5870e546e6a01a863e9f323861aec36cbe16348a5",
+    "/tmp/lilia-stage18-tflite-real-v2/move_head_old/Stage18_Q_tflite_analysis.json": "f6953d34ae864fc82c239eb10b30a6f5adc0e8db1203ea0a8959d95f7640462b",
+    "/tmp/lilia-stage18-tflite-real-v2/move_head_old/Stage18_Q_tflite_metrics.csv": "6f8d94947a8ac35d2723f93c2522fc1165ca5018182982f94f2fb49a025ce70d",
+    "/tmp/lilia-stage18-tflite-real-v2/move_head_old/Stage18_Q_tflite_metrics.csv.meta.json": "5a54e3a8913b88b9d71e5e1808340381c055a74c7fc130c67558f17351421f79",
+    "/tmp/lilia-stage18-tflite-real-v2/move_head_old/Stage18_Q_tflite_summary_session.png": "1fdd876a3e3b25a9bf6181c14d8606d1d52dbe0ab371330b086163f65cc1ef8d",
+    "/tmp/lilia-stage18-tflite-real-v2/plot_tflite_summary.py.legacy.txt": "c4ff852907eb00b2b67096b82448d0634986eb56317e760353c45061c16b2377",
+    "/tmp/lilia-stage18-tflite-real-v2/source_inventory.json": "dd000638f12a926c3ce7ef4a1ed33c87ff0c6879cecf2855f631810db97ad14d",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_actual.npz": "bb4d85fbeac3dbc77f1aa9d22cc69376ee11a2ee39bac51995b78d1d27414f14",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_expected.npz": "bb4d85fbeac3dbc77f1aa9d22cc69376ee11a2ee39bac51995b78d1d27414f14",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_actual.npz": "36c910331e2637ce01f12a3142363ff541239520fc70fd8cb7d490e62096c536",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_expected.npz": "36c910331e2637ce01f12a3142363ff541239520fc70fd8cb7d490e62096c536",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_new/Stage18_Q_tflite_analysis.json": "d51c8c2bf701db3331fff28edf36d0de0de91cd7cedf9b25578b461913263bef",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_new/Stage18_Q_tflite_metrics.csv": "02f5b2e74c732518f8df73ce3d6751a8b6c7852ab4a7c9e8d4bf178aee0ca869",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_new/Stage18_Q_tflite_metrics.csv.meta.json": "7649980a71c6e72594b7947da0e05729e03b904a72b21dcf3bc2dedadfc4212f",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_new/Stage18_Q_tflite_summary_session.png": "9e1eba9984951832bbc1bb7e34dde043cf999c4c5ffd8fa2fe578a7832cf5ebe",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_old/Stage18_Q_tflite_analysis.json": "d18c89554b52487bff752ec31ed25a4da8b5612744f33c424413884cf346923b",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_old/Stage18_Q_tflite_metrics.csv": "9e6f6112e50c16c3153a52a9fc96a0ee69273399720c64c6fc7e337ebccfba0b",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_old/Stage18_Q_tflite_metrics.csv.meta.json": "06c532e2cd3e6adcb3bb464d137adadffbb7d88b9dd252d6187959ea552919c0",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_fallback_old/Stage18_Q_tflite_summary_session.png": "276e66f783575cc2009ef3507b0b6da6f02f0868fc53ae4a498a98334270de86",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_gap_actual.npz": "7537afcaf2662f17d032376b42a89c322bdebe339d793eb712a1c956b65f847a",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_gap_expected.npz": "7537afcaf2662f17d032376b42a89c322bdebe339d793eb712a1c956b65f847a",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_gap_new/Stage18_Q_tflite_analysis.json": "a0e7376621f31ed315363819adaba1c248a6bf1c77f2c3e385d2e6743b2cd617",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_gap_new/Stage18_Q_tflite_metrics.csv": "f60e6ab1c4f845f32e5199cbf644078cc7cb4059fdfe88fdcbc105cd3e36c88a",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_gap_new/Stage18_Q_tflite_metrics.csv.meta.json": "0185eda3d8cd77ce7b229759e1b39fbb218d2b44354d78575150290ea1c72aa7",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_gap_new/Stage18_Q_tflite_summary_session.png": "485b876882f8f4d8f116100a122b6b3d0e3db1104a1f87d75dda1164e4806ccf",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_gap_old/Stage18_Q_tflite_analysis.json": "459d507e999acbef4beda388847b065e33b6e05f2c4937669f8c53a3da0afbea",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_gap_old/Stage18_Q_tflite_metrics.csv": "a416e2790f691e3092cf097d0befad68c5ff6c56a2c1c095b3f9f088f471d369",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_gap_old/Stage18_Q_tflite_metrics.csv.meta.json": "4c737ebc24637b0e95cbcaae070a6d8f8906bb445bdd716e18a13a1e6b9fb5cd",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_gap_old/Stage18_Q_tflite_summary_session.png": "d8068338b5207a62e8a045112f0ce6396a9499cb1cf716e200f9bdb76e57de1a",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_actual.npz": "a4fb8a232dcfac06c681f7379b6f0ce86914cc1e2849c5df50a7b706f9a727c2",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_expected.npz": "a4fb8a232dcfac06c681f7379b6f0ce86914cc1e2849c5df50a7b706f9a727c2",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_new/Stage18_Q_tflite_analysis.json": "b40295a97027635ae1d7d8dd68ccf58c8fc1a63966c6650a7d7dabf6a7a83bee",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_new/Stage18_Q_tflite_metrics.csv": "ddd28fde9bc7f9097b6dba59a11014725207fde4165531fff1ac731f3c12b56d",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_new/Stage18_Q_tflite_metrics.csv.meta.json": "33fbacb44243724e2172b37fe0825a8aae36c1bc9ff99c255fa783e40c7fb248",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_old/Stage18_Q_tflite_analysis.json": "fdd5f604c1d5eb0f53e530e059a686525837d974c863fbaed9a3c213e9831d98",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_old/Stage18_Q_tflite_metrics.csv": "647afb4d0799bc2aa2b6056a3958daa8674d84dbb505a9e69cca172b880d1fd7",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_half_second_old/Stage18_Q_tflite_metrics.csv.meta.json": "23bf43c8aac9c52f322628230272f7e59b4165689b2898b5b5773f10becf23a5",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_new/Stage18_Q_tflite_analysis.json": "b5c7e17e10b2ad7f40a23fbe105489583e19df1f8049c9d44b16e43a5891f216",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_new/Stage18_Q_tflite_metrics.csv": "926e3482710370767c42d62712111007d34fe2cc0190baddc66a4303064b420d",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_new/Stage18_Q_tflite_metrics.csv.meta.json": "c67028b367bcc49c12b12603e3a40859d5906ea9e44a8372702ed159e19cc915",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_new/Stage18_Q_tflite_summary_session.png": "968861bdc1de9322943dc9a66d0deb2a4e8fb216c8ef51587e61e804ae21640d",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_old/Stage18_Q_tflite_analysis.json": "58bace71e037ef2f77521b26445d8a40e0946bde1e5ebee3e99d712dc09a6103",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_old/Stage18_Q_tflite_metrics.csv": "647afb4d0799bc2aa2b6056a3958daa8674d84dbb505a9e69cca172b880d1fd7",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_old/Stage18_Q_tflite_metrics.csv.meta.json": "23bf43c8aac9c52f322628230272f7e59b4165689b2898b5b5773f10becf23a5",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_old/Stage18_Q_tflite_summary_session.png": "4f96788d45c42493967f0dc2d30b3fb731ae883a815308f0d1daf69fbcabc87b",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_actual.npz": "dfedb24c714fb128c494f045d71ed20fc65e234000ba316c253a896b8f293b14",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_expected.npz": "dfedb24c714fb128c494f045d71ed20fc65e234000ba316c253a896b8f293b14",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_new/Stage18_Q_tflite_analysis.json": "18b65a791785f263c66344c4daafe44f1e1c4430ee50e6aaeccba98b75a0fe7c",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_new/Stage18_Q_tflite_metrics.csv": "dbf2315e46aaf879db56897dd8333a7e3c436f070b9fd2d53d8469873cf1ae18",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_new/Stage18_Q_tflite_metrics.csv.meta.json": "a8c0eeea36dac548407a944a1534aa7623ef00cb28c8a2c7799d14a6752a9056",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_new/Stage18_Q_tflite_summary_session.png": "f480e7842b085f369b50bdcea8da0db0915c0db33f6575018161180585f2bd78",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_old/Stage18_Q_tflite_analysis.json": "8d05e25fd52702380c31f94ab016d1e856a7674f64e7bfa51904bb614f17fc7c",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_old/Stage18_Q_tflite_metrics.csv": "37d9e06057fa44d6e4aec07668ba486444bc2d2beb9243a4f45805abee0021a3",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_old/Stage18_Q_tflite_metrics.csv.meta.json": "a88e602099831e3de6a7c641329724ad7725d1742e7092f6061df432256045a2",
+    "/tmp/lilia-stage18-tflite-real-v2/talk_threshold_zero_old/Stage18_Q_tflite_summary_session.png": "d9db599da3f3ee41cbc205e3e3ee21d586c161ff90e096e80c0fd37b4ab0dc78",
+    "/tmp/lilia-stage18-tflite-real-v2/tflite_baseline.py.legacy.txt": "840140b3925a6d075eff2994e071defbf9350438c6acb78f84861b1f1df35b7a",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_actual.npz": "378512197f9d5be3d635d47cb6bc015188a677a93d2b03a47ffc7981890cd0e6",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_expected.npz": "378512197f9d5be3d635d47cb6bc015188a677a93d2b03a47ffc7981890cd0e6",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_new/Stage18_Q_tflite_analysis.json": "7a30c190ab869019087ec2c86e5dbe46249bb8d8b574818c535ee314914c1eb2",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_new/Stage18_Q_tflite_metrics.csv": "88986d1bcdc97aba15e9b8a598c324a711175345e290d8fa2d84fde42d214e38",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_new/Stage18_Q_tflite_metrics.csv.meta.json": "78bfb7f48c6761b2cebca737f96abe39745309e9bc265718811b6092c9f31366",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_new/Stage18_Q_tflite_summary_session.png": "a1bbd70b0c8d2cfcd1679dff5132d49b87f702c248b9ed160759ad78c05a81af",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_old/Stage18_Q_tflite_analysis.json": "35e7c3b147c7a38c0b52ed0f22168e496fefd1aac90a14f4d6bf681c674dab6b",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_old/Stage18_Q_tflite_metrics.csv": "6be0c2c443dc3d41b60fb65f6d0e0f77f5ee5fe5368f62298247ded6e899604e",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_old/Stage18_Q_tflite_metrics.csv.meta.json": "83202c5a8d850462477a7ebb15ccfdbfe0f6289359cd491d97c7d589e0367bc2",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level1_old/Stage18_Q_tflite_summary_session.png": "a50a36dcfa362b48e5baa12b68f566552db07986dc4280bd6abbfd85afcc3705",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_actual.npz": "debcce0e7cccb8564f02ac33e975d2eeb4949131c8f739c1566474a9dc7a0122",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_expected.npz": "debcce0e7cccb8564f02ac33e975d2eeb4949131c8f739c1566474a9dc7a0122",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_new/Stage18_Q_tflite_analysis.json": "614fb624608dff8662656efb0c8856467e7c1638f9d390e8b1015b15b2812f08",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_new/Stage18_Q_tflite_metrics.csv": "224f5a22942bce7c0c5056c0f0ead7cfc05d49e2334e924ba7b5d10538221946",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_new/Stage18_Q_tflite_metrics.csv.meta.json": "66389c870ef2a0139becf061640c8ddc84dbdfae21ed3f1c0f0c50026db678de",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_new/Stage18_Q_tflite_summary_session.png": "56f9320a7311ff8caa6b884591439c38db17a7c56a9dfb53abdb76d07f3ced77",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_old/Stage18_Q_tflite_analysis.json": "6daebc475a0a49160edc5b593a7b6fbc8d17e1b7eee1265bfeb08f11f62aab26",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_old/Stage18_Q_tflite_metrics.csv": "5a1b0e348216b592334c0134caea54b666cf6af55da2de8ec20a4b065ca2f8a7",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_old/Stage18_Q_tflite_metrics.csv.meta.json": "d80910acc36fcaaa2943c049cd84d953ba5cd3a4f7bf30dd08128d4132e789ce",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level2_old/Stage18_Q_tflite_summary_session.png": "4639ca2fbec6b7fbf8b473390e5a847d1eb9fcb347a4e8cbf4fe6d8bd2e4f3b3",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_actual.npz": "bda670c322fcecebe67268ae90bdaf6d75c116c76014aa2047554acd4ef51fbf",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_expected.npz": "bda670c322fcecebe67268ae90bdaf6d75c116c76014aa2047554acd4ef51fbf",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_new/Stage18_Q_tflite_analysis.json": "52e60f97bb7dfab786100ffd112bb5efc2dbbcbe436a6f71e50699020c0fbab7",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_new/Stage18_Q_tflite_metrics.csv": "1c660807de1df92b0cdcbd1f6bc1ac3d054bc4e1ec8a98de88e62ac46f356511",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_new/Stage18_Q_tflite_metrics.csv.meta.json": "5839185010642d161b945b87f56b012b61e18811469259c163dfc7f4899552dd",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_new/Stage18_Q_tflite_summary_session.png": "c003f0ff3d15051b146770ce9f58a648c5d416f9dd572fd85b875de9d6615e08",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_old/Stage18_Q_tflite_analysis.json": "1cb5fc086119bf26587f630f21c0724c36924f9ba0bf0b2d89d9659cf00d403a",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_old/Stage18_Q_tflite_metrics.csv": "c92f7098fde682823e45b0565d42d7d69b3ae6e58ba3dd250169571574451a2e",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_old/Stage18_Q_tflite_metrics.csv.meta.json": "0782925d2a3c223763b280b66dc36e213a219954dec2dee13cb903dcbe184b40",
+    "/tmp/lilia-stage18-tflite-real-v2/vibration_level3_old/Stage18_Q_tflite_summary_session.png": "e59e430745e168d7b64088e8b6d7af8b0b2f91916ba9d2b24045ed59e58423cf"
+  },
+  "log": "/tmp/lilia-stage18-tflite-evidence-v2/evidence.log"
+}

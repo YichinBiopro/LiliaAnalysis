@@ -4,6 +4,7 @@ from __future__ import annotations
 import math
 import numpy as np
 from lilia.qeeg import compute_qeeg_indices
+from lilia.quality_audit import capture_diagnostics, pending_diagnostics, json_value
 
 KEYS = ('relaxation', 'calm', 'flow', 'focus')
 
@@ -22,26 +23,43 @@ def score_baseline_windows(time_us, filtered, raw, timeline, *, scorer, quality_
         raise ValueError('Quality epoch_sec must divide a complete model window')
     rows = []
     for window in timeline.model_windows:
-        row = dict(window, eligible=True, reason='', quality_min=None, saturated_subepochs=0)
+        row = dict(window, eligible=True, reason='', quality_min=None, saturated_subepochs=0,
+                   quality_subepochs=[], n_subepochs=n_sub)
         scores = []
         for i in range(n_sub):
             lo = window['window_start_us'] + int(round(i * epoch_sec * 1e6))
             hi = min(window['window_end_us'], lo + int(round(epoch_sec * 1e6)))
             a, b = int(np.searchsorted(t, lo)), int(np.searchsorted(t, hi))
+            request = dict(fs=timeline.fs_in, params=quality_params, n_channels=filtered.shape[1],
+                           n_samples=b-a, stage='filtered')
+            audit = dict(subepoch_index=i, raw_start_idx=a, raw_end_idx=b,
+                         window_start_us=lo, window_end_us=hi, quality_overall=None,
+                         quality_median=None, saturation_fraction=None, screening_status='accepted')
+            row['quality_subepochs'].append(audit)
             if b - a < 8:
                 row.update(eligible=False, reason='insufficient_raw_subepoch')
+                audit.update(screening_status=row['reason'], quality_diagnostics=pending_diagnostics(
+                    **request, reasons=[row['reason']]))
                 break
             if not np.isfinite(filtered[a:b]).all() or not np.isfinite(raw[a:b]).all():
                 row.update(eligible=False, reason='nonfinite_signal')
+                audit.update(screening_status=row['reason'], quality_diagnostics=pending_diagnostics(
+                    **request, reasons=[row['reason']]))
                 break
             saturation = float(np.mean(np.any(np.abs(raw[a:b]) >= rail - 1, axis=1)))
+            audit['saturation_fraction'] = saturation
             if saturation > max_saturation:
                 row.update(eligible=False, reason='raw_saturation', saturated_subepochs=1)
+                audit.update(screening_status=row['reason'], quality_diagnostics=pending_diagnostics(
+                    **request, reasons=[row['reason']]))
                 break
-            quality = float(np.median(scorer(filtered[a:b].T.astype(np.float64),
-                                             fs=timeline.fs_in, params=quality_params)['overall']))
+            result = scorer(filtered[a:b].T.astype(np.float64), fs=timeline.fs_in, params=quality_params)
+            quality = float(np.median(result['overall']))
+            audit.update(quality_overall=json_value(result['overall']), quality_median=json_value(quality),
+                         quality_diagnostics=capture_diagnostics(result, **request))
             if not np.isfinite(quality) or quality < threshold:
                 row.update(eligible=False, reason='nonfinite_quality' if not np.isfinite(quality) else 'low_quality')
+                audit['screening_status'] = row['reason']
                 break
             scores.append(quality)
         if scores:

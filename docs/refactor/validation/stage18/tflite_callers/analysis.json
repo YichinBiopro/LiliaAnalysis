@@ -1,0 +1,317 @@
+{
+  "status": "passed",
+  "cases": [
+    {
+      "case": "move_head",
+      "status": "passed",
+      "quality_threshold": 0.5,
+      "baseline_epoch_sec": 1.0,
+      "model_windows": 29,
+      "metric_windows": 11,
+      "quality_summary": {
+        "before": {
+          "valid": 11,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "after": {
+          "valid": 11,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "baseline_subepochs": {
+          "valid": 57,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        }
+      },
+      "max_abs_error": 0,
+      "changed_selected_windows": 0,
+      "arrays": 46
+    },
+    {
+      "case": "talk",
+      "status": "passed",
+      "quality_threshold": 0.5,
+      "baseline_epoch_sec": 1.0,
+      "model_windows": 30,
+      "metric_windows": 12,
+      "quality_summary": {
+        "before": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "after": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "baseline_subepochs": {
+          "valid": 60,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        }
+      },
+      "max_abs_error": 0,
+      "changed_selected_windows": 0,
+      "arrays": 47
+    },
+    {
+      "case": "vibration_level1",
+      "status": "passed",
+      "quality_threshold": 0.5,
+      "baseline_epoch_sec": 1.0,
+      "model_windows": 30,
+      "metric_windows": 12,
+      "quality_summary": {
+        "before": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "after": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "baseline_subepochs": {
+          "valid": 60,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        }
+      },
+      "max_abs_error": 0,
+      "changed_selected_windows": 0,
+      "arrays": 47
+    },
+    {
+      "case": "vibration_level2",
+      "status": "passed",
+      "quality_threshold": 0.5,
+      "baseline_epoch_sec": 1.0,
+      "model_windows": 32,
+      "metric_windows": 12,
+      "quality_summary": {
+        "before": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "after": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "baseline_subepochs": {
+          "valid": 63,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        }
+      },
+      "max_abs_error": 0,
+      "changed_selected_windows": 0,
+      "arrays": 47
+    },
+    {
+      "case": "vibration_level3",
+      "status": "passed",
+      "quality_threshold": 0.5,
+      "baseline_epoch_sec": 1.0,
+      "model_windows": 30,
+      "metric_windows": 12,
+      "quality_summary": {
+        "before": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "after": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "baseline_subepochs": {
+          "valid": 60,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        }
+      },
+      "max_abs_error": 0,
+      "changed_selected_windows": 0,
+      "arrays": 47
+    },
+    {
+      "case": "talk_gap",
+      "status": "passed",
+      "quality_threshold": 0.5,
+      "baseline_epoch_sec": 1.0,
+      "model_windows": 30,
+      "metric_windows": 12,
+      "quality_summary": {
+        "before": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "after": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "baseline_subepochs": {
+          "valid": 60,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        }
+      },
+      "max_abs_error": 0,
+      "changed_selected_windows": 0,
+      "arrays": 47
+    },
+    {
+      "case": "talk_threshold_zero",
+      "status": "passed",
+      "quality_threshold": 0.0,
+      "baseline_epoch_sec": 1.0,
+      "model_windows": 30,
+      "metric_windows": 12,
+      "quality_summary": {
+        "before": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "after": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "baseline_subepochs": {
+          "valid": 60,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        }
+      },
+      "max_abs_error": 0,
+      "changed_selected_windows": 0,
+      "arrays": 47
+    },
+    {
+      "case": "talk_half_second",
+      "status": "No usable TFLite baseline reference; see analysis audit",
+      "quality_threshold": 0.5,
+      "baseline_epoch_sec": 0.5,
+      "model_windows": 30,
+      "metric_windows": 12,
+      "quality_summary": {
+        "before": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "after": {
+          "valid": 12,
+          "invalid": 0,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "baseline_subepochs": {
+          "valid": 0,
+          "invalid": 30,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        }
+      },
+      "max_abs_error": 0,
+      "changed_selected_windows": 0,
+      "arrays": 24
+    },
+    {
+      "case": "talk_fallback",
+      "status": "passed",
+      "quality_threshold": 0.5,
+      "baseline_epoch_sec": 1.0,
+      "model_windows": 30,
+      "metric_windows": 12,
+      "quality_summary": {
+        "before": {
+          "valid": 0,
+          "invalid": 12,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "after": {
+          "valid": 0,
+          "invalid": 12,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        },
+        "baseline_subepochs": {
+          "valid": 0,
+          "invalid": 60,
+          "unavailable": 0,
+          "error": 0,
+          "not_scored": 0
+        }
+      },
+      "max_abs_error": 0,
+      "changed_selected_windows": 0,
+      "arrays": 47
+    }
+  ],
+  "policy": "legacy_overall; no threshold or baseline selection changes",
+  "reader_verification": {
+    "before": "source filter/resample and diagnostic rescoring",
+    "baseline": "source filter, raw saturation and diagnostic rescoring",
+    "after": "model identity and diagnostic consistency; reader does not rerun inference"
+  }
+}

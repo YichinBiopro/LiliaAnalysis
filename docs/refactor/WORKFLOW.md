@@ -73,3 +73,7 @@ NPZ 對照要求相同 keys、非空相同 shape；整數 indices／timestamps �
 真實資料的生成命令、專屬分析參數及必要的特殊比較仍由任務記錄；共用工具處理機械性核對。完整報告只貼摘要與失敗項目；持久保存重要 JSON／manifest，原始大型產物留指定資料目錄。不要為補證據覆寫正式來源。
 
 第十八階段核心診斷以 `tools/validate_quality_stage18.py --out /path/to/new-directory` 對照四 presets 的舊分數；`valid` 與 `usable_overall` 是新增介面，不自動取代呼叫端原有品質政策。呼叫端遷移仍在任務 18，詳見 [核心增量報告](STAGE18_CORE_REPORT_2026-09-10.md)。
+
+第十八階段共用 raw 呼叫端以 `tools/validate_quality_callers_stage18.py --out /path/to/new-directory` 驗證；event／zoom／subject comparison 新表的 `quality_diagnostics_version=1`、四個 CSV 診斷欄位與逐窗 audit 須完整一致。來源 reader 重建 raw 品質窗口與設定並重算一般診斷；歷史注入例外只核對 fallback 與可重算部分，不能證明例外重現。無整組診斷的舊表仍可讀，外部舊 scorer 明示 unavailable；品質政策仍是 `legacy_overall`，不可把 diagnostics 的 valid 直接當成門檻遮罩。已驗收範圍、八／四通道驗證副本與暫存來源限制見 [raw 呼叫端報告](STAGE18_RAW_CALLERS_REPORT_2026-09-11.md)，其餘 filtered／直接 caller 仍待完成。
+
+TFLite baseline／summary 增量以 `tools/validate_tflite_quality_stage18.py --out /path/to/new-directory` 驗證。`tflite_qeeg` 新診斷表的 Before／After 各四欄與 `quality_analysis` 一致，source reader 重建 filtered／filtered_resampled 品質與 raw 削波、baseline 短路順序及 seed 選取；After 的 model_output 與 baseline qEEG 不在 reader 重算範圍，須另做真實模型數值對照。三種 stage／採樣率／通道不可混用，舊表仍可讀，`legacy_overall` 及例外向外傳遞政策保留。完成範圍、半秒失敗與 fallback 驗證、持久產物及暫存來源限制見 [TFLite 呼叫端報告](STAGE18_TFLITE_CALLERS_REPORT_2026-09-11.md)。

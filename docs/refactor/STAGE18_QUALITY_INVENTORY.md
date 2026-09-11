@@ -1,6 +1,6 @@
 # 第十八階段品質 scorer 盤點與相容契約
 
-日期：2026-09-10。核心增量完成；呼叫端診斷傳遞與採用政策待完成。
+更新：2026-09-11。核心、共用 raw 及 TFLite baseline／summary 增量完成；其餘直接／filtered 呼叫端待完成。
 
 ## 現況與範圍
 
@@ -27,7 +27,23 @@
 - 新增 keyword-only `stage`；未提供時明示 `unspecified`，不猜測處理階段。fs 非有限／非正、零通道、空 stage 拒絕；設定 metadata 要求可序列化的有限浮點參數。
 - deprecated parameters 仍只作相容 metadata；不因新增 diagnostics 啟用它們。
 
-## 下一增量完成條件
+## 呼叫端完成範圍
+
+| 路徑 | 品質輸入／目前狀態 |
+| --- | --- |
+| event qEEG → event markers／zoom／subject comparison | raw 映射切片；逐窗診斷、CSV／sidecar／audit／來源 reader 完成，event 品質圖標記與實際 preset 標題完成。 |
+| TFLite baseline／summary | baseline filtered 500 Hz 四通道；Before filtered_resampled 200 Hz ch1/2；After model_output 200 Hz。診斷／CSV／audit／來源 reader／品質圖完成，legacy sampler 診斷亦保存。 |
+| entropy clean／state／MI | filtered 品質路徑，待串接。 |
+| Goertzel | BP 品質與 raw hard-artifact features，待串接。 |
+| quality_check／舊直接 helper | raw／BP 對照與抽樣路徑，待逐一串接；event 舊 `compute_quality_windowed` 不等同已驗收的 main 路徑。 |
+
+- [raw 呼叫端增量](STAGE18_RAW_CALLERS_REPORT_2026-09-11.md) 固定 `legacy_overall`，診斷有效性與分數門檻分別保存；短窗、非有限與 scorer 例外有原因，外部舊 scorer 明示 unavailable。
+- `lilia/quality_audit.py` 在呼叫端綁定實際 raw stage，保留注入 scorer 舊簽名；新表宣告 `quality_diagnostics_version=1`，四個 CSV 診斷欄位與 sidecar 逐窗資料必須一致。舊表缺少整組診斷時仍可讀，不推定有效。
+- 來源 reader 重算 raw slice 的一般 diagnostics；歷史例外僅核對 fallback 與其餘可重算部分，無法由產物證明當時例外必然再發生。310 tests／33 表／10 新舊數值組／三圖完成，不代表其他 caller 已驗收。
+- [TFLite 呼叫端增量](STAGE18_TFLITE_CALLERS_REPORT_2026-09-11.md) 完成 317 tests／18 新舊表／9 數值組（399 陣列）／三圖；同樣保留 `legacy_overall`，半秒無可用 baseline 的失敗結果與有限 fallback 接受結果皆不變。
+- TFLite source reader 重建 filtered／resampled 輸入、raw 削波與 baseline 短路順序及 seed 選取；After 不重跑模型，只核對模型身分與診斷一致性。模型及 baseline qEEG 數值由獨立凍結舊碼實跑比較，未以 reader 代替。
+
+## 剩餘增量完成條件
 
 - 逐呼叫端保存 raw／filtered stage 與診斷，保留注入 scorer／舊 API 相容性；各種 CSV／audit reader 要能核對新欄位，不能只在 scorer 回傳後丟棄。
 - 對照既有接受／排除窗口，明示是否採用 `usable_overall`；任何改變都須記錄具體窗口與原因，不在 metadata 重構中暗改篩選政策。

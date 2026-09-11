@@ -10,6 +10,7 @@ from lilia.event_qeeg_io import json_safe
 from lilia.hardy2_io import _equivalent
 from lilia.io import read_lilia_frame
 from lilia.provenance import file_sha256
+from lilia.quality_audit import attach_diagnostic_columns, validate_diagnostics
 from lilia.subject_comparison import summarize_comparison
 from lilia.tflite import build_tflite_timeline
 from lilia.windowing import build_window_grid, continuous_slices
@@ -25,8 +26,9 @@ def write_comparison_table(path, source, branch, parameters, code_id, segments, 
             frame[f'{k}_ch{ch+1}'] = branch['scores'][k][:,ch]
     for key in ('quality_status','metric_status'):
         frame[key] = [r[key] for r in branch['window_audit']]
+    attach_diagnostic_columns(frame, branch['window_audit'])
     analysis = json_safe({'summary':branch['summary'],'window_audit':branch['window_audit'],'segments':segments})
-    info = {'analysis':analysis,'analysis_id':config_id(analysis)}
+    info = {'analysis':analysis,'analysis_id':config_id(analysis), 'quality_diagnostics_version': 1}
     if timeline is not None:
         info.update(inference=timeline.metadata(),source_samples=timeline.source_samples,source_epoch_us=timeline.source_epoch_us)
     kind = 'subject_comparison_bp' if timeline is None else 'subject_comparison_tflite'
@@ -95,4 +97,5 @@ def load_comparison_table(path, raw_csv, model_path=None):
     summary = summarize_comparison({'grid':grid,'valid':valid,'scores':scores},p['events'])
     if not _equivalent(meta['analysis']['summary'],json_safe(summary)):
         raise ValueError('Comparison baseline or delta summary differs from source windows')
+    validate_diagnostics(frame, meta, raw.iloc[:, 1:].to_numpy(dtype=np.float32))
     return frame,meta

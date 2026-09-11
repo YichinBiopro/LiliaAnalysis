@@ -6,13 +6,18 @@ from lilia.entropy_io import _write_window_table, _load_window_table
 from lilia.io import read_lilia_frame
 from lilia.provenance import file_sha256
 from lilia.tflite import build_tflite_timeline
+from lilia.tflite_quality import attach_columns, validate_quality
 
 
-def write_tflite_table(path, source, frame, grid, parameters, code_sha256, timeline):
+def write_tflite_table(path, source, frame, grid, parameters, code_sha256, timeline, *, quality_analysis=None):
+    extra = {}
+    if quality_analysis is not None:
+        attach_columns(frame, quality_analysis)
+        extra = {'quality_diagnostics_version': 1, 'quality_analysis': quality_analysis}
     _write_window_table(path, source, frame, grid, parameters, code_sha256, 'tflite_qeeg',
                         source_info={'source_samples': timeline.source_samples,
                                      'source_epoch_us': timeline.source_epoch_us,
-                                     'inference': timeline.metadata()})
+                                     'inference': timeline.metadata(), **extra})
 
 
 def load_tflite_table(path, raw_csv=None, model_path=None):
@@ -24,10 +29,12 @@ def load_tflite_table(path, raw_csv=None, model_path=None):
         raise ValueError('Incorrect TFLite index space')
     if model_path is not None and file_sha256(model_path) != params['model_sha256']:
         raise ValueError('TFLite model differs from metadata')
+    signal = t = timeline = None
     if raw_csv is not None:
         if file_sha256(raw_csv) != meta['source_id']:
             raise ValueError('Raw recording differs from TFLite source')
         raw = read_lilia_frame(raw_csv)
+        signal = raw.iloc[:, 1:].to_numpy(dtype=np.float32)
         t = raw.iloc[:, 0].to_numpy(dtype=np.int64)
         if len(raw.columns) != 5 or len(t) != meta['source_samples'] or int(t[0]) != meta['source_epoch_us']:
             raise ValueError('Raw source shape or epoch differs from TFLite metadata')
@@ -42,4 +49,5 @@ def load_tflite_table(path, raw_csv=None, model_path=None):
                       else np.array_equal(actual, expected)))
             if not valid:
                 raise ValueError(f'TFLite {key} does not match inference timestamps')
+    validate_quality(frame, meta, raw=signal, time_us=t, timeline=timeline)
     return frame, meta

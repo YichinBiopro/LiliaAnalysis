@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "move_head_actual.npz",
+      "sha256": "2ec0eb862ea5704b4a89668ad7d4da1dc3dba546bc0cf4e1dd574fc185f48b49"
+    },
+    {
+      "path": "move_head_expected.npz",
+      "sha256": "2ec0eb862ea5704b4a89668ad7d4da1dc3dba546bc0cf4e1dd574fc185f48b49"
+    },
+    {
+      "path": "talk_actual.npz",
+      "sha256": "bb4d85fbeac3dbc77f1aa9d22cc69376ee11a2ee39bac51995b78d1d27414f14"
+    },
+    {
+      "path": "talk_expected.npz",
+      "sha256": "bb4d85fbeac3dbc77f1aa9d22cc69376ee11a2ee39bac51995b78d1d27414f14"
+    },
+    {
+      "path": "vibration_level1_actual.npz",
+      "sha256": "378512197f9d5be3d635d47cb6bc015188a677a93d2b03a47ffc7981890cd0e6"
+    },
+    {
+      "path": "vibration_level1_expected.npz",
+      "sha256": "378512197f9d5be3d635d47cb6bc015188a677a93d2b03a47ffc7981890cd0e6"
+    },
+    {
+      "path": "vibration_level2_actual.npz",
+      "sha256": "debcce0e7cccb8564f02ac33e975d2eeb4949131c8f739c1566474a9dc7a0122"
+    },
+    {
+      "path": "vibration_level2_expected.npz",
+      "sha256": "debcce0e7cccb8564f02ac33e975d2eeb4949131c8f739c1566474a9dc7a0122"
+    },
+    {
+      "path": "vibration_level3_actual.npz",
+      "sha256": "bda670c322fcecebe67268ae90bdaf6d75c116c76014aa2047554acd4ef51fbf"
+    },
+    {
+      "path": "vibration_level3_expected.npz",
+      "sha256": "bda670c322fcecebe67268ae90bdaf6d75c116c76014aa2047554acd4ef51fbf"
+    },
+    {
+      "path": "talk_gap_actual.npz",
+      "sha256": "7537afcaf2662f17d032376b42a89c322bdebe339d793eb712a1c956b65f847a"
+    },
+    {
+      "path": "talk_gap_expected.npz",
+      "sha256": "7537afcaf2662f17d032376b42a89c322bdebe339d793eb712a1c956b65f847a"
+    },
+    {
+      "path": "talk_threshold_zero_actual.npz",
+      "sha256": "dfedb24c714fb128c494f045d71ed20fc65e234000ba316c253a896b8f293b14"
+    },
+    {
+      "path": "talk_threshold_zero_expected.npz",
+      "sha256": "dfedb24c714fb128c494f045d71ed20fc65e234000ba316c253a896b8f293b14"
+    },
+    {
+      "path": "talk_half_second_actual.npz",
+      "sha256": "a4fb8a232dcfac06c681f7379b6f0ce86914cc1e2849c5df50a7b706f9a727c2"
+    },
+    {
+      "path": "talk_half_second_expected.npz",
+      "sha256": "a4fb8a232dcfac06c681f7379b6f0ce86914cc1e2849c5df50a7b706f9a727c2"
+    },
+    {
+      "path": "talk_fallback_actual.npz",
+      "sha256": "36c910331e2637ce01f12a3142363ff541239520fc70fd8cb7d490e62096c536"
+    },
+    {
+      "path": "talk_fallback_expected.npz",
+      "sha256": "36c910331e2637ce01f12a3142363ff541239520fc70fd8cb7d490e62096c536"
+    }
+  ],
+  "comparisons": [
+    {
+      "actual": "move_head_actual.npz",
+      "expected": "move_head_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "talk_actual.npz",
+      "expected": "talk_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "vibration_level1_actual.npz",
+      "expected": "vibration_level1_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "vibration_level2_actual.npz",
+      "expected": "vibration_level2_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "vibration_level3_actual.npz",
+      "expected": "vibration_level3_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "talk_gap_actual.npz",
+      "expected": "talk_gap_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "talk_threshold_zero_actual.npz",
+      "expected": "talk_threshold_zero_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "talk_half_second_actual.npz",
+      "expected": "talk_half_second_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    },
+    {
+      "actual": "talk_fallback_actual.npz",
+      "expected": "talk_fallback_expected.npz",
+      "rtol": 0,
+      "atol": 0,
+      "equal_nan": true
+    }
+  ]
+}

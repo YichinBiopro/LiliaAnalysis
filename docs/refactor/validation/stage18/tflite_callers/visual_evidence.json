@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "talk_new/Stage18_Q_tflite_summary_session.png",
+      "sha256": "968861bdc1de9322943dc9a66d0deb2a4e8fb216c8ef51587e61e804ae21640d"
+    },
+    {
+      "path": "talk_gap_new/Stage18_Q_tflite_summary_session.png",
+      "sha256": "485b876882f8f4d8f116100a122b6b3d0e3db1104a1f87d75dda1164e4806ccf"
+    },
+    {
+      "path": "talk_fallback_new/Stage18_Q_tflite_summary_session.png",
+      "sha256": "9e1eba9984951832bbc1bb7e34dde043cf999c4c5ffd8fa2fe578a7832cf5ebe"
+    },
+    {
+      "path": "visual_review.json",
+      "sha256": "7b74a17cd2da403b133b87448c797861bcc4e4e6496ecfd6ef22874a8fbbd7da"
+    }
+  ]
+}

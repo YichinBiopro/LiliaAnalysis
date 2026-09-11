@@ -1,6 +1,6 @@
 # 階段任務單
 
-只讀當前卡片。14–17 已完成；當前為 18 品質 scorer，核心診斷增量已實作，呼叫端遷移待完成。
+只讀當前卡片。14–17 已完成；當前為 18 品質 scorer，核心、共用 raw 與 TFLite baseline／summary 增量已驗收，其餘直接／filtered 呼叫端待完成。
 所有任務共用 [WORKFLOW](WORKFLOW.md) 的驗證與收尾規則。方法校準另立任務，勿混入等價搬移。
 
 <a id="stage-14"></a>
@@ -52,14 +52,18 @@
 - Git：第十六階段後半及第十七階段已提交 `ef9eada`；代表圖／manifest 補提交 `23aa2df`，未 push。下一工作單元為第十八階段品質 scorer。
 
 <a id="stage-18"></a>
-## 18：品質 scorer — 進行中（核心診斷增量）
+## 18：品質 scorer — 進行中（核心、raw 與 TFLite 呼叫端已驗收）
 
 - 目標：`lilia/quality.py` 與品質呼叫端／audit／圖形；[盤點與契約](STAGE18_QUALITY_INVENTORY.md)。
 - 已實作：保留 legacy overall／detail，新增 valid／invalid reasons、component diagnostics、usable_overall、preset／stage／config context；主版與兩份 bundle 同步。
 - 舊基準：`23aa2df` 的四 presets、五真實來源 raw／BP 118 窗口，加合成邊界共 130 輸入／520 評分／1,950 陣列；數值與 NaN 位置精確一致。
-- 本增量：[報告](STAGE18_CORE_REPORT_2026-09-10.md)；未變更呼叫端品質門檻及篩選行為，不能把核心測試通過當整階段完成。
-- 下一步：逐入口傳遞 raw／filtered stage 與 diagnostics 到 audit／輸出 reader，核對是否採用 usable_overall 的窗口差異；處理圖形無效／低分辨識。
-- 起始測試：`python tools/refactor_check.py check --tests tests/test_quality_diagnostics_regression.py tests/test_event_qeeg_regression.py tests/test_subject_comparison_regression.py tests/test_tflite_baseline_regression.py`
+- 核心：[報告](STAGE18_CORE_REPORT_2026-09-10.md)，已提交 `a0a7ba6`，未 push。
+- 前增量：[raw 呼叫端報告](STAGE18_RAW_CALLERS_REPORT_2026-09-11.md)。event qEEG／event markers／zoom／subject comparison 的逐窗診斷、CSV／audit／來源 reader 完成；event 品質圖明示無效／不可用及實際 preset。尚未提交。
+- 本增量：[TFLite 呼叫端報告](STAGE18_TFLITE_CALLERS_REPORT_2026-09-11.md)。baseline filtered／Before filtered_resampled／After model_output 三種 stage、子窗口 audit／來源 reader／品質圖完成；legacy sampler 亦保存診斷，短路及 API 相容語義保留。尚未提交。
+- 最新驗證：317 tests／0 skipped、176 Python 靜態／bundle；九案例共 107 qEEG 窗口／271 模型窗口／510 子窗口，9 NPZ 組共 399 陣列、18 表重讀，最大誤差與選取差異均 0，三圖目視通過。
+- 相容政策：仍用 `legacy_overall`，診斷無效不暗改既有接受／排除結果；注入舊 scorer 明示 unavailable，無診斷的舊表仍可讀。原始 stage 與 BP／模型分析 branch 不混用。
+- 下一步：`spectral_entropy.py` clean／state／MI，再接 `plot_goertzel_vs_raw.py`、`quality_check.py` 與剩餘直接 helper；逐入口核對 stage、CSV／audit／reader、圖形及品質窗口選取差異。
+- 起始測試：`python tools/refactor_check.py check --tests tests/test_quality_diagnostics_regression.py tests/test_quality_audit_regression.py tests/test_tflite_quality_regression.py tests/test_tflite_baseline_regression.py`；接手 entropy 後按盤點加入其專屬測試。
 - 完成條件：callers／readers／圖形與 preset／stage 全程可追蹤；真實數值、短窗／污染／fallback、接受排除差異、目視及完整檢查。尚未完成。
 
 ## 入口遷移後的其餘待辦（尚未編號）

@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "date": "2026-09-11",
+  "figures": [
+    {
+      "path": "talk_new/Stage18_Q_tflite_summary_session.png",
+      "sha256": "968861bdc1de9322943dc9a66d0deb2a4e8fb216c8ef51587e61e804ae21640d",
+      "finding": "真實 talk：兩條品質曲線與原門檻保留，標題清楚標示 filtered/resampled → model output 與實際 ibrain_device preset；四項趨勢及 heatmap 正常。",
+      "note": "Final generated PNG hash matches the visually reviewed run."
+    },
+    {
+      "path": "talk_gap_new/Stage18_Q_tflite_summary_session.png",
+      "sha256": "485b876882f8f4d8f116100a122b6b3d0e3db1104a1f87d75dda1164e4806ccf",
+      "finding": "真實訊號缺口副本：品質與 qEEG 趨勢不跨 100 秒缺口連線，heatmap 缺口留白，來源段與真實時間對齊。",
+      "note": "Final generated PNG hash matches the visually reviewed run."
+    },
+    {
+      "path": "talk_fallback_new/Stage18_Q_tflite_summary_session.png",
+      "sha256": "9e1eba9984951832bbc1bb7e34dde043cf999c4c5ffd8fa2fe578a7832cf5ebe",
+      "finding": "強制 spectrum 例外：前後皆保留 0.5 與原接受政策，以不同橘色符號標記 before／after 診斷無效，圖例及 spectrum [custom] 標題清楚。",
+      "note": "Final generated PNG hash matches the visually reviewed run."
+    }
+  ]
+}

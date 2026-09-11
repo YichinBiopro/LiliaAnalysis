@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "plot_real/Stage18_stage18_eeg_bp_session_start.png",
+      "sha256": "1804ddf3201d5eb8b1d08e96acea12abf41b0d46dc95d200503d52004763c52c"
+    },
+    {
+      "path": "plot_fallback/Stage18_stage18_eeg_bp_session_start.png",
+      "sha256": "be39f0cb522a1e5365e84d0a241287eed4e17b0a6c28902a8664a11dad6a2589"
+    },
+    {
+      "path": "zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta.png",
+      "sha256": "7a0ed876096e524541ba7d886f9399a49de9d06b8c791a47ee1946179744046c"
+    },
+    {
+      "path": "visual_review.json",
+      "sha256": "6cb8f2636a31968bee61274f0402b288659180a22d69aa373a33490a3ffecc61"
+    }
+  ]
+}

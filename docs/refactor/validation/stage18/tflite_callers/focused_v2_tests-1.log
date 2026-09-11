@@ -1,0 +1,115 @@
+test_baseline_records_filtered_stage_and_preserves_short_circuit (test_tflite_quality_regression.TFLiteQualityTests) ... ok
+test_csv_score_tampering_rejected_after_rehash_and_legacy_tables_readable (test_tflite_quality_regression.TFLiteQualityTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+ERROR
+test_legacy_helper_preserves_tuple_and_sampler_selection (test_tflite_quality_regression.TFLiteQualityTests) ... ok
+test_rehashed_diagnostic_stage_preset_coverage_and_baseline_tampering_fail (test_tflite_quality_regression.TFLiteQualityTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+ERROR
+test_short_subepoch_is_not_scored_and_scorer_errors_still_propagate (test_tflite_quality_regression.TFLiteQualityTests) ... ok
+test_summary_three_stages_fallback_markers_and_source_reader (test_tflite_quality_regression.TFLiteQualityTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+FAIL
+
+======================================================================
+ERROR: test_csv_score_tampering_rejected_after_rehash_and_legacy_tables_readable (test_tflite_quality_regression.TFLiteQualityTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/tests/test_tflite_quality_regression.py", line 139, in test_csv_score_tampering_rejected_after_rehash_and_legacy_tables_readable
+    source, table, _ = self.run_plot()
+  File "/home/bps-yichin/lilia_analysis/tests/test_tflite_quality_regression.py", line 55, in run_plot
+    entry.plot_subject_tflite_summary('Demo', {'dir': 'Demo', 'sn': 'Q'},
+  File "/home/bps-yichin/lilia_analysis/plot_tflite_summary.py", line 446, in plot_subject_tflite_summary
+    session_ref, sb_meta = select_tflite_baseline(tfl_data, timeline, catalog,
+  File "/home/bps-yichin/lilia_analysis/lilia/tflite_baseline.py", line 88, in select_tflite_baseline
+    raise ValueError(f'Insufficient complete baseline model windows for {label}: '
+ValueError: Insufficient complete baseline model windows for session: 0/16 eligible, need 5 (10s)
+
+======================================================================
+ERROR: test_rehashed_diagnostic_stage_preset_coverage_and_baseline_tampering_fail (test_tflite_quality_regression.TFLiteQualityTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/tests/test_tflite_quality_regression.py", line 115, in test_rehashed_diagnostic_stage_preset_coverage_and_baseline_tampering_fail
+    source, table, _ = self.run_plot()
+  File "/home/bps-yichin/lilia_analysis/tests/test_tflite_quality_regression.py", line 55, in run_plot
+    entry.plot_subject_tflite_summary('Demo', {'dir': 'Demo', 'sn': 'Q'},
+  File "/home/bps-yichin/lilia_analysis/plot_tflite_summary.py", line 446, in plot_subject_tflite_summary
+    session_ref, sb_meta = select_tflite_baseline(tfl_data, timeline, catalog,
+  File "/home/bps-yichin/lilia_analysis/lilia/tflite_baseline.py", line 88, in select_tflite_baseline
+    raise ValueError(f'Insufficient complete baseline model windows for {label}: '
+ValueError: Insufficient complete baseline model windows for session: 0/16 eligible, need 5 (10s)
+
+======================================================================
+FAIL: test_summary_three_stages_fallback_markers_and_source_reader (test_tflite_quality_regression.TFLiteQualityTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/tests/test_tflite_quality_regression.py", line 110, in test_summary_three_stages_fallback_markers_and_source_reader
+    self.assertIn('spectrum [custom]', ax.get_title())
+AssertionError: 'spectrum [custom]' not found in ''
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.421s
+
+FAILED (failures=1, errors=2)
