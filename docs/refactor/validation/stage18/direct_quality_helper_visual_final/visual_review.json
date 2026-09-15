@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-15",
+  "plots": [
+    {
+      "case": "real_talk",
+      "reviewed": true,
+      "finding": "Quality and qEEG panels readable; raw stage, preset and threshold shown.",
+      "publication": "local source-bound review; image retained on validation machine"
+    },
+    {
+      "case": "gap_plot",
+      "path": "gap_plot_new/plot.png",
+      "sha256": "7b6b5bf0b9dea4df6bda6dbbb689a2163c77dda6e933c13a5e7f3ac492f7ba27",
+      "reviewed": true,
+      "finding": "Raw timestamp gap and quality line break visible; retained legacy score marked by hollow triangle; qEEG masked."
+    },
+    {
+      "case": "fallback_plot",
+      "path": "fallback_plot_new/plot.png",
+      "sha256": "af147f8306094f3ac4d84b18a0bccd46d8b3f8eb53fcc88f11cd1c682ad9360f",
+      "reviewed": true,
+      "finding": "Finite low legacy score and invalid diagnostic marker both shown; qEEG remains masked by old score threshold."
+    },
+    {
+      "case": "external_plot",
+      "path": "external_plot_new/plot.png",
+      "sha256": "1fa5953aca571ef9536ca6e50a53c9dadf9f85173fa2d8afe09abdba6ac383dc",
+      "reviewed": true,
+      "finding": "Injected scorer score visible and diagnostic unavailability explicit."
+    },
+    {
+      "case": "nan_plot",
+      "path": "nan_plot_new/plot.png",
+      "sha256": "28e44ae0a1ce6dcbecbf80de66f115e9b34d7ed6d22f2a8ee4c8e576ceb98905",
+      "reviewed": true,
+      "finding": "Nonfinite scorer quality and diagnostic unavailability explicit."
+    }
+  ],
+  "passed": true
+}

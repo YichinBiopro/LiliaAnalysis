@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-15",
+  "modules": [
+    {
+      "name": "core",
+      "original_manifest": "docs/refactor/validation/stage18/core/evidence.json",
+      "files": 19,
+      "tables": 0,
+      "comparisons": 1,
+      "omissions": []
+    },
+    {
+      "name": "raw_callers",
+      "original_manifest": "docs/refactor/validation/stage18/raw_callers/evidence.json",
+      "files": 124,
+      "tables": 33,
+      "comparisons": 10,
+      "omissions": [
+        {
+          "path": "/home/bps-yichin/lilia_analysis/lilia/quality_audit.py",
+          "reason": "code changed after earlier increment; final full check and new direct-helper baseline cover current code"
+        }
+      ]
+    },
+    {
+      "name": "tflite_callers",
+      "original_manifest": "docs/refactor/validation/stage18/tflite_callers/evidence.json",
+      "files": 117,
+      "tables": 18,
+      "comparisons": 9,
+      "omissions": [
+        {
+          "path": "/home/bps-yichin/lilia_analysis/plot_event_markers.py",
+          "reason": "code changed after earlier increment; final full check and new direct-helper baseline cover current code"
+        }
+      ]
+    },
+    {
+      "name": "mi_quality_state",
+      "original_manifest": "docs/refactor/validation/stage18/mi_quality_state/manifest.json",
+      "files": 199,
+      "tables": 48,
+      "comparisons": 1,
+      "omissions": [
+        {
+          "path": "/home/bps-yichin/lilia_analysis/spectral_entropy.py",
+          "reason": "code changed after earlier increment; final full check and new direct-helper baseline cover current code"
+        },
+        {
+          "path": "/home/bps-yichin/lilia_analysis/tools/validate_entropy_quality_state_stage18.py",
+          "reason": "code changed after earlier increment; final full check and new direct-helper baseline cover current code"
+        }
+      ]
+    },
+    {
+      "name": "entropy_diagnostics",
+      "original_manifest": "docs/refactor/validation/stage18/entropy_diagnostics/manifest.json",
+      "files": 289,
+      "tables": 66,
+      "comparisons": 1,
+      "omissions": []
+    },
+    {
+      "name": "goertzel_quality",
+      "original_manifest": "docs/refactor/validation/stage18/goertzel_quality_final/manifest.json",
+      "files": 184,
+      "tables": 18,
+      "comparisons": 1,
+      "omissions": []
+    },
+    {
+      "name": "quality_check",
+      "original_manifest": "docs/refactor/validation/stage18/quality_check_r6_release/source_manifest.json",
+      "files": 136,
+      "tables": 17,
+      "comparisons": 1,
+      "omissions": [
+        {
+          "path": "/home/bps-yichin/lilia_analysis/plot_event_markers.py",
+          "reason": "code changed after earlier increment; final full check and new direct-helper baseline cover current code"
+        },
+        {
+          "path": "/home/bps-yichin/lilia_analysis/tools/refactor_check.py",
+          "reason": "code changed after earlier increment; final full check and new direct-helper baseline cover current code"
+        }
+      ]
+    },
+    {
+      "name": "direct_helper",
+      "original_manifest": "docs/refactor/validation/stage18/direct_quality_helper_visual_final/manifest.json",
+      "files": 67,
+      "tables": 4,
+      "comparisons": 1,
+      "omissions": [
+        {
+          "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+          "reason": "private source recording; local source-bound evidence only"
+        },
+        {
+          "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+          "reason": "private source recording; local source-bound evidence only"
+        },
+        {
+          "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+          "reason": "private source recording; local source-bound evidence only"
+        },
+        {
+          "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+          "reason": "private source recording; local source-bound evidence only"
+        },
+        {
+          "path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+          "reason": "private source recording; local source-bound evidence only"
+        },
+        {
+          "path": "real_talk_new/summary_quality_windows.csv",
+          "reason": "private source reader; local full evidence only"
+        }
+      ],
+      "publication": {
+        "files": 55,
+        "tables": 4,
+        "comparisons": 0,
+        "reason": "recording-derived plots and source-bound NPZ stay local"
+      }
+    }
+  ],
+  "rule": "Preserve original artifact hashes and numeric baselines; omit only code files superseded by later increments. Direct-helper private recording excluded from portable repository manifest and tested in local full source manifest."
+}

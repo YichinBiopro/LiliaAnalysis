@@ -2,12 +2,10 @@
 
 更新：2026-09-15。接手先讀本檔，再只讀當前任務；歷史細節按需查閱。
 
-- 已完成：分析／資料集入口遷移至第十七階段（Jenqwei 資料集）。
-- 當前：[第十八階段品質 scorer](docs/refactor/TASKS.md#stage-18) 進行中；核心、共用 raw、TFLite、entropy、Goertzel 與 R6 quality_check 增量完成，剩餘 direct helper 待完成。
-- 本輪：[R6 quality_check 增量](docs/refactor/STAGE18_QUALITY_CHECK_REPORT_2026-09-15.md)：NaN 異常明確 flagged，samples raw／filtered 與 anomalies raw 診斷、CSV／sidecar／來源 reader、品質圖完成。完整檢查 345 tests／0 skipped、188 Python／bundle 通過。
-- 數值：五份完整 Jenqwei、真實 James samples 與 Hardy anomalies，加合成邊界共 20 案例及污染 helper；974 陣列精確相同、17 來源 reader、970 表格列、八圖目視。只有 3 個 NaN 異常的原因／severity 有意修正；有限分數及選取不變。
-- 下一步：剩餘 direct helper（event 舊 `compute_quality_windowed`）及第十八階段整體收斂驗收；保留 legacy_overall 與既有門檻，Goertzel rolling median 分段平滑另待方法校準。
-- 其後：baseline／PSD／Goertzel／MI 方法校準、架構／F19、批次／原子發佈、整體驗收。
+- 已完成：第十八階段品質 scorer 全部呼叫端與整階段收斂驗收；詳見 [Stage18 完整驗收](docs/refactor/STAGE18_ACCEPTANCE_REPORT_2026-09-15.md)。
+- 本輪：最後剩餘的 `compute_quality_windowed` → `plot_custom_markers` 保存 raw 逐窗診斷、CSV／sidecar／來源 reader 與品質圖；舊雙值 API、外部 scorer 簽名、`legacy_overall` 門檻與 qEEG 缺口 mask 保留。
+- 驗證：348 tests／0 skipped、192 Python／Pyflakes／bundle／diff；16 helper＋5 plot 案例，102 陣列精確相同、5 來源 reader／五圖目視；R1–R6 與新 helper 本機來源綁定 1,364 項、可提交範圍 1,351 項原 hash／表／NPZ 核對通過。
+- 下一步：[方法校準](docs/refactor/TASKS.md)：baseline／PSD／Goertzel／MI 舊 profile 與真實比較基準；再接架構／F19、批次／原子發佈及跨階段整體驗收。
 
 ## 必須保留
 
@@ -25,7 +23,10 @@
 
 ## 驗證入口
 
-- 本輪：[完整檢查](docs/refactor/validation/stage18/quality_check_r6_release_checks/summary.json) 345 tests／0 skipped、188 Python；[數值](docs/refactor/validation/stage18/quality_check_r6_release/analysis.json)／[產物 evidence](docs/refactor/validation/stage18/quality_check_r6_release_evidence/summary.json)／[目視](docs/refactor/validation/stage18/quality_check_r6_release/visual_review.json)。Git 可提交清單另有 [142 項核對](docs/refactor/validation/stage18/quality_check_r6_repository_evidence/summary.json)；本機正式來源版 [156 項核對](docs/refactor/validation/stage18/quality_check_r6_source_evidence/summary.json)。
+- 本輪：[完整檢查](docs/refactor/validation/stage18/direct_quality_helper_final_checks/summary.json) 348 tests／0 skipped、192 Python；[舊新數值](docs/refactor/validation/stage18/direct_quality_helper_visual_final/analysis.json)／本機 78 項來源證據／[可提交 59 項證據](docs/refactor/validation/stage18/direct_quality_helper_visual_final/repository_evidence_release/summary.json)／[五圖目視](docs/refactor/validation/stage18/direct_quality_helper_visual_final/visual_review.json)。
+- 整階段：[8 模組原 hash／reader／NPZ 核對](docs/refactor/validation/stage18/final_acceptance/evidence_rollup.json) 本機 1,364 項、可提交範圍 1,351 項；[範圍與舊程式 hash 排除明細](docs/refactor/validation/stage18/final_acceptance/scope.json)。較早程式 hash 被後續增量替代，原產物 hash 與原 NPZ 不重算。
+- R6：[增量數值](docs/refactor/validation/stage18/quality_check_r6_release/analysis.json) 974 陣列、17 reader／八圖；[可提交 142 項](docs/refactor/validation/stage18/quality_check_r6_repository_evidence/summary.json) 與 [本機 156 項](docs/refactor/validation/stage18/quality_check_r6_source_evidence/summary.json) 均為當時增量證據。
+
 - 前增量：[Goertzel 完整檢查](docs/refactor/validation/stage18/goertzel_quality_checks/summary.json) 為當時 336 tests；354 陣列／36 reader／七圖見 [R5 報告](docs/refactor/STAGE18_GOERTZEL_QUALITY_REPORT_2026-09-15.md)。
 - 前輪：[entropy 完整檢查](docs/refactor/validation/stage18/entropy_diagnostics_checks/summary.json) 為當時 327 tests；35 案例／714 陣列／77 reader 及五圖見 [entropy 報告](docs/refactor/STAGE18_ENTROPY_DIAGNOSTICS_REPORT_2026-09-15.md)。
 - 前次：[驗收檢查與反例](docs/refactor/STAGE18_REVIEW_REPORT_2026-09-11.md) 是修正前的 40 tests 與 R1–R6 發現；重現腳本以當時缺陷為成功條件，不可當修復後回歸測試。
@@ -44,7 +45,7 @@
 ## 按需參考
 
 - [TFLite 呼叫端增量報告](docs/refactor/STAGE18_TFLITE_CALLERS_REPORT_2026-09-11.md)／[品質盤點與相容契約](docs/refactor/STAGE18_QUALITY_INVENTORY.md)／[實跑腳本](tools/validate_tflite_quality_stage18.py)。
-- 本輪實跑：`tools/validate_quality_check_stage18.py`；證據在 `docs/refactor/validation/stage18/quality_check_r6_release/`。[R3 恢復報告](docs/refactor/STAGE18_ARTIFACT_RESTORE_REPORT_2026-09-15.md) 確認舊 CSV／圖已在 Git，舊 TFLite 重讀仍依賴暫存四通道來源。
+- R6 實跑：`tools/validate_quality_check_stage18.py`；證據在 `docs/refactor/validation/stage18/quality_check_r6_release/`。[R3 恢復報告](docs/refactor/STAGE18_ARTIFACT_RESTORE_REPORT_2026-09-15.md) 確認舊 CSV／圖已在 Git，舊 TFLite 重讀仍依賴暫存四通道來源。
 - [raw 呼叫端增量報告](docs/refactor/STAGE18_RAW_CALLERS_REPORT_2026-09-11.md) 保留 event／zoom／comparison 驗收範圍。
 - [核心增量報告](docs/refactor/STAGE18_CORE_REPORT_2026-09-10.md) 與 `tests/fixtures/quality_stage18_*` 保留原 scorer 相容基準。
 - [第十七階段驗收報告](docs/refactor/STAGE17_REPORT_2026-09-10.md)／[資料集契約](docs/refactor/STAGE17_DATASET_CONTRACT.md)；資料集 `dataset_jenqwei_*` 與分析 `jenqwei_*` 基準不可混用。

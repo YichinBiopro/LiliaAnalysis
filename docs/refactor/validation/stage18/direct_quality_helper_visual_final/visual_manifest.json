@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "gap_plot_new/plot.png",
+      "sha256": "7b6b5bf0b9dea4df6bda6dbbb689a2163c77dda6e933c13a5e7f3ac492f7ba27"
+    },
+    {
+      "path": "fallback_plot_new/plot.png",
+      "sha256": "af147f8306094f3ac4d84b18a0bccd46d8b3f8eb53fcc88f11cd1c682ad9360f"
+    },
+    {
+      "path": "external_plot_new/plot.png",
+      "sha256": "1fa5953aca571ef9536ca6e50a53c9dadf9f85173fa2d8afe09abdba6ac383dc"
+    },
+    {
+      "path": "nan_plot_new/plot.png",
+      "sha256": "28e44ae0a1ce6dcbecbf80de66f115e9b34d7ed6d22f2a8ee4c8e576ceb98905"
+    },
+    {
+      "path": "visual_review.json",
+      "sha256": "14d8de41b986b0abdf6b3d3d5217c9a940b4645138ef00c88f3b16d3be016c24"
+    }
+  ]
+}

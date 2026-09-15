@@ -48,6 +48,9 @@ from lilia.qeeg import (
 from lilia.io import bandpass_filter, load_merged_csv, read_lilia_frame
 from lilia.windowing import continuous_slices, require_continuous, transform_runs, plot_breaks
 from lilia.entropy_io import load_entropy_table
+from lilia.quality_audit import (POLICY, diagnostic_columns, diagnostic_label,
+                                 plot_diagnostic_markers)
+from lilia.custom_marker_quality_io import write_custom_marker_quality
 import plot_event_markers as pem
 
 
@@ -451,12 +454,44 @@ def plot_custom_markers(
 
     # Apply the same device-quality threshold used by the existing bundle.
     # Quality is computed on the selected channel in matching 5-second windows.
-    _, quality = pem.compute_quality_windowed(time_us, data[:, ch - 1:ch],
-                                              win_sec=win_sec, fs=fs)
+    _, quality, quality_rows = pem.compute_quality_windowed(
+        time_us, data[:, ch - 1:ch], win_sec=win_sec, fs=fs,
+        return_audit=True)
     if quality.shape != (len(score_us), 1):
         raise ValueError('Quality and qEEG windows are not aligned')
     score_good &= np.isfinite(quality[:, 0]) & (quality[:, 0] >= quality_threshold)
-    score_good &= ~np.asarray(gap_rows, dtype=bool)
+    gap_mask = np.asarray(gap_rows, dtype=bool)
+    score_good &= ~gap_mask
+    quality_table_rows = []
+    for i, row in enumerate(quality_rows):
+        score_start = i * win
+        row.update(score_window_start_idx=score_start,
+                   score_window_end_idx=score_start + win,
+                   score_center_us=int(score_us[i]),
+                   score_policy=POLICY,
+                   crosses_gap=bool(gap_rows[i]),
+                   quality_good=bool(score_good[i]))
+        quality_table_rows.append(dict(
+            window_start_idx=row['window_start_idx'],
+            window_end_idx=row['window_end_idx'],
+            window_center_us=row['window_center_us'],
+            score_window_start_idx=score_start,
+            score_window_end_idx=score_start + win,
+            score_center_us=int(score_us[i]),
+            quality_ch1=float(quality[i, 0]),
+            crosses_gap=bool(gap_rows[i]),
+            quality_good=bool(score_good[i])))
+    quality_frame = pd.DataFrame(quality_table_rows)
+    for key, values in diagnostic_columns(quality_rows).items():
+        quality_frame[key] = values
+    quality_csv = os.path.splitext(summary_csv)[0] + '_quality_windows.csv'
+    write_custom_marker_quality(quality_csv, raw_csv, quality_frame,
+        dict(source_samples=len(time_us), source_channels=data.shape[1],
+             channel=ch, fs=fs, win_sec=win_sec,
+             quality_win_samples=int(win_sec * fs), score_win_samples=win,
+             gap_factor=3.0, quality_threshold=quality_threshold,
+             quality_params=pem.QUALITY_PARAMS, score_policy=POLICY, stage='raw'),
+        quality_rows)
     for key in scores:
         scores[key] = np.where(score_good, scores[key], np.nan)
 
@@ -472,8 +507,8 @@ def plot_custom_markers(
     colors = {key: color for key, _, color in SIGNAL_SPECS if key != 'entropy'}
     labels = {key: label for key, label, _ in SIGNAL_SPECS if key != 'entropy'}
     fig, axes = plt.subplots(
-        5, 1, figsize=(15, 12), sharex=True,
-        gridspec_kw={'height_ratios': [1.2, 1.2, 1.2, 1.2, 1.5]})
+        6, 1, figsize=(15, 14), sharex=True,
+        gridspec_kw={'height_ratios': [1.2, 1.2, 1.2, 1.2, .8, 1.5]})
     fig.suptitle(
         f'{subject} ch{ch} — qEEG indices vs raw EEG\n'
         f'custom markers, Δ vs preceding {baseline_sec:g}s baseline; '
@@ -550,7 +585,31 @@ def plot_custom_markers(
 
         ax.legend(loc='upper right', fontsize=7)
 
-    axr = axes[4]
+    axq = axes[4]
+    axq.plot(score_dt, np.where(gap_mask, np.nan, quality[:, 0]), color='#222222', lw=.9,
+             label='Raw legacy quality')
+    axq.axhline(quality_threshold, color='0.35', lw=.8, ls='--',
+                label=f'threshold {quality_threshold:g}')
+    low = np.isfinite(quality[:, 0]) & (quality[:, 0] < quality_threshold)
+    if np.any(low):
+        axq.scatter(score_dt[low], quality[low, 0], color='#d62728',
+                    marker='o', s=25, zorder=4, label='Low score')
+    if np.any(gap_mask):
+        gap_y = np.where(np.isfinite(quality[gap_mask, 0]), quality[gap_mask, 0], .02)
+        axq.scatter(score_dt[gap_mask], gap_y, facecolors='none',
+                    edgecolors='#9467bd', marker='v', s=70, zorder=5,
+                    label='Time-gap window')
+    plot_diagnostic_markers(axq, score_dt, quality_rows, quality,
+                            label_prefix='Raw ')
+    axq.text(.01, .98, 'raw | ' + diagnostic_label(quality_rows),
+             transform=axq.transAxes, ha='left', va='top', fontsize=7)
+    axq.set_ylim(-.03, 1.03)
+    axq.set_ylabel('Quality')
+    axq.grid(True, alpha=.2)
+    axq.legend(loc='upper right' if np.any(~np.isfinite(quality[:, 0]))
+               else 'lower right', fontsize=6, ncol=3)
+
+    axr = axes[5]
     axr.plot(raw_dt, raw_amp, color='#444444', lw=0.45, alpha=0.8)
     axr.set_ylabel(f'Raw EEG ch{ch}\n(input units)')
     axr.set_xlabel('Local time (UTC+8)')
@@ -574,6 +633,7 @@ def plot_custom_markers(
     plt.close(fig)
     print(f'Saved: {outpath}')
     print(f'Saved: {summary_csv}')
+    print(f'Saved: {quality_csv}')
     for row in summary_rows:
         print(f"  {row['marker']}: {row['status']} "
               f"(baseline windows={row['baseline_windows']}, "

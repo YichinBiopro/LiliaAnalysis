@@ -20,6 +20,7 @@ sys.path.insert(0, str(ROOT))
 SOURCE_DIRS = ('lilia', 'tests', 'tools', 'plot_index_vs_raw_bundle', 'signal_quality_package')
 # Only known readers; a manifest cannot select arbitrary Python code.
 READERS = {
+    'custom_marker_quality': ('custom_marker_quality_io', 'load_custom_marker_quality_table', False),
     'quality_check_samples': ('quality_check_io', 'load_quality_samples_table', False),
     'quality_check_anomalies': ('quality_check_io', 'load_quality_anomalies_table', False),
     'goertzel': ('goertzel_io', 'load_goertzel_table', False),

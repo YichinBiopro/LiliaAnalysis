@@ -55,5 +55,22 @@ report_figures/
 # The reviewed development note is tracked; other Goertzel run outputs stay local.
 /docs/refactor/validation/stage18/goertzel_quality/
 
+# Superseded direct-helper development runs; final numerical and visual evidence stays tracked.
+/docs/refactor/validation/stage18/direct_helper_dev/
+/docs/refactor/validation/stage18/direct_helper_focused_checks/
+/docs/refactor/validation/stage18/direct_helper_initial_tests/
+/docs/refactor/validation/stage18/direct_helper_regression_fixed/
+/docs/refactor/validation/stage18/direct_quality_helper_acceptance/
+/docs/refactor/validation/stage18/direct_quality_helper_final/
+/docs/refactor/validation/stage18/direct_quality_helper_full_checks/
+/docs/refactor/validation/stage18/direct_quality_helper_release/
+/docs/refactor/validation/stage18/direct_quality_helper_static/
+/docs/refactor/validation/stage18/final_acceptance/direct_helper_evidence/
+/docs/refactor/validation/stage18/direct_quality_helper_visual_final/source_evidence_publication_local/
+/docs/refactor/validation/stage18/direct_quality_helper_visual_final/repository_evidence/
+/docs/refactor/validation/stage18/direct_quality_helper_visual_final/visual_evidence/
+/docs/refactor/validation/stage18/direct_quality_helper_visual_final/primary_evidence_release/
+/docs/refactor/validation/stage18/direct_quality_helper_visual_final/visual_evidence_release/
+
 # Matplotlib's local font cache is reproducible tooling state.
 /docs/refactor/validation/**/mpl/

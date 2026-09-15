@@ -1,6 +1,6 @@
 # 第十八階段品質 scorer 盤點與相容契約
 
-更新：2026-09-15。核心、共用 raw、TFLite、entropy、Goertzel 及 R6 quality_check 增量完成；剩餘 direct helper 待完成。
+更新：2026-09-15。核心、共用 raw、TFLite、entropy、Goertzel、R6 quality_check 及 direct helper 全部完成；整階段證據見 [驗收報告](STAGE18_ACCEPTANCE_REPORT_2026-09-15.md)。
 
 ## 現況與範圍
 
@@ -36,7 +36,7 @@
 | entropy clean／state／MI | raw／filtered 隨實際 bandpass 設定；逐窗診斷、CSV／audit、來源 reader 及配套品質圖完成。denoised MI 保持 disabled／model_output，ordinary state 明示未評分。 |
 | Goertzel | 全 filtered 通道評分、取指定通道 legacy overall；raw sat／PTP／max diff、filtered edge shift。診斷／CSV／來源 reader／品質標記及缺口斷線完成。 |
 | quality_check samples／anomalies | samples raw／filtered 分階段評分；anomalies raw 窗口評分。兩路診斷、CSV／sidecar／來源 reader 與圖形完成；NaN qmed 明確 flagged。 |
-| event 舊直接 helper | 舊 `compute_quality_windowed` 不等同已驗收的 main 路徑，待單獨盤點及遷移。 |
+| event 舊直接 helper → `plot_custom_markers` | raw 單通道 legacy score 保留；新增逐窗 diagnostics、CSV／sidecar／來源 reader、品質圖與缺口標記。舊雙值 API／外部 scorer 簽名保留。 |
 
 - [raw 呼叫端增量](STAGE18_RAW_CALLERS_REPORT_2026-09-11.md) 固定 `legacy_overall`，診斷有效性與分數門檻分別保存；短窗、非有限與 scorer 例外有原因，外部舊 scorer 明示 unavailable。
 - `lilia/quality_audit.py` 在呼叫端綁定實際 raw stage，保留注入 scorer 舊簽名；新表宣告 `quality_diagnostics_version=1`，四個 CSV 診斷欄位與 sidecar 逐窗資料必須一致。舊表缺少整組診斷時仍可讀，不推定有效。
@@ -47,8 +47,8 @@
 - [Goertzel 增量](STAGE18_GOERTZEL_QUALITY_REPORT_2026-09-15.md) 完成 336 tests／19 案例及污染 helper／354 陣列精確對照、36 reader 檢查與七圖目視。`fs=int(fs)`、hard 規則、平滑方法及例外向外傳遞保留；reader 重建來源特徵／品質及整數窗口，cache 重繪載回 audit。舊完整表可讀，歷史 fallback／external 的可驗證限制沿用共用契約。
 - [R6 quality_check 增量](STAGE18_QUALITY_CHECK_REPORT_2026-09-15.md) 完成 345 tests／20 案例及污染 helper／974 陣列精確對照、970 表格列／17 來源 reader 與八圖目視。samples 保存 raw／filtered 實際 stage，anomalies raw 保存原 features；reader 重建來源段、分數、診斷及異常原因。只有 NaN qmed 的三列原因／severity 有意修正，有限分數、門檻、窗口與抽樣政策保留。
 
-## 剩餘 helper 與整階段完成條件
+## 整階段相容條件
 
-- 逐呼叫端保存 raw／filtered stage 與診斷，保留注入 scorer／舊 API 相容性；各種 CSV／audit reader 要能核對新欄位，不能只在 scorer 回傳後丟棄。
+- 各呼叫端保存實際 raw／filtered stage 與診斷，保留注入 scorer／舊 API 相容性；CSV／audit reader 核對新欄位。
 - 對照既有接受／排除窗口，明示是否採用 `usable_overall`；任何改變都須記錄具體窗口與原因，不在 metadata 重構中暗改篩選政策。
-- 確認品質圖能區分無效／低分及例外；真實資料、污染／短窗／強制例外與完整檢查完成後，才把第十八階段標為完成。
+- 品質圖區分無效／低分及不可用診斷；真實資料、污染／短窗／強制例外、整階段既有證據及完整檢查已通過。方法門檻與校準另列下一單元。

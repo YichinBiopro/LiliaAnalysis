@@ -1,0 +1,4 @@
+window_start_idx,window_end_idx,window_center_us,score_window_start_idx,score_window_end_idx,score_center_us,quality_ch1,crosses_gap,quality_good,quality_diagnostic_state,quality_diagnostic_reason,quality_stage,quality_score_policy
+0,2500,2500000,0,2500,2500000,,False,False,unavailable,"[""scorer_diagnostics_unavailable""]",raw,legacy_overall
+2500,5000,7500000,2500,5000,7500000,,False,False,unavailable,"[""scorer_diagnostics_unavailable""]",raw,legacy_overall
+5000,7500,12500000,5000,7500,12500000,,False,False,unavailable,"[""scorer_diagnostics_unavailable""]",raw,legacy_overall

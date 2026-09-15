@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-16T02:15:40.673196+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/direct_quality_helper_visual_final/gap_plot_new/plot.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/direct_quality_helper_visual_final/fallback_plot_new/plot.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/direct_quality_helper_visual_final/external_plot_new/plot.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/direct_quality_helper_visual_final/nan_plot_new/plot.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/direct_quality_helper_visual_final/visual_review.json",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/direct_quality_helper_visual_final/external_plot_new/plot.png": "1fa5953aca571ef9536ca6e50a53c9dadf9f85173fa2d8afe09abdba6ac383dc",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/direct_quality_helper_visual_final/fallback_plot_new/plot.png": "af147f8306094f3ac4d84b18a0bccd46d8b3f8eb53fcc88f11cd1c682ad9360f",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/direct_quality_helper_visual_final/gap_plot_new/plot.png": "7b6b5bf0b9dea4df6bda6dbbb689a2163c77dda6e933c13a5e7f3ac492f7ba27",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/direct_quality_helper_visual_final/nan_plot_new/plot.png": "28e44ae0a1ce6dcbecbf80de66f115e9b34d7ed6d22f2a8ee4c8e576ceb98905",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/direct_quality_helper_visual_final/visual_manifest.json": "52929eba144f4b186e393e02dfad5f55ec3d033c89b41381917938e2e8b23996",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/direct_quality_helper_visual_final/visual_review.json": "14d8de41b986b0abdf6b3d3d5217c9a940b4645138ef00c88f3b16d3be016c24"
+  },
+  "log": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/direct_quality_helper_visual_final/visual_evidence_publication/evidence.log"
+}

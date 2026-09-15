@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-15",
+  "passed": true,
+  "totals": {
+    "files": 1123,
+    "tables": 204,
+    "comparisons": 24,
+    "checks": 1351
+  },
+  "modules": [
+    {
+      "name": "core",
+      "passed": true,
+      "files": 19,
+      "tables": 0,
+      "comparisons": 1,
+      "total_checks": 20,
+      "summary": "docs/refactor/validation/stage18/final_acceptance/core_evidence/summary.json"
+    },
+    {
+      "name": "raw_callers",
+      "passed": true,
+      "files": 124,
+      "tables": 33,
+      "comparisons": 10,
+      "total_checks": 167,
+      "summary": "docs/refactor/validation/stage18/final_acceptance/raw_callers_evidence/summary.json"
+    },
+    {
+      "name": "tflite_callers",
+      "passed": true,
+      "files": 117,
+      "tables": 18,
+      "comparisons": 9,
+      "total_checks": 144,
+      "summary": "docs/refactor/validation/stage18/final_acceptance/tflite_callers_evidence/summary.json"
+    },
+    {
+      "name": "mi_quality_state",
+      "passed": true,
+      "files": 199,
+      "tables": 48,
+      "comparisons": 1,
+      "total_checks": 248,
+      "summary": "docs/refactor/validation/stage18/final_acceptance/mi_quality_state_evidence/summary.json"
+    },
+    {
+      "name": "entropy_diagnostics",
+      "passed": true,
+      "files": 289,
+      "tables": 66,
+      "comparisons": 1,
+      "total_checks": 356,
+      "summary": "docs/refactor/validation/stage18/final_acceptance/entropy_diagnostics_evidence/summary.json"
+    },
+    {
+      "name": "goertzel_quality",
+      "passed": true,
+      "files": 184,
+      "tables": 18,
+      "comparisons": 1,
+      "total_checks": 203,
+      "summary": "docs/refactor/validation/stage18/final_acceptance/goertzel_quality_evidence/summary.json"
+    },
+    {
+      "name": "quality_check",
+      "passed": true,
+      "files": 136,
+      "tables": 17,
+      "comparisons": 1,
+      "total_checks": 154,
+      "summary": "docs/refactor/validation/stage18/final_acceptance/quality_check_evidence/summary.json"
+    },
+    {
+      "name": "direct_helper",
+      "passed": true,
+      "files": 55,
+      "tables": 4,
+      "comparisons": 0,
+      "total_checks": 59,
+      "summary": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/final_acceptance/direct_helper_public_evidence/summary.json"
+    }
+  ],
+  "local_source_bound_totals": {
+    "files": 1135,
+    "tables": 204,
+    "comparisons": 25,
+    "checks": 1364
+  }
+}

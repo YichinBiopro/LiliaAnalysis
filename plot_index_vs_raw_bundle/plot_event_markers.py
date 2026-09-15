@@ -36,7 +36,8 @@ import matplotlib.ticker as mticker
 from lilia.windowing import continuous_slices, plot_breaks, finite_runs
 import numpy as np
 import pandas as pd
-from lilia.quality_audit import plot_diagnostic_markers, diagnostic_summary, diagnostic_label
+from lilia.quality_audit import (plot_diagnostic_markers, diagnostic_summary,
+                                 diagnostic_label, capture_diagnostics, json_value)
 from lilia.quality import (
     get_eeg_quality_index_v2_parametric,
     get_ibrain_device_eeg_quality_v2_params,
@@ -189,7 +190,8 @@ def read_abs_time_offset(path: str) -> int:
 # ── EEG quality (windowed) ─────────────────────────────────────────────────────
 
 def compute_quality_windowed(time_us: np.ndarray, data: np.ndarray,
-                             win_sec: float = QUALITY_WIN_SEC, fs: float = FS):
+                             win_sec: float = QUALITY_WIN_SEC, fs: float = FS,
+                             *, return_audit: bool = False):
     """
     Slide a non-overlapping window over data and score each window.
 
@@ -210,6 +212,7 @@ def compute_quality_windowed(time_us: np.ndarray, data: np.ndarray,
 
     q_dt      = []
     q_overall = []
+    quality_audit = []
 
     for start in range(0, n - win + 1, step):
         seg = data[start : start + win]            # (win, n_ch)
@@ -221,8 +224,18 @@ def compute_quality_windowed(time_us: np.ndarray, data: np.ndarray,
         )
         q_dt.append(us_to_local_dt(mid_us))
         q_overall.append(result["overall"])        # (n_ch,)
+        if return_audit:
+            quality_audit.append(dict(window_start_idx=start,
+                                      window_end_idx=start + win,
+                                      window_center_us=mid_us,
+                                      legacy_overall=json_value(result['overall']),
+                                      quality_diagnostics=capture_diagnostics(
+                                          result, fs=fs, params=QUALITY_PARAMS,
+                                          n_channels=seg.shape[1], n_samples=win,
+                                          stage='raw')))
 
-    return q_dt, np.array(q_overall)              # (n_windows, n_ch)
+    scores = np.array(q_overall)                  # (n_windows, n_ch)
+    return (q_dt, scores, quality_audit) if return_audit else (q_dt, scores)
 
 
 # ── qEEG windowed computation ──────────────────────────────────────────────────

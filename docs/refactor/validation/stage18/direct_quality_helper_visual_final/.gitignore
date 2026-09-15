@@ -1,0 +1,13 @@
+# Bounded final direct-helper acceptance outputs.
+!*.csv
+!*.png
+!*.svg
+
+# Local source-bound numerical arrays and recording-derived plots stay on this machine.
+/actual.npz
+/expected.npz
+/real_talk_new/
+/real_talk_old/
+/source_bound_manifest.local.json
+/source_manifest.json
+/source_evidence/

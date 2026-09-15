@@ -55,6 +55,7 @@ class PipelineOutputTests(unittest.TestCase):
                 return {'overall': np.zeros(1)}
             with patch.object(plot, 'load_merged_csv', return_value=(t, data)), \
                  patch.object(plot.pem, 'get_eeg_quality_index_v2_parametric', side_effect=score) as scorer, \
+                 patch.object(plot, 'write_custom_marker_quality'), \
                  contextlib.redirect_stdout(io.StringIO()):
                 plot.plot_custom_markers('unused.csv', 'Demo', 1, ['12:00:15'], '2026-05-12',
                                          10, 10, str(root / 'out.png'), str(root / 'out.csv'), fs=200)

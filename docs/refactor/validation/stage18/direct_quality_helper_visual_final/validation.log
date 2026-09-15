@@ -1,0 +1,22 @@
+PASS real_0_ch1: 11 quality windows
+PASS real_0_ch2: 11 quality windows
+PASS real_1_ch1: 12 quality windows
+PASS real_1_ch2: 12 quality windows
+PASS real_2_ch1: 12 quality windows
+PASS real_2_ch2: 12 quality windows
+PASS real_3_ch1: 12 quality windows
+PASS real_3_ch2: 12 quality windows
+PASS real_4_ch1: 12 quality windows
+PASS real_4_ch2: 12 quality windows
+PASS gap: 3 quality windows
+PASS external: 3 quality windows
+PASS nan: 3 quality windows
+PASS fallback: 3 quality windows
+PASS short: 0 quality windows
+PASS error: 0 quality windows
+PASS real_talk: 12 table rows
+PASS gap_plot: 3 table rows
+PASS fallback_plot: 3 table rows
+PASS external_plot: 3 table rows
+PASS nan_plot: 3 table rows
+PASS 16 helper cases + 5 plot cases; 102 exact arrays; 5 source readers

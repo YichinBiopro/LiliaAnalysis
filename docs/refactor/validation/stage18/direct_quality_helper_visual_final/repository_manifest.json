@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "8bc11a3a3d8ac7afc2cebc14701c950985d6d0b1fa7f3412b7f0bebf772cf3b6"
+    },
+    {
+      "path": "external_plot_new/plot.png",
+      "sha256": "1fa5953aca571ef9536ca6e50a53c9dadf9f85173fa2d8afe09abdba6ac383dc"
+    },
+    {
+      "path": "external_plot_new/plot.svg",
+      "sha256": "36e4734559dde4428af0967f68b492c1dcc3ca98f5dc8d14bea9ed8e1816a9b8"
+    },
+    {
+      "path": "external_plot_new/run.log",
+      "sha256": "a284b216adf3171a3cbb0076d812be6a05f66d185b7903fabdb3f602246f6967"
+    },
+    {
+      "path": "external_plot_new/summary.csv",
+      "sha256": "f6bd3c041c52df2b30b4302a7a2456b3c4e5474e7ebd0cc26d8c86f66581e590"
+    },
+    {
+      "path": "external_plot_new/summary_quality_windows.csv",
+      "sha256": "4f8016ed7babd739529c016cf9502b44c008e3139d312ae9ba5a419ee03ddd7f"
+    },
+    {
+      "path": "external_plot_new/summary_quality_windows.csv.meta.json",
+      "sha256": "f976f23573b7ed4bc9655acbc91fe1388cb89c0168f7a492bf9467a28f13f28f"
+    },
+    {
+      "path": "external_plot_old/plot.png",
+      "sha256": "3d73bef80923ae2ffe33fd66411001363bc4c1bd9468d65cc5f12043c3ece20a"
+    },
+    {
+      "path": "external_plot_old/plot.svg",
+      "sha256": "0d3a81b8ac72f2e1673e234c9625d76fca88e55bc203e62cfd5ec289e8fabf64"
+    },
+    {
+      "path": "external_plot_old/run.log",
+      "sha256": "02b60545984b2a27554a69f072517ae53dd8857cf541b91f7a0e30a2b3120b2a"
+    },
+    {
+      "path": "external_plot_old/summary.csv",
+      "sha256": "f6bd3c041c52df2b30b4302a7a2456b3c4e5474e7ebd0cc26d8c86f66581e590"
+    },
+    {
+      "path": "fallback_plot_new/plot.png",
+      "sha256": "af147f8306094f3ac4d84b18a0bccd46d8b3f8eb53fcc88f11cd1c682ad9360f"
+    },
+    {
+      "path": "fallback_plot_new/plot.svg",
+      "sha256": "63276685e12919d28c3c4d120d50cffcb2b94f5647ce854d1a5ccc4f8cd548da"
+    },
+    {
+      "path": "fallback_plot_new/run.log",
+      "sha256": "42ed8fc6b550855580db8c0b4ba6038b1e35cbf789464c15fdd44510f3f9f9aa"
+    },
+    {
+      "path": "fallback_plot_new/summary.csv",
+      "sha256": "d739b795ac6ae011a03b2d28993376af5bc7f148ba1ffa897adc089d0b975764"
+    },
+    {
+      "path": "fallback_plot_new/summary_quality_windows.csv",
+      "sha256": "8a1de31e5edfbecbc2856288bf878edf86664acf3365185f725223cfc3359d72"
+    },
+    {
+      "path": "fallback_plot_new/summary_quality_windows.csv.meta.json",
+      "sha256": "4bf9c3eea0d3ad77bf1071b3017b841442e6671e00dcad5cde3e847d09af29b2"
+    },
+    {
+      "path": "fallback_plot_old/plot.png",
+      "sha256": "1de722735aadead15dfb97aec46058b5d3801f1c2ca8236099386d5761e65f7b"
+    },
+    {
+      "path": "fallback_plot_old/plot.svg",
+      "sha256": "8badcaba7c512d95ea4812857c7825ec2b211d5375b08b23b3d295adcb09b279"
+    },
+    {
+      "path": "fallback_plot_old/run.log",
+      "sha256": "b617aade99a350da948e82cb96d1902cf35bf369898c4041dbfd6e72b173f15f"
+    },
+    {
+      "path": "fallback_plot_old/summary.csv",
+      "sha256": "d739b795ac6ae011a03b2d28993376af5bc7f148ba1ffa897adc089d0b975764"
+    },
+    {
+      "path": "gap_plot_new/plot.png",
+      "sha256": "7b6b5bf0b9dea4df6bda6dbbb689a2163c77dda6e933c13a5e7f3ac492f7ba27"
+    },
+    {
+      "path": "gap_plot_new/plot.svg",
+      "sha256": "991de5e1a6def77f429bd6e83ebf71e188b84f550853728a8d5bd979d58c55b2"
+    },
+    {
+      "path": "gap_plot_new/run.log",
+      "sha256": "9f7fb00f29b19617dda5f7189249929ba0ae0ed29b668d94a74c7a96e416e608"
+    },
+    {
+      "path": "gap_plot_new/summary.csv",
+      "sha256": "d739b795ac6ae011a03b2d28993376af5bc7f148ba1ffa897adc089d0b975764"
+    },
+    {
+      "path": "gap_plot_new/summary_quality_windows.csv",
+      "sha256": "867c5713db5006756b24b03f3a854234bb8beee5f9d31d958be41c358c0fad11"
+    },
+    {
+      "path": "gap_plot_new/summary_quality_windows.csv.meta.json",
+      "sha256": "2824fcd7dc9edcacc0058e8c592c7eae2f4bfe70274720ee31244b61f7897bda"
+    },
+    {
+      "path": "gap_plot_old/plot.png",
+      "sha256": "708b58e1a4fadc4f0959bd745fada8b9422e208da581cc4880289716339f04f9"
+    },
+    {
+      "path": "gap_plot_old/plot.svg",
+      "sha256": "4d6bc3a22c2602952b95930aebb1c1ae6d4d311f523c202ac9193518db2aceb7"
+    },
+    {
+      "path": "gap_plot_old/run.log",
+      "sha256": "e07ed2181be8209b040ee482e4a741e310052b08c5056ddec22f3a527ccf38c5"
+    },
+    {
+      "path": "gap_plot_old/summary.csv",
+      "sha256": "d739b795ac6ae011a03b2d28993376af5bc7f148ba1ffa897adc089d0b975764"
+    },
+    {
+      "path": "nan_plot_new/plot.png",
+      "sha256": "28e44ae0a1ce6dcbecbf80de66f115e9b34d7ed6d22f2a8ee4c8e576ceb98905"
+    },
+    {
+      "path": "nan_plot_new/plot.svg",
+      "sha256": "b566bbcb3cec4333322f4cb59f4f6317dcb2bbc5fa394d8b2242e730410cf06b"
+    },
+    {
+      "path": "nan_plot_new/run.log",
+      "sha256": "5dc2d3927e14264bffa3238dc9f6f793eb3dab48b0a351364616d8f313779c25"
+    },
+    {
+      "path": "nan_plot_new/summary.csv",
+      "sha256": "d739b795ac6ae011a03b2d28993376af5bc7f148ba1ffa897adc089d0b975764"
+    },
+    {
+      "path": "nan_plot_new/summary_quality_windows.csv",
+      "sha256": "e08ea29fa1c1717637a9468f0e759121840cef88fbfc9d7f6cfb535027e22b04"
+    },
+    {
+      "path": "nan_plot_new/summary_quality_windows.csv.meta.json",
+      "sha256": "22d3bf421a4c170f4ac762126cb4da7b2ccaa51e21de1df4567c949032b3ec57"
+    },
+    {
+      "path": "nan_plot_old/plot.png",
+      "sha256": "cb8cd69540c112fa97c7ede1734bbb3b0a0ddfee087a1a9d6eab31119de6f94c"
+    },
+    {
+      "path": "nan_plot_old/plot.svg",
+      "sha256": "997d88af5bb0f84097a63f8360935fd667a250d39237ca962f03f673917a4c85"
+    },
+    {
+      "path": "nan_plot_old/run.log",
+      "sha256": "1091bcf6bbbd7f926407a4cdb84bb911f473ef344dd515f4aaf1cc20ab8db4f6"
+    },
+    {
+      "path": "nan_plot_old/summary.csv",
+      "sha256": "d739b795ac6ae011a03b2d28993376af5bc7f148ba1ffa897adc089d0b975764"
+    },
+    {
+      "path": "plot_event_markers.legacy.txt",
+      "sha256": "d51238453f94af442e8fb10f25c9591981fff7e501f9a85e067be235a648f3c9"
+    },
+    {
+      "path": "plot_index_vs_raw.legacy.txt",
+      "sha256": "01f120d1fc0b247821efb3d1d41278d7ce0fd74f5d867da29a5af3e7129753ba"
+    },
+    {
+      "path": "synthetic_continuous.csv",
+      "sha256": "2ee4a9ef4fd21c0de039e53860eb14cba17baa77fab2b69a7805bd88b4f58574"
+    },
+    {
+      "path": "synthetic_gap.csv",
+      "sha256": "293eba1b64ef06f0419696c721c54ad45dd0760338c6a9df22f4464c7a94a09b"
+    },
+    {
+      "path": "../../../../../lilia/constants.py",
+      "sha256": "e6f087db9eaa89e408bd4c5668eaeca374e4502665f8a51b43e3d27efb59c795"
+    },
+    {
+      "path": "../../../../../lilia/custom_marker_quality_io.py",
+      "sha256": "ffd311b57d1195082a6f6b0006b3e848234b9bf485057bc1d26f21a1efd0f079"
+    },
+    {
+      "path": "../../../../../lilia/io.py",
+      "sha256": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e"
+    },
+    {
+      "path": "../../../../../lilia/qeeg.py",
+      "sha256": "0943e90d793cd8106f8b6262be2342333c89d873675cf0c586e0e7364f35507a"
+    },
+    {
+      "path": "../../../../../lilia/quality.py",
+      "sha256": "9b80325a917c2d82629457c55dc94cd8d014c1534598987553a94c72217ab765"
+    },
+    {
+      "path": "../../../../../lilia/time_utils.py",
+      "sha256": "65e368faf50e10dac21aca98922addf96efc81a36a5c4ee53aa44e594ab56043"
+    },
+    {
+      "path": "../../../../../lilia/windowing.py",
+      "sha256": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c"
+    },
+    {
+      "path": "../../../../../plot_event_markers.py",
+      "sha256": "8f13381d0e024ea05f890903c0587a66bb9d986e9fe1de3a1a4e383b49be1178"
+    },
+    {
+      "path": "../../../../../plot_index_vs_raw.py",
+      "sha256": "a72e170ac7075b39e0bbbbf8e3b48e903ec4e75dbec51430b5a69275994a5884"
+    },
+    {
+      "path": "../../../../../tools/validate_direct_quality_helper_stage18.py",
+      "sha256": "0d8b4fc602e84155137c94a33d18e97ce8b2d02ec5466d38ec8e7e49d79e2636"
+    }
+  ],
+  "tables": [
+    {
+      "path": "gap_plot_new/summary_quality_windows.csv",
+      "kind": "custom_marker_quality",
+      "raw_csv": "synthetic_gap.csv"
+    },
+    {
+      "path": "fallback_plot_new/summary_quality_windows.csv",
+      "kind": "custom_marker_quality",
+      "raw_csv": "synthetic_continuous.csv"
+    },
+    {
+      "path": "external_plot_new/summary_quality_windows.csv",
+      "kind": "custom_marker_quality",
+      "raw_csv": "synthetic_continuous.csv"
+    },
+    {
+      "path": "nan_plot_new/summary_quality_windows.csv",
+      "kind": "custom_marker_quality",
+      "raw_csv": "synthetic_continuous.csv"
+    }
+  ],
+  "comparisons": []
+}

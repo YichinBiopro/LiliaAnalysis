@@ -1,0 +1,2 @@
+marker,marker_local,marker_us_utc,status,baseline_start_local,baseline_end_local,post_start_local,post_end_local,baseline_windows,post_windows,focus_baseline,focus_post_mean,focus_delta,flow_baseline,flow_post_mean,flow_delta,calm_baseline,calm_post_mean,calm_delta,relaxation_baseline,relaxation_post_mean,relaxation_delta
+08:00:05,1970-01-01 08:00:05,5000000,baseline_or_post_unavailable,1970-01-01 08:00:00,1970-01-01 08:00:05,1970-01-01 08:00:05,1970-01-01 08:00:10,0,0,,,,,,,,,,,,
