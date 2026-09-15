@@ -1,0 +1,951 @@
+{
+  "kind": "state_band_entropy",
+  "schema_version": 1,
+  "index_space": "raw_samples",
+  "source_path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+  "source_id": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883",
+  "parameters": {
+    "fs": 500.0,
+    "channel": 1,
+    "win_sec": 2.0,
+    "step_sec": 2.0,
+    "ranges": {
+      "baseline": [
+        0.0,
+        4.0
+      ],
+      "event": [
+        4.0,
+        8.0
+      ]
+    },
+    "clean": true,
+    "quality_threshold": 0.5,
+    "quality_state_version": 1,
+    "quality_diagnostics_version": 1,
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "quality_channels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "quality_params": {
+      "flat_weight": 0.0,
+      "spectrum_weight": 1.0,
+      "kurtosis_weight": 0.0,
+      "corr_weight": 0.0
+    },
+    "saturation_fraction_max": 0.02,
+    "saturation_rail": 2048.0,
+    "window_policy": "interval_first_sample_reset_per_segment_complete_only",
+    "aggregation": "equal_window_mean_psd_and_separate_per_window_entropy",
+    "bands": [
+      [
+        "theta",
+        [
+          4.0,
+          8.0
+        ]
+      ],
+      [
+        "alpha",
+        [
+          8.0,
+          13.0
+        ]
+      ],
+      [
+        "beta",
+        [
+          13.0,
+          30.0
+        ]
+      ]
+    ],
+    "welch_nperseg": null,
+    "welch_noverlap": null
+  },
+  "config_id": "dd32b92dfb65d8dfe2188506d2bb391ea2406fb6766f46ce73c1fa0a56ed4e90",
+  "states": {
+    "baseline": {
+      "lo_us": 0,
+      "hi_us": 4000000,
+      "windows": [
+        {
+          "window_start_idx": 0,
+          "window_end_idx": 1000,
+          "window_start_us": 0,
+          "window_end_us": 2000000,
+          "window_center_us": 1000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "scored",
+          "quality": 0.5,
+          "saturation_fraction": 0.0,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "invalid",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": {
+                "flat_weight": 0.0,
+                "spectrum_weight": 1.0,
+                "kurtosis_weight": 0.0,
+                "corr_weight": 0.0
+              },
+              "stage": "filtered",
+              "n_channels": 8,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "spectrum:exception:RuntimeError"
+            ],
+            "result": {
+              "overall": [
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5
+              ],
+              "detail": {
+                "spectrum": [
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5
+                ]
+              },
+              "valid": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              "invalid_reasons": [
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ]
+              ],
+              "component_valid": {
+                "spectrum": [
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              },
+              "component_reasons": {
+                "spectrum": [
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ]
+                ]
+              },
+              "context": {
+                "profile": "legacy_v2",
+                "preset": "custom",
+                "stage": "filtered",
+                "fs": 500.0,
+                "parameters": {
+                  "target_score": 0.8,
+                  "flat_activity_k": 0.8,
+                  "spectrum_fit_hi": 45.0,
+                  "flat_ratio_start": 0.3,
+                  "flat_penalty_floor": 0.2,
+                  "spike_ratio_start": 0.0001,
+                  "spike_ratio_end": 0.0015,
+                  "spike_penalty_floor": 0.2,
+                  "clip_ratio_start": 0.001,
+                  "clip_ratio_end": 0.01,
+                  "clip_penalty_floor": 0.2,
+                  "range_start": 6.0,
+                  "range_end": 12.0,
+                  "range_penalty_floor": 0.3,
+                  "slope_good_low": -3.5,
+                  "slope_center": -2.0,
+                  "slope_good_high": -0.5,
+                  "slope_edge_score": 0.4,
+                  "slope_outer_floor": 0.2,
+                  "alpha_dpr_good": 0.55,
+                  "alpha_dpr_bad": 0.8,
+                  "alpha_artifact_floor": 0.5,
+                  "nonalpha_dpr_good": 0.25,
+                  "nonalpha_dpr_bad": 0.5,
+                  "nonalpha_artifact_floor": 0.1,
+                  "low_freq_penalty_floor": 0.3,
+                  "low_freq_penalty_ceiling": 0.7,
+                  "line_noise_penalty_floor": 0.4,
+                  "line_noise_penalty_ceiling": 0.7,
+                  "kurtosis_good_low": 2.0,
+                  "kurtosis_good_high": 8.0,
+                  "kurtosis_bad_high": 15.0,
+                  "kurtosis_floor": 0.2,
+                  "corr_low": 0.2,
+                  "corr_mid": 0.4,
+                  "corr_high": 0.9,
+                  "corr_floor": 0.3,
+                  "corr_low_score": 0.75,
+                  "corr_mid_score": 0.9,
+                  "flat_weight": 0.0,
+                  "spectrum_weight": 1.0,
+                  "kurtosis_weight": 0.0,
+                  "corr_weight": 0.0
+                },
+                "active_components": [
+                  "spectrum"
+                ],
+                "n_channels": 8,
+                "n_samples": 1000,
+                "fallback_policy": "preserve_legacy_values_and_mark_invalid",
+                "flat_window_policy": "legacy_exclusive_stop",
+                "corr_single_channel_policy": "identity",
+                "deprecated_parameters": [
+                  "alpha_artifact_floor",
+                  "alpha_dpr_bad",
+                  "alpha_dpr_good",
+                  "line_noise_penalty_ceiling",
+                  "line_noise_penalty_floor",
+                  "low_freq_penalty_ceiling",
+                  "low_freq_penalty_floor",
+                  "nonalpha_artifact_floor",
+                  "nonalpha_dpr_bad",
+                  "nonalpha_dpr_good",
+                  "target_score"
+                ],
+                "config_id": "526d3284f1b6481ba8d276de41c5be492c6d0eb1ebbda74ef0feb147985d5bfc"
+              }
+            }
+          }
+        },
+        {
+          "window_start_idx": 1000,
+          "window_end_idx": 2000,
+          "window_start_us": 2000000,
+          "window_end_us": 4000000,
+          "window_center_us": 3000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "scored",
+          "quality": 0.5,
+          "saturation_fraction": 0.0,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "invalid",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": {
+                "flat_weight": 0.0,
+                "spectrum_weight": 1.0,
+                "kurtosis_weight": 0.0,
+                "corr_weight": 0.0
+              },
+              "stage": "filtered",
+              "n_channels": 8,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "spectrum:exception:RuntimeError"
+            ],
+            "result": {
+              "overall": [
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5
+              ],
+              "detail": {
+                "spectrum": [
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5
+                ]
+              },
+              "valid": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              "invalid_reasons": [
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ]
+              ],
+              "component_valid": {
+                "spectrum": [
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              },
+              "component_reasons": {
+                "spectrum": [
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ]
+                ]
+              },
+              "context": {
+                "profile": "legacy_v2",
+                "preset": "custom",
+                "stage": "filtered",
+                "fs": 500.0,
+                "parameters": {
+                  "target_score": 0.8,
+                  "flat_activity_k": 0.8,
+                  "spectrum_fit_hi": 45.0,
+                  "flat_ratio_start": 0.3,
+                  "flat_penalty_floor": 0.2,
+                  "spike_ratio_start": 0.0001,
+                  "spike_ratio_end": 0.0015,
+                  "spike_penalty_floor": 0.2,
+                  "clip_ratio_start": 0.001,
+                  "clip_ratio_end": 0.01,
+                  "clip_penalty_floor": 0.2,
+                  "range_start": 6.0,
+                  "range_end": 12.0,
+                  "range_penalty_floor": 0.3,
+                  "slope_good_low": -3.5,
+                  "slope_center": -2.0,
+                  "slope_good_high": -0.5,
+                  "slope_edge_score": 0.4,
+                  "slope_outer_floor": 0.2,
+                  "alpha_dpr_good": 0.55,
+                  "alpha_dpr_bad": 0.8,
+                  "alpha_artifact_floor": 0.5,
+                  "nonalpha_dpr_good": 0.25,
+                  "nonalpha_dpr_bad": 0.5,
+                  "nonalpha_artifact_floor": 0.1,
+                  "low_freq_penalty_floor": 0.3,
+                  "low_freq_penalty_ceiling": 0.7,
+                  "line_noise_penalty_floor": 0.4,
+                  "line_noise_penalty_ceiling": 0.7,
+                  "kurtosis_good_low": 2.0,
+                  "kurtosis_good_high": 8.0,
+                  "kurtosis_bad_high": 15.0,
+                  "kurtosis_floor": 0.2,
+                  "corr_low": 0.2,
+                  "corr_mid": 0.4,
+                  "corr_high": 0.9,
+                  "corr_floor": 0.3,
+                  "corr_low_score": 0.75,
+                  "corr_mid_score": 0.9,
+                  "flat_weight": 0.0,
+                  "spectrum_weight": 1.0,
+                  "kurtosis_weight": 0.0,
+                  "corr_weight": 0.0
+                },
+                "active_components": [
+                  "spectrum"
+                ],
+                "n_channels": 8,
+                "n_samples": 1000,
+                "fallback_policy": "preserve_legacy_values_and_mark_invalid",
+                "flat_window_policy": "legacy_exclusive_stop",
+                "corr_single_channel_policy": "identity",
+                "deprecated_parameters": [
+                  "alpha_artifact_floor",
+                  "alpha_dpr_bad",
+                  "alpha_dpr_good",
+                  "line_noise_penalty_ceiling",
+                  "line_noise_penalty_floor",
+                  "low_freq_penalty_ceiling",
+                  "low_freq_penalty_floor",
+                  "nonalpha_artifact_floor",
+                  "nonalpha_dpr_bad",
+                  "nonalpha_dpr_good",
+                  "target_score"
+                ],
+                "config_id": "526d3284f1b6481ba8d276de41c5be492c6d0eb1ebbda74ef0feb147985d5bfc"
+              }
+            }
+          }
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 2,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 2,
+      "n_accepted_epochs": 2,
+      "per_window_entropy": [
+        1.106801315493383,
+        1.2810634887720618
+      ],
+      "per_window_entropy_norm": [
+        0.698313881236805,
+        0.8082610712803485
+      ]
+    },
+    "event": {
+      "lo_us": 4000000,
+      "hi_us": 8000000,
+      "windows": [
+        {
+          "window_start_idx": 2000,
+          "window_end_idx": 3000,
+          "window_start_us": 4000000,
+          "window_end_us": 6000000,
+          "window_center_us": 5000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "scored",
+          "quality": 0.5,
+          "saturation_fraction": 0.0,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "invalid",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": {
+                "flat_weight": 0.0,
+                "spectrum_weight": 1.0,
+                "kurtosis_weight": 0.0,
+                "corr_weight": 0.0
+              },
+              "stage": "filtered",
+              "n_channels": 8,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "spectrum:exception:RuntimeError"
+            ],
+            "result": {
+              "overall": [
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5
+              ],
+              "detail": {
+                "spectrum": [
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5
+                ]
+              },
+              "valid": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              "invalid_reasons": [
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ]
+              ],
+              "component_valid": {
+                "spectrum": [
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              },
+              "component_reasons": {
+                "spectrum": [
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ]
+                ]
+              },
+              "context": {
+                "profile": "legacy_v2",
+                "preset": "custom",
+                "stage": "filtered",
+                "fs": 500.0,
+                "parameters": {
+                  "target_score": 0.8,
+                  "flat_activity_k": 0.8,
+                  "spectrum_fit_hi": 45.0,
+                  "flat_ratio_start": 0.3,
+                  "flat_penalty_floor": 0.2,
+                  "spike_ratio_start": 0.0001,
+                  "spike_ratio_end": 0.0015,
+                  "spike_penalty_floor": 0.2,
+                  "clip_ratio_start": 0.001,
+                  "clip_ratio_end": 0.01,
+                  "clip_penalty_floor": 0.2,
+                  "range_start": 6.0,
+                  "range_end": 12.0,
+                  "range_penalty_floor": 0.3,
+                  "slope_good_low": -3.5,
+                  "slope_center": -2.0,
+                  "slope_good_high": -0.5,
+                  "slope_edge_score": 0.4,
+                  "slope_outer_floor": 0.2,
+                  "alpha_dpr_good": 0.55,
+                  "alpha_dpr_bad": 0.8,
+                  "alpha_artifact_floor": 0.5,
+                  "nonalpha_dpr_good": 0.25,
+                  "nonalpha_dpr_bad": 0.5,
+                  "nonalpha_artifact_floor": 0.1,
+                  "low_freq_penalty_floor": 0.3,
+                  "low_freq_penalty_ceiling": 0.7,
+                  "line_noise_penalty_floor": 0.4,
+                  "line_noise_penalty_ceiling": 0.7,
+                  "kurtosis_good_low": 2.0,
+                  "kurtosis_good_high": 8.0,
+                  "kurtosis_bad_high": 15.0,
+                  "kurtosis_floor": 0.2,
+                  "corr_low": 0.2,
+                  "corr_mid": 0.4,
+                  "corr_high": 0.9,
+                  "corr_floor": 0.3,
+                  "corr_low_score": 0.75,
+                  "corr_mid_score": 0.9,
+                  "flat_weight": 0.0,
+                  "spectrum_weight": 1.0,
+                  "kurtosis_weight": 0.0,
+                  "corr_weight": 0.0
+                },
+                "active_components": [
+                  "spectrum"
+                ],
+                "n_channels": 8,
+                "n_samples": 1000,
+                "fallback_policy": "preserve_legacy_values_and_mark_invalid",
+                "flat_window_policy": "legacy_exclusive_stop",
+                "corr_single_channel_policy": "identity",
+                "deprecated_parameters": [
+                  "alpha_artifact_floor",
+                  "alpha_dpr_bad",
+                  "alpha_dpr_good",
+                  "line_noise_penalty_ceiling",
+                  "line_noise_penalty_floor",
+                  "low_freq_penalty_ceiling",
+                  "low_freq_penalty_floor",
+                  "nonalpha_artifact_floor",
+                  "nonalpha_dpr_bad",
+                  "nonalpha_dpr_good",
+                  "target_score"
+                ],
+                "config_id": "526d3284f1b6481ba8d276de41c5be492c6d0eb1ebbda74ef0feb147985d5bfc"
+              }
+            }
+          }
+        },
+        {
+          "window_start_idx": 3000,
+          "window_end_idx": 4000,
+          "window_start_us": 6000000,
+          "window_end_us": 8000000,
+          "window_center_us": 7000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "scored",
+          "quality": 0.5,
+          "saturation_fraction": 0.0,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "invalid",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": {
+                "flat_weight": 0.0,
+                "spectrum_weight": 1.0,
+                "kurtosis_weight": 0.0,
+                "corr_weight": 0.0
+              },
+              "stage": "filtered",
+              "n_channels": 8,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "spectrum:exception:RuntimeError"
+            ],
+            "result": {
+              "overall": [
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5
+              ],
+              "detail": {
+                "spectrum": [
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5,
+                  0.5
+                ]
+              },
+              "valid": [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              "invalid_reasons": [
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ],
+                [
+                  "spectrum:exception:RuntimeError"
+                ]
+              ],
+              "component_valid": {
+                "spectrum": [
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false
+                ]
+              },
+              "component_reasons": {
+                "spectrum": [
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ],
+                  [
+                    "exception:RuntimeError"
+                  ]
+                ]
+              },
+              "context": {
+                "profile": "legacy_v2",
+                "preset": "custom",
+                "stage": "filtered",
+                "fs": 500.0,
+                "parameters": {
+                  "target_score": 0.8,
+                  "flat_activity_k": 0.8,
+                  "spectrum_fit_hi": 45.0,
+                  "flat_ratio_start": 0.3,
+                  "flat_penalty_floor": 0.2,
+                  "spike_ratio_start": 0.0001,
+                  "spike_ratio_end": 0.0015,
+                  "spike_penalty_floor": 0.2,
+                  "clip_ratio_start": 0.001,
+                  "clip_ratio_end": 0.01,
+                  "clip_penalty_floor": 0.2,
+                  "range_start": 6.0,
+                  "range_end": 12.0,
+                  "range_penalty_floor": 0.3,
+                  "slope_good_low": -3.5,
+                  "slope_center": -2.0,
+                  "slope_good_high": -0.5,
+                  "slope_edge_score": 0.4,
+                  "slope_outer_floor": 0.2,
+                  "alpha_dpr_good": 0.55,
+                  "alpha_dpr_bad": 0.8,
+                  "alpha_artifact_floor": 0.5,
+                  "nonalpha_dpr_good": 0.25,
+                  "nonalpha_dpr_bad": 0.5,
+                  "nonalpha_artifact_floor": 0.1,
+                  "low_freq_penalty_floor": 0.3,
+                  "low_freq_penalty_ceiling": 0.7,
+                  "line_noise_penalty_floor": 0.4,
+                  "line_noise_penalty_ceiling": 0.7,
+                  "kurtosis_good_low": 2.0,
+                  "kurtosis_good_high": 8.0,
+                  "kurtosis_bad_high": 15.0,
+                  "kurtosis_floor": 0.2,
+                  "corr_low": 0.2,
+                  "corr_mid": 0.4,
+                  "corr_high": 0.9,
+                  "corr_floor": 0.3,
+                  "corr_low_score": 0.75,
+                  "corr_mid_score": 0.9,
+                  "flat_weight": 0.0,
+                  "spectrum_weight": 1.0,
+                  "kurtosis_weight": 0.0,
+                  "corr_weight": 0.0
+                },
+                "active_components": [
+                  "spectrum"
+                ],
+                "n_channels": 8,
+                "n_samples": 1000,
+                "fallback_policy": "preserve_legacy_values_and_mark_invalid",
+                "flat_window_policy": "legacy_exclusive_stop",
+                "corr_single_channel_policy": "identity",
+                "deprecated_parameters": [
+                  "alpha_artifact_floor",
+                  "alpha_dpr_bad",
+                  "alpha_dpr_good",
+                  "line_noise_penalty_ceiling",
+                  "line_noise_penalty_floor",
+                  "low_freq_penalty_ceiling",
+                  "low_freq_penalty_floor",
+                  "nonalpha_artifact_floor",
+                  "nonalpha_dpr_bad",
+                  "nonalpha_dpr_good",
+                  "target_score"
+                ],
+                "config_id": "526d3284f1b6481ba8d276de41c5be492c6d0eb1ebbda74ef0feb147985d5bfc"
+              }
+            }
+          }
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 2,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 2,
+      "n_accepted_epochs": 2,
+      "per_window_entropy": [
+        1.4165178916794274,
+        1.3285153551688722
+      ],
+      "per_window_entropy_norm": [
+        0.8937232843268617,
+        0.8381998656525939
+      ]
+    }
+  },
+  "audit_id": "7b7327dfb56c38a3c07b91c348cd2677448f006f5b41f2f05318221de6922a95",
+  "code_sha256": "d93f9691bea7521fc2d29b92b864d1762993bfcba586e1caaef1f3d39d008b3f",
+  "table_sha256": "2c581e919b6859319329c2f717988f73ae90e58c4e2377e4f3dd170f02f639bd",
+  "quality_diagnostics_version": 1
+}

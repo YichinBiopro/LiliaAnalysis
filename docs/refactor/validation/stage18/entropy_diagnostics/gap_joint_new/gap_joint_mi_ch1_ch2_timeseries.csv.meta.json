@@ -1,0 +1,160 @@
+{
+  "kind": "joint_mi",
+  "schema_version": 1,
+  "source_id": "3b1ed12591a6d9bdd1f34dbd32e8c7f52e5e8707dc7ba3f1ade7272d69a392fe",
+  "source_path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/gap.csv",
+  "source_samples": 4000,
+  "source_epoch_us": 0,
+  "config_id": "3988ce9919399e085d5c5cac3dddf691fddb8b5b1feafef0251c8631ea8a159a",
+  "parameters": {
+    "fs": 500.0,
+    "channels": [
+      1,
+      2
+    ],
+    "win_sec": 2.0,
+    "step_sec": 1.0,
+    "win_samples": 1000,
+    "step_samples": 500,
+    "bandpass": null,
+    "quality_enabled": false,
+    "quality_threshold": 0.5,
+    "quality_state_version": 1,
+    "quality_params": null,
+    "quality_channels": [
+      1,
+      2
+    ],
+    "quality_reduction": "channel median",
+    "mi_bins": 8,
+    "mi_binning": "quantile",
+    "denoise": false,
+    "grid_policy": "original sample grid; complete continuous windows; gap > 3 sample periods",
+    "code_sha256": "21eac333681197b611c601f3a7a367da0f5acf52d82076d37e3373a0a691fdd9"
+  },
+  "code_sha256": "21eac333681197b611c601f3a7a367da0f5acf52d82076d37e3373a0a691fdd9",
+  "table_sha256": "df44d586aa098be2ed99136058612d1767c5f970f668abe54a8ec8c0c057cb05",
+  "quality_diagnostics_version": 1,
+  "quality_audit": [
+    {
+      "window_start_idx": 0,
+      "window_end_idx": 1000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "raw",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 500,
+      "window_end_idx": 1500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "raw",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 1000,
+      "window_end_idx": 2000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "raw",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 2000,
+      "window_end_idx": 3000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "raw",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 2500,
+      "window_end_idx": 3500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "raw",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 3000,
+      "window_end_idx": 4000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "raw",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    }
+  ]
+}

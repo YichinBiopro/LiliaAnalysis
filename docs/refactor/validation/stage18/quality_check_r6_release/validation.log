@@ -1,0 +1,23 @@
+/home/bps-yichin/.config/matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /tmp/matplotlib-ghq7i70i because there was an issue with the default path (/home/bps-yichin/.config/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+PASS jenqwei_0: 11 table rows, 0 intended NaN changes
+PASS jenqwei_1: 12 table rows, 0 intended NaN changes
+PASS jenqwei_2: 12 table rows, 0 intended NaN changes
+PASS jenqwei_3: 12 table rows, 0 intended NaN changes
+PASS jenqwei_4: 12 table rows, 0 intended NaN changes
+PASS real_sample: 4 table rows, 0 intended NaN changes
+PASS real_anomaly: 850 table rows, 0 intended NaN changes
+PASS synthetic_sample: 4 table rows, 0 intended NaN changes
+PASS fallback_sample: 4 table rows, 0 intended NaN changes
+PASS external_sample: 4 table rows, 0 intended NaN changes
+PASS short_sample: 0 table rows, 0 intended NaN changes
+PASS gap_anomaly: 3 table rows, 0 intended NaN changes
+PASS half_anomaly: 30 table rows, 0 intended NaN changes
+PASS fallback_anomaly: 3 table rows, 0 intended NaN changes
+PASS external_anomaly: 3 table rows, 0 intended NaN changes
+PASS nan_anomaly: 3 table rows, 3 intended NaN changes
+PASS all_rejected_anomaly: 3 table rows, 0 intended NaN changes
+PASS empty_anomaly: 0 table rows, 0 intended NaN changes
+PASS nonfinite_anomaly: 0 table rows, 0 intended NaN changes
+PASS nonfinite_sample: 0 table rows, 0 intended NaN changes
+PASS 20 cases + polluted helper; 974 exact arrays; 17 source readers

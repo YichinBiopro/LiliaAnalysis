@@ -1,6 +1,6 @@
 # 階段任務單
 
-只讀當前卡片。14–17 已完成；當前為 18 品質 scorer，核心、共用 raw 與 TFLite baseline／summary 增量已驗收，其餘直接／filtered 呼叫端待完成。
+只讀當前卡片。14–17 已完成；當前為 18 品質 scorer，核心、共用 raw、TFLite、entropy、Goertzel 與 R6 quality_check 增量已驗收，剩餘 direct helper 待完成。
 所有任務共用 [WORKFLOW](WORKFLOW.md) 的驗證與收尾規則。方法校準另立任務，勿混入等價搬移。
 
 <a id="stage-14"></a>
@@ -52,18 +52,21 @@
 - Git：第十六階段後半及第十七階段已提交 `ef9eada`；代表圖／manifest 補提交 `23aa2df`，未 push。下一工作單元為第十八階段品質 scorer。
 
 <a id="stage-18"></a>
-## 18：品質 scorer — 進行中（核心、raw 與 TFLite 呼叫端已驗收）
+## 18：品質 scorer — 進行中（核心、raw、TFLite、entropy、Goertzel 與 R6 quality_check 已驗收）
 
 - 目標：`lilia/quality.py` 與品質呼叫端／audit／圖形；[盤點與契約](STAGE18_QUALITY_INVENTORY.md)。
 - 已實作：保留 legacy overall／detail，新增 valid／invalid reasons、component diagnostics、usable_overall、preset／stage／config context；主版與兩份 bundle 同步。
 - 舊基準：`23aa2df` 的四 presets、五真實來源 raw／BP 118 窗口，加合成邊界共 130 輸入／520 評分／1,950 陣列；數值與 NaN 位置精確一致。
 - 核心：[報告](STAGE18_CORE_REPORT_2026-09-10.md)，已提交 `a0a7ba6`，未 push。
-- 前增量：[raw 呼叫端報告](STAGE18_RAW_CALLERS_REPORT_2026-09-11.md)。event qEEG／event markers／zoom／subject comparison 的逐窗診斷、CSV／audit／來源 reader 完成；event 品質圖明示無效／不可用及實際 preset。尚未提交。
-- 本增量：[TFLite 呼叫端報告](STAGE18_TFLITE_CALLERS_REPORT_2026-09-11.md)。baseline filtered／Before filtered_resampled／After model_output 三種 stage、子窗口 audit／來源 reader／品質圖完成；legacy sampler 亦保存診斷，短路及 API 相容語義保留。尚未提交。
-- 最新驗證：317 tests／0 skipped、176 Python 靜態／bundle；九案例共 107 qEEG 窗口／271 模型窗口／510 子窗口，9 NPZ 組共 399 陣列、18 表重讀，最大誤差與選取差異均 0，三圖目視通過。
+- 前增量：[raw 呼叫端報告](STAGE18_RAW_CALLERS_REPORT_2026-09-11.md)。event qEEG／event markers／zoom／subject comparison 的逐窗診斷、CSV／audit／來源 reader 完成；event 品質圖明示無效／不可用及實際 preset。程式已提交 `40d2a23`，驗收 CSV／圖有漏提交。
+- TFLite 增量：[報告](STAGE18_TFLITE_CALLERS_REPORT_2026-09-11.md)。baseline filtered／Before filtered_resampled／After model_output 三種 stage、子窗口 audit／來源 reader／品質圖完成；legacy sampler 亦保存診斷，短路及 API 相容語義保留。程式已提交 `40d2a23`，產物漏提交詳見 R3。
+- 前增量驗證：當時 317 tests／0 skipped、176 Python 靜態／bundle；九案例共 107 qEEG 窗口／271 模型窗口／510 子窗口，9 NPZ 組共 399 陣列、18 表重讀，最大誤差與選取差異均 0，三圖目視通過。
+- entropy：[entropy 診斷增量](STAGE18_ENTROPY_DIAGNOSTICS_REPORT_2026-09-15.md)：R2／R4 的 raw／filtered stage、component 診斷、來源 reader 與品質圖完成；327 tests／0 skipped、180 Python 靜態／bundle，35 案例、714 陣列精確相同、77 reader 檢查、五圖目視。R3 的 73 檔已由 `0dd9ff3` 補提交。
+- R5：[Goertzel 增量](STAGE18_GOERTZEL_QUALITY_REPORT_2026-09-15.md)：filtered 品質診斷、raw／filtered artifact 來源、CSV／reader／品質標記與四面板缺口斷線完成；336 tests／0 skipped、354 陣列精確相同、36 reader 檢查、七圖目視。舊 rolling median 保留，分段平滑另待方法校準。
+- 最新：[R6 quality_check 增量](STAGE18_QUALITY_CHECK_REPORT_2026-09-15.md)：NaN qmed 明確列異常；samples raw／filtered 與 anomalies raw 保存診斷、CSV／sidecar／來源 reader、圖形。345 tests／0 skipped、188 Python 靜態／bundle；20 案例及污染 helper、974 陣列精確相同、970 表格列／17 來源 reader、八圖目視。三個 NaN 異常原因／severity 有意修正，有限分數與接受政策不變。
 - 相容政策：仍用 `legacy_overall`，診斷無效不暗改既有接受／排除結果；注入舊 scorer 明示 unavailable，無診斷的舊表仍可讀。原始 stage 與 BP／模型分析 branch 不混用。
-- 下一步：`spectral_entropy.py` clean／state／MI，再接 `plot_goertzel_vs_raw.py`、`quality_check.py` 與剩餘直接 helper；逐入口核對 stage、CSV／audit／reader、圖形及品質窗口選取差異。
-- 起始測試：`python tools/refactor_check.py check --tests tests/test_quality_diagnostics_regression.py tests/test_quality_audit_regression.py tests/test_tflite_quality_regression.py tests/test_tflite_baseline_regression.py`；接手 entropy 後按盤點加入其專屬測試。
+- 下一步：剩餘 direct helper（含 event 舊 `compute_quality_windowed`），再做第十八階段整體收斂驗收。R1–R6 已完成；程式、文件與最終驗收證據按來源與產物分類納入 Git，正式錄製副本與重複開發期 run 留本機；推送狀態以分支遠端為準。
+- 下一工作單元起始測試：按剩餘 helper 的實際 caller 選 `tests/test_event_qeeg_regression.py`、`tests/test_quality_audit_regression.py` 等專屬測試；R6 已新增 `tests/test_quality_check_diagnostics_regression.py`，不重跑無變更的真實數值對照。
 - 完成條件：callers／readers／圖形與 preset／stage 全程可追蹤；真實數值、短窗／污染／fallback、接受排除差異、目視及完整檢查。尚未完成。
 
 ## 入口遷移後的其餘待辦（尚未編號）

@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "kind": "joint_mi_summary",
+  "source_id": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883",
+  "series_path": "2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.csv",
+  "series_sha256": "6016f9e1680a8d8c74062712b909984593315f08d214a46f194b17f1e3b1f4a6",
+  "series_meta_sha256": "d35e08f9bc668779c5fc303dc9ad6040cb1dc06248f4ca6771635415aa1225d5",
+  "table_sha256": "bd292470883636c2aa07b34caabff0ca4901d91b51f77c3da6f4dd2ce1eb6aaf"
+}

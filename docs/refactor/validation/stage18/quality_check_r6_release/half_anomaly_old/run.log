@@ -1,0 +1,35 @@
+  [half_anomaly] loading & scoring quality windows…
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+  [half_anomaly] 30/30 windows flagged as abnormal:
+      06:13:20  low-Q 0.00
+      06:13:20  low-Q 0.00
+      06:13:21  low-Q 0.00
+      06:13:21  low-Q 0.00
+      06:13:22  low-Q 0.00
+      06:13:22  low-Q 0.00
+      06:13:23  low-Q 0.00
+      06:13:23  low-Q 0.00
+      06:13:24  low-Q 0.00
+      06:13:24  low-Q 0.00
+      06:13:25  low-Q 0.00
+      06:13:25  low-Q 0.00
+      06:13:26  low-Q 0.00
+      06:13:26  low-Q 0.00
+      06:13:27  low-Q 0.00
+      06:13:27  low-Q 0.00
+      06:13:28  low-Q 0.00
+      06:13:28  low-Q 0.00
+      06:13:29  low-Q 0.00
+      06:13:29  low-Q 0.00
+      06:13:30  low-Q 0.00
+      06:13:30  low-Q 0.00
+      06:13:31  low-Q 0.00
+      06:13:31  low-Q 0.00
+      06:13:32  low-Q 0.00
+      06:13:32  low-Q 0.00
+      06:13:33  low-Q 0.00
+      06:13:33  low-Q 0.00
+      06:13:34  low-Q 0.00
+      06:13:34  low-Q 0.00
+       → /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/quality_check_r6_release/half_anomaly_old/half_anomaly_R6_quality_anomalies.png

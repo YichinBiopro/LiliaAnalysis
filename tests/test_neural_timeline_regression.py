@@ -16,7 +16,7 @@ import spectral_entropy as spectral
 from lilia.event_windows import select_event_windows
 from lilia.neural import build_inference_timeline, denoise_with_time, model_provenance
 from lilia.neural_io import load_denoised_joint_mi_table
-from lilia.entropy_io import load_joint_mi_table
+from lilia.entropy_io import load_joint_mi_table, load_joint_mi_summary
 from lilia.provenance import file_sha256
 from lilia.signal import resample_polyphase, resample_segment_time_us
 from lilia.windowing import continuous_slices
@@ -179,6 +179,11 @@ class NeuralTimelineTests(unittest.TestCase):
         self.assertEqual(frame.quality_state.unique().tolist(), ['disabled'])
         self.assertEqual(frame.window_start_idx.tolist(), [0, 480])
         self.assertEqual(meta['inference']['segments'][0]['status'], 'excluded')
+        summary_path = table.with_name('source_joint_mi_denoised_ch1_ch2_summary.csv')
+        summary, _ = load_joint_mi_summary(summary_path, source, da.MODEL_PATH)
+        self.assertEqual(summary.series_quality_state.iloc[0], 'disabled')
+        self.assertFalse(summary.population_quality_masked.iloc[0])
+        self.assertEqual(summary.series_quality_valid_windows.iloc[0], 2)
         with self.assertRaisesRegex(ValueError, 'fingerprint mismatch'):
             load_joint_mi_table(table, source)
         fake_model = self.root / 'wrong.pth'

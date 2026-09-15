@@ -1,0 +1,22 @@
+{
+  "date": "2026-09-11",
+  "scope": "population unmasked title and scored/all-excluded MI series; plots unchanged by this increment",
+  "reviewed": [
+    {
+      "path": "real_1_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_distribution.png",
+      "sha256": "9ecf2dde5f741a33a529e76b6fa80d315b42903e147806a7005a0e7d4c0d2f2d",
+      "observation": "Population title explicitly says quality unmasked; 30648 samples remain; existing footer step=2s differs from series step=1s, track with R4 plot context."
+    },
+    {
+      "path": "real_1_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.png",
+      "sha256": "767a66cecd9b285c0135a36ba88b3618904720705e2f9949f4208ac4e09f0a6d",
+      "observation": "Scored series has finite MI and smoothing across actual recording time."
+    },
+    {
+      "path": "all_rejected_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.png",
+      "sha256": "c573ebee6b6a77b606c99682929fe05193e6f4902ecdf2a6cfc3784f24c665a3",
+      "observation": "No MI curves after all scores fail threshold; existing automatic x axis collapses near zero and there is no explicit all-excluded message. Track with R4 visualization work."
+    }
+  ],
+  "status": "R1 scope confirmed; pre-existing axis/footer presentation limitations remain in R4"
+}

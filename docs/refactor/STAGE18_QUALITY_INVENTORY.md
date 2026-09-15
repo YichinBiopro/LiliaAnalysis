@@ -1,6 +1,6 @@
 # 第十八階段品質 scorer 盤點與相容契約
 
-更新：2026-09-11。核心、共用 raw 及 TFLite baseline／summary 增量完成；其餘直接／filtered 呼叫端待完成。
+更新：2026-09-15。核心、共用 raw、TFLite、entropy、Goertzel 及 R6 quality_check 增量完成；剩餘 direct helper 待完成。
 
 ## 現況與範圍
 
@@ -33,17 +33,21 @@
 | --- | --- |
 | event qEEG → event markers／zoom／subject comparison | raw 映射切片；逐窗診斷、CSV／sidecar／audit／來源 reader 完成，event 品質圖標記與實際 preset 標題完成。 |
 | TFLite baseline／summary | baseline filtered 500 Hz 四通道；Before filtered_resampled 200 Hz ch1/2；After model_output 200 Hz。診斷／CSV／audit／來源 reader／品質圖完成，legacy sampler 診斷亦保存。 |
-| entropy clean／state／MI | filtered 品質路徑，待串接。 |
-| Goertzel | BP 品質與 raw hard-artifact features，待串接。 |
-| quality_check／舊直接 helper | raw／BP 對照與抽樣路徑，待逐一串接；event 舊 `compute_quality_windowed` 不等同已驗收的 main 路徑。 |
+| entropy clean／state／MI | raw／filtered 隨實際 bandpass 設定；逐窗診斷、CSV／audit、來源 reader 及配套品質圖完成。denoised MI 保持 disabled／model_output，ordinary state 明示未評分。 |
+| Goertzel | 全 filtered 通道評分、取指定通道 legacy overall；raw sat／PTP／max diff、filtered edge shift。診斷／CSV／來源 reader／品質標記及缺口斷線完成。 |
+| quality_check samples／anomalies | samples raw／filtered 分階段評分；anomalies raw 窗口評分。兩路診斷、CSV／sidecar／來源 reader 與圖形完成；NaN qmed 明確 flagged。 |
+| event 舊直接 helper | 舊 `compute_quality_windowed` 不等同已驗收的 main 路徑，待單獨盤點及遷移。 |
 
 - [raw 呼叫端增量](STAGE18_RAW_CALLERS_REPORT_2026-09-11.md) 固定 `legacy_overall`，診斷有效性與分數門檻分別保存；短窗、非有限與 scorer 例外有原因，外部舊 scorer 明示 unavailable。
 - `lilia/quality_audit.py` 在呼叫端綁定實際 raw stage，保留注入 scorer 舊簽名；新表宣告 `quality_diagnostics_version=1`，四個 CSV 診斷欄位與 sidecar 逐窗資料必須一致。舊表缺少整組診斷時仍可讀，不推定有效。
 - 來源 reader 重算 raw slice 的一般 diagnostics；歷史例外僅核對 fallback 與其餘可重算部分，無法由產物證明當時例外必然再發生。310 tests／33 表／10 新舊數值組／三圖完成，不代表其他 caller 已驗收。
 - [TFLite 呼叫端增量](STAGE18_TFLITE_CALLERS_REPORT_2026-09-11.md) 完成 317 tests／18 新舊表／9 數值組（399 陣列）／三圖；同樣保留 `legacy_overall`，半秒無可用 baseline 的失敗結果與有限 fallback 接受結果皆不變。
 - TFLite source reader 重建 filtered／resampled 輸入、raw 削波與 baseline 短路順序及 seed 選取；After 不重跑模型，只核對模型身分與診斷一致性。模型及 baseline qEEG 數值由獨立凍結舊碼實跑比較，未以 reader 代替。
+- [entropy 增量](STAGE18_ENTROPY_DIAGNOSTICS_REPORT_2026-09-15.md) 完成 327 tests／35 案例／714 陣列精確對照；ordinary helper 的 scorer 例外仍向外傳遞、clean state 仍先做 raw precheck 並保存 scorer error，有限 fallback 不暗改舊選取。raw／filtered 來源診斷可重算，外部舊 scorer 明示 unavailable。
+- [Goertzel 增量](STAGE18_GOERTZEL_QUALITY_REPORT_2026-09-15.md) 完成 336 tests／19 案例及污染 helper／354 陣列精確對照、36 reader 檢查與七圖目視。`fs=int(fs)`、hard 規則、平滑方法及例外向外傳遞保留；reader 重建來源特徵／品質及整數窗口，cache 重繪載回 audit。舊完整表可讀，歷史 fallback／external 的可驗證限制沿用共用契約。
+- [R6 quality_check 增量](STAGE18_QUALITY_CHECK_REPORT_2026-09-15.md) 完成 345 tests／20 案例及污染 helper／974 陣列精確對照、970 表格列／17 來源 reader 與八圖目視。samples 保存 raw／filtered 實際 stage，anomalies raw 保存原 features；reader 重建來源段、分數、診斷及異常原因。只有 NaN qmed 的三列原因／severity 有意修正，有限分數、門檻、窗口與抽樣政策保留。
 
-## 剩餘增量完成條件
+## 剩餘 helper 與整階段完成條件
 
 - 逐呼叫端保存 raw／filtered stage 與診斷，保留注入 scorer／舊 API 相容性；各種 CSV／audit reader 要能核對新欄位，不能只在 scorer 回傳後丟棄。
 - 對照既有接受／排除窗口，明示是否採用 `usable_overall`；任何改變都須記錄具體窗口與原因，不在 metadata 重構中暗改篩選政策。

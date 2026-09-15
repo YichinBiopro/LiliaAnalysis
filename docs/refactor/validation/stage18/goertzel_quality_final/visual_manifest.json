@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "empty_new/plot.png",
+      "sha256": "ef4d440c507d796ecce369e1090990666bd02454265f5884831247bcfaad4162"
+    },
+    {
+      "path": "external_new/plot.png",
+      "sha256": "1c0ff4afd489766df90a31f314c71cda89ffa0133c1187e8895a2e2d9f9e89f1"
+    },
+    {
+      "path": "fallback_new/plot.png",
+      "sha256": "7154228eefddaf84e9353f598b41687b2c99d3b9caa87cf595f8d202df9ba525"
+    },
+    {
+      "path": "gap_new/plot.png",
+      "sha256": "c61502f3e904ac7747316f9fe2d00e12d1eed08b57895ce291857a3292a7e4db"
+    },
+    {
+      "path": "half_second_new/plot.png",
+      "sha256": "de345023b1e4358ff43ca78ab7518ba562b5db97e551104cfa86707e83d2d283"
+    },
+    {
+      "path": "real_1_ch1_new/plot.png",
+      "sha256": "013ec609a627bc6c3d4ed0cf925974de943f06655a60c4c9a5e0892190cdab7f"
+    },
+    {
+      "path": "hard_new/plot.png",
+      "sha256": "21345083f2e9f871cea32a951ec3a5761e2eafc1aaa56b1795533364b70b2f14"
+    },
+    {
+      "path": "visual_review.json",
+      "sha256": "8a6004d4160f022d8adf100989910c0afd562be1dfec58541825b599c3617ce0"
+    }
+  ]
+}

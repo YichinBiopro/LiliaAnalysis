@@ -1,0 +1,22 @@
+/home/bps-yichin/.config/matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /tmp/matplotlib-_7x3xh1o because there was an issue with the default path (/home/bps-yichin/.config/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+PASS real_0_ch1: 11 windows, 2 readers
+PASS real_0_ch2: 11 windows, 2 readers
+PASS real_1_ch1: 12 windows, 2 readers
+PASS real_1_ch2: 12 windows, 2 readers
+PASS real_2_ch1: 12 windows, 2 readers
+PASS real_2_ch2: 12 windows, 2 readers
+PASS real_3_ch1: 12 windows, 2 readers
+PASS real_3_ch2: 12 windows, 2 readers
+PASS real_4_ch1: 12 windows, 2 readers
+PASS real_4_ch2: 12 windows, 2 readers
+PASS gap: 6 windows, 2 readers
+PASS hard: 6 windows, 2 readers
+PASS half_second: 122 windows, 2 readers
+PASS fallback: 12 windows, 2 readers
+PASS external: 6 windows, 2 readers
+PASS all_rejected: 6 windows, 2 readers
+PASS empty: 0 windows, 2 readers
+PASS fractional_fs: 12 windows, 2 readers
+PASS nonfinite: 0 windows, 0 readers
+PASS 19 cases + polluted helper; 354 exact arrays; 36 readers

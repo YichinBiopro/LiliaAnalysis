@@ -1,0 +1,161 @@
+{
+  "kind": "state_band_entropy",
+  "schema_version": 1,
+  "index_space": "raw_samples",
+  "source_path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+  "source_id": "07cf89ba2216be66a09195c884a565498d802bf193432f21a7be27b0b9320d8b",
+  "parameters": {
+    "fs": 500.0,
+    "channel": 1,
+    "win_sec": 2.0,
+    "step_sec": 2.0,
+    "ranges": {
+      "baseline": [
+        0.0,
+        4.0
+      ],
+      "event": [
+        4.0,
+        8.0
+      ]
+    },
+    "clean": false,
+    "quality_threshold": 0.5,
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "quality_channels": [],
+    "quality_params": null,
+    "saturation_fraction_max": null,
+    "window_policy": "interval_first_sample_reset_per_segment_complete_only",
+    "aggregation": "equal_window_mean_psd_and_separate_per_window_entropy",
+    "bands": [
+      [
+        "theta",
+        [
+          4.0,
+          8.0
+        ]
+      ],
+      [
+        "alpha",
+        [
+          8.0,
+          13.0
+        ]
+      ],
+      [
+        "beta",
+        [
+          13.0,
+          30.0
+        ]
+      ]
+    ],
+    "welch_nperseg": null,
+    "welch_noverlap": null
+  },
+  "config_id": "5ba201bb7d2164e320ccb16377d6a0200248c7b6d9149508950a14f9b1307ed2",
+  "states": {
+    "baseline": {
+      "lo_us": 0,
+      "hi_us": 4000000,
+      "windows": [
+        {
+          "window_start_idx": 0,
+          "window_end_idx": 1000,
+          "window_start_us": 0,
+          "window_end_us": 2000000,
+          "window_center_us": 1000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null
+        },
+        {
+          "window_start_idx": 1000,
+          "window_end_idx": 2000,
+          "window_start_us": 2000000,
+          "window_end_us": 4000000,
+          "window_center_us": 3000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 2,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 2,
+      "n_accepted_epochs": 2,
+      "per_window_entropy": [
+        1.29510366057956,
+        1.1938141769752517
+      ],
+      "per_window_entropy_norm": [
+        0.8171194334189543,
+        0.753212884489108
+      ]
+    },
+    "event": {
+      "lo_us": 4000000,
+      "hi_us": 8000000,
+      "windows": [
+        {
+          "window_start_idx": 2000,
+          "window_end_idx": 3000,
+          "window_start_us": 4000000,
+          "window_end_us": 6000000,
+          "window_center_us": 5000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null
+        },
+        {
+          "window_start_idx": 3000,
+          "window_end_idx": 4000,
+          "window_start_us": 6000000,
+          "window_end_us": 8000000,
+          "window_center_us": 7000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 2,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 2,
+      "n_accepted_epochs": 2,
+      "per_window_entropy": [
+        1.2670660021614903,
+        1.5672864127026072
+      ],
+      "per_window_entropy_norm": [
+        0.799429640502521,
+        0.9888476301423496
+      ]
+    }
+  },
+  "audit_id": "e525d475048676943a2bd3efc06611ee6bdfa085f736341892b90e03be117776",
+  "code_sha256": "6091f45065c414a1af6957542dc38efeab54898153d733e53ceb51cee8e520ee",
+  "table_sha256": "c478392c288cacf7fca4fdfa233e981863a4193c2673bc77efa3ae9715bc2bdd"
+}

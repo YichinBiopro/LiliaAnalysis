@@ -1,0 +1,214 @@
+{
+  "kind": "state_band_entropy",
+  "schema_version": 1,
+  "index_space": "raw_samples",
+  "source_path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+  "source_id": "248dda71a06a6c4f76a4082fd734961383b80b464d8b8fbe9278cae23866d91a",
+  "parameters": {
+    "fs": 500.0,
+    "channel": 1,
+    "win_sec": 2.0,
+    "step_sec": 2.0,
+    "ranges": {
+      "baseline": [
+        0.0,
+        4.0
+      ],
+      "event": [
+        4.0,
+        8.0
+      ]
+    },
+    "clean": true,
+    "quality_threshold": 0.5,
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "quality_channels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "quality_params": {
+      "target_score": 0.8,
+      "flat_activity_k": 0.35,
+      "spectrum_fit_hi": 40.0,
+      "flat_ratio_start": 0.3,
+      "flat_penalty_floor": 0.2,
+      "spike_ratio_start": 0.0001,
+      "spike_ratio_end": 0.0015,
+      "spike_penalty_floor": 0.2,
+      "clip_ratio_start": 0.001,
+      "clip_ratio_end": 0.01,
+      "clip_penalty_floor": 0.2,
+      "range_start": 6.0,
+      "range_end": 12.0,
+      "range_penalty_floor": 0.3,
+      "slope_good_low": -2.5,
+      "slope_center": -1.0,
+      "slope_good_high": -0.2,
+      "slope_edge_score": 0.7,
+      "slope_outer_floor": 0.2,
+      "alpha_dpr_good": 0.55,
+      "alpha_dpr_bad": 0.8,
+      "alpha_artifact_floor": 0.5,
+      "nonalpha_dpr_good": 0.25,
+      "nonalpha_dpr_bad": 0.5,
+      "nonalpha_artifact_floor": 0.1,
+      "low_freq_penalty_floor": 0.3,
+      "low_freq_penalty_ceiling": 0.7,
+      "line_noise_penalty_floor": 0.4,
+      "line_noise_penalty_ceiling": 0.7,
+      "kurtosis_good_low": 2.0,
+      "kurtosis_good_high": 8.0,
+      "kurtosis_bad_high": 15.0,
+      "kurtosis_floor": 0.2,
+      "corr_low": 0.2,
+      "corr_mid": 0.4,
+      "corr_high": 0.9,
+      "corr_floor": 0.3,
+      "corr_low_score": 0.75,
+      "corr_mid_score": 0.9,
+      "flat_weight": 1.0,
+      "spectrum_weight": 0.9,
+      "kurtosis_weight": 0.0,
+      "corr_weight": 0.0
+    },
+    "saturation_fraction_max": 0.02,
+    "window_policy": "interval_first_sample_reset_per_segment_complete_only",
+    "aggregation": "equal_window_mean_psd_and_separate_per_window_entropy",
+    "bands": [
+      [
+        "theta",
+        [
+          4.0,
+          8.0
+        ]
+      ],
+      [
+        "alpha",
+        [
+          8.0,
+          13.0
+        ]
+      ],
+      [
+        "beta",
+        [
+          13.0,
+          30.0
+        ]
+      ]
+    ],
+    "welch_nperseg": null,
+    "welch_noverlap": null
+  },
+  "config_id": "80c34d227542e52289368caca8610b2d70f34c1cad07b03edaabf181dc5a7569",
+  "states": {
+    "baseline": {
+      "lo_us": 0,
+      "hi_us": 4000000,
+      "windows": [
+        {
+          "window_start_idx": 0,
+          "window_end_idx": 1000,
+          "window_start_us": 0,
+          "window_end_us": 2000000,
+          "window_center_us": 1000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "scored",
+          "quality": 0.8074687551652957,
+          "saturation_fraction": 0.0
+        },
+        {
+          "window_start_idx": 1000,
+          "window_end_idx": 2000,
+          "window_start_us": 2000000,
+          "window_end_us": 4000000,
+          "window_center_us": 3000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "scored",
+          "quality": 0.8352264723146288,
+          "saturation_fraction": 0.0
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 2,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 2,
+      "n_accepted_epochs": 2,
+      "per_window_entropy": [
+        1.4295988255660053,
+        1.3961298925841532
+      ],
+      "per_window_entropy_norm": [
+        0.9019764347204047,
+        0.8808598890818652
+      ]
+    },
+    "event": {
+      "lo_us": 4000000,
+      "hi_us": 8000000,
+      "windows": [
+        {
+          "window_start_idx": 2000,
+          "window_end_idx": 3000,
+          "window_start_us": 4000000,
+          "window_end_us": 6000000,
+          "window_center_us": 5000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "scored",
+          "quality": 0.8291903342658027,
+          "saturation_fraction": 0.0
+        },
+        {
+          "window_start_idx": 3000,
+          "window_end_idx": 4000,
+          "window_start_us": 6000000,
+          "window_end_us": 8000000,
+          "window_center_us": 7000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "scored",
+          "quality": 0.8296152288396541,
+          "saturation_fraction": 0.0
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 2,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 2,
+      "n_accepted_epochs": 2,
+      "per_window_entropy": [
+        1.1628829603862227,
+        1.1003983862889863
+      ],
+      "per_window_entropy_norm": [
+        0.7336974596289265,
+        0.6942740826917396
+      ]
+    }
+  },
+  "audit_id": "a919d2d4627b38e83c4f2e0e178e68644e10129a34b27b5f00726277d25b3e4c",
+  "code_sha256": "6091f45065c414a1af6957542dc38efeab54898153d733e53ceb51cee8e520ee",
+  "table_sha256": "edf46863b901d193352121fd9e75fcd8743cd22df72c50052c8491fcad18d7fb"
+}

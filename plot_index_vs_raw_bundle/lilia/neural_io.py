@@ -3,17 +3,17 @@ from __future__ import annotations
 
 import numpy as np
 
-from lilia.entropy_io import _write_window_table, _load_window_table
+from lilia.entropy_io import _write_window_table, _load_window_table, validate_window_quality
 from lilia.io import read_lilia_frame
 from lilia.neural import build_inference_timeline
 from lilia.provenance import file_sha256
 
 
-def write_denoised_joint_mi_table(path, source, frame, grid, parameters, code_sha256, timeline):
+def write_denoised_joint_mi_table(path, source, frame, grid, parameters, code_sha256, timeline, *, quality_audit=None):
     _write_window_table(path, source, frame, grid, parameters, code_sha256, 'denoised_joint_mi',
                         source_info={'source_samples': timeline.source_samples,
                                      'source_epoch_us': timeline.source_epoch_us,
-                                     'inference': timeline.metadata()})
+                                     'inference': timeline.metadata()}, quality_audit=quality_audit)
 
 
 def load_denoised_joint_mi_table(path, raw_csv=None, model_path=None):
@@ -28,6 +28,8 @@ def load_denoised_joint_mi_table(path, raw_csv=None, model_path=None):
     params = metadata['parameters']
     if params.get('index_space') != 'resampled_model_output' or not params.get('denoise'):
         raise ValueError('Incorrect denoised joint-MI index space')
+    if params.get('quality_enabled') is not False:
+        raise ValueError('Denoised joint-MI quality scoring must remain disabled')
     if model_path is not None and file_sha256(model_path) != params['model']['checkpoint_sha256']:
         raise ValueError('Model checkpoint differs from denoised joint-MI source')
     if raw_csv is not None:
@@ -49,4 +51,7 @@ def load_denoised_joint_mi_table(path, raw_csv=None, model_path=None):
                       else np.array_equal(actual, expected)))
             if not valid:
                 raise ValueError(f'Denoised joint-MI {key} does not match inference timestamps')
+    validate_window_quality(frame, params, joint=True)
+    from lilia.entropy_quality import validate_window_diagnostics
+    validate_window_diagnostics(frame, metadata, raw_csv)
     return frame, metadata

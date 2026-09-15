@@ -1,0 +1,16 @@
+test_baseline_and_joint_mi_modes_cannot_be_combined (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_cli_quality_nan_mask_and_metadata_keep_all_window_rows (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_continuous_mi_quality_and_surrogates_match_reference (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_joint_windows_use_actual_timestamps_and_original_sample_grid (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_metadata_rejects_wrong_source_pair_kind_or_rehashed_indexes (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_missing_quality_or_count_mismatch_fails (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_nonfinite_samples_invalidate_windows_without_dropping_rows (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_peri_event_interpolation_does_not_fill_recording_or_quality_gaps (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_series_plot_preserves_first_point_after_gap_and_smooths_per_run (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_short_segment_excluded_from_summary_and_filtering_is_independent (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+test_surrogate_rolls_each_segment_independently (test_joint_mi_windows_regression.JointMIWindowTests) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.364s
+
+OK

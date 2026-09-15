@@ -1,0 +1,5 @@
+  [gap_anomaly] loading & scoring quality windows…
+  [gap_anomaly] 2/3 windows flagged as abnormal:
+      06:13:22  clip 20%
+      06:13:35  time-gap 8s
+       → /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/quality_check_r6_release/gap_anomaly_old/gap_anomaly_R6_quality_anomalies.png

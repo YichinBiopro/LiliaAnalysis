@@ -1,0 +1,11 @@
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv
+  [baseline] accepted 2/2 complete windows
+  [event] accepted 2/2 complete windows
+Saved summary and window audit: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/real_4_state_new/2026-06-18-lilia-vibration-level3_baseline_event_entropy_ch1.csv
+
+Summary (pooled-PSD band entropy, bits; max = log2(3) ≈ 1.585):
+  baseline: pooled=1.2607  per-window=1.2445±0.0506  (n=2)  [theta=0.143, alpha=0.199, beta=0.659]
+  event   : pooled=1.5435  per-window=1.4172±0.1501  (n=2)  [theta=0.306, alpha=0.251, beta=0.443]
+  Δ pooled entropy (event − baseline)      : +0.2827 bits
+  Δ mean per-window entropy (event − base) : +0.1727 bits
+  Mann–Whitney U (per-window, two-sided)   : U=3.0, p=0.6667

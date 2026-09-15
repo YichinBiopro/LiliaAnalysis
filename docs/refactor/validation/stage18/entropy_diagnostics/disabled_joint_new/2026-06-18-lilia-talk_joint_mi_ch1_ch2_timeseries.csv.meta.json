@@ -1,0 +1,1243 @@
+{
+  "kind": "joint_mi",
+  "schema_version": 1,
+  "source_id": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883",
+  "source_path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+  "source_samples": 30648,
+  "source_epoch_us": 0,
+  "config_id": "0eb4d0507285f9cf3c0e328407da2e5bb43882bfc597d69579788ea4479e497d",
+  "parameters": {
+    "fs": 500.0,
+    "channels": [
+      1,
+      2
+    ],
+    "win_sec": 2.0,
+    "step_sec": 1.0,
+    "win_samples": 1000,
+    "step_samples": 500,
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "quality_enabled": false,
+    "quality_threshold": 0.5,
+    "quality_state_version": 1,
+    "quality_params": null,
+    "quality_channels": [
+      1,
+      2
+    ],
+    "quality_reduction": "channel median",
+    "mi_bins": 8,
+    "mi_binning": "quantile",
+    "denoise": false,
+    "grid_policy": "original sample grid; complete continuous windows; gap > 3 sample periods",
+    "code_sha256": "21eac333681197b611c601f3a7a367da0f5acf52d82076d37e3373a0a691fdd9"
+  },
+  "code_sha256": "21eac333681197b611c601f3a7a367da0f5acf52d82076d37e3373a0a691fdd9",
+  "table_sha256": "490f6edeb7621a687ad11c0ce3e6498c37e4dcc031f3c3142ba03279491a83db",
+  "quality_diagnostics_version": 1,
+  "quality_audit": [
+    {
+      "window_start_idx": 0,
+      "window_end_idx": 1000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 500,
+      "window_end_idx": 1500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 1000,
+      "window_end_idx": 2000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 1500,
+      "window_end_idx": 2500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 2000,
+      "window_end_idx": 3000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 2500,
+      "window_end_idx": 3500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 3000,
+      "window_end_idx": 4000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 3500,
+      "window_end_idx": 4500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 4000,
+      "window_end_idx": 5000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 4500,
+      "window_end_idx": 5500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 5000,
+      "window_end_idx": 6000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 5500,
+      "window_end_idx": 6500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 6000,
+      "window_end_idx": 7000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 6500,
+      "window_end_idx": 7500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 7000,
+      "window_end_idx": 8000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 7500,
+      "window_end_idx": 8500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 8000,
+      "window_end_idx": 9000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 8500,
+      "window_end_idx": 9500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 9000,
+      "window_end_idx": 10000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 9500,
+      "window_end_idx": 10500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 10000,
+      "window_end_idx": 11000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 10500,
+      "window_end_idx": 11500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 11000,
+      "window_end_idx": 12000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 11500,
+      "window_end_idx": 12500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 12000,
+      "window_end_idx": 13000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 12500,
+      "window_end_idx": 13500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 13000,
+      "window_end_idx": 14000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 13500,
+      "window_end_idx": 14500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 14000,
+      "window_end_idx": 15000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 14500,
+      "window_end_idx": 15500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 15000,
+      "window_end_idx": 16000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 15500,
+      "window_end_idx": 16500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 16000,
+      "window_end_idx": 17000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 16500,
+      "window_end_idx": 17500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 17000,
+      "window_end_idx": 18000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 17500,
+      "window_end_idx": 18500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 18000,
+      "window_end_idx": 19000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 18500,
+      "window_end_idx": 19500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 19000,
+      "window_end_idx": 20000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 19500,
+      "window_end_idx": 20500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 20000,
+      "window_end_idx": 21000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 20500,
+      "window_end_idx": 21500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 21000,
+      "window_end_idx": 22000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 21500,
+      "window_end_idx": 22500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 22000,
+      "window_end_idx": 23000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 22500,
+      "window_end_idx": 23500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 23000,
+      "window_end_idx": 24000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 23500,
+      "window_end_idx": 24500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 24000,
+      "window_end_idx": 25000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 24500,
+      "window_end_idx": 25500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 25000,
+      "window_end_idx": 26000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 25500,
+      "window_end_idx": 26500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 26000,
+      "window_end_idx": 27000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 26500,
+      "window_end_idx": 27500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 27000,
+      "window_end_idx": 28000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 27500,
+      "window_end_idx": 28500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 28000,
+      "window_end_idx": 29000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 28500,
+      "window_end_idx": 29500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 29000,
+      "window_end_idx": 30000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 29500,
+      "window_end_idx": 30500,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "kind": "joint_mi_summary",
+  "source_id": "3ecea3ac6d6393849157cd57b5a97e69af15a84e2bf124178fc469ac728503c0",
+  "series_path": "2026-06-18-lilia-vibration-level2_joint_mi_ch1_ch2_timeseries.csv",
+  "series_sha256": "3e772de99f8f1aeeb2a2b29e048e4f2a9f19ce760c8df7e2e558ad9829c1e07a",
+  "series_meta_sha256": "0f44724300ed520b98855358f12c578ef02183e8afac3edb208307034bc35240",
+  "table_sha256": "4070098e79d1b0e041a3a993594e31971f6dfb389767ebd2011972ca25237872"
+}

@@ -1,0 +1,12 @@
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=8 (quantile), fs=500Hz
+  Series quality: disabled; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/disabled_joint_old/2026-06-18-lilia-talk_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/disabled_joint_old/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/disabled_joint_old/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.0596 bits  (Miller–Madow 0.0585; norm 0.0199)
+  surrogate null: mean=0.0039±0.0008 bits, p=0.25, z=69.22 (n=3)
+  windowed MI   : mean=0.1452, std=0.0513, min=0.0479, max=0.2568 (n=60 windows)

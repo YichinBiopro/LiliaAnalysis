@@ -1,0 +1,11 @@
+[
+  {
+    "row": 0,
+    "old_reasons": [],
+    "new_reasons": [
+      "invalid-Q non-finite"
+    ],
+    "old_severity": 0.0002,
+    "new_severity": 1.0002
+  }
+]

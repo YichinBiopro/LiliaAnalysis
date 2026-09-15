@@ -1,0 +1,4 @@
+# Bounded R6 acceptance outputs.
+!*.csv
+!*.png
+!*.svg

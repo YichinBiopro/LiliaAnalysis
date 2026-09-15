@@ -178,6 +178,34 @@ class StateEntropyTests(unittest.TestCase):
         frame, _ = load_state_entropy_table(table, source)
         self.assertEqual(frame.n_windows.tolist(), [3, 3])
 
+    def test_rehashed_state_quality_decisions_and_prechecks_are_rejected(self):
+        t, x = self.gapped()
+        source = self.source(t, x)
+        with patch.object(entropy, '_eeg_quality_v2', return_value={'overall': [.9] * 4}):
+            table = self.run_cli(source, '--clean')
+        frame, original = load_state_entropy_table(table, source)
+        sidecar = Path(str(table) + '.meta.json')
+        for key, value in [('quality_state', 'disabled'), ('quality', .1), ('saturation_fraction', 1.)]:
+            with self.subTest(key=key):
+                meta = json.loads(json.dumps(original))
+                meta['states']['baseline']['windows'][0][key] = value
+                meta['audit_id'] = config_id(meta['states'])
+                sidecar.write_text(json.dumps(meta))
+                with self.assertRaisesRegex(ValueError, 'quality|saturation'):
+                    load_state_entropy_table(table, source)
+        meta = json.loads(json.dumps(original))
+        meta['states']['baseline']['n_lowquality_epochs'] = 1
+        meta['audit_id'] = config_id(meta['states'])
+        sidecar.write_text(json.dumps(meta))
+        with self.assertRaisesRegex(ValueError, 'summary counts'):
+            load_state_entropy_table(table, source)
+        frame.loc[0, 'quality_state'] = 'disabled'
+        frame.to_csv(table, index=False)
+        original['table_sha256'] = file_sha256(table)
+        sidecar.write_text(json.dumps(original))
+        with self.assertRaisesRegex(ValueError, 'quality state'):
+            load_state_entropy_table(table, source)
+
     def test_failed_scorer_is_audited_and_clean_step_is_explicit(self):
         t, x = self.gapped()
         with patch.object(entropy, '_eeg_quality_v2', side_effect=RuntimeError('scorer unavailable')):

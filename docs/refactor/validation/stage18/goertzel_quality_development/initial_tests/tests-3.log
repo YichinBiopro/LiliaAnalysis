@@ -1,0 +1,8 @@
+test_collect_group_data_filters_rows (test_goertzel_distribution_regression.GoertzelDistributionRegressionTests) ... ok
+test_common_db_edges_shape (test_goertzel_distribution_regression.GoertzelDistributionRegressionTests) ... ok
+test_with_aggregates_adds_channel_and_all_channels (test_goertzel_distribution_regression.GoertzelDistributionRegressionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.007s
+
+OK

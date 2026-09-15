@@ -1,0 +1,10 @@
+test_cache_rejects_changes_and_legacy_without_metadata (test_safety_regression.SafetyRegressionTests) ... ok
+test_goertzel_windows_after_gap_preserve_indices_and_wall_time (test_safety_regression.SafetyRegressionTests) ... ok
+test_mi_onsets_exclude_nonparticipants (test_safety_regression.SafetyRegressionTests) ... ok
+test_quality_policy_rejects_nonfinite_and_hard_artifacts (test_safety_regression.SafetyRegressionTests) ... ok
+test_validation_shell_propagates_each_failure_stage (test_safety_regression.SafetyRegressionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.173s
+
+OK

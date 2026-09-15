@@ -1,0 +1,12 @@
+Loading: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/gap.csv
+Bandpass: DISABLED (--no-bandpass) — analysing raw channels.
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=8 (quantile), fs=500Hz
+  Series quality: disabled; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/gap_joint_old/gap_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/gap_joint_old/gap_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/gap_joint_old/gap_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.0080 bits  (Miller–Madow 0.0000; norm 0.0027)
+  surrogate null: mean=0.0082±0.0021 bits, p=0.75, z=-0.10 (n=3)
+  windowed MI   : mean=0.0362, std=0.0049, min=0.0285, max=0.0432 (n=6 windows)

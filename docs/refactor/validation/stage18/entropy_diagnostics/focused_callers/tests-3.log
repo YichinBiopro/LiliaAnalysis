@@ -1,0 +1,16 @@
+test_all_excluded_and_empty_interval_still_save_verifiable_audit (test_state_entropy_regression.StateEntropyTests) ... ok
+test_clean_audits_quality_nonfinite_saturation_and_no_cross_gap (test_state_entropy_regression.StateEntropyTests) ... ok
+test_continuous_ordinary_and_real_quality_match_saved_reference (test_state_entropy_regression.StateEntropyTests) ... ok
+test_failed_scorer_is_audited_and_clean_step_is_explicit (test_state_entropy_regression.StateEntropyTests) ... ok
+test_filter_only_contributing_segments_and_keep_finite_channel (test_state_entropy_regression.StateEntropyTests) ... ok
+test_gapped_cli_matches_independent_segment_filter_and_psds (test_state_entropy_regression.StateEntropyTests) ... ok
+test_half_open_fractional_boundaries_and_short_segments (test_state_entropy_regression.StateEntropyTests) ... ok
+test_interval_crossing_gap_pools_only_independent_complete_windows (test_state_entropy_regression.StateEntropyTests) ... ok
+test_metadata_rejects_source_channel_config_and_rehashed_geometry (test_state_entropy_regression.StateEntropyTests) ... ok
+test_nonfinite_filter_context_and_too_short_filter_are_audited (test_state_entropy_regression.StateEntropyTests) ... ok
+test_rehashed_state_quality_decisions_and_prechecks_are_rejected (test_state_entropy_regression.StateEntropyTests) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 2.021s
+
+OK

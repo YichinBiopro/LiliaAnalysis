@@ -1,0 +1,29 @@
+/home/bps-yichin/.config/matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /tmp/matplotlib-ft_pc_6z because there was an issue with the default path (/home/bps-yichin/.config/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+PASS real_0_joint: 3 reader checks
+PASS real_0_entropy: 2 reader checks
+PASS real_0_state: 2 reader checks
+PASS real_0_clean: 2 reader checks
+PASS real_1_joint: 3 reader checks
+PASS real_1_entropy: 2 reader checks
+PASS real_1_state: 2 reader checks
+PASS real_1_clean: 2 reader checks
+PASS real_2_joint: 3 reader checks
+PASS real_2_entropy: 2 reader checks
+PASS real_2_state: 2 reader checks
+PASS real_2_clean: 2 reader checks
+PASS real_3_joint: 3 reader checks
+PASS real_3_entropy: 2 reader checks
+PASS real_3_state: 2 reader checks
+PASS real_3_clean: 2 reader checks
+PASS real_4_joint: 3 reader checks
+PASS real_4_entropy: 2 reader checks
+PASS real_4_state: 2 reader checks
+PASS real_4_clean: 2 reader checks
+PASS gap_joint: 3 reader checks
+PASS gap_entropy: 2 reader checks
+PASS nonfinite_joint: 0 reader checks
+PASS nonfinite_entropy: 0 reader checks
+PASS all_rejected_joint: 3 reader checks
+PASS disabled_joint: 3 reader checks
+PASS 26 cases; 513 exact arrays; 56 readers

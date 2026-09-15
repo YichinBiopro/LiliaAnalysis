@@ -24,7 +24,7 @@ def goertzel_code_fingerprint():
     return digest.hexdigest()
 
 
-def write_goertzel_metadata(table, source, parameters):
+def write_goertzel_metadata(table, source, parameters, *, quality_audit=None):
     metadata = {
         'schema_version': 1,
         'source_path': str(Path(source).resolve()),
@@ -33,6 +33,10 @@ def write_goertzel_metadata(table, source, parameters):
         'code_sha256': goertzel_code_fingerprint(),
         'parameters': parameters,
     }
+    if quality_audit is not None:
+        from lilia.goertzel_io import FEATURE_SOURCES
+        metadata.update(kind='goertzel', quality_diagnostics_version=1,
+                        quality_audit=quality_audit, feature_sources=FEATURE_SOURCES)
     Path(str(table) + '.meta.json').write_text(json.dumps(metadata, indent=2), encoding='utf-8')
 
 

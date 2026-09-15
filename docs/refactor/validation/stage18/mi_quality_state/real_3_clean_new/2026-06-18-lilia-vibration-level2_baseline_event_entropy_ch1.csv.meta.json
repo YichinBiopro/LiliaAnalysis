@@ -1,0 +1,215 @@
+{
+  "kind": "state_band_entropy",
+  "schema_version": 1,
+  "index_space": "raw_samples",
+  "source_path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+  "source_id": "3ecea3ac6d6393849157cd57b5a97e69af15a84e2bf124178fc469ac728503c0",
+  "parameters": {
+    "fs": 500.0,
+    "channel": 1,
+    "win_sec": 2.0,
+    "step_sec": 2.0,
+    "ranges": {
+      "baseline": [
+        0.0,
+        4.0
+      ],
+      "event": [
+        4.0,
+        8.0
+      ]
+    },
+    "clean": true,
+    "quality_threshold": 0.5,
+    "quality_state_version": 1,
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "quality_channels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "quality_params": {
+      "target_score": 0.8,
+      "flat_activity_k": 0.35,
+      "spectrum_fit_hi": 40.0,
+      "flat_ratio_start": 0.3,
+      "flat_penalty_floor": 0.2,
+      "spike_ratio_start": 0.0001,
+      "spike_ratio_end": 0.0015,
+      "spike_penalty_floor": 0.2,
+      "clip_ratio_start": 0.001,
+      "clip_ratio_end": 0.01,
+      "clip_penalty_floor": 0.2,
+      "range_start": 6.0,
+      "range_end": 12.0,
+      "range_penalty_floor": 0.3,
+      "slope_good_low": -2.5,
+      "slope_center": -1.0,
+      "slope_good_high": -0.2,
+      "slope_edge_score": 0.7,
+      "slope_outer_floor": 0.2,
+      "alpha_dpr_good": 0.55,
+      "alpha_dpr_bad": 0.8,
+      "alpha_artifact_floor": 0.5,
+      "nonalpha_dpr_good": 0.25,
+      "nonalpha_dpr_bad": 0.5,
+      "nonalpha_artifact_floor": 0.1,
+      "low_freq_penalty_floor": 0.3,
+      "low_freq_penalty_ceiling": 0.7,
+      "line_noise_penalty_floor": 0.4,
+      "line_noise_penalty_ceiling": 0.7,
+      "kurtosis_good_low": 2.0,
+      "kurtosis_good_high": 8.0,
+      "kurtosis_bad_high": 15.0,
+      "kurtosis_floor": 0.2,
+      "corr_low": 0.2,
+      "corr_mid": 0.4,
+      "corr_high": 0.9,
+      "corr_floor": 0.3,
+      "corr_low_score": 0.75,
+      "corr_mid_score": 0.9,
+      "flat_weight": 1.0,
+      "spectrum_weight": 0.9,
+      "kurtosis_weight": 0.0,
+      "corr_weight": 0.0
+    },
+    "saturation_fraction_max": 0.02,
+    "window_policy": "interval_first_sample_reset_per_segment_complete_only",
+    "aggregation": "equal_window_mean_psd_and_separate_per_window_entropy",
+    "bands": [
+      [
+        "theta",
+        [
+          4.0,
+          8.0
+        ]
+      ],
+      [
+        "alpha",
+        [
+          8.0,
+          13.0
+        ]
+      ],
+      [
+        "beta",
+        [
+          13.0,
+          30.0
+        ]
+      ]
+    ],
+    "welch_nperseg": null,
+    "welch_noverlap": null
+  },
+  "config_id": "051d815f62195dffcad2d0aa003043182d4e03d599909a3bf96066cf84fdeb42",
+  "states": {
+    "baseline": {
+      "lo_us": 0,
+      "hi_us": 4000000,
+      "windows": [
+        {
+          "window_start_idx": 0,
+          "window_end_idx": 1000,
+          "window_start_us": 0,
+          "window_end_us": 2000000,
+          "window_center_us": 1000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "scored",
+          "quality": 0.8127615464211565,
+          "saturation_fraction": 0.0
+        },
+        {
+          "window_start_idx": 1000,
+          "window_end_idx": 2000,
+          "window_start_us": 2000000,
+          "window_end_us": 4000000,
+          "window_center_us": 3000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "scored",
+          "quality": 0.8710381737126223,
+          "saturation_fraction": 0.0
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 2,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 2,
+      "n_accepted_epochs": 2,
+      "per_window_entropy": [
+        1.350322153011868,
+        1.372538390439493
+      ],
+      "per_window_entropy_norm": [
+        0.8519584232418579,
+        0.8659753084473542
+      ]
+    },
+    "event": {
+      "lo_us": 4000000,
+      "hi_us": 8000000,
+      "windows": [
+        {
+          "window_start_idx": 2000,
+          "window_end_idx": 3000,
+          "window_start_us": 4000000,
+          "window_end_us": 6000000,
+          "window_center_us": 5000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "scored",
+          "quality": 0.8430485011366918,
+          "saturation_fraction": 0.0
+        },
+        {
+          "window_start_idx": 3000,
+          "window_end_idx": 4000,
+          "window_start_us": 6000000,
+          "window_end_us": 8000000,
+          "window_center_us": 7000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "scored",
+          "quality": 0.7656578231853314,
+          "saturation_fraction": 0.0
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 2,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 2,
+      "n_accepted_epochs": 2,
+      "per_window_entropy": [
+        1.0325857869331228,
+        1.2488265107166012
+      ],
+      "per_window_entropy_norm": [
+        0.6514890960911046,
+        0.7879218026599283
+      ]
+    }
+  },
+  "audit_id": "c253f336f71d64cd7120c4793de71cc98d72f8c53a92437fd7ff97f4d8be3534",
+  "code_sha256": "6091f45065c414a1af6957542dc38efeab54898153d733e53ceb51cee8e520ee",
+  "table_sha256": "2015c353c1d87171d5c4fa2891798b9d3870211b0776d7cfea40039776e13679"
+}

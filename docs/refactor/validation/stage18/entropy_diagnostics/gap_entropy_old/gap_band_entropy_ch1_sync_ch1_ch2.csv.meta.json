@@ -1,0 +1,56 @@
+{
+  "kind": "band_entropy",
+  "schema_version": 1,
+  "source_id": "3b1ed12591a6d9bdd1f34dbd32e8c7f52e5e8707dc7ba3f1ade7272d69a392fe",
+  "source_path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/gap.csv",
+  "source_samples": 4000,
+  "source_epoch_us": 0,
+  "config_id": "7921aeb730a43e9f5686b70cbdf4fc17d8f300edd5c367380ec734d5b26daf30",
+  "parameters": {
+    "fs": 500.0,
+    "channel": 1,
+    "win_sec": 2.0,
+    "step_sec": 1.0,
+    "win_samples": 1000,
+    "step_samples": 500,
+    "bandpass": null,
+    "quality_enabled": false,
+    "quality_threshold": 0.5,
+    "quality_params": null,
+    "bands": [
+      [
+        "theta",
+        [
+          4.0,
+          8.0
+        ]
+      ],
+      [
+        "alpha",
+        [
+          8.0,
+          13.0
+        ]
+      ],
+      [
+        "beta",
+        [
+          13.0,
+          30.0
+        ]
+      ]
+    ],
+    "sync_pair": [
+      1,
+      2
+    ],
+    "tau_ms": [
+      10.0
+    ],
+    "mi_bins": 8,
+    "grid_policy": "original sample grid; complete continuous windows; gap > 3 sample periods",
+    "code_sha256": "019f12040535eb84f789b2b6e4fcde81a66d8da90ccfbf8436409e7b43de40e8"
+  },
+  "code_sha256": "019f12040535eb84f789b2b6e4fcde81a66d8da90ccfbf8436409e7b43de40e8",
+  "table_sha256": "78ab841811b0bbe7af785c8aeca6ce186992d867a7a1a1dcd39734f8171a3695"
+}

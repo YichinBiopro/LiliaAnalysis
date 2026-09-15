@@ -1,0 +1,14 @@
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing band entropy — ch1, win=2.0s, step=1.0s, bands=theta/alpha/beta, fs=500.0Hz
+Computing lagged interhemispheric synchrony — ch1↔ch2, tau=10 ms, bins=8
+  Scoring window quality (eeg_quality_v2, ch median) and masking < 0.5…
+    masked 0/60 windows (0.0%) below quality 0.5.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/real_4_entropy_new/2026-06-18-lilia-vibration-level3_band_entropy_ch1_sync_ch1_ch2.csv
+
+Summary:
+  valid windows     : 60/60 (quality ≥ 0.5)
+  band_entropy      : mean=1.3536, std=0.1517, min=1.0171, max=1.5756
+  band_entropy_norm : mean=0.8540, std=0.0957, min=0.6417, max=0.9941
+  lagged_mi_mean    : mean=0.0987, std=0.0301, min=0.0468, max=0.1698
+  lagged_mi_max     : mean=0.0987, std=0.0301, min=0.0468, max=0.1698

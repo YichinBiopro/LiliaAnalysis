@@ -1,0 +1,32 @@
+{
+  "date": "2026-09-15",
+  "status": "passed",
+  "scope": "Five representative figures for entropy/MI/state diagnostics and R4 plot fixes",
+  "figures": [
+    {
+      "path": "fallback_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_quality.png",
+      "sha256": "811203d54b5690d8eb5b239de6fdbcd09d0b6d7bb20623cd8e08816eb60d1587",
+      "observation": "Filtered spectrum fallback remains 0.5 with orange invalid markers, distinct from the threshold."
+    },
+    {
+      "path": "fallback_entropy_new/2026-06-18-lilia-talk_band_entropy_ch1_sync_ch1_ch2_quality.png",
+      "sha256": "692ba6ea1c0a324493a26296dbfdfa3a15c77eb43d9929c685a1524ce96b9400",
+      "observation": "Entropy quality has the same finite-fallback markers and preserved elapsed axis."
+    },
+    {
+      "path": "fallback_clean_new/2026-06-18-lilia-talk_baseline_quality.png",
+      "sha256": "b1da3450b2c5b88e8c20eff1ee57eae2b1de0f0360c6aa0e730dc7cc0cd0771e",
+      "observation": "Clean state accepted fallback scores remain visible at 0.5; diagnostic invalidity is separate."
+    },
+    {
+      "path": "all_rejected_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.png",
+      "sha256": "b0158623add4d2974edff4330f1bfe62ed7cb48efcee583c8747a49e87d24c82",
+      "observation": "All excluded series keeps the real 1–60 second axis and explicit no-usable-windows message."
+    },
+    {
+      "path": "real_1_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_distribution.png",
+      "sha256": "238145783f14ddb08504dfcddea1036018115696fd68c24e18a49215487773b4",
+      "observation": "Population remains explicitly unmasked; footer correctly shows 500 Hz, 2 s windows and 1 s step."
+    }
+  ]
+}

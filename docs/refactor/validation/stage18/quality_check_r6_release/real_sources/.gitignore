@@ -1,0 +1,2 @@
+# Local byte-identical copies of recordings are used only for validation.
+*.csv

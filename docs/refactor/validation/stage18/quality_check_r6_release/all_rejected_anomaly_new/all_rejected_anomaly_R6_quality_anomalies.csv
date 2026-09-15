@@ -1,0 +1,4 @@
+window_start_idx,window_end_idx,window_center_us,qmed,clip,flat,gap,severity,reasons,quality_diagnostic_state,quality_diagnostic_reason,quality_stage,quality_score_policy
+0,2500,1700000002500000,0.0,0.0,0.0,0.002,0.5002,"[""low-Q 0.00""]",unavailable,"[""scorer_diagnostics_unavailable""]",raw,legacy_overall
+2500,5000,1700000007500000,0.0,0.0,0.0,0.002,0.5002,"[""low-Q 0.00""]",unavailable,"[""scorer_diagnostics_unavailable""]",raw,legacy_overall
+5000,7500,1700000012500000,0.0,0.0,0.0,0.002,0.5002,"[""low-Q 0.00""]",unavailable,"[""scorer_diagnostics_unavailable""]",raw,legacy_overall

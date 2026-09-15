@@ -11,7 +11,7 @@ import pandas as pd
 from matplotlib.figure import Figure
 
 import spectral_entropy as spectral
-from lilia.entropy_io import load_entropy_table, load_joint_mi_table
+from lilia.entropy_io import load_entropy_table, load_joint_mi_table, load_joint_mi_summary
 from lilia.provenance import file_sha256
 from lilia.windowing import build_window_grid
 
@@ -117,8 +117,11 @@ class JointMIWindowTests(unittest.TestCase):
         self.assertTrue(frame.joint_mi.iloc[1:3].isna().all())
         for seen, start in zip(scored, frame.window_start_idx):
             np.testing.assert_array_equal(seen, self.x[start:start + 400].astype(np.float32).T)
-        summary = pd.read_csv(self.root / 'out/recording_joint_mi_ch1_ch2_summary.csv')
+        summary, _ = load_joint_mi_summary(self.root / 'out/recording_joint_mi_ch1_ch2_summary.csv', source)
         self.assertEqual(summary.population_quality_state.iloc[0], 'disabled')
+        self.assertFalse(summary.population_quality_masked.iloc[0])
+        self.assertEqual(summary.series_quality_state.iloc[0], 'scored')
+        self.assertEqual(summary.series_quality_valid_windows.iloc[0], 4)
         self.assertEqual(summary.population_runs.iloc[0], 2)
 
     def test_missing_quality_or_count_mismatch_fails(self):
@@ -133,6 +136,76 @@ class JointMIWindowTests(unittest.TestCase):
         frame, metadata = load_joint_mi_table(table, source)
         self.assertFalse(metadata['parameters']['quality_enabled'])
         self.assertEqual(frame.quality_state.unique().tolist(), ['disabled'])
+
+    def test_all_quality_rejected_keeps_unmasked_population_and_surrogates(self):
+        source = self.recording()
+        summary_path = self.root / 'out/recording_joint_mi_ch1_ch2_summary.csv'
+        with patch.object(spectral, '_eeg_quality_v2', return_value={'overall': [0., 0.]}):
+            table = self.run_cli(source, '--no-bandpass')
+        rejected, _ = load_joint_mi_table(table, source)
+        masked, _ = load_joint_mi_summary(summary_path, source)
+        self.assertTrue(rejected.joint_mi.isna().all())
+        self.assertEqual(masked.series_quality_valid_windows.iloc[0], 0)
+        self.assertEqual(masked.n_samples.iloc[0], 1600)
+        self.assertFalse(masked.population_quality_masked.iloc[0])
+        self.assertEqual(masked.population_quality_state.iloc[0], 'disabled')
+        self.run_cli(source, '--no-bandpass', '--no-quality-mask')
+        unmasked, _ = load_joint_mi_summary(summary_path, source)
+        self.assertEqual(unmasked.series_quality_state.iloc[0], 'disabled')
+        self.assertEqual(unmasked.series_quality_valid_windows.iloc[0], 6)
+        cols = [key for key in masked if not key.startswith('series_')]
+        pd.testing.assert_frame_equal(masked[cols], unmasked[cols])
+        expected = spectral.compute_joint_probability(self.x[:, 0].astype(np.float32),
+                    self.x[:, 1].astype(np.float32), bins=8, binning='quantile')
+        self.assertEqual(masked.mutual_information_bits.iloc[0], expected['mutual_information'])
+
+    def test_rehashed_quality_state_mask_and_metric_contradictions_are_rejected(self):
+        source = self.recording()
+        scores = [np.nextafter(.5, 0), .5, np.nextafter(.5, 1), np.nan, .9, .9]
+        values = iter(scores)
+        with patch.object(spectral, '_eeg_quality_v2', side_effect=lambda *a, **kw: {'overall': [next(values)] * 2}):
+            table = self.run_cli(source, '--no-bandpass')
+        frame, meta = load_joint_mi_table(table, source)
+        np.testing.assert_array_equal(frame.quality, scores)
+        self.assertEqual(frame.quality_valid.tolist(), [False, True, True, False, True, True])
+        changes = [('quality_state', 0, 'disabled'), ('quality_valid', 0, True),
+                   ('quality', 1, .1), ('signal_valid', 1, False), ('joint_mi', 0, .2),
+                   ('joint_mi_norm', 1, np.nan)]
+        for key, row, value in changes:
+            with self.subTest(key=key):
+                changed = frame.copy()
+                changed.loc[row, key] = value
+                changed.to_csv(table, index=False)
+                meta['table_sha256'] = file_sha256(table)
+                Path(str(table) + '.meta.json').write_text(json.dumps(meta))
+                with self.assertRaisesRegex(ValueError, 'quality|Quality'):
+                    load_joint_mi_table(table, source)
+        for columns in [['quality_state'], ['quality_state', 'quality_valid']]:
+            frame.drop(columns=columns).to_csv(table, index=False)
+            meta['table_sha256'] = file_sha256(table)
+            Path(str(table) + '.meta.json').write_text(json.dumps(meta))
+            with self.assertRaisesRegex(ValueError, 'Incomplete window quality'):
+                load_joint_mi_table(table, source)
+
+    def test_summary_rejects_rehashed_scope_changes_and_changed_parent(self):
+        source = self.recording()
+        table = self.run_cli(source, '--no-quality-mask')
+        summary_path = self.root / 'out/recording_joint_mi_ch1_ch2_summary.csv'
+        frame, meta = load_joint_mi_summary(summary_path, source)
+        for key, value in [('population_quality_state', 'scored'), ('population_quality_masked', True),
+                           ('series_quality_state', 'scored'), ('series_windows', 7),
+                           ('series_quality_valid_windows', 0)]:
+            with self.subTest(key=key):
+                changed = frame.copy()
+                changed.loc[0, key] = value
+                changed.to_csv(summary_path, index=False)
+                meta['table_sha256'] = file_sha256(summary_path)
+                Path(str(summary_path) + '.meta.json').write_text(json.dumps(meta))
+                with self.assertRaisesRegex(ValueError, 'quality scope'):
+                    load_joint_mi_summary(summary_path, source)
+        table.write_text(table.read_text() + '\n')
+        with self.assertRaisesRegex(ValueError, 'series fingerprint'):
+            load_joint_mi_summary(summary_path, source)
 
     def test_metadata_rejects_wrong_source_pair_kind_or_rehashed_indexes(self):
         source = self.recording()

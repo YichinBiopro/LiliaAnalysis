@@ -1,0 +1,5 @@
+segment,window_start_idx,window_end_idx,window_start_us,window_center_us,quality_ch1,quality_ch2,quality_ch3,quality_ch4,quality_diagnostic_state,quality_diagnostic_reason,quality_stage,quality_score_policy
+0,0,15000,1700000000000000,1700000015000000,0.6001770260447608,0.5985740638255163,0.5996676946984066,0.6003032216376466,invalid,"[""spectrum:exception:RuntimeError""]",raw,legacy_overall
+0,0,15000,1700000000000000,1700000015000000,0.5990570058322183,0.5975110236155886,0.599076849916983,0.5970097762831409,invalid,"[""spectrum:exception:RuntimeError""]",filtered,legacy_overall
+1,15000,30000,1700000030000000,1700000045000000,0.5998545610509951,0.6008011153766356,0.6006862093739828,0.6000174493000192,invalid,"[""spectrum:exception:RuntimeError""]",raw,legacy_overall
+1,15000,30000,1700000030000000,1700000045000000,0.5997341082267966,0.598712416095612,0.5983590345357666,0.5972213902611715,invalid,"[""spectrum:exception:RuntimeError""]",filtered,legacy_overall

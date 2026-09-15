@@ -1,0 +1,284 @@
+  [real_anomaly] loading & scoring quality windows…
+  [real_anomaly] 281/850 windows flagged as abnormal:
+      14:10:55  clip 13%  ·  low-Q 0.24
+      14:11:00  clip 17%
+      14:11:05  clip 11%  ·  low-Q 0.27
+      14:11:10  low-Q 0.28
+      14:11:15  jump +0.63
+      14:12:20  clip 2%  ·  low-Q 0.50  ·  jump -0.42
+      14:12:25  low-Q 0.49
+      14:13:25  clip 23%
+      14:13:30  clip 2%
+      14:13:35  jump +0.44
+      14:17:40  clip 10%
+      14:17:45  clip 4%  ·  low-Q 0.48
+      14:17:50  jump +0.43
+      14:18:20  clip 3%  ·  low-Q 0.50  ·  jump -0.42
+      14:18:25  clip 14%  ·  low-Q 0.46
+      14:18:30  clip 5%  ·  low-Q 0.46
+      14:18:35  low-Q 0.44
+      14:18:40  clip 20%  ·  low-Q 0.38
+      14:18:45  clip 5%
+      14:18:50  jump +0.43
+      14:19:25  clip 10%  ·  low-Q 0.49
+      14:19:30  clip 28%  ·  low-Q 0.48
+      14:22:25  clip 18%  ·  low-Q 0.36  ·  jump -0.56
+      14:22:30  clip 18%
+      14:22:35  clip 10%  ·  low-Q 0.50
+      14:22:40  jump +0.43
+      14:22:55  clip 11%  ·  low-Q 0.50
+      14:23:00  jump +0.43
+      14:23:20  low-Q 0.23  ·  jump -0.70
+      14:23:25  jump +0.70
+      14:23:30  clip 15%  ·  low-Q 0.48  ·  jump -0.45
+      14:24:20  clip 31%
+      14:25:00  clip 11%  ·  low-Q 0.48  ·  jump -0.43
+      14:25:05  clip 27%  ·  low-Q 0.41
+      14:25:10  clip 15%  ·  low-Q 0.41
+      14:25:15  low-Q 0.43
+      14:25:30  clip 11%  ·  low-Q 0.46
+      14:25:35  clip 17%
+      14:25:40  clip 24%
+      14:25:45  clip 10%  ·  low-Q 0.45
+      14:25:50  jump +0.43
+      14:26:40  clip 10%  ·  low-Q 0.44  ·  jump -0.48
+      14:26:45  clip 20%  ·  low-Q 0.49
+      14:26:50  clip 14%  ·  low-Q 0.41
+      14:26:55  clip 18%  ·  low-Q 0.41
+      14:27:00  clip 22%  ·  low-Q 0.41
+      14:27:05  clip 32%  ·  low-Q 0.40
+      14:27:10  clip 2%  ·  low-Q 0.20
+      14:27:15  clip 13%  ·  low-Q 0.44
+      14:27:20  jump +0.50
+      14:28:35  clip 11%  ·  low-Q 0.20  ·  jump -0.55
+      14:28:40  clip 36%
+      14:28:45  clip 22%
+      14:28:50  clip 33%  ·  low-Q 0.42
+      14:28:55  clip 53%
+      14:29:00  clip 18%  ·  low-Q 0.26
+      14:29:05  low-Q 0.16
+      14:29:10  jump +0.50
+      14:29:40  clip 12%  ·  low-Q 0.22  ·  jump -0.70
+      14:29:45  jump +0.51
+      14:29:50  clip 5%  ·  low-Q 0.48
+      14:29:55  clip 10%  ·  low-Q 0.24
+      14:30:00  jump +0.51
+      14:30:05  low-Q 0.27  ·  jump -0.48
+      14:30:50  clip 3%  ·  low-Q 0.49  ·  jump -0.41
+      14:30:55  clip 24%
+      14:31:00  clip 14%  ·  low-Q 0.43
+      14:31:05  clip 27%  ·  low-Q 0.42
+      14:31:10  clip 10%  ·  low-Q 0.42
+      14:31:15  clip 30%
+      14:31:20  clip 12%
+      14:31:50  clip 21%  ·  low-Q 0.49  ·  jump -0.41
+      14:31:55  clip 8%  ·  low-Q 0.39
+      14:32:00  low-Q 0.47
+      14:32:45  low-Q 0.33  ·  jump -0.57
+      14:33:10  clip 8%
+      14:33:15  clip 20%
+      14:33:20  clip 4%  ·  low-Q 0.48
+      14:33:25  low-Q 0.33
+      14:33:30  jump +0.55
+      14:33:40  low-Q 0.25  ·  jump -0.68
+      14:33:45  jump +0.65
+      14:34:30  low-Q 0.37
+      14:34:35  jump +0.50
+      14:36:00  low-Q 0.38  ·  jump -0.55
+      14:36:05  jump +0.51
+      14:36:45  low-Q 0.27
+      14:36:50  clip 8%  ·  low-Q 0.24
+      14:36:55  clip 3%
+      14:37:15  clip 18%
+      14:37:20  clip 19%  ·  low-Q 0.43
+      14:37:25  clip 24%
+      14:39:30  low-Q 0.45  ·  jump -0.45
+      14:39:40  clip 11%  ·  low-Q 0.24
+      14:39:45  low-Q 0.35
+      14:40:25  clip 1%
+      14:40:30  clip 4%  ·  low-Q 0.43
+      14:40:45  clip 2%  ·  low-Q 0.41
+      14:40:50  clip 25%  ·  low-Q 0.48
+      14:40:55  clip 26%  ·  low-Q 0.39
+      14:41:00  clip 45%  ·  low-Q 0.37
+      14:41:05  low-Q 0.47
+      14:41:10  jump +0.46
+      14:41:15  clip 4%  ·  low-Q 0.48  ·  jump -0.46
+      14:41:20  clip 22%
+      14:42:15  clip 14%  ·  low-Q 0.42
+      14:42:20  clip 8%  ·  low-Q 0.23
+      14:43:00  low-Q 0.49
+      14:43:05  clip 17%  ·  low-Q 0.39
+      14:43:10  clip 17%  ·  low-Q 0.22
+      14:43:15  clip 18%  ·  low-Q 0.31
+      14:43:20  jump +0.55
+      14:43:30  clip 10%  ·  low-Q 0.44  ·  jump -0.48
+      14:43:35  clip 35%
+      14:43:40  clip 35%  ·  low-Q 0.49
+      14:43:45  clip 6%
+      14:43:50  clip 14%  ·  low-Q 0.24
+      14:43:55  clip 25%
+      14:44:00  clip 4%
+      14:44:05  low-Q 0.28
+      14:44:10  clip 7%  ·  low-Q 0.49
+      14:44:45  clip 17%  ·  jump -0.42
+      14:44:50  clip 11%  ·  low-Q 0.49
+      14:44:55  clip 13%  ·  low-Q 0.25
+      14:45:00  clip 51%
+      14:45:10  clip 9%  ·  jump -0.42
+      14:45:15  clip 7%  ·  low-Q 0.49
+      14:45:20  clip 23%  ·  low-Q 0.49
+      14:45:25  clip 15%  ·  low-Q 0.49
+      14:45:30  clip 12%
+      14:45:35  clip 59%  ·  low-Q 0.42
+      14:45:40  clip 27%  ·  low-Q 0.43
+      14:45:45  low-Q 0.27
+      14:45:50  clip 20%  ·  low-Q 0.49
+      14:45:55  jump +0.41
+      14:46:10  clip 8%  ·  low-Q 0.48
+      14:46:15  clip 8%  ·  low-Q 0.48
+      14:46:30  low-Q 0.37
+      14:46:35  clip 3%  ·  low-Q 0.49
+      14:46:45  time-gap 56s
+      14:48:21  clip 43%
+      14:48:26  clip 43%
+      14:48:41  time-gap 24s
+      14:49:41  clip 20%  ·  low-Q 0.46  ·  jump -0.44
+      14:49:46  clip 47%
+      14:50:21  low-Q 0.40
+      14:50:26  jump +0.50
+      14:50:31  clip 3%  ·  low-Q 0.49  ·  jump -0.41
+      14:50:36  clip 26%  ·  low-Q 0.38
+      14:50:41  jump +0.51
+      14:50:46  clip 37%  ·  low-Q 0.25  ·  jump -0.65
+      14:51:06  time-gap 19s
+      14:51:30  clip 13%  ·  low-Q 0.24  ·  jump -0.68
+      14:52:15  clip 4%  ·  low-Q 0.48
+      14:52:20  clip 25%  ·  low-Q 0.42
+      14:52:25  clip 11%  ·  low-Q 0.24
+      14:52:30  clip 8%
+      14:52:35  clip 32%
+      14:52:40  clip 6%  ·  low-Q 0.47
+      14:52:55  clip 7%  ·  low-Q 0.44  ·  jump -0.40
+      14:53:00  clip 4%  ·  low-Q 0.49
+      14:53:05  clip 40%  ·  low-Q 0.31
+      14:53:10  clip 14%  ·  low-Q 0.24
+      14:53:15  clip 30%  ·  low-Q 0.22
+      14:53:20  jump +0.42
+      14:53:25  low-Q 0.45
+      14:53:30  low-Q 0.48
+      14:53:35  clip 16%  ·  low-Q 0.39
+      14:53:50  low-Q 0.49
+      14:54:00  clip 6%  ·  low-Q 0.45  ·  jump -0.43
+      14:54:10  low-Q 0.41
+      14:54:30  clip 3%  ·  low-Q 0.49
+      14:54:55  low-Q 0.43  ·  jump -0.45
+      14:55:00  jump +0.48
+      14:55:15  clip 16%  ·  low-Q 0.44
+      14:55:20  clip 10%  ·  low-Q 0.22
+      14:55:25  jump +0.42
+      14:56:50  clip 28%  ·  low-Q 0.48  ·  jump -0.42
+      14:56:55  clip 36%
+      14:57:00  clip 34%  ·  low-Q 0.50
+      14:57:05  jump +0.41
+      14:58:20  clip 3%
+      14:58:35  clip 16%
+      14:58:40  clip 32%  ·  low-Q 0.46
+      14:58:45  low-Q 0.45
+      14:58:50  jump +0.47
+      14:59:15  clip 6%  ·  low-Q 0.50  ·  jump -0.42
+      14:59:45  clip 13%
+      14:59:50  clip 26%  ·  low-Q 0.36
+      14:59:55  clip 42%  ·  low-Q 0.40
+      15:00:00  jump +0.44
+      15:00:15  clip 13%
+      15:00:20  clip 11%
+      15:00:25  clip 45%  ·  low-Q 0.42
+      15:00:30  clip 34%  ·  low-Q 0.50
+      15:00:35  clip 56%
+      15:00:40  clip 46%
+      15:01:05  clip 51%
+      15:01:10  clip 12%  ·  low-Q 0.50
+      15:01:15  clip 69%
+      15:01:20  clip 40%  ·  low-Q 0.49
+      15:01:25  clip 7%  ·  low-Q 0.50
+      15:01:30  clip 46%
+      15:01:40  clip 34%
+      15:01:45  clip 32%  ·  low-Q 0.43
+      15:01:50  jump +0.40
+      15:02:00  clip 13%  ·  low-Q 0.46
+      15:02:05  clip 30%
+      15:02:10  clip 30%
+      15:02:15  clip 43%  ·  low-Q 0.48
+      15:02:20  clip 20%
+      15:02:25  clip 66%
+      15:02:30  clip 40%
+      15:02:35  clip 45%
+      15:02:40  clip 7%  ·  low-Q 0.42
+      15:02:45  clip 41%
+      15:02:55  clip 9%
+      15:03:00  clip 26%  ·  low-Q 0.43
+      15:03:05  clip 49%
+      15:03:10  clip 45%
+      15:03:15  clip 46%
+      15:03:25  clip 48%
+      15:03:30  clip 10%  ·  low-Q 0.42
+      15:03:35  clip 52%  ·  low-Q 0.48
+      15:03:45  clip 40%
+      15:03:50  clip 1%  ·  low-Q 0.49
+      15:04:00  clip 8%  ·  low-Q 0.31  ·  jump -0.57
+      15:04:05  clip 51%
+      15:04:15  clip 20%  ·  low-Q 0.44
+      15:04:20  clip 51%
+      15:04:25  clip 37%
+      15:04:30  clip 70%
+      15:04:35  clip 23%  ·  low-Q 0.42
+      15:04:40  clip 50%
+      15:04:45  clip 28%  ·  low-Q 0.43
+      15:04:50  clip 34%  ·  low-Q 0.48
+      15:04:55  clip 48%  ·  low-Q 0.48
+      15:05:00  clip 74%
+      15:05:05  clip 61%
+      15:05:10  clip 64%  ·  low-Q 0.45
+      15:05:15  clip 17%  ·  low-Q 0.35
+      15:05:20  clip 41%  ·  low-Q 0.49
+      15:05:30  clip 7%
+      15:05:35  clip 32%  ·  low-Q 0.43
+      15:05:40  clip 34%  ·  low-Q 0.44
+      15:06:00  clip 19%  ·  low-Q 0.42
+      15:06:05  jump +0.48
+      15:06:35  low-Q 0.40  ·  jump -0.51
+      15:06:40  low-Q 0.40
+      15:06:45  jump +0.47
+      15:07:05  low-Q 0.39  ·  jump -0.42
+      15:07:10  jump +0.54
+      15:12:50  low-Q 0.33  ·  jump -0.59
+      15:12:55  jump +0.46
+      15:16:35  low-Q 0.28  ·  jump -0.62
+      15:16:40  clip 33%
+      15:17:05  clip 30%
+      15:17:10  clip 48%  ·  low-Q 0.45
+      15:17:15  clip 32%  ·  low-Q 0.48
+      15:17:20  time-gap 410s  ·  clip 64%  ·  flat 13%  ·  low-Q 0.17
+      15:24:15  clip 63%  ·  flat 12%  ·  low-Q 0.20
+      15:24:20  clip 36%  ·  flat 10%  ·  low-Q 0.35
+      15:24:25  jump +0.44
+      15:24:40  clip 12%  ·  low-Q 0.21  ·  jump -0.54
+      15:24:45  jump +0.72
+      15:24:50  clip 9%  ·  low-Q 0.29  ·  jump -0.64
+      15:24:55  clip 5%  ·  low-Q 0.32
+      15:25:00  jump +0.55
+      15:25:45  clip 3%  ·  low-Q 0.27  ·  jump -0.63
+      15:25:50  clip 26%  ·  low-Q 0.33
+      15:25:55  clip 31%  ·  low-Q 0.34
+      15:26:00  clip 9%  ·  low-Q 0.24
+      15:26:05  clip 4%  ·  low-Q 0.34
+      15:26:10  time-gap 32s  ·  clip 32%  ·  flat 10%  ·  low-Q 0.25
+      15:26:46  clip 73%  ·  flat 25%  ·  low-Q 0.24
+      15:26:51  clip 31%  ·  low-Q 0.33
+      15:26:56  clip 3%
+      15:27:51  clip 4%
+      15:28:31  clip 5%
+      15:28:36  low-Q 0.31
+      15:28:41  jump +0.59
+       → /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/quality_check_r6_release/real_anomaly_new/real_anomaly_R6_quality_anomalies.png

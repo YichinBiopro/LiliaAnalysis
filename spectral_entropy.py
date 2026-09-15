@@ -91,11 +91,13 @@ from scipy import signal
 from lilia.io import bandpass_filter, load_merged_csv, read_lilia_frame
 from lilia.windowing import (continuous_slices, WindowGrid,
                              build_window_grid, transform_runs, plot_breaks, finite_runs)
-from lilia.entropy_io import write_entropy_table, write_joint_mi_table
+from lilia.entropy_io import write_entropy_table, write_joint_mi_table, write_joint_mi_summary
 from lilia.event_windows import select_event_windows
 from lilia.state_windows import select_state_windows, state_bounds
 from lilia.state_entropy_io import write_state_entropy_table
 from lilia.provenance import file_sha256
+from lilia.quality_audit import capture_diagnostics, pending_diagnostics
+from lilia.entropy_quality import disabled_rows, plot_quality_audit
 import hashlib
 from lilia.time_utils import utc_us_to_local_dt
 
@@ -773,7 +775,7 @@ def collect_clean_epochs(
 
 def _collect_state_epochs(time_us, filtered, raw, lo_us, hi_us, ch_idx, *,
                           fs, win_sec, step_sec=None, clean=False,
-                          quality_threshold=_QUALITY_THRESHOLD, segment_failures=None):
+                          quality_threshold=_QUALITY_THRESHOLD, segment_failures=None, quality_stage='filtered'):
     """Use one candidate catalog for PSD, quality and inclusion/exclusion audit."""
     if clean and not _QC_AVAILABLE:
         raise RuntimeError('Quality-control modules unavailable for --clean')
@@ -811,11 +813,16 @@ def _collect_state_epochs(time_us, filtered, raw, lo_us, hi_us, ch_idx, *,
                 row['status'] = 'raw_saturation'
                 continue
             try:
-                scores = np.asarray(_eeg_quality_v2(seg.T.astype(np.float64), fs=fs,
-                                                   params=_QUALITY_PARAMS)['overall'], dtype=float)
+                result = _eeg_quality_v2(seg.T.astype(np.float64), fs=fs, params=_QUALITY_PARAMS)
+                scores = np.asarray(result['overall'], dtype=float)
             except Exception as exc:
                 row.update(status='quality_error', quality_state='error', error=str(exc))
+                row['quality_diagnostics'] = pending_diagnostics(fs=fs, params=_QUALITY_PARAMS,
+                    n_channels=seg.shape[1], n_samples=len(seg), stage=quality_stage,
+                    state='error', reasons=['scorer_exception:' + type(exc).__name__])
                 continue
+            row['quality_diagnostics'] = capture_diagnostics(result, fs=fs, params=_QUALITY_PARAMS,
+                n_channels=seg.shape[1], n_samples=len(seg), stage=quality_stage)
             if (scores.shape != (seg.shape[1],) or not np.isfinite(scores).all()
                     or np.any((scores < 0) | (scores > 1))):
                 row.update(status='invalid_quality', quality_state='invalid')
@@ -827,6 +834,12 @@ def _collect_state_epochs(time_us, filtered, raw, lo_us, hi_us, ch_idx, *,
             row['status'] = 'accepted'
         if row['status'] == 'accepted':
             epochs.append(seg[:, ch_idx].astype(float))
+    for row in audit['windows']:
+        if 'quality_diagnostics' not in row:
+            row['quality_diagnostics'] = pending_diagnostics(fs=fs, params=_QUALITY_PARAMS if clean else None,
+                n_channels=filtered.shape[1] if clean else 0,
+                n_samples=row['window_end_idx'] - row['window_start_idx'], stage=quality_stage,
+                reasons=[row['status'] if clean else 'quality_disabled'])
     statuses = [row['status'] for row in audit['windows']]
     audit.update(n_total_epochs=sum(row['complete'] for row in audit['windows']),
                  n_saturated_epochs=statuses.count('raw_saturation'),
@@ -843,6 +856,7 @@ def compute_quality_windowed_aligned(
     win_sec: float = DEFAULT_WIN_SEC,
     step_sec: float | None = None,
     windows: WindowGrid | None = None,
+    *, quality_audit: list | None = None, quality_stage: str = 'unspecified',
 ) -> np.ndarray:
     """Channel-median EEG quality for each analysis window, aligned 1:1 with
     ``compute_band_entropy_windowed`` (and the lagged-MI sync windows).
@@ -881,6 +895,10 @@ def compute_quality_windowed_aligned(
         seg = data2d[start:start + win]                       # (win, n_ch)
         res = _eeg_quality_v2(seg.T, fs=fs, params=_QUALITY_PARAMS)
         quality.append(float(np.median(res['overall'])))
+        if quality_audit is not None:
+            quality_audit.append(dict(window_start_idx=int(start), window_end_idx=int(start + win),
+                quality_diagnostics=capture_diagnostics(res, fs=fs, params=_QUALITY_PARAMS,
+                    n_channels=seg.shape[1], n_samples=len(seg), stage=quality_stage)))
     return np.asarray(quality, dtype=float)
 
 
@@ -2504,6 +2522,7 @@ def plot_joint_distribution(
     label_x: str = 'X',
     label_y: str = 'Y',
     sig: dict[str, float] | None = None,
+    *, footer: str | None = None,
 ) -> None:
     """Plot the 2-D joint probability distribution P(X, Y) as a heatmap with the
     two marginals, annotated with the mutual information it implies."""
@@ -2584,8 +2603,8 @@ def plot_joint_distribution(
         ax_sig.legend(fontsize=6, loc='upper right')
 
     fig.suptitle(title, fontsize=13, fontweight='bold')
-    _add_footer(fig, _provenance(float(joint.get('fs', DEFAULT_FS)),
-                                 DEFAULT_WIN_SEC, None, extra='joint-MI'))
+    _add_footer(fig, footer or _provenance(float(joint.get('fs', DEFAULT_FS)),
+                                          DEFAULT_WIN_SEC, None, extra='joint-MI'))
     fig.savefig(outpath, dpi=150, bbox_inches='tight')
     fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
@@ -2598,6 +2617,7 @@ def plot_joint_excess(
     outpath: str,
     label_x: str = 'X',
     label_y: str = 'Y',
+    *, footer: str | None = None,
 ) -> None:
     """Excess-mass view of the joint distribution: P(X,Y) − P(X)P(Y) in
     bin-index space, on a zero-centred diverging colourmap.
@@ -2636,8 +2656,8 @@ def plot_joint_excess(
     cb.set_label('P(X,Y) − P(X)P(Y)  (excess over independence)')
     ax.set_title(f'{title}\nI(X;Y) = {float(joint["mutual_information"]):.4f} bits '
                  f'(MM {float(joint["mutual_information_mm"]):.4f})', fontsize=11)
-    _add_footer(fig, _provenance(float(joint.get('fs', DEFAULT_FS)),
-                                 DEFAULT_WIN_SEC, None, extra='joint-MI excess'))
+    _add_footer(fig, footer or _provenance(float(joint.get('fs', DEFAULT_FS)),
+                                          DEFAULT_WIN_SEC, None, extra='joint-MI excess'))
     fig.tight_layout(rect=(0, 0.02, 1, 1))
     fig.savefig(outpath, dpi=150, bbox_inches='tight')
     fig.savefig(os.path.splitext(outpath)[0] + '.svg')
@@ -3283,6 +3303,8 @@ def _run_joint_mi_mode(args: argparse.Namespace,
         bins=bins, binning=binning, windows=windows)
 
     mi_quality = None
+    quality_audit = []
+    quality_stage = 'model_output' if args.denoise else 'raw' if args.no_bandpass else 'filtered'
     quality_valid = np.ones(len(win_result['time']), dtype=bool)
     signal_valid = np.isfinite(win_result['joint_mi'])
     if (not args.denoise) and (not args.no_quality_mask):
@@ -3290,7 +3312,8 @@ def _run_joint_mi_mode(args: argparse.Namespace,
             raise RuntimeError('Quality modules unavailable; explicitly use --no-quality-mask to disable scoring')
         two_ch = np.column_stack([sig_x, sig_y]).astype(float)
         mi_quality = compute_quality_windowed_aligned(
-            two_ch, fs=fs_eff, win_sec=args.win, step_sec=args.step, windows=windows)
+            two_ch, fs=fs_eff, win_sec=args.win, step_sec=args.step, windows=windows,
+            quality_audit=quality_audit, quality_stage=quality_stage)
         if mi_quality.shape != win_result['time'].shape:
             raise ValueError('Quality window count does not match joint-MI windows')
         quality_valid = np.isfinite(mi_quality) & (mi_quality >= args.quality_threshold)
@@ -3298,6 +3321,8 @@ def _run_joint_mi_mode(args: argparse.Namespace,
         print(f'  Masked {int((~quality_valid).sum())}/{quality_valid.size} MI windows '
               f'with invalid quality or below {args.quality_threshold:g}.')
     quality_state = 'scored' if mi_quality is not None else 'disabled'
+    if mi_quality is None:
+        quality_audit = disabled_rows(windows, fs=fs_eff, n_channels=2, stage=quality_stage)
     print(f'  Series quality: {quality_state}; population summary and pre/onset histograms are unmasked.')
 
     basename = os.path.splitext(os.path.basename(args.csv))[0]
@@ -3320,12 +3345,14 @@ def _run_joint_mi_mode(args: argparse.Namespace,
         'surrogate_null_method': sig['null_method'], 'surrogate_null_state': sig['null_state'],
         'population_scope': 'finite paired samples in grid-contributing segments' if windows is not None else 'denoised samples',
         'population_quality_state': 'disabled',
+        'population_quality_masked': False,
+        'series_quality_state': quality_state,
+        'series_windows': len(quality_valid),
+        'series_quality_valid_windows': int(quality_valid.sum()),
         'population_runs': int(len(np.unique(population_groups))) if population_groups is not None else 1,
         'excluded_samples': int(len(sig_x) - len(pop_x)),
     }
     summary_csv = os.path.join(outdir, f'{stem}_summary.csv')
-    pd.DataFrame([summary]).to_csv(summary_csv, index=False)
-    print(f'Saved: {summary_csv}')
 
     # ── Sliding-window MI series ────────────────────────────────────────────────
     series_csv = os.path.join(outdir, f'{stem}_timeseries.csv')
@@ -3341,7 +3368,8 @@ def _run_joint_mi_mode(args: argparse.Namespace,
     series_df['signal_valid'] = signal_valid
     if windows is not None:
         code_paths = [__file__, *[os.path.join(os.path.dirname(__file__), 'lilia', name)
-                      for name in ('windowing.py', 'signal.py', 'quality.py', 'entropy_io.py', 'neural.py', 'neural_io.py')]]
+                      for name in ('windowing.py', 'signal.py', 'quality.py', 'entropy_io.py', 'neural.py', 'neural_io.py',
+                                   'entropy_quality.py', 'quality_audit.py')]]
         if args.denoise:
             code_paths.append(os.path.join(os.path.dirname(__file__), 'data_analysis.py'))
         code_id = hashlib.sha256(''.join(file_sha256(path) for path in code_paths).encode()).hexdigest()
@@ -3351,8 +3379,9 @@ def _run_joint_mi_mode(args: argparse.Namespace,
             'win_samples': windows.win, 'step_samples': windows.step,
             'bandpass': [DEFAULT_BP_LOW, DEFAULT_BP_HIGH] if args.denoise else (None if args.no_bandpass else [DEFAULT_BP_LOW, DEFAULT_BP_HIGH]),
             'quality_enabled': mi_quality is not None, 'quality_threshold': args.quality_threshold,
+            'quality_state_version': 1,
             'quality_params': _QUALITY_PARAMS if mi_quality is not None else None,
-            'quality_channels': None if args.denoise else list(args.joint_pair), 'quality_reduction': 'channel median',
+            'quality_channels': [1, 2] if args.denoise else list(args.joint_pair), 'quality_reduction': 'channel median',
             'mi_bins': bins, 'mi_binning': binning, 'denoise': bool(args.denoise),
             'grid_policy': 'original sample grid; complete continuous windows; gap > 3 sample periods',
             'code_sha256': code_id,
@@ -3365,14 +3394,17 @@ def _run_joint_mi_mode(args: argparse.Namespace,
                             model=model_provenance(), input_channels=[1, 2, 3, 4],
                             grid_policy='per-source-segment resampled grid; complete MI windows')
             write_denoised_joint_mi_table(series_csv, args.csv, pd.DataFrame(series_df), windows,
-                                          settings, code_id, timeline)
+                                          settings, code_id, timeline, quality_audit=quality_audit)
             pd.DataFrame(timeline.segments).to_csv(
                 os.path.join(outdir, f'{stem}_inference_segments.csv'), index=False)
         else:
-            write_joint_mi_table(series_csv, args.csv, pd.DataFrame(series_df), windows, settings, code_id)
+            write_joint_mi_table(series_csv, args.csv, pd.DataFrame(series_df), windows, settings, code_id,
+                                 quality_audit=quality_audit)
     else:
         pd.DataFrame(series_df).to_csv(series_csv, index=False)
     print(f'Saved: {series_csv}')
+    write_joint_mi_summary(summary_csv, pd.DataFrame([summary]), series_csv)
+    print(f'Saved: {summary_csv}')
 
     # ── Plots ───────────────────────────────────────────────────────────────────
     heatmap_png = os.path.join(outdir, f'{stem}_distribution.png')
@@ -3380,14 +3412,16 @@ def _run_joint_mi_mode(args: argparse.Namespace,
         joint,
         title=(f'Joint P({label_x}, {label_y}) — {os.path.basename(args.csv)} '
                f'[{binning}, {bins} bins; quality unmasked]'),
-        outpath=heatmap_png, label_x=label_x, label_y=label_y, sig=sig)
+        outpath=heatmap_png, label_x=label_x, label_y=label_y, sig=sig,
+        footer=_provenance(fs_eff, args.win, args.step, extra='joint-MI population unmasked'))
 
     excess_png = os.path.join(outdir, f'{stem}_excess.png')
     plot_joint_excess(
         joint,
         title=(f'Excess mass P−P·P ({label_x}, {label_y}) — '
                f'{os.path.basename(args.csv)} [{binning}, {bins} bins; quality unmasked]'),
-        outpath=excess_png, label_x=label_x, label_y=label_y)
+        outpath=excess_png, label_x=label_x, label_y=label_y,
+        footer=_provenance(fs_eff, args.win, args.step, extra='joint-MI population unmasked'))
 
     # iBrainCenter event overlay (absolute local time) on the MI time series.
     use_events = bool(args.ibrain_events)
@@ -3411,6 +3445,15 @@ def _run_joint_mi_mode(args: argparse.Namespace,
             color='#111111', lw=2.0, label='joint MI smooth')
     ax.set_ylabel('MI (bits)')
     ax.set_ylim(bottom=0.0)
+    if len(t_axis) > 1:
+        ax.set_xlim(t_axis[0], t_axis[-1])
+    elif len(t_axis):
+        center = mdates.date2num(t_axis[0]) if use_events else float(t_axis[0])
+        padding = args.win / (2 * 86400) if use_events else args.win / 2
+        ax.set_xlim(center - padding, center + padding)
+    if not np.isfinite(win_result['joint_mi']).any():
+        ax.text(.5, .5, 'No usable MI windows (quality/signal excluded)',
+                ha='center', transform=ax.transAxes)
     ax.set_title(f'Zero-lag mutual information — {label_x} vs {label_y} '
                  f'(win={args.win:g}s; quality {quality_state})')
     ax.grid(True, alpha=0.3)
@@ -3430,6 +3473,10 @@ def _run_joint_mi_mode(args: argparse.Namespace,
     fig.savefig(os.path.splitext(series_png)[0] + '.svg')
     plt.close(fig)
     print(f'Saved: {series_png}')
+    plot_quality_audit(quality_audit, win_result['time'],
+        mi_quality if mi_quality is not None else np.full(len(quality_audit), np.nan),
+        os.path.join(outdir, f'{stem}_quality.png'), title=f'Joint-MI quality — {basename}',
+        threshold=args.quality_threshold, groups=win_result.get('segment_id'))
 
     # ── Pre-event vs onset joint-distribution comparison (--ibrain-events) ───────
     if use_events:
@@ -3547,7 +3594,8 @@ def _run_baseline_event_mode(args: argparse.Namespace,
         epochs, audit = _collect_state_epochs(
             time_us, filtered, data_raw, *state_bounds(time_us, rng), ch_idx,
             fs=args.fs, win_sec=args.win, step_sec=step, clean=args.clean,
-            quality_threshold=args.quality_threshold, segment_failures=failures)
+            quality_threshold=args.quality_threshold, segment_failures=failures,
+            quality_stage='raw' if args.no_bandpass else 'filtered')
         audit['per_window_entropy'] = []
         row = {'state': label, 'sampling': 'clean_epochs' if args.clean else 'segment_windows',
                'status': 'accepted' if epochs else 'excluded_no_usable_windows',
@@ -3574,10 +3622,13 @@ def _run_baseline_event_mode(args: argparse.Namespace,
     parameters = {
         'fs': args.fs, 'channel': args.ch, 'win_sec': args.win, 'step_sec': step,
         'ranges': ranges, 'clean': args.clean, 'quality_threshold': args.quality_threshold,
+        'quality_state_version': 1,
+        'quality_diagnostics_version': 1,
         'bandpass': None if args.no_bandpass else [DEFAULT_BP_LOW, DEFAULT_BP_HIGH],
         'quality_channels': list(range(1, data_raw.shape[1]+1)) if args.clean else [],
         'quality_params': _QUALITY_PARAMS if args.clean else None,
         'saturation_fraction_max': _SAT_FRAC_MAX if args.clean else None,
+        'saturation_rail': 2048.0 if args.clean else None,
         'window_policy': 'interval_first_sample_reset_per_segment_complete_only',
         'aggregation': 'equal_window_mean_psd_and_separate_per_window_entropy',
         'bands': [[name, list(bounds)] for name, bounds in BAND_DEFINITIONS],
@@ -3585,12 +3636,18 @@ def _run_baseline_event_mode(args: argparse.Namespace,
     }
     code_paths = [__file__, *[os.path.join(os.path.dirname(__file__), 'lilia', name)
                    for name in ('windowing.py', 'state_windows.py', 'state_entropy_io.py',
-                                'signal.py', 'quality.py', 'io.py')],
+                                'signal.py', 'quality.py', 'io.py', 'entropy_quality.py', 'quality_audit.py')],
                   os.path.join(os.path.dirname(__file__), 'plot_tflite_summary.py'),
                   os.path.join(os.path.dirname(__file__), 'plot_event_markers.py')]
     code_id = hashlib.sha256(''.join(file_sha256(path) for path in code_paths).encode()).hexdigest()
     write_state_entropy_table(csv_out, args.csv, pd.DataFrame(rows), parameters, audits, code_id)
     print(f'Saved summary and window audit: {csv_out}')
+    for label, audit in audits.items():
+        rows = audit['windows']
+        times = [(r['window_center_us'] - int(time_us[0])) / 1e6 for r in rows]
+        plot_quality_audit(rows, times, [np.nan if r['quality'] is None else r['quality'] for r in rows],
+            os.path.join(outdir, f'{basename}_{label}_quality.png'), title=f'{label} quality — {basename}',
+            threshold=args.quality_threshold, groups=[r['segment_id'] for r in rows])
     if len(states) != 2:
         raise ValueError('Baseline/event has no usable windows; exclusion audit saved')
     result = _finalise_comparison(states['baseline'], states['event'], tuple(args.baseline), tuple(args.event))
@@ -3841,6 +3898,7 @@ def main() -> None:
     # gaps in the plot and blank cells in the CSV, so no band-entropy / sync
     # value is ever reported for a window the quality scorer rejects.
     quality = None
+    quality_audit = []
     if not args.no_quality_mask:
         if not _QC_AVAILABLE:
             raise RuntimeError('Quality modules unavailable; explicitly use --no-quality-mask to disable scoring')
@@ -3848,7 +3906,8 @@ def main() -> None:
             print(f'  Scoring window quality (eeg_quality_v2, ch median) and masking '
                   f'< {args.quality_threshold:g}…', flush=True)
             quality = compute_quality_windowed_aligned(
-                data, fs=args.fs, win_sec=args.win, step_sec=args.step, windows=windows)
+                data, fs=args.fs, win_sec=args.win, step_sec=args.step, windows=windows,
+                quality_audit=quality_audit, quality_stage='raw' if args.no_bandpass else 'filtered')
             if quality.shape[0] != entropy_result['time'].shape[0]:
                 sys.exit('Error: quality window count does not match band-entropy windows.')
             mask = ~np.isfinite(quality) | (quality < args.quality_threshold)
@@ -3888,7 +3947,8 @@ def main() -> None:
                 csv_data[key] = values
 
     code_paths = [__file__, *[os.path.join(os.path.dirname(__file__), 'lilia', name)
-                   for name in ('windowing.py', 'signal.py', 'quality.py', 'entropy_io.py')]]
+                   for name in ('windowing.py', 'signal.py', 'quality.py', 'entropy_io.py',
+                                'entropy_quality.py', 'quality_audit.py')]]
     code_id = hashlib.sha256(''.join(file_sha256(path) for path in code_paths).encode()).hexdigest()
     settings = {
         'fs': args.fs, 'channel': args.ch, 'win_sec': args.win,
@@ -3896,7 +3956,9 @@ def main() -> None:
         'win_samples': windows.win, 'step_samples': windows.step,
         'bandpass': None if args.no_bandpass else [DEFAULT_BP_LOW, DEFAULT_BP_HIGH],
         'quality_enabled': not args.no_quality_mask, 'quality_threshold': args.quality_threshold,
+        'quality_state_version': 1,
         'quality_params': _QUALITY_PARAMS if not args.no_quality_mask else None,
+        'quality_channels': list(range(1, data.shape[1] + 1)),
         'bands': BAND_DEFINITIONS, 'sync_pair': args.sync_pair,
         'tau_ms': args.tau_ms if args.sync_pair else None,
         'mi_bins': args.mi_bins if args.sync_pair else None,
@@ -3906,8 +3968,16 @@ def main() -> None:
     csv_data['quality_valid'] = (np.isfinite(quality) & (quality >= args.quality_threshold)
                                  if quality is not None else np.ones(len(windows.starts), dtype=bool))
     csv_data['quality_state'] = ('scored' if quality is not None else 'disabled')
-    write_entropy_table(csv_out, args.csv, pd.DataFrame(csv_data), windows, settings, code_id)
+    if quality is None:
+        quality_audit = disabled_rows(windows, fs=args.fs, n_channels=data.shape[1],
+                                     stage='raw' if args.no_bandpass else 'filtered')
+    write_entropy_table(csv_out, args.csv, pd.DataFrame(csv_data), windows, settings, code_id,
+                        quality_audit=quality_audit)
     print(f'Saved: {csv_out}')
+    plot_quality_audit(quality_audit, entropy_result['time'],
+        quality if quality is not None else np.full(len(quality_audit), np.nan),
+        os.path.join(outdir, f'{stem}_quality.png'), title=f'Entropy quality — {basename}',
+        threshold=args.quality_threshold, groups=windows.columns['segment_id'])
 
     title = f'Band Entropy — {os.path.basename(args.csv)} ch{args.ch}'
     if args.sync_pair is not None:

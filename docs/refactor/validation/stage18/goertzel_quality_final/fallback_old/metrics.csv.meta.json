@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "source_path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+  "source_sha256": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883",
+  "table_sha256": "36312c2c6bea34917541a66a83cec6b9193c19e19edf1d77a2fd15d81872e4ff",
+  "code_sha256": "f7ff2ea3e0573399dafececde703b8e8954a9a108e479285683ceccc6e558e21",
+  "parameters": {
+    "ch": 1,
+    "fs": 500.0,
+    "target_freq": 60.0,
+    "win_sec": 5.0,
+    "step_sec": 5.0,
+    "sat_uv": 1950.0,
+    "sat_frac_threshold": 0.12,
+    "step_ptp_threshold": 1000.0,
+    "bp_shift_sec": 1.0,
+    "bp_shift_threshold": 80.0,
+    "bp_low": 0.5,
+    "bp_high": 45.0,
+    "quality_params": {
+      "flat_weight": 0.0,
+      "spectrum_weight": 1.0,
+      "kurtosis_weight": 0.0,
+      "corr_weight": 0.0
+    }
+  }
+}

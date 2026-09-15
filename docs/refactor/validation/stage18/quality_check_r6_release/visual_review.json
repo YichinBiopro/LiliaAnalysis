@@ -1,0 +1,59 @@
+{
+  "date": "2026-09-15",
+  "method": "Direct visual inspection via view_image; final NaN layout re-inspected after legend adjustment",
+  "passed": true,
+  "plots": [
+    {
+      "path": "empty_anomaly_new/empty_anomaly_R6_quality_anomalies.png",
+      "sha256": "1ff59c21f499b72709a401a7964910b8631347f9bfd5cfae18c7b654f57582da",
+      "passed": true,
+      "observation": "No candidate windows is visible; the source time range is bounded and the legend does not obscure the message."
+    },
+    {
+      "path": "external_sample_new/Quality_external_sample_sample_quality.png",
+      "sha256": "3ef8455c33e1f0e2a11b299a09dffd4147a985bdbe3e71e1b26155743f7808cc",
+      "passed": true,
+      "observation": "Raw and filtered stages retain legacy 0.7 scores; injected scorer diagnostics are explicitly unavailable."
+    },
+    {
+      "path": "fallback_anomaly_new/fallback_anomaly_R6_quality_anomalies.png",
+      "sha256": "516d7a323d389aae034c29dfcf4a97d623804419060670cf81c2d7a9e77825ed",
+      "passed": true,
+      "observation": "Finite fallback scores remain above the threshold while orange invalid-diagnostic markers identify the scorer failure."
+    },
+    {
+      "path": "gap_anomaly_new/gap_anomaly_R6_quality_anomalies.png",
+      "sha256": "075a42667ec7161ada2c6c1a4d31189a9c609d33cc73dab91a5a80476434f242",
+      "passed": true,
+      "observation": "Clip and time-gap reasons appear separately; raw waveform panels break at the source gap without inventing a connecting signal."
+    },
+    {
+      "path": "jenqwei_1_new/jenqwei_1_R6_quality_anomalies.png",
+      "sha256": "e5f96dc3c28fbb2c35ba4490088de2c8590402e75569be5afff2b100c4137632",
+      "passed": true,
+      "observation": "Real Jenqwei recording shows raw preset, retained above-threshold quality and original local-time placement."
+    },
+    {
+      "path": "nan_anomaly_new/nan_anomaly_R6_quality_anomalies.png",
+      "sha256": "92e43c6ff796544a2e2c9b1cf09f0323a7daee9fe9a0eff0e42f84dcbd4e65b2",
+      "passed": true,
+      "observation": "Three non-finite qmed windows are labelled invalid-Q and shown at the chart baseline; the legend leaves the markers visible."
+    },
+    {
+      "path": "real_anomaly_new/real_anomaly_R6_quality_anomalies.png",
+      "sha256": "8dded76e039f54880740d9db076610cca7509dd873d73904389ab539fa713b37",
+      "passed": true,
+      "observation": "Full real Hardy recording shows source gaps as breaks in the raw panels and the invalid windows remain visible."
+    },
+    {
+      "path": "real_sample_new/Quality_real_sample_sample_quality.png",
+      "sha256": "3eb425c2713fa2da190ed827beed170edcb19164e2b37d07dcae953b7a07681a",
+      "passed": true,
+      "observation": "Full real James recording shows raw and filtered channel scores, both stage labels and the effective preset without hiding the data."
+    }
+  ],
+  "limitations": [
+    "Visual acceptance applies to these eight PNGs; companion SVG bytes are preserved but were not separately opened.",
+    "Legacy window segmentation and sample selection were not changed; gap breaks in raw anomaly waveforms are display-only."
+  ]
+}

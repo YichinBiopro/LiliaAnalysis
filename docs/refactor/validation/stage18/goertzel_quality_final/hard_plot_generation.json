@@ -1,0 +1,15 @@
+{
+  "files": [
+    {
+      "path": "hard_new/plot.png",
+      "sha256": "21345083f2e9f871cea32a951ec3a5761e2eafc1aaa56b1795533364b70b2f14"
+    },
+    {
+      "path": "hard_new/plot.svg",
+      "sha256": "7605b8b4f56238ac4249bb1855074432b8e4a00766bf3a1799be19d5468dcfbc"
+    }
+  ],
+  "source": "hard.csv",
+  "table": "hard_new/metrics.csv",
+  "method": "_plot_subject_from_csv; ch=1 fs=500 target_freq=60 smooth_win=1 threshold=.5 raw_ylim=(-2100,2100) exclude_hard=True use_db=True"
+}

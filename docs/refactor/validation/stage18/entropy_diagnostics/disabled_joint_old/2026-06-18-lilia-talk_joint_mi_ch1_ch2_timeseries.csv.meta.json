@@ -1,0 +1,39 @@
+{
+  "kind": "joint_mi",
+  "schema_version": 1,
+  "source_id": "95dc738fa899cfeec43d671492b3dfaf578b9b7eb5f0f6755cd0a8de5886f883",
+  "source_path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+  "source_samples": 30648,
+  "source_epoch_us": 0,
+  "config_id": "1b5919c3d7d55ccff76fb245b470c1def9007ecd4ebfddb5d642b421b3d936e6",
+  "parameters": {
+    "fs": 500.0,
+    "channels": [
+      1,
+      2
+    ],
+    "win_sec": 2.0,
+    "step_sec": 1.0,
+    "win_samples": 1000,
+    "step_samples": 500,
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "quality_enabled": false,
+    "quality_threshold": 0.5,
+    "quality_params": null,
+    "quality_channels": [
+      1,
+      2
+    ],
+    "quality_reduction": "channel median",
+    "mi_bins": 8,
+    "mi_binning": "quantile",
+    "denoise": false,
+    "grid_policy": "original sample grid; complete continuous windows; gap > 3 sample periods",
+    "code_sha256": "5ed3a100708f42d5edb0ab43e86e08e9afa589b61a09e1b7718192a83223348a"
+  },
+  "code_sha256": "5ed3a100708f42d5edb0ab43e86e08e9afa589b61a09e1b7718192a83223348a",
+  "table_sha256": "d891862f77af780ab19183c05ccba75d3169733b49e09939f586d4a845304ae5"
+}

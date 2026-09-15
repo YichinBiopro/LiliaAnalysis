@@ -146,6 +146,18 @@ class EntropyWindowTests(unittest.TestCase):
         self.assertFalse(frame.loc[[1, 2], 'quality_valid'].any())
         self.assertTrue(np.isfinite(frame.window_start_idx).all())
         np.testing.assert_allclose(frame.time_s, [1, 2, 3, 21, 22, 23])
+        sidecar = Path(str(table) + '.meta.json')
+        meta = json.loads(sidecar.read_text())
+        for key, value in [('quality_state', 'disabled'), ('quality_valid', True),
+                           ('p_alpha', .5), ('lagged_mi_mean', .1)]:
+            with self.subTest(key=key):
+                changed = frame.copy()
+                changed.loc[1, key] = value
+                changed.to_csv(table, index=False)
+                meta['table_sha256'] = file_sha256(table)
+                sidecar.write_text(json.dumps(meta))
+                with self.assertRaisesRegex(ValueError, 'quality|Quality'):
+                    load_entropy_table(table, path, 1)
 
     def test_metadata_rejects_wrong_source_channel_and_partial_schema(self):
         table, source, _ = self.versioned_table()

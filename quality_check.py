@@ -21,6 +21,7 @@ The two subcommands deliberately keep their own quality parameterisations
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import warnings
 
@@ -28,6 +29,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.dates as mdates
 import numpy as np
+import pandas as pd
 from scipy.signal import welch
 
 from lilia.io import load_merged_csv, bandpass_filter
@@ -35,6 +37,10 @@ from lilia.quality import (
     get_eeg_quality_index_v2_parametric,
     get_best_eeg_quality_v2_flat_spectrum_only_params,
 )
+from lilia.quality_audit import (POLICY, capture_diagnostics, diagnostic_columns,
+                                 diagnostic_label, plot_diagnostic_markers)
+from lilia.quality_check_io import write_quality_check_table
+from lilia.windowing import plot_breaks
 from lilia.qeeg import compute_qeeg_indices
 from lilia.segment_sampling import pick_non_overlapping_segments
 from lilia.subject_paths import iter_group_merged_csvs
@@ -122,6 +128,7 @@ def plot_segments(path: str, group: str, subject: str, outdir: str,
     )
 
     outer = gridspec.GridSpec(1, N_SEGS, figure=fig, hspace=0.05, wspace=0.18)
+    quality_rows = []
 
     for col, start in enumerate(starts):
         seg_raw = data[start: start + SEG_SAMPLES]           # (SEG_SAMPLES, n_ch)
@@ -132,8 +139,8 @@ def plot_segments(path: str, group: str, subject: str, outdir: str,
         seg_data = bandpass_filter(seg_raw)
 
         # qEEG indices — 5s non-overlapping windows, raw and filtered
-        qeeg_t, qeeg_raw_w = compute_qeeg_windowed_seg(seg_raw)
-        _, qeeg_filt_w = compute_qeeg_windowed_seg(seg_data)
+        qeeg_t, qeeg_raw_w = compute_qeeg_windowed_seg(seg_raw, win_sec=QEEG_WIN_SEC)
+        _, qeeg_filt_w = compute_qeeg_windowed_seg(seg_data, win_sec=QEEG_WIN_SEC)
 
         # Quality on RAW signal
         result_raw = get_eeg_quality_index_v2_parametric(
@@ -150,6 +157,17 @@ def plot_segments(path: str, group: str, subject: str, outdir: str,
             params=SAMPLES_QUALITY_PARAMS,
         )
         overall = result["overall"]       # (n_ch,)
+        for stage, scores, scored in (('raw', overall_raw, result_raw),
+                                      ('filtered', overall, result)):
+            row = dict(segment=int(col), window_start_idx=int(start),
+                       window_end_idx=int(start+SEG_SAMPLES),
+                       window_start_us=int(seg_t[0]),
+                       window_center_us=int(seg_t[SEG_SAMPLES//2]),
+                       quality_diagnostics=capture_diagnostics(scored, fs=FS,
+                           params=SAMPLES_QUALITY_PARAMS, n_channels=n_ch,
+                           n_samples=SEG_SAMPLES, stage=stage))
+            row.update({f'quality_ch{i+1}': float(value) for i, value in enumerate(scores)})
+            quality_rows.append(row)
 
         # PSD via Welch — raw and filtered
         psd_freqs, psd_powers_raw, psd_powers_filt = [], [], []
@@ -222,9 +240,21 @@ def plot_segments(path: str, group: str, subject: str, outdir: str,
         ax_q.set_xticks(bar_x)
         ax_q.set_xticklabels([f'ch{i+1}' for i in range(n_ch)], fontsize=8)
         ax_q.set_ylabel('Overall\nQuality', fontsize=8)
-        ax_q.legend(loc='upper right', fontsize=7)
         ax_q.grid(True, alpha=0.2, axis='y')
         ax_q.set_xlim(-0.5, n_ch - 0.5)
+        stage_rows = quality_rows[-2:]
+        for stage_i, scores in enumerate((overall_raw, overall)):
+            state = stage_rows[stage_i]['quality_diagnostics']['state']
+            if state in ('invalid', 'unavailable'):
+                x = bar_x + (-bar_w/2 if stage_i == 0 else bar_w/2)
+                y = np.where(np.isfinite(scores), scores, .02)
+                ax_q.scatter(x, y, marker='x' if state == 'invalid' else '|',
+                             color='darkorange' if state == 'invalid' else 'gray',
+                             s=30, zorder=5,
+                             label=f"{('raw','filtered')[stage_i]} diagnostics {state}")
+        ax_q.text(.01, .99, 'raw / filtered | '+diagnostic_label(stage_rows),
+                  transform=ax_q.transAxes, ha='left', va='top', fontsize=6)
+        ax_q.legend(loc='lower left', fontsize=6, ncol=3)
 
         # ── PSD panels (one per channel, shared x and y axes) ────────────────
         BANDS = [('δ', 0.5, 4,  '#a8d8ea'),
@@ -304,6 +334,16 @@ def plot_segments(path: str, group: str, subject: str, outdir: str,
     fig.savefig(outpath, dpi=150, bbox_inches='tight')
     fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
+    frame = pd.DataFrame([{k: v for k, v in row.items() if k != 'quality_diagnostics'}
+                          for row in quality_rows])
+    for key, values in diagnostic_columns(quality_rows).items():
+        frame[key] = values
+    table = os.path.splitext(outpath)[0]+'.csv'
+    write_quality_check_table(table, path, frame, 'quality_check_samples',
+        dict(fs=FS, segment_samples=SEG_SAMPLES, n_segments=N_SEGS,
+             starts=[int(a) for a in starts], source_samples=n_total,
+             source_channels=n_ch, bp_low=BP_LOW, bp_high=BP_HIGH,
+             quality_params=SAMPLES_QUALITY_PARAMS, score_policy=POLICY), quality_rows)
     print(f'       → {outpath}')
 
 
@@ -362,7 +402,9 @@ def analyze_quality_windows(time_us: np.ndarray, data: np.ndarray,
         flat = float(np.mean(np.all(np.diff(seg, axis=0) == 0, axis=1)))
         gap = float(np.max(np.diff(t_seg)) / 1e6) if len(t_seg) > 1 else 0.0
         rows.append(dict(s=int(s), e=int(s + win), mid_us=int(t_seg[len(t_seg) // 2]),
-                         qmed=float(np.median(q)), clip=clip, flat=flat, gap=gap))
+                         qmed=float(np.median(q)), clip=clip, flat=flat, gap=gap,
+                         quality_diagnostics=capture_diagnostics(res, fs=fs, params=params,
+                             n_channels=seg.shape[1], n_samples=win, stage='raw')))
     return rows
 
 
@@ -387,13 +429,15 @@ def flag_anomalies(rows: list[dict],
             reasons.append(f"clip {r['clip'] * 100:.0f}%")        # ADC saturation clipping
         if r["flat"] > flat_frac:
             reasons.append(f"flat {r['flat'] * 100:.0f}%")        # flat-line / disconnection
-        if r["qmed"] < q_thresh:
+        if not np.isfinite(r['qmed']):
+            reasons.append('invalid-Q non-finite')
+        elif r["qmed"] < q_thresh:
             reasons.append(f"low-Q {r['qmed']:.2f}")              # low quality
-        if i > 0 and abs(qmed[i] - qmed[i - 1]) > jump_delta:
+        if i > 0 and np.isfinite(qmed[i]) and np.isfinite(qmed[i - 1]) and abs(qmed[i] - qmed[i - 1]) > jump_delta:
             reasons.append(f"jump {qmed[i] - qmed[i - 1]:+.2f}")  # quality jump
         r["reasons"] = reasons
         r["severity"] = (min(r["gap"] / 10.0, 1.0) + r["clip"] + r["flat"]
-                         + max(0.0, q_thresh - r["qmed"]))
+                         + (1.0 if not np.isfinite(r['qmed']) else max(0.0, q_thresh - r["qmed"])))
     return rows
 
 
@@ -411,6 +455,27 @@ def plot_quality_anomaly_report(name: str, info: dict, outdir: str,
     print(f"  [{name}] loading & scoring quality windows…", flush=True)
     time_us, data = load_merged_csv(merged)
     rows = flag_anomalies(analyze_quality_windows(time_us, data, win_sec=win_sec))
+    quality_audit = [dict(window_start_idx=r['s'], window_end_idx=r['e'],
+                          window_center_us=r['mid_us'], score_policy=POLICY,
+                          qmed=r['qmed'], clip=r['clip'], flat=r['flat'], gap=r['gap'],
+                          reasons=r['reasons'], severity=r['severity'],
+                          quality_diagnostics=r['quality_diagnostics']) for r in rows]
+    frame = pd.DataFrame([dict(window_start_idx=r['s'], window_end_idx=r['e'],
+                               window_center_us=r['mid_us'], qmed=r['qmed'], clip=r['clip'],
+                               flat=r['flat'], gap=r['gap'], severity=r['severity'],
+                               reasons=json.dumps(r['reasons'], separators=(',', ':'))) for r in rows],
+                         columns=('window_start_idx', 'window_end_idx', 'window_center_us',
+                                  'qmed', 'clip', 'flat', 'gap', 'severity', 'reasons'))
+    for key, values in diagnostic_columns(rows).items():
+        frame[key] = values
+    table = os.path.join(outdir, f"{name}_{info['sn']}_quality_anomalies.csv")
+    os.makedirs(outdir, exist_ok=True)
+    write_quality_check_table(table, merged, frame, 'quality_check_anomalies',
+        dict(fs=FS, win_sec=win_sec, source_samples=len(time_us),
+             source_channels=data.shape[1], quality_params=QUALITY_PARAMS,
+             rail_value=RAIL_VALUE, quality_threshold=QUALITY_THRESHOLD,
+             clip_frac=CLIP_FRAC, flat_frac=FLAT_FRAC, gap_sec=GAP_SEC,
+             jump_delta=JUMP_DELTA, score_policy=POLICY), quality_audit)
 
     flagged = [r for r in rows if r["reasons"]]
     print(f"  [{name}] {len(flagged)}/{len(rows)} windows flagged as abnormal:")
@@ -444,19 +509,21 @@ def plot_quality_anomaly_report(name: str, info: dict, outdir: str,
     # overlay each anomaly category with a distinct marker
     cat_style = {"time-gap": ("v", "#9467bd"), "clip": ("s", "#d62728"),
                  "flat": ("D", "#ff7f0e"), "low-Q": ("o", "#1f77b4"),
-                 "jump": ("^", "#2ca02c")}
+                 "jump": ("^", "#2ca02c"), "invalid-Q": ("x", "darkorange")}
     seen = set()
     for r in flagged:
         for reason in r["reasons"]:
             cat = reason.split()[0]
             mk, col = cat_style.get(cat, ("x", "#000000"))
-            ax_q.plot(us_to_local_dt(r["mid_us"]), r["qmed"], mk, color=col,
+            ax_q.plot(us_to_local_dt(r["mid_us"]), r["qmed"] if np.isfinite(r['qmed']) else .02,
+                      mk, color=col,
                       ms=7, mec="k", mew=0.4,
                       label=cat if cat not in seen else None)
             seen.add(cat)
     # mark the windows whose raw waveforms are shown below
     for j, r in enumerate(show):
-        ax_q.annotate(f"#{j + 1}", (us_to_local_dt(r["mid_us"]), r["qmed"]),
+        ax_q.annotate(f"#{j + 1}", (us_to_local_dt(r["mid_us"]),
+                      r["qmed"] if np.isfinite(r['qmed']) else .02),
                       textcoords="offset points", xytext=(0, 10),
                       ha="center", fontsize=8, fontweight="bold", color="#b00")
     ax_q.set_ylim(0, 1.05)
@@ -464,9 +531,20 @@ def plot_quality_anomaly_report(name: str, info: dict, outdir: str,
     ax_q.set_xlabel("Local Time (UTC+8, HH:MM)")
     ax_q.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
     ax_q.xaxis.set_major_locator(mdates.MinuteLocator(byminute=range(0, 60, 5)))
-    ax_q.legend(loc="lower right", fontsize=8, ncol=4, framealpha=0.85)
+    if rows:
+        plot_diagnostic_markers(ax_q, q_dt, rows, q_med[:, None])
+    else:
+        ax_q.text(.5, .5, 'No candidate windows', transform=ax_q.transAxes,
+                  ha='center', va='center')
+        if len(time_us):
+            ax_q.set_xlim(us_to_local_dt(int(time_us[0])),
+                          us_to_local_dt(int(time_us[-1])))
+    legend_loc = "upper right" if any(not np.isfinite(r['qmed']) for r in rows) else "lower right"
+    ax_q.legend(loc=legend_loc, fontsize=8, ncol=4, framealpha=0.85)
     ax_q.set_title(f"{name} ({info['sn']}) — EEG quality anomalies vs raw time-domain",
                    fontsize=12, fontweight="bold")
+    ax_q.text(.01, .97, 'raw | '+diagnostic_label(rows), transform=ax_q.transAxes,
+              ha='left', va='top', fontsize=8)
     ax_q.grid(True, alpha=0.2)
 
     # Bottom: raw 4-ch waveform of each selected window (with ±1-window context)
@@ -478,8 +556,10 @@ def plot_quality_anomaly_report(name: str, info: dict, outdir: str,
         hi = min(len(data), r["e"] + ctx)
         seg = data[lo:hi]
         t_rel = (time_us[lo:hi] - time_us[r["s"]]) / 1e6  # seconds relative to window start
+        raw_breaks = np.r_[0, np.cumsum(np.diff(time_us[lo:hi]) / 1e6 > GAP_SEC)]
         for ch in range(seg.shape[1]):
-            ax.plot(t_rel, seg[:, ch], lw=0.5, color=CH_COLORS[ch % 4],
+            ax.plot(*plot_breaks(t_rel, seg[:, ch], raw_breaks),
+                    lw=0.5, color=CH_COLORS[ch % 4],
                     label=f"ch{ch + 1}")
         # window body span + ADC full-scale reference lines
         ax.axvspan(0, win_sec, color="grey", alpha=0.12)

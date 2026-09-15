@@ -1,0 +1,14 @@
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing band entropy — ch1, win=2.0s, step=1.0s, bands=theta/alpha/beta, fs=500.0Hz
+Computing lagged interhemispheric synchrony — ch1↔ch2, tau=10 ms, bins=8
+  Scoring window quality (eeg_quality_v2, ch median) and masking < 0.5…
+    masked 0/58 windows (0.0%) below quality 0.5.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/real_0_entropy_new/2026-06-18-lilia-move head_band_entropy_ch1_sync_ch1_ch2.csv
+
+Summary:
+  valid windows     : 58/58 (quality ≥ 0.5)
+  band_entropy      : mean=1.2703, std=0.1624, min=0.8827, max=1.5428
+  band_entropy_norm : mean=0.8015, std=0.1025, min=0.5569, max=0.9734
+  lagged_mi_mean    : mean=0.0810, std=0.0237, min=0.0436, max=0.1491
+  lagged_mi_max     : mean=0.0810, std=0.0237, min=0.0436, max=0.1491

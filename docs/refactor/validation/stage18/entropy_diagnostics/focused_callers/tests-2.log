@@ -1,0 +1,18 @@
+test_continuous_numerics_match_pre_refactor_fixture (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_disabled_quality_requires_explicit_plot_override (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_gap_break_retains_first_post_gap_point_and_smoothing_is_separate (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_grid_mismatch_and_no_complete_segment_are_rejected (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_hash_identity_is_text_even_with_large_exponent_or_leading_zeros (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_invalid_quality_masks_metrics_but_retains_metadata_rows (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_legacy_gap_guards_stay_for_unmigrated_modes_and_tables (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_metadata_checks_indexes_against_timestamps_even_if_table_rehashed (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_metadata_rejects_wrong_source_channel_and_partial_schema (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_non_grid_gap_and_jitter_keep_true_sample_centres (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_renderer_smoothing_and_lines_do_not_join_segments (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_session_renderer_uses_metadata_instead_of_cli_defaults_or_row_positions (test_entropy_windows_regression.EntropyWindowTests) ... ok
+test_short_segment_skipped_before_filter_without_poisoning_other_segments (test_entropy_windows_regression.EntropyWindowTests) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 1.904s
+
+OK

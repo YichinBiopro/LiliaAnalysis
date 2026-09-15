@@ -40,3 +40,20 @@ report_figures/
 *.jpeg
 *.gif
 *.html
+
+# Superseded Stage 18 development runs; keep the release evidence directories.
+/docs/refactor/validation/stage18/quality_check_r6/
+/docs/refactor/validation/stage18/quality_check_r6_acceptance/
+/docs/refactor/validation/stage18/quality_check_r6_checks/
+/docs/refactor/validation/stage18/quality_check_r6_evidence/
+/docs/refactor/validation/stage18/quality_check_r6_final/
+/docs/refactor/validation/stage18/quality_check_r6_final_checks/
+/docs/refactor/validation/stage18/quality_check_r6_final_evidence/
+/docs/refactor/validation/stage18/quality_check_r6_static/
+/docs/refactor/validation/stage18/quality_check_r6_visual_final/
+
+# The reviewed development note is tracked; other Goertzel run outputs stay local.
+/docs/refactor/validation/stage18/goertzel_quality/
+
+# Matplotlib's local font cache is reproducible tooling state.
+/docs/refactor/validation/**/mpl/

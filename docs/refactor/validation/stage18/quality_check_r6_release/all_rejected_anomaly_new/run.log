@@ -1,0 +1,6 @@
+  [all_rejected_anomaly] loading & scoring quality windows…
+  [all_rejected_anomaly] 3/3 windows flagged as abnormal:
+      06:13:22  low-Q 0.00
+      06:13:27  low-Q 0.00
+      06:13:32  low-Q 0.00
+       → /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/quality_check_r6_release/all_rejected_anomaly_new/all_rejected_anomaly_R6_quality_anomalies.png

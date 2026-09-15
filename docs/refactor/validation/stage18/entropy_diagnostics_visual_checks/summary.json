@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-15T02:35:49.580477+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/fallback_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_quality.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/fallback_entropy_new/2026-06-18-lilia-talk_band_entropy_ch1_sync_ch1_ch2_quality.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/fallback_clean_new/2026-06-18-lilia-talk_baseline_quality.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/all_rejected_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/real_1_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_distribution.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/visual_review.json",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/all_rejected_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.png": "b0158623add4d2974edff4330f1bfe62ed7cb48efcee583c8747a49e87d24c82",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/fallback_clean_new/2026-06-18-lilia-talk_baseline_quality.png": "b1da3450b2c5b88e8c20eff1ee57eae2b1de0f0360c6aa0e730dc7cc0cd0771e",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/fallback_entropy_new/2026-06-18-lilia-talk_band_entropy_ch1_sync_ch1_ch2_quality.png": "692ba6ea1c0a324493a26296dbfdfa3a15c77eb43d9929c685a1524ce96b9400",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/fallback_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_quality.png": "811203d54b5690d8eb5b239de6fdbcd09d0b6d7bb20623cd8e08816eb60d1587",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/real_1_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_distribution.png": "238145783f14ddb08504dfcddea1036018115696fd68c24e18a49215487773b4",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/visual_evidence.json": "7396f5c8ec2ecff4bbb60dade1c76a8a51a41006f8d58fbcaa68defac9e538dd",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/visual_review.json": "26cdb7c7cfd26c888f4878d56873933a2b415e152e03ce617bf265710a144136"
+  },
+  "log": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics_visual_checks/evidence.log"
+}

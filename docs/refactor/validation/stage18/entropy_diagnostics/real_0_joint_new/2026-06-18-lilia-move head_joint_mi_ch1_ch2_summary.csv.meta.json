@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "kind": "joint_mi_summary",
+  "source_id": "fd291cbc7f9ee7c24561751c9c70793e067d161be24459801868f0727d2d8540",
+  "series_path": "2026-06-18-lilia-move head_joint_mi_ch1_ch2_timeseries.csv",
+  "series_sha256": "2b52df37bcc739a6152bf9f0b7b77c06e00893ac8294205eb7258c704b72a1e0",
+  "series_meta_sha256": "30eb498e9090dbada8e393dbebde5eb8adb2a5c62fc32f3e9c8b57454c6c0b52",
+  "table_sha256": "afa90935b95a7cef4e57a5518fea6c4e59ce46085fd1d6008579135075bb6c54"
+}

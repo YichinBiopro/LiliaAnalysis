@@ -1,0 +1,13 @@
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=8 (quantile), fs=500Hz
+  Masked 1/58 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/mi_quality_state/real_0_joint_new/2026-06-18-lilia-move head_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/mi_quality_state/real_0_joint_new/2026-06-18-lilia-move head_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/mi_quality_state/real_0_joint_new/2026-06-18-lilia-move head_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.0556 bits  (Miller–Madow 0.0544; norm 0.0185)
+  surrogate null: mean=0.0060±0.0010 bits, p=0.25, z=48.30 (n=3)
+  windowed MI   : mean=0.1453, std=0.0601, min=0.0568, max=0.3498 (n=57 windows)

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "fallback_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_quality.png",
+      "sha256": "811203d54b5690d8eb5b239de6fdbcd09d0b6d7bb20623cd8e08816eb60d1587"
+    },
+    {
+      "path": "fallback_entropy_new/2026-06-18-lilia-talk_band_entropy_ch1_sync_ch1_ch2_quality.png",
+      "sha256": "692ba6ea1c0a324493a26296dbfdfa3a15c77eb43d9929c685a1524ce96b9400"
+    },
+    {
+      "path": "fallback_clean_new/2026-06-18-lilia-talk_baseline_quality.png",
+      "sha256": "b1da3450b2c5b88e8c20eff1ee57eae2b1de0f0360c6aa0e730dc7cc0cd0771e"
+    },
+    {
+      "path": "all_rejected_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.png",
+      "sha256": "b0158623add4d2974edff4330f1bfe62ed7cb48efcee583c8747a49e87d24c82"
+    },
+    {
+      "path": "real_1_joint_new/2026-06-18-lilia-talk_joint_mi_ch1_ch2_distribution.png",
+      "sha256": "238145783f14ddb08504dfcddea1036018115696fd68c24e18a49215487773b4"
+    },
+    {
+      "path": "visual_review.json",
+      "sha256": "26cdb7c7cfd26c888f4878d56873933a2b415e152e03ce617bf265710a144136"
+    }
+  ]
+}

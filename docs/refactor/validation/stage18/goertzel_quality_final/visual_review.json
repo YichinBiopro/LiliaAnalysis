@@ -1,0 +1,53 @@
+{
+  "date": "2026-09-15",
+  "method": "Direct visual inspection via view_image",
+  "passed": true,
+  "plots": [
+    {
+      "path": "empty_new/plot.png",
+      "sha256": "ef4d440c507d796ecce369e1090990666bd02454265f5884831247bcfaad4162",
+      "passed": true,
+      "observation": "No candidate windows message and full source time range retained; raw and filtered segment traces remain visible."
+    },
+    {
+      "path": "external_new/plot.png",
+      "sha256": "1c0ff4afd489766df90a31f314c71cda89ffa0133c1187e8895a2e2d9f9e89f1",
+      "passed": true,
+      "observation": "Old injected scorer retains 0.7 scores with gray unavailable markers; source gaps remain blank."
+    },
+    {
+      "path": "fallback_new/plot.png",
+      "sha256": "7154228eefddaf84e9353f598b41687b2c99d3b9caa87cf595f8d202df9ba525",
+      "passed": true,
+      "observation": "Finite 0.5 spectrum fallback is marked diagnostic invalid while all 12 windows still pass the explicit 0.49 threshold."
+    },
+    {
+      "path": "gap_new/plot.png",
+      "sha256": "c61502f3e904ac7747316f9fe2d00e12d1eed08b57895ce291857a3292a7e4db",
+      "passed": true,
+      "observation": "Four panels break between the source segments; no invented signal across the 4-20 second gap; original elapsed axis retained."
+    },
+    {
+      "path": "half_second_new/plot.png",
+      "sha256": "de345023b1e4358ff43ca78ab7518ba562b5db97e551104cfa86707e83d2d283",
+      "passed": true,
+      "observation": "All 122 legacy scores remain low/masked; orange invalid markers and red low-score markers are separately named; raw/filtered traces and full time range remain visible."
+    },
+    {
+      "path": "real_1_ch1_new/plot.png",
+      "sha256": "013ec609a627bc6c3d4ed0cf925974de943f06655a60c4c9a5e0892190cdab7f",
+      "passed": true,
+      "observation": "Full real talk source: filtered preset and all-channel diagnostic scope are visible; selected ch1 quality and unmasked filtered power remain aligned."
+    },
+    {
+      "path": "hard_new/plot.png",
+      "sha256": "21345083f2e9f871cea32a951ec3a5761e2eafc1aaa56b1795533364b70b2f14",
+      "passed": true,
+      "observation": "Two hard windows are marked with purple squares although filtered legacy scores exceed threshold; raw 2000-uV step, filtered edge response and masked windows are visible; isolated kept point is visible."
+    }
+  ],
+  "limitations": [
+    "Rolling median calculation is unchanged; segmentation here only breaks displayed lines.",
+    "Visual acceptance applies to these seven PNGs; companion SVG bytes are saved, not separately visually inspected."
+  ]
+}

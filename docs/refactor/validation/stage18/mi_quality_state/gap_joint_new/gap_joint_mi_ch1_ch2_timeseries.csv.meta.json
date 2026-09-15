@@ -1,0 +1,37 @@
+{
+  "kind": "joint_mi",
+  "schema_version": 1,
+  "source_id": "3b1ed12591a6d9bdd1f34dbd32e8c7f52e5e8707dc7ba3f1ade7272d69a392fe",
+  "source_path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/mi_quality_state/gap.csv",
+  "source_samples": 4000,
+  "source_epoch_us": 0,
+  "config_id": "f8f7c70546e4ecbfe78084fc2a8addadb4fb968e965284050684e840bc222403",
+  "parameters": {
+    "fs": 500.0,
+    "channels": [
+      1,
+      2
+    ],
+    "win_sec": 2.0,
+    "step_sec": 1.0,
+    "win_samples": 1000,
+    "step_samples": 500,
+    "bandpass": null,
+    "quality_enabled": false,
+    "quality_threshold": 0.5,
+    "quality_state_version": 1,
+    "quality_params": null,
+    "quality_channels": [
+      1,
+      2
+    ],
+    "quality_reduction": "channel median",
+    "mi_bins": 8,
+    "mi_binning": "quantile",
+    "denoise": false,
+    "grid_policy": "original sample grid; complete continuous windows; gap > 3 sample periods",
+    "code_sha256": "941e7595a3a769247717d8bb5ebf83880a90a19d75ef98938fb0b5abc4ee6457"
+  },
+  "code_sha256": "941e7595a3a769247717d8bb5ebf83880a90a19d75ef98938fb0b5abc4ee6457",
+  "table_sha256": "7b76c8b5a1197f871c19edf272dd30aaf416a618629bda656e26ddeaf592829a"
+}

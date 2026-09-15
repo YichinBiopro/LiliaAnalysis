@@ -1,0 +1,8 @@
+test_collect_candidates_per_subject_prefers_quality_final_and_excludes_hard_clip (test_goertzel_sampling_regression.GoertzelSamplingRegressionTests) ... ok
+test_collect_matches_global_filters_by_tolerance_and_quality (test_goertzel_sampling_regression.GoertzelSamplingRegressionTests) ... ok
+test_sample_rows_is_reproducible (test_goertzel_sampling_regression.GoertzelSamplingRegressionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.009s
+
+OK

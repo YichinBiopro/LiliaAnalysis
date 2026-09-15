@@ -1,0 +1,6 @@
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+  [baseline] accepted 0/8 complete windows
+  [event] accepted 0/8 complete windows
+Saved summary and window audit: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/half_second_clean_old/2026-06-18-lilia-talk_baseline_event_entropy_ch1.csv

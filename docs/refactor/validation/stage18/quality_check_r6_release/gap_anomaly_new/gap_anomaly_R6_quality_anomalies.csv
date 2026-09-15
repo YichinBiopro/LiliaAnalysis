@@ -1,0 +1,4 @@
+window_start_idx,window_end_idx,window_center_us,qmed,clip,flat,gap,severity,reasons,quality_diagnostic_state,quality_diagnostic_reason,quality_stage,quality_score_policy
+0,2500,1700000002500000,0.7499739249323436,0.2,0.0,0.002,0.20020000000000002,"[""clip 20%""]",valid,[],raw,legacy_overall
+2500,5000,1700000015500000,0.7781205849931428,0.0,0.0,8.002,0.8002,"[""time-gap 8s""]",valid,[],raw,legacy_overall
+5000,7500,1700000020500000,0.7670608806137269,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall

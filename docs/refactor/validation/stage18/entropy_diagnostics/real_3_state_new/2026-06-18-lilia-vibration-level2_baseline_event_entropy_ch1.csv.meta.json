@@ -1,0 +1,229 @@
+{
+  "kind": "state_band_entropy",
+  "schema_version": 1,
+  "index_space": "raw_samples",
+  "source_path": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+  "source_id": "3ecea3ac6d6393849157cd57b5a97e69af15a84e2bf124178fc469ac728503c0",
+  "parameters": {
+    "fs": 500.0,
+    "channel": 1,
+    "win_sec": 2.0,
+    "step_sec": 2.0,
+    "ranges": {
+      "baseline": [
+        0.0,
+        4.0
+      ],
+      "event": [
+        4.0,
+        8.0
+      ]
+    },
+    "clean": false,
+    "quality_threshold": 0.5,
+    "quality_state_version": 1,
+    "quality_diagnostics_version": 1,
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "quality_channels": [],
+    "quality_params": null,
+    "saturation_fraction_max": null,
+    "saturation_rail": null,
+    "window_policy": "interval_first_sample_reset_per_segment_complete_only",
+    "aggregation": "equal_window_mean_psd_and_separate_per_window_entropy",
+    "bands": [
+      [
+        "theta",
+        [
+          4.0,
+          8.0
+        ]
+      ],
+      [
+        "alpha",
+        [
+          8.0,
+          13.0
+        ]
+      ],
+      [
+        "beta",
+        [
+          13.0,
+          30.0
+        ]
+      ]
+    ],
+    "welch_nperseg": null,
+    "welch_noverlap": null
+  },
+  "config_id": "49640fbd48e57e9716962060b443c4605c9b170e95520afc04a9308c5a4cad00",
+  "states": {
+    "baseline": {
+      "lo_us": 0,
+      "hi_us": 4000000,
+      "windows": [
+        {
+          "window_start_idx": 0,
+          "window_end_idx": 1000,
+          "window_start_us": 0,
+          "window_end_us": 2000000,
+          "window_center_us": 1000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 1000,
+          "window_end_idx": 2000,
+          "window_start_us": 2000000,
+          "window_end_us": 4000000,
+          "window_center_us": 3000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 2,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 2,
+      "n_accepted_epochs": 2,
+      "per_window_entropy": [
+        1.350322153011868,
+        1.372538390439493
+      ],
+      "per_window_entropy_norm": [
+        0.8519584232418579,
+        0.8659753084473542
+      ]
+    },
+    "event": {
+      "lo_us": 4000000,
+      "hi_us": 8000000,
+      "windows": [
+        {
+          "window_start_idx": 2000,
+          "window_end_idx": 3000,
+          "window_start_us": 4000000,
+          "window_end_us": 6000000,
+          "window_center_us": 5000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 3000,
+          "window_end_idx": 4000,
+          "window_start_us": 6000000,
+          "window_end_us": 8000000,
+          "window_center_us": 7000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 2,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 2,
+      "n_accepted_epochs": 2,
+      "per_window_entropy": [
+        1.0325857869331228,
+        1.2488265107166012
+      ],
+      "per_window_entropy_norm": [
+        0.6514890960911046,
+        0.7879218026599283
+      ]
+    }
+  },
+  "audit_id": "0f64357abae3c1f8c03f68da3b96f1852e475e961898e24f4f6ffc4c36912d2d",
+  "code_sha256": "d93f9691bea7521fc2d29b92b864d1762993bfcba586e1caaef1f3d39d008b3f",
+  "table_sha256": "bf2ff8118e89ab71b7bf5af6e61a1ee4aa2755c1a12cf1adba6a981f7a0bd8aa",
+  "quality_diagnostics_version": 1
+}

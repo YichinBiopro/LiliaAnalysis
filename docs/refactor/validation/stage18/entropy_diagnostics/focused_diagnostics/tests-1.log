@@ -1,0 +1,15 @@
+test_empty_mi_plot_keeps_real_time_extent_and_message (test_entropy_quality_diagnostics_regression.EntropyQualityDiagnosticsTests) ... ok
+test_finite_fallback_remains_accepted_and_reader_preserves_reason_and_stage (test_entropy_quality_diagnostics_regression.EntropyQualityDiagnosticsTests) ... ok
+test_half_second_and_nonfinite_helper_preserve_scores_and_expose_invalidity (test_entropy_quality_diagnostics_regression.EntropyQualityDiagnosticsTests) ... /home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+ok
+test_raw_and_disabled_and_external_scorer_are_distinct (test_entropy_quality_diagnostics_regression.EntropyQualityDiagnosticsTests) ... /home/bps-yichin/lilia_analysis/spectral_entropy.py:2918: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+  ax.legend(loc='upper right', fontsize=9, ncol=3)
+ok
+test_rehashed_diagnostic_csv_stage_components_and_score_are_rejected (test_entropy_quality_diagnostics_regression.EntropyQualityDiagnosticsTests) ... ok
+test_state_precheck_and_exception_diagnostics_survive_all_excluded_failure (test_entropy_quality_diagnostics_regression.EntropyQualityDiagnosticsTests) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.838s
+
+OK

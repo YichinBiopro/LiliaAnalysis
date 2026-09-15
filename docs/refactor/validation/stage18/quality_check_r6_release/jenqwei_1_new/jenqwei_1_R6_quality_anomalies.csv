@@ -1,0 +1,13 @@
+window_start_idx,window_end_idx,window_center_us,qmed,clip,flat,gap,severity,reasons,quality_diagnostic_state,quality_diagnostic_reason,quality_stage,quality_score_policy
+0,2500,2500000,0.8123429129132904,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall
+2500,5000,7500000,0.8875988027694,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall
+5000,7500,12500000,0.8718574303347681,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall
+7500,10000,17500000,0.8870129921854635,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall
+10000,12500,22500000,0.8911568901404158,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall
+12500,15000,27500000,0.9289710730818963,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall
+15000,17500,32500000,0.8356708656089171,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall
+17500,20000,37500000,0.8931535110512427,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall
+20000,22500,42500000,0.8924932789503226,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall
+22500,25000,47500000,0.9159869451325581,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall
+25000,27500,52500000,0.8913339139987058,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall
+27500,30000,57500000,0.8896590558461503,0.0,0.0,0.002,0.0002,[],valid,[],raw,legacy_overall

@@ -1,0 +1,4 @@
+# Bounded R5 acceptance outputs.
+!*.csv
+!*.png
+!*.svg

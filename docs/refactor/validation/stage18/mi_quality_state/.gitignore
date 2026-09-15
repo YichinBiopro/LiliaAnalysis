@@ -1,0 +1,3 @@
+# Reviewed, bounded acceptance artifacts; formal recordings remain excluded elsewhere.
+!*.csv
+!*.png

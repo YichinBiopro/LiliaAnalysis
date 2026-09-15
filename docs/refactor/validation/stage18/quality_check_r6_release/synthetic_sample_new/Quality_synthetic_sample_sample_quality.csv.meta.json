@@ -1,0 +1,876 @@
+{
+  "schema_version": 1,
+  "kind": "quality_check_samples",
+  "source_sha256": "ee079f4e349c73c4b95de5e18168a2088dbd7b027364b644e0df5ffbb30e04a9",
+  "source_samples": 30000,
+  "source_channels": 4,
+  "table_sha256": "df1175dd1ea9fa362dc3e80dd491e3e2106ec32e7d3e88f78affbdba9bda41f2",
+  "parameters": {
+    "fs": 500,
+    "segment_samples": 15000,
+    "n_segments": 2,
+    "starts": [
+      0,
+      15000
+    ],
+    "source_samples": 30000,
+    "source_channels": 4,
+    "bp_low": 0.5,
+    "bp_high": 45.0,
+    "quality_params": {
+      "target_score": 0.78,
+      "flat_ratio_start": 0.3,
+      "flat_penalty_floor": 0.2,
+      "spike_ratio_start": 0.0001,
+      "spike_ratio_end": 0.0015,
+      "spike_penalty_floor": 0.2,
+      "clip_ratio_start": 0.001,
+      "clip_ratio_end": 0.01,
+      "clip_penalty_floor": 0.2,
+      "range_start": 6.0,
+      "range_end": 12.0,
+      "range_penalty_floor": 0.3,
+      "slope_good_low": -3.5,
+      "slope_center": -2.0,
+      "slope_good_high": -0.5,
+      "slope_edge_score": 0.4,
+      "slope_outer_floor": 0.2,
+      "alpha_dpr_good": 0.55,
+      "alpha_dpr_bad": 0.8,
+      "alpha_artifact_floor": 0.5,
+      "nonalpha_dpr_good": 0.25,
+      "nonalpha_dpr_bad": 0.44,
+      "nonalpha_artifact_floor": 0.1,
+      "low_freq_penalty_floor": 0.3,
+      "line_noise_penalty_floor": 0.4,
+      "low_freq_penalty_ceiling": 0.7,
+      "line_noise_penalty_ceiling": 0.7,
+      "kurtosis_good_low": 2.0,
+      "kurtosis_good_high": 8.0,
+      "kurtosis_bad_high": 15.0,
+      "kurtosis_floor": 0.2,
+      "corr_low": 0.2,
+      "corr_mid": 0.4,
+      "corr_high": 0.84,
+      "corr_floor": 0.3,
+      "corr_low_score": 0.75,
+      "corr_mid_score": 0.88,
+      "flat_weight": 1.0,
+      "spectrum_weight": 0.9,
+      "kurtosis_weight": 0.0,
+      "corr_weight": 0.0
+    },
+    "score_policy": "legacy_overall"
+  },
+  "quality_diagnostics_version": 1,
+  "quality_audit": [
+    {
+      "segment": 0,
+      "window_start_idx": 0,
+      "window_end_idx": 15000,
+      "window_start_us": 1700000000000000,
+      "window_center_us": 1700000015000000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "valid",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": {
+            "target_score": 0.78,
+            "flat_ratio_start": 0.3,
+            "flat_penalty_floor": 0.2,
+            "spike_ratio_start": 0.0001,
+            "spike_ratio_end": 0.0015,
+            "spike_penalty_floor": 0.2,
+            "clip_ratio_start": 0.001,
+            "clip_ratio_end": 0.01,
+            "clip_penalty_floor": 0.2,
+            "range_start": 6.0,
+            "range_end": 12.0,
+            "range_penalty_floor": 0.3,
+            "slope_good_low": -3.5,
+            "slope_center": -2.0,
+            "slope_good_high": -0.5,
+            "slope_edge_score": 0.4,
+            "slope_outer_floor": 0.2,
+            "alpha_dpr_good": 0.55,
+            "alpha_dpr_bad": 0.8,
+            "alpha_artifact_floor": 0.5,
+            "nonalpha_dpr_good": 0.25,
+            "nonalpha_dpr_bad": 0.44,
+            "nonalpha_artifact_floor": 0.1,
+            "low_freq_penalty_floor": 0.3,
+            "line_noise_penalty_floor": 0.4,
+            "low_freq_penalty_ceiling": 0.7,
+            "line_noise_penalty_ceiling": 0.7,
+            "kurtosis_good_low": 2.0,
+            "kurtosis_good_high": 8.0,
+            "kurtosis_bad_high": 15.0,
+            "kurtosis_floor": 0.2,
+            "corr_low": 0.2,
+            "corr_mid": 0.4,
+            "corr_high": 0.84,
+            "corr_floor": 0.3,
+            "corr_low_score": 0.75,
+            "corr_mid_score": 0.88,
+            "flat_weight": 1.0,
+            "spectrum_weight": 0.9,
+            "kurtosis_weight": 0.0,
+            "corr_weight": 0.0
+          },
+          "stage": "raw",
+          "n_channels": 4,
+          "n_samples": 15000
+        },
+        "reasons": [],
+        "result": {
+          "overall": [
+            0.4902051458486357,
+            0.4977711696306321,
+            0.4986373276144754,
+            0.49517414524672887
+          ],
+          "detail": {
+            "flat": [
+              0.7073881719129033,
+              0.7038028100942338,
+              0.706248009957411,
+              0.7076708012930768
+            ],
+            "spectrum": [
+              0.32613707224345667,
+              0.3387622499897627,
+              0.33870015596127073,
+              0.33300770016228004
+            ]
+          },
+          "valid": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "invalid_reasons": [
+            [],
+            [],
+            [],
+            []
+          ],
+          "component_valid": {
+            "flat": [
+              true,
+              true,
+              true,
+              true
+            ],
+            "spectrum": [
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          "component_reasons": {
+            "flat": [
+              [],
+              [],
+              [],
+              []
+            ],
+            "spectrum": [
+              [],
+              [],
+              [],
+              []
+            ]
+          },
+          "context": {
+            "profile": "legacy_v2",
+            "preset": "flat_spectrum_only",
+            "stage": "raw",
+            "fs": 500.0,
+            "parameters": {
+              "target_score": 0.78,
+              "flat_activity_k": 0.8,
+              "spectrum_fit_hi": 45.0,
+              "flat_ratio_start": 0.3,
+              "flat_penalty_floor": 0.2,
+              "spike_ratio_start": 0.0001,
+              "spike_ratio_end": 0.0015,
+              "spike_penalty_floor": 0.2,
+              "clip_ratio_start": 0.001,
+              "clip_ratio_end": 0.01,
+              "clip_penalty_floor": 0.2,
+              "range_start": 6.0,
+              "range_end": 12.0,
+              "range_penalty_floor": 0.3,
+              "slope_good_low": -3.5,
+              "slope_center": -2.0,
+              "slope_good_high": -0.5,
+              "slope_edge_score": 0.4,
+              "slope_outer_floor": 0.2,
+              "alpha_dpr_good": 0.55,
+              "alpha_dpr_bad": 0.8,
+              "alpha_artifact_floor": 0.5,
+              "nonalpha_dpr_good": 0.25,
+              "nonalpha_dpr_bad": 0.44,
+              "nonalpha_artifact_floor": 0.1,
+              "low_freq_penalty_floor": 0.3,
+              "low_freq_penalty_ceiling": 0.7,
+              "line_noise_penalty_floor": 0.4,
+              "line_noise_penalty_ceiling": 0.7,
+              "kurtosis_good_low": 2.0,
+              "kurtosis_good_high": 8.0,
+              "kurtosis_bad_high": 15.0,
+              "kurtosis_floor": 0.2,
+              "corr_low": 0.2,
+              "corr_mid": 0.4,
+              "corr_high": 0.84,
+              "corr_floor": 0.3,
+              "corr_low_score": 0.75,
+              "corr_mid_score": 0.88,
+              "flat_weight": 1.0,
+              "spectrum_weight": 0.9,
+              "kurtosis_weight": 0.0,
+              "corr_weight": 0.0
+            },
+            "active_components": [
+              "flat",
+              "spectrum"
+            ],
+            "n_channels": 4,
+            "n_samples": 15000,
+            "fallback_policy": "preserve_legacy_values_and_mark_invalid",
+            "flat_window_policy": "legacy_exclusive_stop",
+            "corr_single_channel_policy": "identity",
+            "deprecated_parameters": [
+              "alpha_artifact_floor",
+              "alpha_dpr_bad",
+              "alpha_dpr_good",
+              "line_noise_penalty_ceiling",
+              "line_noise_penalty_floor",
+              "low_freq_penalty_ceiling",
+              "low_freq_penalty_floor",
+              "nonalpha_artifact_floor",
+              "nonalpha_dpr_bad",
+              "nonalpha_dpr_good",
+              "target_score"
+            ],
+            "config_id": "ba978a31e08b0ab2161e2bc526d7c93382ff186c03abc44cfd163262534a6135"
+          }
+        }
+      },
+      "quality_ch1": 0.4902051458486357,
+      "quality_ch2": 0.4977711696306321,
+      "quality_ch3": 0.4986373276144754,
+      "quality_ch4": 0.49517414524672887
+    },
+    {
+      "segment": 0,
+      "window_start_idx": 0,
+      "window_end_idx": 15000,
+      "window_start_us": 1700000000000000,
+      "window_center_us": 1700000015000000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "valid",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": {
+            "target_score": 0.78,
+            "flat_ratio_start": 0.3,
+            "flat_penalty_floor": 0.2,
+            "spike_ratio_start": 0.0001,
+            "spike_ratio_end": 0.0015,
+            "spike_penalty_floor": 0.2,
+            "clip_ratio_start": 0.001,
+            "clip_ratio_end": 0.01,
+            "clip_penalty_floor": 0.2,
+            "range_start": 6.0,
+            "range_end": 12.0,
+            "range_penalty_floor": 0.3,
+            "slope_good_low": -3.5,
+            "slope_center": -2.0,
+            "slope_good_high": -0.5,
+            "slope_edge_score": 0.4,
+            "slope_outer_floor": 0.2,
+            "alpha_dpr_good": 0.55,
+            "alpha_dpr_bad": 0.8,
+            "alpha_artifact_floor": 0.5,
+            "nonalpha_dpr_good": 0.25,
+            "nonalpha_dpr_bad": 0.44,
+            "nonalpha_artifact_floor": 0.1,
+            "low_freq_penalty_floor": 0.3,
+            "line_noise_penalty_floor": 0.4,
+            "low_freq_penalty_ceiling": 0.7,
+            "line_noise_penalty_ceiling": 0.7,
+            "kurtosis_good_low": 2.0,
+            "kurtosis_good_high": 8.0,
+            "kurtosis_bad_high": 15.0,
+            "kurtosis_floor": 0.2,
+            "corr_low": 0.2,
+            "corr_mid": 0.4,
+            "corr_high": 0.84,
+            "corr_floor": 0.3,
+            "corr_low_score": 0.75,
+            "corr_mid_score": 0.88,
+            "flat_weight": 1.0,
+            "spectrum_weight": 0.9,
+            "kurtosis_weight": 0.0,
+            "corr_weight": 0.0
+          },
+          "stage": "filtered",
+          "n_channels": 4,
+          "n_samples": 15000
+        },
+        "reasons": [],
+        "result": {
+          "overall": [
+            0.5088994349186273,
+            0.5161495843201575,
+            0.5174505695865367,
+            0.5118224608472871
+          ],
+          "detail": {
+            "flat": [
+              0.7048821030213397,
+              0.7014298569864802,
+              0.7049264679186517,
+              0.7003122733893561
+            ],
+            "spectrum": [
+              0.35434552430108474,
+              0.36708442045043616,
+              0.3670071140199456,
+              0.36125733775528135
+            ]
+          },
+          "valid": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "invalid_reasons": [
+            [],
+            [],
+            [],
+            []
+          ],
+          "component_valid": {
+            "flat": [
+              true,
+              true,
+              true,
+              true
+            ],
+            "spectrum": [
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          "component_reasons": {
+            "flat": [
+              [],
+              [],
+              [],
+              []
+            ],
+            "spectrum": [
+              [],
+              [],
+              [],
+              []
+            ]
+          },
+          "context": {
+            "profile": "legacy_v2",
+            "preset": "flat_spectrum_only",
+            "stage": "filtered",
+            "fs": 500.0,
+            "parameters": {
+              "target_score": 0.78,
+              "flat_activity_k": 0.8,
+              "spectrum_fit_hi": 45.0,
+              "flat_ratio_start": 0.3,
+              "flat_penalty_floor": 0.2,
+              "spike_ratio_start": 0.0001,
+              "spike_ratio_end": 0.0015,
+              "spike_penalty_floor": 0.2,
+              "clip_ratio_start": 0.001,
+              "clip_ratio_end": 0.01,
+              "clip_penalty_floor": 0.2,
+              "range_start": 6.0,
+              "range_end": 12.0,
+              "range_penalty_floor": 0.3,
+              "slope_good_low": -3.5,
+              "slope_center": -2.0,
+              "slope_good_high": -0.5,
+              "slope_edge_score": 0.4,
+              "slope_outer_floor": 0.2,
+              "alpha_dpr_good": 0.55,
+              "alpha_dpr_bad": 0.8,
+              "alpha_artifact_floor": 0.5,
+              "nonalpha_dpr_good": 0.25,
+              "nonalpha_dpr_bad": 0.44,
+              "nonalpha_artifact_floor": 0.1,
+              "low_freq_penalty_floor": 0.3,
+              "low_freq_penalty_ceiling": 0.7,
+              "line_noise_penalty_floor": 0.4,
+              "line_noise_penalty_ceiling": 0.7,
+              "kurtosis_good_low": 2.0,
+              "kurtosis_good_high": 8.0,
+              "kurtosis_bad_high": 15.0,
+              "kurtosis_floor": 0.2,
+              "corr_low": 0.2,
+              "corr_mid": 0.4,
+              "corr_high": 0.84,
+              "corr_floor": 0.3,
+              "corr_low_score": 0.75,
+              "corr_mid_score": 0.88,
+              "flat_weight": 1.0,
+              "spectrum_weight": 0.9,
+              "kurtosis_weight": 0.0,
+              "corr_weight": 0.0
+            },
+            "active_components": [
+              "flat",
+              "spectrum"
+            ],
+            "n_channels": 4,
+            "n_samples": 15000,
+            "fallback_policy": "preserve_legacy_values_and_mark_invalid",
+            "flat_window_policy": "legacy_exclusive_stop",
+            "corr_single_channel_policy": "identity",
+            "deprecated_parameters": [
+              "alpha_artifact_floor",
+              "alpha_dpr_bad",
+              "alpha_dpr_good",
+              "line_noise_penalty_ceiling",
+              "line_noise_penalty_floor",
+              "low_freq_penalty_ceiling",
+              "low_freq_penalty_floor",
+              "nonalpha_artifact_floor",
+              "nonalpha_dpr_bad",
+              "nonalpha_dpr_good",
+              "target_score"
+            ],
+            "config_id": "9b61100bef11d469afd70eb5179c4d79b3d9b70bf2a10ad17e6fc64f4bf52ad6"
+          }
+        }
+      },
+      "quality_ch1": 0.5088994349186273,
+      "quality_ch2": 0.5161495843201575,
+      "quality_ch3": 0.5174505695865367,
+      "quality_ch4": 0.5118224608472871
+    },
+    {
+      "segment": 1,
+      "window_start_idx": 15000,
+      "window_end_idx": 30000,
+      "window_start_us": 1700000030000000,
+      "window_center_us": 1700000045000000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "valid",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": {
+            "target_score": 0.78,
+            "flat_ratio_start": 0.3,
+            "flat_penalty_floor": 0.2,
+            "spike_ratio_start": 0.0001,
+            "spike_ratio_end": 0.0015,
+            "spike_penalty_floor": 0.2,
+            "clip_ratio_start": 0.001,
+            "clip_ratio_end": 0.01,
+            "clip_penalty_floor": 0.2,
+            "range_start": 6.0,
+            "range_end": 12.0,
+            "range_penalty_floor": 0.3,
+            "slope_good_low": -3.5,
+            "slope_center": -2.0,
+            "slope_good_high": -0.5,
+            "slope_edge_score": 0.4,
+            "slope_outer_floor": 0.2,
+            "alpha_dpr_good": 0.55,
+            "alpha_dpr_bad": 0.8,
+            "alpha_artifact_floor": 0.5,
+            "nonalpha_dpr_good": 0.25,
+            "nonalpha_dpr_bad": 0.44,
+            "nonalpha_artifact_floor": 0.1,
+            "low_freq_penalty_floor": 0.3,
+            "line_noise_penalty_floor": 0.4,
+            "low_freq_penalty_ceiling": 0.7,
+            "line_noise_penalty_ceiling": 0.7,
+            "kurtosis_good_low": 2.0,
+            "kurtosis_good_high": 8.0,
+            "kurtosis_bad_high": 15.0,
+            "kurtosis_floor": 0.2,
+            "corr_low": 0.2,
+            "corr_mid": 0.4,
+            "corr_high": 0.84,
+            "corr_floor": 0.3,
+            "corr_low_score": 0.75,
+            "corr_mid_score": 0.88,
+            "flat_weight": 1.0,
+            "spectrum_weight": 0.9,
+            "kurtosis_weight": 0.0,
+            "corr_weight": 0.0
+          },
+          "stage": "raw",
+          "n_channels": 4,
+          "n_samples": 15000
+        },
+        "reasons": [],
+        "result": {
+          "overall": [
+            0.4947506152309317,
+            0.49727059570589743,
+            0.49122002640129153,
+            0.4947122306759125
+          ],
+          "detail": {
+            "flat": [
+              0.7066662178153361,
+              0.708786412649464,
+              0.7085288733015427,
+              0.7070308582168161
+            ],
+            "spectrum": [
+              0.3329317746936111,
+              0.33540355694835805,
+              0.32697824187584335,
+              0.3326865008587969
+            ]
+          },
+          "valid": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "invalid_reasons": [
+            [],
+            [],
+            [],
+            []
+          ],
+          "component_valid": {
+            "flat": [
+              true,
+              true,
+              true,
+              true
+            ],
+            "spectrum": [
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          "component_reasons": {
+            "flat": [
+              [],
+              [],
+              [],
+              []
+            ],
+            "spectrum": [
+              [],
+              [],
+              [],
+              []
+            ]
+          },
+          "context": {
+            "profile": "legacy_v2",
+            "preset": "flat_spectrum_only",
+            "stage": "raw",
+            "fs": 500.0,
+            "parameters": {
+              "target_score": 0.78,
+              "flat_activity_k": 0.8,
+              "spectrum_fit_hi": 45.0,
+              "flat_ratio_start": 0.3,
+              "flat_penalty_floor": 0.2,
+              "spike_ratio_start": 0.0001,
+              "spike_ratio_end": 0.0015,
+              "spike_penalty_floor": 0.2,
+              "clip_ratio_start": 0.001,
+              "clip_ratio_end": 0.01,
+              "clip_penalty_floor": 0.2,
+              "range_start": 6.0,
+              "range_end": 12.0,
+              "range_penalty_floor": 0.3,
+              "slope_good_low": -3.5,
+              "slope_center": -2.0,
+              "slope_good_high": -0.5,
+              "slope_edge_score": 0.4,
+              "slope_outer_floor": 0.2,
+              "alpha_dpr_good": 0.55,
+              "alpha_dpr_bad": 0.8,
+              "alpha_artifact_floor": 0.5,
+              "nonalpha_dpr_good": 0.25,
+              "nonalpha_dpr_bad": 0.44,
+              "nonalpha_artifact_floor": 0.1,
+              "low_freq_penalty_floor": 0.3,
+              "low_freq_penalty_ceiling": 0.7,
+              "line_noise_penalty_floor": 0.4,
+              "line_noise_penalty_ceiling": 0.7,
+              "kurtosis_good_low": 2.0,
+              "kurtosis_good_high": 8.0,
+              "kurtosis_bad_high": 15.0,
+              "kurtosis_floor": 0.2,
+              "corr_low": 0.2,
+              "corr_mid": 0.4,
+              "corr_high": 0.84,
+              "corr_floor": 0.3,
+              "corr_low_score": 0.75,
+              "corr_mid_score": 0.88,
+              "flat_weight": 1.0,
+              "spectrum_weight": 0.9,
+              "kurtosis_weight": 0.0,
+              "corr_weight": 0.0
+            },
+            "active_components": [
+              "flat",
+              "spectrum"
+            ],
+            "n_channels": 4,
+            "n_samples": 15000,
+            "fallback_policy": "preserve_legacy_values_and_mark_invalid",
+            "flat_window_policy": "legacy_exclusive_stop",
+            "corr_single_channel_policy": "identity",
+            "deprecated_parameters": [
+              "alpha_artifact_floor",
+              "alpha_dpr_bad",
+              "alpha_dpr_good",
+              "line_noise_penalty_ceiling",
+              "line_noise_penalty_floor",
+              "low_freq_penalty_ceiling",
+              "low_freq_penalty_floor",
+              "nonalpha_artifact_floor",
+              "nonalpha_dpr_bad",
+              "nonalpha_dpr_good",
+              "target_score"
+            ],
+            "config_id": "ba978a31e08b0ab2161e2bc526d7c93382ff186c03abc44cfd163262534a6135"
+          }
+        }
+      },
+      "quality_ch1": 0.4947506152309317,
+      "quality_ch2": 0.49727059570589743,
+      "quality_ch3": 0.49122002640129153,
+      "quality_ch4": 0.4947122306759125
+    },
+    {
+      "segment": 1,
+      "window_start_idx": 15000,
+      "window_end_idx": 30000,
+      "window_start_us": 1700000030000000,
+      "window_center_us": 1700000045000000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "valid",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": {
+            "target_score": 0.78,
+            "flat_ratio_start": 0.3,
+            "flat_penalty_floor": 0.2,
+            "spike_ratio_start": 0.0001,
+            "spike_ratio_end": 0.0015,
+            "spike_penalty_floor": 0.2,
+            "clip_ratio_start": 0.001,
+            "clip_ratio_end": 0.01,
+            "clip_penalty_floor": 0.2,
+            "range_start": 6.0,
+            "range_end": 12.0,
+            "range_penalty_floor": 0.3,
+            "slope_good_low": -3.5,
+            "slope_center": -2.0,
+            "slope_good_high": -0.5,
+            "slope_edge_score": 0.4,
+            "slope_outer_floor": 0.2,
+            "alpha_dpr_good": 0.55,
+            "alpha_dpr_bad": 0.8,
+            "alpha_artifact_floor": 0.5,
+            "nonalpha_dpr_good": 0.25,
+            "nonalpha_dpr_bad": 0.44,
+            "nonalpha_artifact_floor": 0.1,
+            "low_freq_penalty_floor": 0.3,
+            "line_noise_penalty_floor": 0.4,
+            "low_freq_penalty_ceiling": 0.7,
+            "line_noise_penalty_ceiling": 0.7,
+            "kurtosis_good_low": 2.0,
+            "kurtosis_good_high": 8.0,
+            "kurtosis_bad_high": 15.0,
+            "kurtosis_floor": 0.2,
+            "corr_low": 0.2,
+            "corr_mid": 0.4,
+            "corr_high": 0.84,
+            "corr_floor": 0.3,
+            "corr_low_score": 0.75,
+            "corr_mid_score": 0.88,
+            "flat_weight": 1.0,
+            "spectrum_weight": 0.9,
+            "kurtosis_weight": 0.0,
+            "corr_weight": 0.0
+          },
+          "stage": "filtered",
+          "n_channels": 4,
+          "n_samples": 15000
+        },
+        "reasons": [],
+        "result": {
+          "overall": [
+            0.5140702398685598,
+            0.5148312788744537,
+            0.5089135843654268,
+            0.5117400951868406
+          ],
+          "detail": {
+            "flat": [
+              0.7063966303425433,
+              0.7041119237282769,
+              0.7033225084094399,
+              0.7007839860285883
+            ],
+            "spectrum": [
+              0.361127088977976,
+              0.36356295138009237,
+              0.35523953760293675,
+              0.3608645306126944
+            ]
+          },
+          "valid": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "invalid_reasons": [
+            [],
+            [],
+            [],
+            []
+          ],
+          "component_valid": {
+            "flat": [
+              true,
+              true,
+              true,
+              true
+            ],
+            "spectrum": [
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          "component_reasons": {
+            "flat": [
+              [],
+              [],
+              [],
+              []
+            ],
+            "spectrum": [
+              [],
+              [],
+              [],
+              []
+            ]
+          },
+          "context": {
+            "profile": "legacy_v2",
+            "preset": "flat_spectrum_only",
+            "stage": "filtered",
+            "fs": 500.0,
+            "parameters": {
+              "target_score": 0.78,
+              "flat_activity_k": 0.8,
+              "spectrum_fit_hi": 45.0,
+              "flat_ratio_start": 0.3,
+              "flat_penalty_floor": 0.2,
+              "spike_ratio_start": 0.0001,
+              "spike_ratio_end": 0.0015,
+              "spike_penalty_floor": 0.2,
+              "clip_ratio_start": 0.001,
+              "clip_ratio_end": 0.01,
+              "clip_penalty_floor": 0.2,
+              "range_start": 6.0,
+              "range_end": 12.0,
+              "range_penalty_floor": 0.3,
+              "slope_good_low": -3.5,
+              "slope_center": -2.0,
+              "slope_good_high": -0.5,
+              "slope_edge_score": 0.4,
+              "slope_outer_floor": 0.2,
+              "alpha_dpr_good": 0.55,
+              "alpha_dpr_bad": 0.8,
+              "alpha_artifact_floor": 0.5,
+              "nonalpha_dpr_good": 0.25,
+              "nonalpha_dpr_bad": 0.44,
+              "nonalpha_artifact_floor": 0.1,
+              "low_freq_penalty_floor": 0.3,
+              "low_freq_penalty_ceiling": 0.7,
+              "line_noise_penalty_floor": 0.4,
+              "line_noise_penalty_ceiling": 0.7,
+              "kurtosis_good_low": 2.0,
+              "kurtosis_good_high": 8.0,
+              "kurtosis_bad_high": 15.0,
+              "kurtosis_floor": 0.2,
+              "corr_low": 0.2,
+              "corr_mid": 0.4,
+              "corr_high": 0.84,
+              "corr_floor": 0.3,
+              "corr_low_score": 0.75,
+              "corr_mid_score": 0.88,
+              "flat_weight": 1.0,
+              "spectrum_weight": 0.9,
+              "kurtosis_weight": 0.0,
+              "corr_weight": 0.0
+            },
+            "active_components": [
+              "flat",
+              "spectrum"
+            ],
+            "n_channels": 4,
+            "n_samples": 15000,
+            "fallback_policy": "preserve_legacy_values_and_mark_invalid",
+            "flat_window_policy": "legacy_exclusive_stop",
+            "corr_single_channel_policy": "identity",
+            "deprecated_parameters": [
+              "alpha_artifact_floor",
+              "alpha_dpr_bad",
+              "alpha_dpr_good",
+              "line_noise_penalty_ceiling",
+              "line_noise_penalty_floor",
+              "low_freq_penalty_ceiling",
+              "low_freq_penalty_floor",
+              "nonalpha_artifact_floor",
+              "nonalpha_dpr_bad",
+              "nonalpha_dpr_good",
+              "target_score"
+            ],
+            "config_id": "9b61100bef11d469afd70eb5179c4d79b3d9b70bf2a10ad17e6fc64f4bf52ad6"
+          }
+        }
+      },
+      "quality_ch1": 0.5140702398685598,
+      "quality_ch2": 0.5148312788744537,
+      "quality_ch3": 0.5089135843654268,
+      "quality_ch4": 0.5117400951868406
+    }
+  ]
+}

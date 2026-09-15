@@ -1,0 +1,13 @@
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=8 (quantile), fs=500Hz
+  Masked 0/60 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/real_4_joint_new/2026-06-18-lilia-vibration-level3_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/real_4_joint_new/2026-06-18-lilia-vibration-level3_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/entropy_diagnostics/real_4_joint_new/2026-06-18-lilia-vibration-level3_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.0760 bits  (Miller–Madow 0.0748; norm 0.0253)
+  surrogate null: mean=0.0131±0.0079 bits, p=0.25, z=7.93 (n=3)
+  windowed MI   : mean=0.1522, std=0.0429, min=0.1015, max=0.3383 (n=60 windows)

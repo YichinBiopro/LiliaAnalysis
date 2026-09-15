@@ -1,0 +1,623 @@
+{
+  "commit": "40d2a233473c3aced382f6eea7f1473842f38cf6",
+  "legacy_entry_sha256": "7d230aeaf5d9debab7264b867621261f074446739c7a3082ef0907728b4e1b0c",
+  "numerical_dependencies": {
+    "lilia/io.py": "f85c790c46e3ccb9e16b9151ccbce758ab93683f3bc0b14f13c1e8d1e44abe1e",
+    "lilia/signal.py": "6eb67263801e1aabb0bbee299f9234a578e40d678632eea246d0369f867c8c7d",
+    "lilia/windowing.py": "d363b9c4670b95ab33d7233ceb9a4d9407ebd442b9ce00716144551317c9bd8c",
+    "lilia/quality.py": "9b80325a917c2d82629457c55dc94cd8d014c1534598987553a94c72217ab765",
+    "lilia/goertzel.py": "e3474ea1ea491fee74411f1d9e004beb5c8a35cb08b4a54f7adb91854144ab15",
+    "lilia/quality_policy.py": "2edf6f4cc11353ca564b84f8735a9e75c6194d109a611ada61a58912b300908e"
+  },
+  "cases": [
+    {
+      "case": "real_0_ch1",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+      "unchanged_failure": null,
+      "rows": 11,
+      "readers": 2,
+      "selections": {
+        "real_0_ch1__keep_True_0.49": 11,
+        "real_0_ch1__keep_True_0.5": 11,
+        "real_0_ch1__keep_False_0.49": 11,
+        "real_0_ch1__keep_False_0.5": 11
+      },
+      "diagnostic_counts": {
+        "valid": 11
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "real_0_ch2",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv",
+      "unchanged_failure": null,
+      "rows": 11,
+      "readers": 2,
+      "selections": {
+        "real_0_ch2__keep_True_0.49": 7,
+        "real_0_ch2__keep_True_0.5": 7,
+        "real_0_ch2__keep_False_0.49": 7,
+        "real_0_ch2__keep_False_0.5": 7
+      },
+      "diagnostic_counts": {
+        "valid": 11
+      },
+      "hard_windows": 2,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "real_1_ch1",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "unchanged_failure": null,
+      "rows": 12,
+      "readers": 2,
+      "selections": {
+        "real_1_ch1__keep_True_0.49": 12,
+        "real_1_ch1__keep_True_0.5": 12,
+        "real_1_ch1__keep_False_0.49": 12,
+        "real_1_ch1__keep_False_0.5": 12
+      },
+      "diagnostic_counts": {
+        "valid": 12
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "real_1_ch2",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "unchanged_failure": null,
+      "rows": 12,
+      "readers": 2,
+      "selections": {
+        "real_1_ch2__keep_True_0.49": 10,
+        "real_1_ch2__keep_True_0.5": 10,
+        "real_1_ch2__keep_False_0.49": 10,
+        "real_1_ch2__keep_False_0.5": 10
+      },
+      "diagnostic_counts": {
+        "valid": 12
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "real_2_ch1",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+      "unchanged_failure": null,
+      "rows": 12,
+      "readers": 2,
+      "selections": {
+        "real_2_ch1__keep_True_0.49": 9,
+        "real_2_ch1__keep_True_0.5": 9,
+        "real_2_ch1__keep_False_0.49": 9,
+        "real_2_ch1__keep_False_0.5": 9
+      },
+      "diagnostic_counts": {
+        "valid": 12
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "real_2_ch2",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv",
+      "unchanged_failure": null,
+      "rows": 12,
+      "readers": 2,
+      "selections": {
+        "real_2_ch2__keep_True_0.49": 12,
+        "real_2_ch2__keep_True_0.5": 12,
+        "real_2_ch2__keep_False_0.49": 12,
+        "real_2_ch2__keep_False_0.5": 12
+      },
+      "diagnostic_counts": {
+        "valid": 12
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "real_3_ch1",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+      "unchanged_failure": null,
+      "rows": 12,
+      "readers": 2,
+      "selections": {
+        "real_3_ch1__keep_True_0.49": 12,
+        "real_3_ch1__keep_True_0.5": 12,
+        "real_3_ch1__keep_False_0.49": 12,
+        "real_3_ch1__keep_False_0.5": 12
+      },
+      "diagnostic_counts": {
+        "valid": 12
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "real_3_ch2",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv",
+      "unchanged_failure": null,
+      "rows": 12,
+      "readers": 2,
+      "selections": {
+        "real_3_ch2__keep_True_0.49": 11,
+        "real_3_ch2__keep_True_0.5": 11,
+        "real_3_ch2__keep_False_0.49": 11,
+        "real_3_ch2__keep_False_0.5": 11
+      },
+      "diagnostic_counts": {
+        "valid": 12
+      },
+      "hard_windows": 1,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "real_4_ch1",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+      "unchanged_failure": null,
+      "rows": 12,
+      "readers": 2,
+      "selections": {
+        "real_4_ch1__keep_True_0.49": 11,
+        "real_4_ch1__keep_True_0.5": 11,
+        "real_4_ch1__keep_False_0.49": 11,
+        "real_4_ch1__keep_False_0.5": 11
+      },
+      "diagnostic_counts": {
+        "valid": 12
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "real_4_ch2",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv",
+      "unchanged_failure": null,
+      "rows": 12,
+      "readers": 2,
+      "selections": {
+        "real_4_ch2__keep_True_0.49": 12,
+        "real_4_ch2__keep_True_0.5": 12,
+        "real_4_ch2__keep_False_0.49": 12,
+        "real_4_ch2__keep_False_0.5": 12
+      },
+      "diagnostic_counts": {
+        "valid": 12
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "gap",
+      "source": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/goertzel_quality_final/gap.csv",
+      "unchanged_failure": null,
+      "rows": 6,
+      "readers": 2,
+      "selections": {
+        "gap__keep_True_0.49": 6,
+        "gap__keep_True_0.5": 6,
+        "gap__keep_False_0.49": 6,
+        "gap__keep_False_0.5": 6
+      },
+      "diagnostic_counts": {
+        "valid": 6
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "hard",
+      "source": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/goertzel_quality_final/hard.csv",
+      "unchanged_failure": null,
+      "rows": 6,
+      "readers": 2,
+      "selections": {
+        "hard__keep_True_0.49": 4,
+        "hard__keep_True_0.5": 4,
+        "hard__keep_False_0.49": 6,
+        "hard__keep_False_0.5": 6
+      },
+      "diagnostic_counts": {
+        "valid": 6
+      },
+      "hard_windows": 2,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "half_second",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "unchanged_failure": null,
+      "rows": 122,
+      "readers": 2,
+      "selections": {
+        "half_second__keep_True_0.49": 0,
+        "half_second__keep_True_0.5": 0,
+        "half_second__keep_False_0.49": 0,
+        "half_second__keep_False_0.5": 0
+      },
+      "diagnostic_counts": {
+        "invalid": 122
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "fallback",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "unchanged_failure": null,
+      "rows": 12,
+      "readers": 2,
+      "selections": {
+        "fallback__keep_True_0.49": 12,
+        "fallback__keep_True_0.5": 0,
+        "fallback__keep_False_0.49": 12,
+        "fallback__keep_False_0.5": 0
+      },
+      "diagnostic_counts": {
+        "invalid": 12
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "external",
+      "source": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/goertzel_quality_final/gap.csv",
+      "unchanged_failure": null,
+      "rows": 6,
+      "readers": 2,
+      "selections": {
+        "external__keep_True_0.49": 6,
+        "external__keep_True_0.5": 6,
+        "external__keep_False_0.49": 6,
+        "external__keep_False_0.5": 6
+      },
+      "diagnostic_counts": {
+        "unavailable": 6
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "all_rejected",
+      "source": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/goertzel_quality_final/gap.csv",
+      "unchanged_failure": null,
+      "rows": 6,
+      "readers": 2,
+      "selections": {
+        "all_rejected__keep_True_0.49": 0,
+        "all_rejected__keep_True_0.5": 0,
+        "all_rejected__keep_False_0.49": 0,
+        "all_rejected__keep_False_0.5": 0
+      },
+      "diagnostic_counts": {
+        "unavailable": 6
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "empty",
+      "source": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/goertzel_quality_final/gap.csv",
+      "unchanged_failure": null,
+      "rows": 0,
+      "readers": 2,
+      "selections": {
+        "empty__keep_True_0.49": 0,
+        "empty__keep_True_0.5": 0,
+        "empty__keep_False_0.49": 0,
+        "empty__keep_False_0.5": 0
+      },
+      "diagnostic_counts": {},
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "fractional_fs",
+      "source": "/home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv",
+      "unchanged_failure": null,
+      "rows": 12,
+      "readers": 2,
+      "selections": {
+        "fractional_fs__keep_True_0.49": 12,
+        "fractional_fs__keep_True_0.5": 12,
+        "fractional_fs__keep_False_0.49": 12,
+        "fractional_fs__keep_False_0.5": 12
+      },
+      "diagnostic_counts": {
+        "valid": 12
+      },
+      "hard_windows": 0,
+      "feature_sources": {
+        "quality": "filtered",
+        "goertzel_power": "filtered",
+        "goertzel_db": "filtered",
+        "sat_frac_1950": "raw",
+        "peak_to_peak_uv": "raw",
+        "max_abs_diff_uv": "raw",
+        "bp_edge_shift_uv": "filtered",
+        "artifact_hard_clip": [
+          "sat_frac_1950",
+          "peak_to_peak_uv",
+          "bp_edge_shift_uv"
+        ],
+        "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+      }
+    },
+    {
+      "case": "nonfinite",
+      "source": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/goertzel_quality_final/nonfinite.csv",
+      "unchanged_failure": "Non-finite EEG samples: /home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/goertzel_quality_final/nonfinite.csv",
+      "rows": 0,
+      "readers": 0
+    }
+  ],
+  "array_count": 354,
+  "persisted_nonempty_arrays": 335,
+  "empty_arrays": [
+    "empty__window_start_idx",
+    "empty__window_end_idx",
+    "empty__time_s",
+    "empty__window_start_us",
+    "empty__window_end_us",
+    "empty__window_center_us",
+    "empty__goertzel_power",
+    "empty__goertzel_db",
+    "empty__quality",
+    "empty__quality_final",
+    "empty__sat_frac_1950",
+    "empty__peak_to_peak_uv",
+    "empty__max_abs_diff_uv",
+    "empty__bp_edge_shift_uv",
+    "empty__artifact_hard_clip",
+    "empty__keep_True_0.49",
+    "empty__keep_True_0.5",
+    "empty__keep_False_0.49",
+    "empty__keep_False_0.5"
+  ],
+  "max_abs_error": 0.0,
+  "tolerance": 0.0,
+  "nan_and_selection_equal": true,
+  "reader_checks": 36,
+  "plots_reviewed": false
+}

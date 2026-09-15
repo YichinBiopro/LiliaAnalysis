@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import argparse
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import matplotlib
 
@@ -20,10 +20,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from lilia.windowing import window_starts
+from lilia.windowing import window_starts, continuous_slices, plot_breaks
 from lilia.goertzel import goertzel_power
 from lilia.provenance import write_goertzel_metadata, validate_goertzel_cache
 from lilia.quality_policy import valid_goertzel_rows
+from lilia.quality_audit import (capture_diagnostics, diagnostic_columns,
+                                 plot_diagnostic_markers, diagnostic_label)
+from lilia.goertzel_io import load_goertzel_table
 from lilia.io import bandpass_filter, load_merged_csv
 from lilia.quality import (
     get_eeg_quality_index_v2_parametric,
@@ -47,6 +50,8 @@ class WindowResult:
     max_abs_diff_uv: np.ndarray
     bp_edge_shift_uv: np.ndarray
     hard_artifact: np.ndarray
+    quality_audit: list[dict] = field(default_factory=list)
+    segment_ids: np.ndarray | None = None
 
 
 def _rolling_median(y: np.ndarray, win: int) -> np.ndarray:
@@ -87,6 +92,7 @@ def _compute_window_metrics(
     max_abs_diff = []
     bp_edge_shift = []
     hard = []
+    quality_audit = []
 
     for start in window_starts(len(data_bp), win, step, time_us, fs):
         end = start + win
@@ -103,11 +109,16 @@ def _compute_window_metrics(
             remove_dc=True,
             apply_hann=True,
         )
-        quality = get_eeg_quality_index_v2_parametric(
+        scored = get_eeg_quality_index_v2_parametric(
             seg.T.astype(np.float64),
             fs=int(fs),
             params=quality_params,
-        )['overall'][ch_idx]
+        )
+        quality = scored['overall'][ch_idx]
+        quality_audit.append(dict(
+            window_start_idx=int(start), window_end_idx=int(end),
+            quality_diagnostics=capture_diagnostics(scored, fs=int(fs), params=quality_params,
+                n_channels=seg.shape[1], n_samples=len(seg), stage='filtered')))
 
         # Hard-artifact features are measured on the RAW signal so clipping /
         # step artifacts are not attenuated by bandpass filtering.
@@ -163,6 +174,8 @@ def _compute_window_metrics(
         max_abs_diff_uv=max_abs_diff,
         bp_edge_shift_uv=bp_edge_shift,
         hard_artifact=hard,
+        quality_audit=quality_audit,
+        segment_ids=_window_segment_ids(time_us, win_start_idx, fs),
     )
 
 
@@ -185,10 +198,17 @@ def _subject_events(subject_key: str | None, epoch_us: int):
     return out
 
 
-def _load_raw_decimated(time_us: np.ndarray, raw_ch: np.ndarray, max_points: int = 15000):
+def _window_segment_ids(time_us, starts, fs):
+    stops = [sl.stop for sl in continuous_slices(time_us, fs)]
+    return np.searchsorted(stops, starts, side='right')
+
+
+def _load_raw_decimated(time_us: np.ndarray, raw_ch: np.ndarray, max_points: int = 15000,
+                        *, fs: float = 500.):
     t_s = (time_us - int(time_us[0])) / 1e6
     stride = max(1, len(t_s) // max_points)
-    return t_s[::stride], raw_ch[::stride]
+    indices = np.arange(0, len(t_s), stride)
+    return plot_breaks(t_s[indices], raw_ch[indices], _window_segment_ids(time_us, indices, fs))
 
 
 def _plot_subject(
@@ -254,6 +274,7 @@ def _plot_subject(
             'max_abs_diff_uv': result.max_abs_diff_uv,
             'bp_edge_shift_uv': result.bp_edge_shift_uv,
             'artifact_hard_clip': result.hard_artifact.astype(int),
+            **diagnostic_columns(result.quality_audit),
         }
     ).to_csv(out_csv, index=False)
     write_goertzel_metadata(out_csv, merged_csv, {
@@ -264,14 +285,14 @@ def _plot_subject(
         'bp_shift_sec': bp_shift_sec, 'bp_shift_threshold': bp_shift_threshold,
         'bp_low': pem.BP_LOW, 'bp_high': pem.BP_HIGH,
         'quality_params': quality_params,
-    })
+    }, quality_audit=result.quality_audit)
 
     sub_dirname = os.path.basename(os.path.dirname(merged_csv))
     subject_key = _subject_key_from_dir(sub_dirname)
     events = _subject_events(subject_key, int(time_us[0]))
 
-    t_raw, y_raw = _load_raw_decimated(time_us, data[:, ch - 1])
-    t_bp, y_bp = _load_raw_decimated(time_us, data_bp[:, ch - 1])
+    t_raw, y_raw = _load_raw_decimated(time_us, data[:, ch - 1], fs=fs)
+    t_bp, y_bp = _load_raw_decimated(time_us, data_bp[:, ch - 1], fs=fs)
 
     _render_plot(
         out_png=out_png,
@@ -307,16 +328,18 @@ def _plot_subject_from_csv(
     ref_lines: list[tuple[float, str]] | None = None,
     power_ylim: tuple[float, float] | None = None,
 ) -> None:
-    """Re-render the 4-panel figure from an already-computed per-window CSV
-    (as saved by _plot_subject), skipping the expensive Goertzel/quality
-    recomputation. Only the raw/bandpass EEG traces are reloaded."""
+    """Re-render stored metrics after cache and source/diagnostic validation.
+
+    The reader recomputes source features and quality diagnostics for validation;
+    the figure uses the original stored scores, including historical fallbacks.
+    """
     validate_goertzel_cache(in_csv, merged_csv, {'ch': ch, 'fs': fs, 'target_freq': target_freq})
     time_us, data = load_merged_csv(merged_csv)
     if ch < 1 or ch > data.shape[1]:
         raise ValueError(f'channel {ch} out of range for {merged_csv}')
     data_bp = bandpass_filter(data, fs=fs, lo=pem.BP_LOW, hi=pem.BP_HIGH, time_us=time_us)
 
-    df = pd.read_csv(in_csv)
+    df, metadata = load_goertzel_table(in_csv, merged_csv)
     result = WindowResult(
         window_start_idx=df['window_start_idx'].to_numpy(),
         window_end_idx=df['window_end_idx'].to_numpy(),
@@ -330,14 +353,16 @@ def _plot_subject_from_csv(
         max_abs_diff_uv=df['max_abs_diff_uv'].to_numpy(),
         bp_edge_shift_uv=df['bp_edge_shift_uv'].to_numpy(),
         hard_artifact=df['artifact_hard_clip'].to_numpy().astype(bool),
+        quality_audit=metadata.get('quality_audit', []),
+        segment_ids=_window_segment_ids(time_us, df['window_start_idx'].to_numpy(), fs),
     )
 
     sub_dirname = os.path.basename(os.path.dirname(merged_csv))
     subject_key = _subject_key_from_dir(sub_dirname)
     events = _subject_events(subject_key, int(time_us[0]))
 
-    t_raw, y_raw = _load_raw_decimated(time_us, data[:, ch - 1])
-    t_bp, y_bp = _load_raw_decimated(time_us, data_bp[:, ch - 1])
+    t_raw, y_raw = _load_raw_decimated(time_us, data[:, ch - 1], fs=fs)
+    t_bp, y_bp = _load_raw_decimated(time_us, data_bp[:, ch - 1], fs=fs)
 
     _render_plot(
         out_png=out_png,
@@ -385,7 +410,7 @@ def _render_plot(
     masked_series = np.where(good, series, np.nan)
     smooth_series = np.where(good, _rolling_median(masked_series, smooth_win), np.nan)
     unit_label = 'Power (dB)' if use_db else 'Power (linear, a.u.)'
-    raw_label = 'absolute (raw dB)' if use_db else 'absolute (raw, linear)'
+    raw_label = 'unmasked filtered power (dB)' if use_db else 'unmasked filtered power (linear)'
     smooth_label = ('quality-masked + smoothed dB' if use_db
                      else 'quality-masked + smoothed (linear)')
 
@@ -407,9 +432,10 @@ def _render_plot(
 
     # Panel 1: Goertzel power (dB or linear)
     ax0 = axes[0]
-    ax0.plot(result.time_s / 60.0, series, color='0.82', lw=0.8,
+    ax0.plot(*plot_breaks(result.time_s / 60.0, series, result.segment_ids), color='0.82', lw=0.8,
              label=raw_label)
-    ax0.plot(result.time_s / 60.0, smooth_series, color='#1f77b4', lw=1.8,
+    ax0.plot(*plot_breaks(result.time_s / 60.0, smooth_series, result.segment_ids), color='#1f77b4', lw=1.8,
+             marker='.',
              label=smooth_label)
     ax0.set_ylabel(f'Goertzel {target_freq:g} Hz\n{unit_label}')
     if not use_db:
@@ -434,8 +460,26 @@ def _render_plot(
 
     # Panel 2: EEG quality score
     ax1 = axes[1]
-    ax1.plot(result.time_s / 60.0, result.quality, color='#2ca02c', lw=1.5,
-             label='quality')
+    ax1.plot(*plot_breaks(result.time_s / 60.0, result.quality, result.segment_ids), color='#2ca02c', lw=1.5,
+             marker='.', label='filtered quality (legacy overall)')
+    if result.quality_audit:
+        plot_diagnostic_markers(ax1, result.time_s / 60.0, result.quality_audit,
+                                result.quality[:, None])
+    elif result.time_s.size:
+        ax1.scatter(result.time_s / 60.0, np.where(np.isfinite(result.quality), result.quality, .02),
+                    marker='|', color='gray', label='Diagnostics unavailable')
+    low = np.isfinite(result.quality) & (result.quality <= quality_threshold)
+    if low.any():
+        ax1.scatter(result.time_s[low] / 60.0, result.quality[low], marker='v', color='red',
+                    label='At/below threshold')
+    if result.hard_artifact.any():
+        ax1.scatter(result.time_s[result.hard_artifact] / 60.0,
+                    np.zeros(int(result.hard_artifact.sum())), marker='s', color='purple', s=18,
+                    label='Hard artifact (raw saturation/PTP; filtered edge shift)')
+    ax1.set_title('filtered | ' + diagnostic_label(result.quality_audit)
+                  + ' | diagnostics cover all scoring channels', fontsize=8)
+    if not result.time_s.size:
+        ax1.text(.5, .5, 'No candidate windows', ha='center', transform=ax1.transAxes)
     ax1.axhline(quality_threshold, color='#d62728', ls='--', lw=1.0,
                 label=f'threshold={quality_threshold:g}')
     ax1.set_ylim(-0.05, 1.05)
