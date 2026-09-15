@@ -1,0 +1,450 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-15T02:24:28.521282+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/move_head_all8_bp.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/move_head_all8_bp_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/move_head_first4_bp.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/move_head_first4_bp_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/move_head_first4_tflite.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/move_head_first4_tflite_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/plot_fallback/Stage18_stage18_eeg_bp_session_start.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/plot_fallback/Stage18_stage18_eeg_bp_session_start.svg",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/plot_fallback/Stage18_stage18_eeg_bp_session_start_bp_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/plot_real/Stage18_stage18_eeg_bp_session_start.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/plot_real/Stage18_stage18_eeg_bp_session_start.svg",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/plot_real/Stage18_stage18_eeg_bp_session_start_bp_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/talk_all8_bp.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/talk_all8_bp_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/talk_first4_bp.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/talk_first4_bp_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/talk_first4_tflite.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/talk_first4_tflite_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level1_all8_bp.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level1_all8_bp_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level1_first4_bp.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level1_first4_bp_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level1_first4_tflite.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level1_first4_tflite_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level2_all8_bp.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level2_all8_bp_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level2_first4_bp.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level2_first4_bp_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level2_first4_tflite.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level2_first4_tflite_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level3_all8_bp.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level3_all8_bp_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level3_first4_bp.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level3_first4_bp_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level3_first4_tflite.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level3_first4_tflite_comparison.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta.svg",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta_bp_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/move_head_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/move_head_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/move_head_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/move_head_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_fallback_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_fallback_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_fallback_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_fallback_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_gap_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_gap_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_gap_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_gap_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_half_second_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_half_second_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_threshold_zero_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_threshold_zero_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_threshold_zero_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_threshold_zero_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level1_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level1_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level1_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level1_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level2_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level2_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level2_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level2_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level3_new/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level3_new/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level3_old/Stage18_Q_tflite_metrics.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level3_old/Stage18_Q_tflite_summary_session.png",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/artifact_restore/evidence.json": "b53deff81cd3c86f07cfcb06c8e33071d2a8f300dfeb1072a747766e61f4156e",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/move_head_all8_bp.csv": "ec6ff98dec8f61bfaf6e4e5b6ff60e04e23e4f249b4cb2ad00a3d30f0a5e2465",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/move_head_all8_bp_comparison.csv": "775b882b220552961c1cc7ecf0708cec587a75f2d2c02b3a8ca1d7dfd16b1bbc",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/move_head_first4_bp.csv": "79b149d7217ca00b73fc931ebee62cca3158f08e030ba89135bbe033f9dc7498",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/move_head_first4_bp_comparison.csv": "aed016fb8e2637ddcb85112fd797aefe68b2791e194f2e2e489d2d42bfdc909e",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/move_head_first4_tflite.csv": "caa1033292b7bba001990741a69cee73a44bf33c0ba5359bde10f673a8c0eb65",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/move_head_first4_tflite_comparison.csv": "1242c1d3aea6b66b280dc196a8021d425b1167496541d640f9ab4b78e861ba60",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/plot_fallback/Stage18_stage18_eeg_bp_session_start.png": "be39f0cb522a1e5365e84d0a241287eed4e17b0a6c28902a8664a11dad6a2589",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/plot_fallback/Stage18_stage18_eeg_bp_session_start.svg": "c2db0735aa774807dc44fb2dc958d71230e65e49e03d94fc2d8059359f47860f",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/plot_fallback/Stage18_stage18_eeg_bp_session_start_bp_metrics.csv": "16e646f9b2ac4ce702a5b027807f11dc8a3347286cc440e511fb4d63aac8f91d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/plot_real/Stage18_stage18_eeg_bp_session_start.png": "1804ddf3201d5eb8b1d08e96acea12abf41b0d46dc95d200503d52004763c52c",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/plot_real/Stage18_stage18_eeg_bp_session_start.svg": "e8b65f026e646f76f192ad31b61a5c059a45457ffcb75776df01ba6c1b9cc456",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/plot_real/Stage18_stage18_eeg_bp_session_start_bp_metrics.csv": "0115d693a9e72796463321d4121f9d4b41aea29e3e6a436678dcd9af3476268d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/talk_all8_bp.csv": "497ca637ee129cab69ebe744dc96c0c4eedb639bda7476ddcd2b50f3f55c57a4",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/talk_all8_bp_comparison.csv": "c7a2dd7988b241d9b51f14e8f103620e6195db27f42bca6d8c1a1fdb99e2bf0b",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/talk_first4_bp.csv": "5e1caa440bd97dc612cdd3b85b51380283a9270993b4ba00a913c7cfee944f9c",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/talk_first4_bp_comparison.csv": "78c078e3c781a6c4e615a64d099096520cba509aa0255aa21dbb8c1f4cfa27bb",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/talk_first4_tflite.csv": "6b8d8da29049c8456de3cb78c3e5b89b8ff1972ac067b90fdf2e962facf7e00b",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/talk_first4_tflite_comparison.csv": "2df532da7c335715e47bfc9b2ac7540232793376f743b518bc3261366ea437aa",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level1_all8_bp.csv": "ff3a082c5af87efce85da55d89cbdcd0edd4764a68fa9a2f895c4f0136965f98",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level1_all8_bp_comparison.csv": "1918fdc8309efcaf26354a0f9c0679b35110107d6d485032a9da6bdeea008722",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level1_first4_bp.csv": "47282d1f6227493b73f3c3c0dc05d4db98b536248535d832b12c442d7dc8fe7d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level1_first4_bp_comparison.csv": "7c233ec70934fcf5993001074585b743e266ab4805c192fd0ae87e743cf5c78d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level1_first4_tflite.csv": "86e2974374cfd8f1851eae800bc088a80a81dbf604e0c24b120edfcb04a45f43",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level1_first4_tflite_comparison.csv": "cf07332bb69752f690b80595064cb9476ad867de6ac1d6497c093834a4a7681d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level2_all8_bp.csv": "5a952e2761db65dbf81916dbb10a4a0ec6ed095db10be7192046aa1994b3c4a6",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level2_all8_bp_comparison.csv": "3dbe56d82904ebdf82e5da83f8cc4cc1370de040502ffa9ba0c6a6aac9849a9f",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level2_first4_bp.csv": "1bcd2976383d51c3000577d71ef36f3a238c941c316203c85e86208be6892161",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level2_first4_bp_comparison.csv": "2ac1bca75efb5e95e9340a8511f679a4007853e1b58c218f82cbbc5d01198e62",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level2_first4_tflite.csv": "4ac6d0fe908dfaad795d9f4040b1bbbc3973f3f48d83a17caba780fdd0fa75fb",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level2_first4_tflite_comparison.csv": "c7eeae41e6992a0b1d1489276b88390e133556f8fea5f2b0fc2bfc1e49c5fbc5",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level3_all8_bp.csv": "a1153549c7472d404e02d06fa70d40195c5538c7220f07a40674f434750ea47f",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level3_all8_bp_comparison.csv": "89d34c007c2aa9084db86b5c6a63938f1efc0b46fa80272bfdd10617f1408435",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level3_first4_bp.csv": "f57a9260dcefbd48a03095aa4870061fecb34b31b9c02bc169b332b84a94ff73",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level3_first4_bp_comparison.csv": "23673e5c6f7f2610b228168e344dbcb2d180bac8aa41ce8b75c05ca305b8fa4e",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level3_first4_tflite.csv": "18fec8fc34bbf12d92f45d253ea803a04119821dcabea96df140d963861315ca",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/vibration_level3_first4_tflite_comparison.csv": "f851fe8db317241db6782e2b23dc97baa6a0f03254e2a28da1139fb8f9ed2e55",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta.png": "7a0ed876096e524541ba7d886f9399a49de9d06b8c791a47ee1946179744046c",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta.svg": "ca39bd6f3a45a7839e1323c5a9975fa0a6a3797acb0c49d4f24d13578885f63b",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/raw_callers/zoom/Stage18_stage18_Stage18_ch1-4_qEEG_delta_bp_metrics.csv": "46803e10c9644214c237a6066be27dddb034ac8bd6438e1f02b42e144e9eeaab",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/move_head_new/Stage18_Q_tflite_metrics.csv": "573f8219011936d0cdde9eb48b8e04f76cd725c33ff112c47703004f6864f898",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/move_head_new/Stage18_Q_tflite_summary_session.png": "1a403ac4e5de9f08940054c5870e546e6a01a863e9f323861aec36cbe16348a5",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/move_head_old/Stage18_Q_tflite_metrics.csv": "6f8d94947a8ac35d2723f93c2522fc1165ca5018182982f94f2fb49a025ce70d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/move_head_old/Stage18_Q_tflite_summary_session.png": "1fdd876a3e3b25a9bf6181c14d8606d1d52dbe0ab371330b086163f65cc1ef8d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_fallback_new/Stage18_Q_tflite_metrics.csv": "02f5b2e74c732518f8df73ce3d6751a8b6c7852ab4a7c9e8d4bf178aee0ca869",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_fallback_new/Stage18_Q_tflite_summary_session.png": "9e1eba9984951832bbc1bb7e34dde043cf999c4c5ffd8fa2fe578a7832cf5ebe",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_fallback_old/Stage18_Q_tflite_metrics.csv": "9e6f6112e50c16c3153a52a9fc96a0ee69273399720c64c6fc7e337ebccfba0b",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_fallback_old/Stage18_Q_tflite_summary_session.png": "276e66f783575cc2009ef3507b0b6da6f02f0868fc53ae4a498a98334270de86",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_gap_new/Stage18_Q_tflite_metrics.csv": "f60e6ab1c4f845f32e5199cbf644078cc7cb4059fdfe88fdcbc105cd3e36c88a",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_gap_new/Stage18_Q_tflite_summary_session.png": "485b876882f8f4d8f116100a122b6b3d0e3db1104a1f87d75dda1164e4806ccf",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_gap_old/Stage18_Q_tflite_metrics.csv": "a416e2790f691e3092cf097d0befad68c5ff6c56a2c1c095b3f9f088f471d369",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_gap_old/Stage18_Q_tflite_summary_session.png": "d8068338b5207a62e8a045112f0ce6396a9499cb1cf716e200f9bdb76e57de1a",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_half_second_new/Stage18_Q_tflite_metrics.csv": "ddd28fde9bc7f9097b6dba59a11014725207fde4165531fff1ac731f3c12b56d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_half_second_old/Stage18_Q_tflite_metrics.csv": "647afb4d0799bc2aa2b6056a3958daa8674d84dbb505a9e69cca172b880d1fd7",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_new/Stage18_Q_tflite_metrics.csv": "926e3482710370767c42d62712111007d34fe2cc0190baddc66a4303064b420d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_new/Stage18_Q_tflite_summary_session.png": "968861bdc1de9322943dc9a66d0deb2a4e8fb216c8ef51587e61e804ae21640d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_old/Stage18_Q_tflite_metrics.csv": "647afb4d0799bc2aa2b6056a3958daa8674d84dbb505a9e69cca172b880d1fd7",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_old/Stage18_Q_tflite_summary_session.png": "4f96788d45c42493967f0dc2d30b3fb731ae883a815308f0d1daf69fbcabc87b",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_threshold_zero_new/Stage18_Q_tflite_metrics.csv": "dbf2315e46aaf879db56897dd8333a7e3c436f070b9fd2d53d8469873cf1ae18",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_threshold_zero_new/Stage18_Q_tflite_summary_session.png": "f480e7842b085f369b50bdcea8da0db0915c0db33f6575018161180585f2bd78",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_threshold_zero_old/Stage18_Q_tflite_metrics.csv": "37d9e06057fa44d6e4aec07668ba486444bc2d2beb9243a4f45805abee0021a3",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/talk_threshold_zero_old/Stage18_Q_tflite_summary_session.png": "d9db599da3f3ee41cbc205e3e3ee21d586c161ff90e096e80c0fd37b4ab0dc78",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level1_new/Stage18_Q_tflite_metrics.csv": "88986d1bcdc97aba15e9b8a598c324a711175345e290d8fa2d84fde42d214e38",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level1_new/Stage18_Q_tflite_summary_session.png": "a1bbd70b0c8d2cfcd1679dff5132d49b87f702c248b9ed160759ad78c05a81af",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level1_old/Stage18_Q_tflite_metrics.csv": "6be0c2c443dc3d41b60fb65f6d0e0f77f5ee5fe5368f62298247ded6e899604e",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level1_old/Stage18_Q_tflite_summary_session.png": "a50a36dcfa362b48e5baa12b68f566552db07986dc4280bd6abbfd85afcc3705",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level2_new/Stage18_Q_tflite_metrics.csv": "224f5a22942bce7c0c5056c0f0ead7cfc05d49e2334e924ba7b5d10538221946",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level2_new/Stage18_Q_tflite_summary_session.png": "56f9320a7311ff8caa6b884591439c38db17a7c56a9dfb53abdb76d07f3ced77",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level2_old/Stage18_Q_tflite_metrics.csv": "5a1b0e348216b592334c0134caea54b666cf6af55da2de8ec20a4b065ca2f8a7",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level2_old/Stage18_Q_tflite_summary_session.png": "4639ca2fbec6b7fbf8b473390e5a847d1eb9fcb347a4e8cbf4fe6d8bd2e4f3b3",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level3_new/Stage18_Q_tflite_metrics.csv": "1c660807de1df92b0cdcbd1f6bc1ac3d054bc4e1ec8a98de88e62ac46f356511",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level3_new/Stage18_Q_tflite_summary_session.png": "c003f0ff3d15051b146770ce9f58a648c5d416f9dd572fd85b875de9d6615e08",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level3_old/Stage18_Q_tflite_metrics.csv": "c92f7098fde682823e45b0565d42d7d69b3ae6e58ba3dd250169571574451a2e",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/tflite_callers/vibration_level3_old/Stage18_Q_tflite_summary_session.png": "e59e430745e168d7b64088e8b6d7af8b0b2f91916ba9d2b24045ed59e58423cf"
+  },
+  "log": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/stage18/artifact_restore/checks/evidence.log"
+}

@@ -1,0 +1,4 @@
+# Bounded acceptance artifacts referenced by the saved evidence manifests.
+!*.csv
+!*.png
+!*.svg
