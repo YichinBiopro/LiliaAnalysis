@@ -1,0 +1,3 @@
+PASS actual talk_markers: 24 arrays, 1 tables
+PASS actual move_head_markers: 24 arrays, 1 tables
+PASS actual gap_markers: 24 arrays, 1 tables

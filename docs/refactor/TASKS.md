@@ -1,6 +1,6 @@
 # 階段任務單
 
-只讀當前卡片。14–18 已完成；下一工作單元為方法校準，先固定 baseline／PSD／Goertzel／MI 舊 profile 與真實比較基準。
+只讀當前卡片。14–18 已完成；方法校準已完成 M0 核心基準與 M1 baseline 完整入口，當前為 M2：補 PSD 基準並定義比較契約。
 所有任務共用 [WORKFLOW](WORKFLOW.md) 的驗證與收尾規則。方法校準另立任務，勿混入等價搬移。
 
 <a id="stage-14"></a>
@@ -69,11 +69,25 @@
 - 相容與限制：舊雙值 API、外部 scorer 簽名、`legacy_overall` 門檻和缺口 qEEG mask 保留；無法重跑的外部 scorer 診斷明示 unavailable。正式來源僅留來源 hash 與本機核對，不納入 Git 副本。
 - 完成條件：callers／readers／圖形與 preset／stage 可追蹤；真實舊新數值、短窗／污染／fallback／例外、接受排除、目視、整階段證據及完整檢查均已通過。Git 發佈狀態以分支遠端為準。
 
+<a id="method-calibration"></a>
+## 方法校準：進行中
+
+- 範圍：[舊 profiles／比較契約](METHOD_CALIBRATION_PROFILES.md)；與等價重構分開，不改目前 CLI 預設、方法數值或品質接受政策。
+- M0 已完成（2026-09-16）：baseline／PSD／Goertzel／MI 盤點，固定 Stage18 後 `aa0df5f4` 原碼與來源／模型／環境；五份真實＋三份合成案例共 1,255 陣列與選取 audit 精確一致。詳見 [首輪增量報告](METHOD_CALIBRATION_BASELINE_REPORT_2026-09-16.md)。這是核心 helper／模型比較基準，不代表所有入口或科學方法已驗收。
+- M1 已完成（2026-09-16）：meditation／marker／legacy sampler／entropy-state 完整入口與多事件、非參與者、鍵盤標記／protocol 案例；19 案例、585 陣列與 metadata 精確一致、20 來源 reader。目視另修正 marker 窗口間缺口連線，3 案例／72 陣列重驗；357 tests／0 skipped。詳見 [M1 增量報告](METHOD_CALIBRATION_M1_REPORT_2026-09-16.md)。來源標註不等於觀測行為，缺 baseline／品質邊界／guard 政策保留。
+- **M2 當前任務**：先補 P-jenqwei／P-quality-plot 的獨立舊新 PSD capture；沿用固定 `aa0df5f4` 原碼與來源／模型 hash，真實模型 Before／After、逐段與短段都保存頻率／線性 PSD／顯示值。
+- M2 完成條件：先定窗長、頻帶上下界、單頻點積分、denominator 的比較量與容許差異，再做同輸入敏感度比較；1 秒／4 秒及各 legacy profile 不暗改。數值、NaN／索引／品質差異、reader 與必要圖形可追蹤；若引入新方法，需具名 profile 與明示相容策略。
+- M2 起始測試：依 `lilia.jenqwei_plot`、`quality_check` 與共享 PSD 實作查相應回歸；先讀 profiles 的 PSD 表，按需讀 Stage16 與 Stage18 R6 證據。涉及科學判讀時另查一手方法文獻；收尾 `--full`。
+- M3：Goertzel 分段平滑獨立比較，再處理 normalization／前端濾波與門檻單位；舊 > 門檻、不正規化 power 及 rolling 行為保留可重現版本。
+- M4：MI histogram／KSG／null 分開校準；含合成控制、真實標註、bins／k／樣本數／seed／surrogates 敏感度；方法結論另查一手文獻。
+- 重跑核心基準：`python tools/freeze_method_profiles.py --out /path/to/new-directory`；只寫新目錄。真實衍生產物在 ignored `local/`，合成與摘要可提交；完整來源版與 repository manifest 分開。
+- 校準完成條件：具名 legacy／新 profile、明示預設與相容政策、預先定義的數值差異驗收、真實與合成／圖形／完整檢查；不得以 M0 精確相同替代方法有效性驗證。
+
 ## 入口遷移後的其餘待辦（尚未編號）
 
 | 工作單元 | 接手範圍／完成依據 |
 | --- | --- |
-| 方法校準 | baseline policies、PSD profiles、Goertzel 門檻／normalization、MI estimator／surrogates；保留舊 profile 及比較證據。 |
+| 方法校準 | 進行中；M0／M1 完成，下一步 M2 PSD 基準與比較契約，見上方卡片。 |
 | 架構與 F19 | 大入口拆分、移除計算對繪圖私有函式的依賴、明示 deprecated 參數的相容策略。 |
 | 批次與產物 | 批次失敗報告、來源／設定追蹤、CSV／sidecar／圖形成套原子發佈。 |
 | 整體驗收 | 所有入口、真實基準、必要方法差異、bundle、文件與發佈狀態；提交／推送依當時授權。 |

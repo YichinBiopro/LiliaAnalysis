@@ -11,6 +11,7 @@ import matplotlib
 matplotlib.use('Agg')
 import numpy as np
 import pandas as pd
+from matplotlib.figure import Figure
 
 import plot_event_markers as event
 import plot_index_vs_raw as plot
@@ -20,6 +21,46 @@ from test_csv_contract_regression import write_recording
 
 
 class CustomMarkerQualityRegression(unittest.TestCase):
+    def test_between_window_gaps_break_lines_without_dropping_valid_points(self):
+        for gap_us in (0, 8000, 10000000):
+            with self.subTest(gap_us=gap_us), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                source = root/'recording.csv'
+                time = np.arange(5000, dtype=np.int64)*2000
+                time[2500:] += gap_us
+                values = np.sin(np.arange(5000)/17.)*20
+                write_recording(source, ''.join(f'{t},{v:.8f}\n' for t, v in zip(time, values)),
+                                offset=0, channels='value', rate=500)
+                seen = []
+
+                def inspect(fig, path, **kwargs):
+                    if str(path).endswith('.png'):
+                        for ax, label in [(fig.axes[0], 'Focus absolute'),
+                                          (fig.axes[0], 'Δ vs 5s pre-marker'),
+                                          (fig.axes[4], 'Raw legacy quality')]:
+                            line = next(line for line in ax.lines if line.get_label() == label)
+                            data = np.asarray(line.get_ydata(), dtype=float)
+                            self.assertEqual(len(data), 3 if gap_us else 2)
+                            self.assertEqual(int(np.isfinite(data).sum()), 2)
+                            if gap_us:
+                                self.assertTrue(np.isnan(data[1]))
+                            self.assertEqual(line.get_marker(), '.')
+                        raw = np.asarray(fig.axes[5].lines[0].get_ydata())
+                        self.assertEqual(int(np.isfinite(raw).sum()), 5000)
+                        self.assertEqual(len(raw), 5001 if gap_us else 5000)
+                        seen.append(True)
+
+                with patch.object(Figure, 'savefig', inspect), \
+                     patch.object(event, 'get_eeg_quality_index_v2_parametric',
+                                  side_effect=lambda data, **kw: {'overall': np.full(data.shape[0], .7)}), \
+                     contextlib.redirect_stdout(io.StringIO()):
+                    plot.plot_custom_markers(str(source), 'Gap', 1, ['07:59:55'], '1970-01-01',
+                        5, 30, str(root/'plot.png'), str(root/'summary.csv'))
+                self.assertEqual(seen, [True])
+                frame, _ = load_custom_marker_quality_table(root/'summary_quality_windows.csv', source)
+                self.assertEqual(frame.crosses_gap.tolist(), [False, False])
+                self.assertEqual(frame.quality_good.tolist(), [True, True])
+
     def test_direct_helper_preserves_two_result_api_and_adds_raw_audit(self):
         t = np.arange(5000, dtype=np.int64) * 2000
         x = np.sin(np.arange(5000) / 17.)[:, None].astype(np.float32)

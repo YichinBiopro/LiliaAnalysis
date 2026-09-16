@@ -1,0 +1,11 @@
+Loading: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/inputs/gap/merged.csv
+  [baseline] accepted 30/30 complete windows
+  [event] accepted 25/25 complete windows
+Saved summary and window audit: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/equality_state/merged_baseline_event_entropy_ch1.csv
+
+Summary (pooled-PSD band entropy, bits; max = log2(3) ≈ 1.585):
+  baseline: pooled=0.0412  per-window=0.0410±0.0061  (n=30)  [theta=0.996, alpha=0.001, beta=0.003]
+  event   : pooled=0.0428  per-window=0.0427±0.0060  (n=25)  [theta=0.996, alpha=0.001, beta=0.003]
+  Δ pooled entropy (event − baseline)      : +0.0016 bits
+  Δ mean per-window entropy (event − base) : +0.0017 bits
+  Mann–Whitney U (per-window, two-sided)   : U=434.0, p=0.3227

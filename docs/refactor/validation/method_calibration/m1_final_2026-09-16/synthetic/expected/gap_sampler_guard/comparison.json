@@ -1,0 +1,12 @@
+{
+  "error": null,
+  "extra": {
+    "session": {
+      "expected_error": "Legacy raw baseline epoch sampler requires a continuous recording; split at timestamp gaps first"
+    },
+    "pre_event": {
+      "expected_error": "Legacy raw baseline epoch sampler requires a continuous recording; split at timestamp gaps first"
+    }
+  },
+  "products": {}
+}

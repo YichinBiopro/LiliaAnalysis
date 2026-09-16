@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-16T07:30:08.031397+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/local/actual/tyy_meditation/TYY_SN041_meditation_tflite.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/local/actual/tyy_multievent/TYY_M1_eeg_bp_pre_event_rest.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/local/actual/talk_markers/markers.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/gap_meditation/TYY_SN041_meditation_tflite.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/missing_meditation/TYY_SN041_meditation_tflite.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/gap_markers/markers.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/gap_events_pre-event-rest/Synthetic_M1_eeg_tflite_pre_event_rest.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/gap_tflite_summary/Synthetic_M1_tflite_summary_pre_event.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/gap_tflite_summary/Synthetic_M1_tflite_summary_session.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/equality_state/merged_event_quality.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/empty_state/merged_baseline_quality.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/local/actual/talk_state_clean/merged_event_quality.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_marker_gap_2026-09-16/synthetic/actual/gap_markers/markers.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_marker_gap_2026-09-16/local/actual/talk_markers/markers.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_marker_gap_2026-09-16/local/actual/move_head_markers/markers.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_acceptance_2026-09-16/scope.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_acceptance_2026-09-16/visual_review.json",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_acceptance_2026-09-16/manifest_visual_local.json": "47b13355fd6d151a9154468b75c22eedf7f25224e54eaaf2aa3562409e15985c",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_acceptance_2026-09-16/scope.json": "c6b7756326c5cd8166e7513a53858738959a2483dbb216b1f5f3e0d833bccbb8",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_acceptance_2026-09-16/visual_review.json": "f9d6a9974f7cec8f57b70395cf9ec3745d049d2385223c6fc562d9a67b2ba06a",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/local/actual/talk_markers/markers.png": "6279f9aae63f7794c9a3c8f8cb2131894a142e4c0de4f0c5f237308823ef0aa8",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/local/actual/talk_state_clean/merged_event_quality.png": "f4f1246a3ce3e431806af2ee0da7c4307fc30b2f4aa0adc862ec952a403b1008",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/local/actual/tyy_meditation/TYY_SN041_meditation_tflite.png": "04b213b9027aac4e3c65642a051b510b269e8edda733dff5e67718bab6d7ce05",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/local/actual/tyy_multievent/TYY_M1_eeg_bp_pre_event_rest.png": "deb44cb5d2249b7af9921fceeee05674fa96bfa3eaccba9ae39d856affe6c5a3",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/empty_state/merged_baseline_quality.png": "bb78d17386daba72aef451bd3c26f9fdb5a7261756f946070357efa0316493fe",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/equality_state/merged_event_quality.png": "53e1532edacf8716e99335dcaba12585b9300c0acc48b9e9b0baf775d8e8cc6e",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/gap_events_pre-event-rest/Synthetic_M1_eeg_tflite_pre_event_rest.png": "6b8a05e69f2b6fdd100e2d297a06fef10d16ef8c235fd53bad166c7addbba9de",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/gap_markers/markers.png": "aaf7763bc46cd126b2aa1cfdb8ea074e476825edf5d1ce94df2d3fc626d85cf5",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/gap_meditation/TYY_SN041_meditation_tflite.png": "c218fe092dc3b61c6fb2a8c2dd96853b29eb72fb64eba6e12cc24a9a68427278",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/gap_tflite_summary/Synthetic_M1_tflite_summary_pre_event.png": "cb733a63df957ff4d0bbc92579370be5fc619b7bd87e79c2e67da71c4a02ec62",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/gap_tflite_summary/Synthetic_M1_tflite_summary_session.png": "10e4e573ab0414a6499adc5eb0cf7e4ce22e0d0e218948ff8e0ea2dca3072931",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/missing_meditation/TYY_SN041_meditation_tflite.png": "0f1745bbf703f14eae46cb882bdb5c8d5eff68d28e02dffa5df6d3a92167122f",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_marker_gap_2026-09-16/local/actual/move_head_markers/markers.png": "84946e38e892af67717f46e949aa369dc856727bfe1b871c8cc2e2435f8d23c5",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_marker_gap_2026-09-16/local/actual/talk_markers/markers.png": "bdfdf79118abf72758bb6a80c209561e84226bab18622ab02276ac4eff360730",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_marker_gap_2026-09-16/synthetic/actual/gap_markers/markers.png": "8b018a64dee679a87e470a5318fe9e112a4be8ae3912b180d4911ccf89a3bef8"
+  },
+  "log": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_visual_local_2026-09-16/evidence.log"
+}

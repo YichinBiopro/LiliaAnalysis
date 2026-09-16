@@ -1,0 +1,16 @@
+  [Synthetic] loading…
+  [Synthetic] applying TFLite (500→200Hz)…
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+  [Synthetic] screening complete baseline model windows…
+  [Synthetic] building pre-event micro-epoch baselines (buffer -3s, search -15s, need 10s, seed 42)…
+      Probe A: 5 complete model windows selected
+      Probe B: 5 complete model windows selected
+  [Synthetic] building session baseline (blind-sample 10s across whole session, seed 42)…
+      session: 5 complete model windows selected
+       → /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/expected/gap_tflite_summary/Synthetic_M1_tflite_summary_session.png
+       → /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/expected/gap_tflite_summary/Synthetic_M1_tflite_summary_pre_event.png

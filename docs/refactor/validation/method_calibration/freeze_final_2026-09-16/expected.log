@@ -1,0 +1,85 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789526143.093523     139 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789526143.855716     139 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+PASS real_0: 167 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+PASS real_1: 167 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+PASS real_2: 167 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+PASS real_3: 163 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+PASS real_4: 167 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+PASS synthetic_continuous: 159 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 500, using nperseg = 500
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+PASS synthetic_gap: 174 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/scipy/signal/_spectral_py.py:790: UserWarning: nperseg = 1000 is greater than input length  = 250, using nperseg = 250
+  freqs, _, Pxy = _spectral_helper(x, y, fs, window, nperseg, noverlap,
+PASS synthetic_short: 91 arrays

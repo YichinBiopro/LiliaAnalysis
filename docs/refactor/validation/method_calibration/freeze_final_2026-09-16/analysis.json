@@ -1,0 +1,78 @@
+{
+  "baseline_commit": "aa0df5f4ebaefddae1fee8c9e50e95323e777aed",
+  "cases": [
+    {
+      "name": "real_0",
+      "arrays": 167,
+      "empty_arrays": [],
+      "exact": true
+    },
+    {
+      "name": "real_1",
+      "arrays": 167,
+      "empty_arrays": [],
+      "exact": true
+    },
+    {
+      "name": "real_2",
+      "arrays": 167,
+      "empty_arrays": [],
+      "exact": true
+    },
+    {
+      "name": "real_3",
+      "arrays": 163,
+      "empty_arrays": [],
+      "exact": true
+    },
+    {
+      "name": "real_4",
+      "arrays": 167,
+      "empty_arrays": [],
+      "exact": true
+    },
+    {
+      "name": "synthetic_continuous",
+      "arrays": 159,
+      "empty_arrays": [],
+      "exact": true
+    },
+    {
+      "name": "synthetic_gap",
+      "arrays": 174,
+      "empty_arrays": [],
+      "exact": true
+    },
+    {
+      "name": "synthetic_short",
+      "arrays": 91,
+      "empty_arrays": [
+        "goertzel_5.0_window_start_idx",
+        "goertzel_5.0_window_end_idx",
+        "goertzel_5.0_time_s",
+        "goertzel_5.0_goertzel_power",
+        "goertzel_5.0_goertzel_db",
+        "goertzel_5.0_quality",
+        "goertzel_5.0_quality_final",
+        "goertzel_5.0_sat_frac_1950",
+        "goertzel_5.0_peak_to_peak_uv",
+        "goertzel_5.0_max_abs_diff_uv",
+        "goertzel_5.0_bp_edge_shift_uv",
+        "goertzel_5.0_hard_artifact",
+        "goertzel_5.0_segment_ids",
+        "goertzel_5.0_keep",
+        "goertzel_5.0_smooth"
+      ],
+      "exact": true
+    }
+  ],
+  "array_count": 1255,
+  "max_abs_error": 0.0,
+  "tolerance": 0.0,
+  "selection_audits_equal": true,
+  "scientific_calibration": false,
+  "limitations": [
+    "Probe events are not actual behavioral annotations.",
+    "Not all inventoried legacy profiles are exercised; see inventory coverage."
+  ]
+}

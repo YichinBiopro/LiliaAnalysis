@@ -1,0 +1,24 @@
+PASS expected talk_markers: 24 arrays, 1 tables
+PASS expected talk_state_ordinary: 49 arrays, 1 tables
+PASS expected talk_state_clean: 49 arrays, 1 tables
+PASS expected talk_sampler: 3 arrays, 0 tables
+PASS expected move_head_markers: 24 arrays, 1 tables
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789527179.977961     195 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789527180.738245     195 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+PASS expected tyy_meditation: 44 arrays, 2 tables
+PASS expected tyy_multievent: 31 arrays, 1 tables
+PASS expected gap_meditation: 44 arrays, 2 tables
+PASS expected missing_meditation: 44 arrays, 2 tables
+PASS expected gap_markers: 24 arrays, 1 tables
+PASS expected equality_sampler: 3 arrays, 0 tables
+PASS expected low_sampler: 1 arrays, 0 tables
+PASS expected gap_sampler_guard: 1 arrays, 0 tables
+PASS expected gap_state: 49 arrays, 1 tables
+PASS expected equality_state: 49 arrays, 1 tables
+PASS expected empty_state: 13 arrays, 1 tables
+PASS expected gap_events_session-start: 56 arrays, 2 tables
+PASS expected gap_events_pre-event-rest: 56 arrays, 2 tables
+PASS expected gap_tflite_summary: 21 arrays, 1 tables

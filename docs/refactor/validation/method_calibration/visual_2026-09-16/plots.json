@@ -1,0 +1,47 @@
+[
+  {
+    "case": "real_1",
+    "path": "local/real_1.png",
+    "sha256": "aa2122edaaed91e37c359212ae12a106b9b5b01cf4d92f54f92817e2366a5542",
+    "counts": {
+      "5.0": {
+        "windows": 12,
+        "accepted": 12
+      },
+      "0.5": {
+        "windows": 122,
+        "accepted": 0
+      }
+    }
+  },
+  {
+    "case": "synthetic_gap",
+    "path": "synthetic_gap.png",
+    "sha256": "2ec1f87cfa4cde50d2ca881f20cb1faab17869b6462c03ebf452a54e43078a1e",
+    "counts": {
+      "5.0": {
+        "windows": 12,
+        "accepted": 8
+      },
+      "0.5": {
+        "windows": 120,
+        "accepted": 0
+      }
+    }
+  },
+  {
+    "case": "synthetic_short",
+    "path": "synthetic_short.png",
+    "sha256": "cd461eb765a0c9f827bad4a3b5b9652f355e9098a68ca961a4deddf45cec99f9",
+    "counts": {
+      "5.0": {
+        "windows": 0,
+        "accepted": 0
+      },
+      "0.5": {
+        "windows": 1,
+        "accepted": 0
+      }
+    }
+  }
+]

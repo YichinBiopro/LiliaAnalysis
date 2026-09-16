@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "name": "talk_markers",
+      "arrays": 24,
+      "tables": 1,
+      "real": true,
+      "expected_failure": false
+    },
+    {
+      "name": "move_head_markers",
+      "arrays": 24,
+      "tables": 1,
+      "real": true,
+      "expected_failure": false
+    },
+    {
+      "name": "gap_markers",
+      "arrays": 24,
+      "tables": 1,
+      "real": false,
+      "expected_failure": false
+    }
+  ],
+  "array_count": 72,
+  "reader_checks": 3,
+  "baseline_commit": "aa0df5f4ebaefddae1fee8c9e50e95323e777aed",
+  "max_abs_error": 0.0,
+  "tolerance": 0.0,
+  "metadata_equal": true,
+  "scientific_calibration": false
+}

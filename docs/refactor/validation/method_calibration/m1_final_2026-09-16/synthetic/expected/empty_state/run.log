@@ -1,0 +1,4 @@
+Loading: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/inputs/continuous/merged.csv
+  [baseline] accepted 0/0 complete windows
+  [event] accepted 0/0 complete windows
+Saved summary and window audit: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/expected/empty_state/merged_baseline_event_entropy_ch1.csv

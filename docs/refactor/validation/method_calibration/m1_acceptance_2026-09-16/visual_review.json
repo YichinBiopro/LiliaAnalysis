@@ -1,0 +1,112 @@
+{
+  "date": "2026-09-16",
+  "method": "Manual inspection of rendered PNGs",
+  "reviewed_images": 15,
+  "records": [
+    {
+      "path": "../m1_final_2026-09-16/local/actual/tyy_meditation/TYY_SN041_meditation_tflite.png",
+      "sha256": "04b213b9027aac4e3c65642a051b510b269e8edda733dff5e67718bab6d7ce05",
+      "status": "pass",
+      "note": "Full TYY default meditation entry; BP four channels and model two channels; baseline cutoff and display interval visible.",
+      "local": true
+    },
+    {
+      "path": "../m1_final_2026-09-16/local/actual/tyy_multievent/TYY_M1_eeg_bp_pre_event_rest.png",
+      "sha256": "deb44cb5d2249b7af9921fceeee05674fa96bfa3eaccba9ae39d856affe6c5a3",
+      "status": "pass",
+      "note": "Protocol events and participation preserved; only participating events summarized; unavailable heatmap bins gray.",
+      "local": true
+    },
+    {
+      "path": "../m1_final_2026-09-16/local/actual/talk_markers/markers.png",
+      "sha256": "6279f9aae63f7794c9a3c8f8cb2131894a142e4c0de4f0c5f237308823ef0aa8",
+      "status": "superseded",
+      "note": "Keyboard marker absolute microseconds and baseline/post spans aligned; current rendering reviewed separately.",
+      "local": true
+    },
+    {
+      "path": "../m1_final_2026-09-16/synthetic/actual/gap_meditation/TYY_SN041_meditation_tflite.png",
+      "sha256": "c218fe092dc3b61c6fb2a8c2dd96853b29eb72fb64eba6e12cc24a9a68427278",
+      "status": "pass",
+      "note": "Source gap remains blank in BP and model panels.",
+      "local": false
+    },
+    {
+      "path": "../m1_final_2026-09-16/synthetic/actual/missing_meditation/TYY_SN041_meditation_tflite.png",
+      "sha256": "0f1745bbf703f14eae46cb882bdb5c8d5eff68d28e02dffa5df6d3a92167122f",
+      "status": "pass",
+      "note": "Missing BP/model baseline explicitly shown; gray unavailable bins and missing lines.",
+      "local": false
+    },
+    {
+      "path": "../m1_final_2026-09-16/synthetic/actual/gap_markers/markers.png",
+      "sha256": "aaf7763bc46cd126b2aa1cfdb8ea074e476825edf5d1ce94df2d3fc626d85cf5",
+      "status": "defect_superseded",
+      "note": "Found legacy qEEG and quality lines bridging a gap between complete windows. Replaced by corrected marker capture; numerical selection was unchanged.",
+      "local": false
+    },
+    {
+      "path": "../m1_final_2026-09-16/synthetic/actual/gap_events_pre-event-rest/Synthetic_M1_eeg_tflite_pre_event_rest.png",
+      "sha256": "6b8a05e69f2b6fdd100e2d297a06fef10d16ef8c235fd53bad166c7addbba9de",
+      "status": "pass",
+      "note": "Source gaps and event spans visible; valid bars can coexist with missing baseline heatmap bins.",
+      "local": false
+    },
+    {
+      "path": "../m1_final_2026-09-16/synthetic/actual/gap_tflite_summary/Synthetic_M1_tflite_summary_pre_event.png",
+      "sha256": "cb733a63df957ff4d0bbc92579370be5fc619b7bd87e79c2e67da71c4a02ec62",
+      "status": "pass",
+      "note": "Pre-event profile, segment breaks and filtered/resampled/model quality stages visible.",
+      "local": false
+    },
+    {
+      "path": "../m1_final_2026-09-16/synthetic/actual/gap_tflite_summary/Synthetic_M1_tflite_summary_session.png",
+      "sha256": "10e4e573ab0414a6499adc5eb0cf7e4ce22e0d0e218948ff8e0ea2dca3072931",
+      "status": "pass",
+      "note": "Session baseline labeled separately with corresponding heatmap values.",
+      "local": false
+    },
+    {
+      "path": "../m1_final_2026-09-16/synthetic/actual/equality_state/merged_event_quality.png",
+      "sha256": "53e1532edacf8716e99335dcaba12585b9300c0acc48b9e9b0baf775d8e8cc6e",
+      "status": "pass",
+      "note": "Exactly 0.5 retained; gap disconnected; injected scorer diagnostics unavailable.",
+      "local": false
+    },
+    {
+      "path": "../m1_final_2026-09-16/synthetic/actual/empty_state/merged_baseline_quality.png",
+      "sha256": "bb78d17386daba72aef451bd3c26f9fdb5a7261756f946070357efa0316493fe",
+      "status": "pass",
+      "note": "Quality scoring disabled label visible; no usable-window failure is validated in the audit/table, not inferred from this plot.",
+      "local": false
+    },
+    {
+      "path": "../m1_final_2026-09-16/local/actual/talk_state_clean/merged_event_quality.png",
+      "sha256": "f4f1246a3ce3e431806af2ee0da7c4307fc30b2f4aa0adc862ec952a403b1008",
+      "status": "pass",
+      "note": "Filtered quality stage shown; partial-end exclusion diagnosed.",
+      "local": true
+    },
+    {
+      "path": "../m1_marker_gap_2026-09-16/synthetic/actual/gap_markers/markers.png",
+      "sha256": "8b018a64dee679a87e470a5318fe9e112a4be8ae3912b180d4911ccf89a3bef8",
+      "status": "pass",
+      "note": "qEEG absolute/delta and quality lines break across 10-second gap; raw endpoints retained, fallback and 0.5 threshold visible.",
+      "local": false
+    },
+    {
+      "path": "../m1_marker_gap_2026-09-16/local/actual/talk_markers/markers.png",
+      "sha256": "bdfdf79118abf72758bb6a80c209561e84226bab18622ab02276ac4eff360730",
+      "status": "pass",
+      "note": "Real keyboard marker times and baseline spans preserved after rendering correction.",
+      "local": true
+    },
+    {
+      "path": "../m1_marker_gap_2026-09-16/local/actual/move_head_markers/markers.png",
+      "sha256": "84946e38e892af67717f46e949aa369dc856727bfe1b871c8cc2e2435f8d23c5",
+      "status": "pass",
+      "note": "Low-quality window marked and excluded; isolated valid post-marker point remains visible.",
+      "local": true
+    }
+  ]
+}

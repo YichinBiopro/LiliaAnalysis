@@ -1,0 +1,8 @@
+test_hhmm_to_local_dt (test_time_utils_regression.TimeUtilsRegressionTests) ... ok
+test_hhmm_to_utc_us_matches_expected (test_time_utils_regression.TimeUtilsRegressionTests) ... ok
+test_round_trip_local_dt_and_utc_us (test_time_utils_regression.TimeUtilsRegressionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+OK

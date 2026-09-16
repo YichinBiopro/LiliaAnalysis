@@ -1,0 +1,144 @@
+{
+  "cases": [
+    {
+      "name": "talk_markers",
+      "arrays": 24,
+      "tables": 1,
+      "real": true,
+      "expected_failure": false
+    },
+    {
+      "name": "talk_state_ordinary",
+      "arrays": 49,
+      "tables": 1,
+      "real": true,
+      "expected_failure": false
+    },
+    {
+      "name": "talk_state_clean",
+      "arrays": 49,
+      "tables": 1,
+      "real": true,
+      "expected_failure": false
+    },
+    {
+      "name": "talk_sampler",
+      "arrays": 3,
+      "tables": 0,
+      "real": true,
+      "expected_failure": false
+    },
+    {
+      "name": "move_head_markers",
+      "arrays": 24,
+      "tables": 1,
+      "real": true,
+      "expected_failure": false
+    },
+    {
+      "name": "tyy_meditation",
+      "arrays": 44,
+      "tables": 2,
+      "real": true,
+      "expected_failure": false
+    },
+    {
+      "name": "tyy_multievent",
+      "arrays": 31,
+      "tables": 1,
+      "real": true,
+      "expected_failure": false
+    },
+    {
+      "name": "gap_meditation",
+      "arrays": 44,
+      "tables": 2,
+      "real": false,
+      "expected_failure": false
+    },
+    {
+      "name": "missing_meditation",
+      "arrays": 44,
+      "tables": 2,
+      "real": false,
+      "expected_failure": true
+    },
+    {
+      "name": "gap_markers",
+      "arrays": 24,
+      "tables": 1,
+      "real": false,
+      "expected_failure": false
+    },
+    {
+      "name": "equality_sampler",
+      "arrays": 3,
+      "tables": 0,
+      "real": false,
+      "expected_failure": false
+    },
+    {
+      "name": "low_sampler",
+      "arrays": 1,
+      "tables": 0,
+      "real": false,
+      "expected_failure": true
+    },
+    {
+      "name": "gap_sampler_guard",
+      "arrays": 1,
+      "tables": 0,
+      "real": false,
+      "expected_failure": true
+    },
+    {
+      "name": "gap_state",
+      "arrays": 49,
+      "tables": 1,
+      "real": false,
+      "expected_failure": false
+    },
+    {
+      "name": "equality_state",
+      "arrays": 49,
+      "tables": 1,
+      "real": false,
+      "expected_failure": false
+    },
+    {
+      "name": "empty_state",
+      "arrays": 13,
+      "tables": 1,
+      "real": false,
+      "expected_failure": true
+    },
+    {
+      "name": "gap_events_session-start",
+      "arrays": 56,
+      "tables": 2,
+      "real": false,
+      "expected_failure": false
+    },
+    {
+      "name": "gap_events_pre-event-rest",
+      "arrays": 56,
+      "tables": 2,
+      "real": false,
+      "expected_failure": false
+    },
+    {
+      "name": "gap_tflite_summary",
+      "arrays": 21,
+      "tables": 1,
+      "real": false,
+      "expected_failure": false
+    }
+  ],
+  "array_count": 585,
+  "reader_checks": 20,
+  "baseline_commit": "aa0df5f4ebaefddae1fee8c9e50e95323e777aed",
+  "max_abs_error": 0.0,
+  "tolerance": 0.0,
+  "metadata_equal": true,
+  "scientific_calibration": false
+}

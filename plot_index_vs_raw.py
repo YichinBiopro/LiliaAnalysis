@@ -427,7 +427,7 @@ def plot_custom_markers(
 
     # The test02 export declares four EEG channels.  Use the selected channel;
     # this also avoids treating any future trailing export columns as EEG.
-    continuous_slices(time_us, fs)  # Validate ordering before computing windows.
+    source_segments = continuous_slices(time_us, fs)
     filtered = bandpass_filter(data[:, ch - 1], fs=fs, time_us=time_us)
     score_times = []
     score_rows = []
@@ -500,9 +500,14 @@ def plot_custom_markers(
     raw_us = time_us[::stride]
     raw_amp = data[::stride, ch - 1].astype(float)
     raw_dt = np.array([pem.us_to_local_dt(int(u)) for u in raw_us])
-    raw_gap = np.diff(raw_us) > (win_sec * 1e6 * 1.5)
-    raw_amp[1:][raw_gap] = np.nan
+    segment_ends = [segment.stop for segment in source_segments]
+    raw_groups = np.searchsorted(segment_ends, np.arange(0, len(time_us), stride), side='right')
+    raw_dt, raw_amp = plot_breaks(raw_dt, raw_amp, raw_groups)
     score_dt = np.array([pem.us_to_local_dt(int(u)) for u in score_us])
+    # A gap between two complete windows does not set crosses_gap on either
+    # window. Break only the rendered lines, retaining both endpoint values.
+    score_groups = np.searchsorted(segment_ends, np.arange(len(score_us)) * win, side='right')
+    plot_scope = {'_segment_id': score_groups}
 
     colors = {key: color for key, _, color in SIGNAL_SPECS if key != 'entropy'}
     labels = {key: label for key, label, _ in SIGNAL_SPECS if key != 'entropy'}
@@ -523,8 +528,8 @@ def plot_custom_markers(
 
     for ax, key in zip(axes[:4], ['focus', 'flow', 'calm', 'relaxation']):
         y = scores[key]
-        ax.plot(score_dt, y, color='0.65', lw=0.8, alpha=0.8,
-                label=f'{labels[key]} absolute')
+        _plot_series(ax, score_dt, y, plot_scope, color='0.65', lw=0.8, alpha=0.8,
+                     marker='.', ms=2, label=f'{labels[key]} absolute')
         ax.axhline(0.0, color='k', lw=0.7, ls=':', alpha=0.5)
         ax.set_ylabel(labels[key])
         ax.grid(True, alpha=0.25)
@@ -552,8 +557,9 @@ def plot_custom_markers(
             delta_series = np.full(y.shape, np.nan)
             if np.isfinite(pre_value):
                 delta_series[post_mask] = y[post_mask] - pre_value
-            ax.plot(score_dt, delta_series, color=colors[key], lw=1.8,
-                    label=f'Δ vs {baseline_sec:g}s pre-marker' if marker_idx == 0 else None)
+            _plot_series(ax, score_dt, delta_series, plot_scope, color=colors[key], lw=1.8,
+                         marker='.', ms=2,
+                         label=f'Δ vs {baseline_sec:g}s pre-marker' if marker_idx == 0 else None)
             ax.axvspan(pem.us_to_local_dt(baseline_start_us),
                        pem.us_to_local_dt(baseline_end_us),
                        color='#2ca02c', alpha=0.10, lw=0)
@@ -586,8 +592,8 @@ def plot_custom_markers(
         ax.legend(loc='upper right', fontsize=7)
 
     axq = axes[4]
-    axq.plot(score_dt, np.where(gap_mask, np.nan, quality[:, 0]), color='#222222', lw=.9,
-             label='Raw legacy quality')
+    _plot_series(axq, score_dt, np.where(gap_mask, np.nan, quality[:, 0]), plot_scope,
+                 color='#222222', lw=.9, marker='.', ms=2, label='Raw legacy quality')
     axq.axhline(quality_threshold, color='0.35', lw=.8, ls='--',
                 label=f'threshold {quality_threshold:g}')
     low = np.isfinite(quality[:, 0]) & (quality[:, 0] < quality_threshold)

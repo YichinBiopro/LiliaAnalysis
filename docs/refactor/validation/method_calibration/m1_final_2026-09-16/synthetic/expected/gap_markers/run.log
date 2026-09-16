@@ -1,0 +1,7 @@
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/expected/gap_markers/markers.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/expected/gap_markers/markers_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/expected/gap_markers/markers_summary_quality_windows.csv
+  14:09:55.000000: ok (baseline windows=6, post windows=5)
+  14:10:32.500000: ok (baseline windows=6, post windows=6)
+  14:11:35.000000: ok (baseline windows=5, post windows=5)
+  14:14:10.000000: baseline_or_post_unavailable (baseline windows=0, post windows=0)

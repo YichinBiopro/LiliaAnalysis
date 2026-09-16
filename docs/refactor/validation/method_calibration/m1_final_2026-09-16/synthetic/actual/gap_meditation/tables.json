@@ -1,0 +1,14 @@
+[
+  {
+    "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/gap_meditation/TYY_SN041_meditation_tflite_bp_metrics.csv",
+    "kind": "meditation_bp",
+    "raw_csv": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/inputs/gap/merged.csv",
+    "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+  },
+  {
+    "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/actual/gap_meditation/TYY_SN041_meditation_tflite_tflite_metrics.csv",
+    "kind": "meditation_tflite",
+    "raw_csv": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/inputs/gap/merged.csv",
+    "model_path": "/home/bps-yichin/lilia_analysis/tiny_v4_optimized.tflite"
+  }
+]

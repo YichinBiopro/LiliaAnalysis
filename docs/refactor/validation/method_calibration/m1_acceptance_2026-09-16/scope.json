@@ -1,0 +1,23 @@
+{
+  "baseline_commit": "aa0df5f4ebaefddae1fee8c9e50e95323e777aed",
+  "original_capture": "../m1_final_2026-09-16",
+  "preserved_manifests": [
+    "../m1_final_2026-09-16/manifest_baseline_preserved_local.json",
+    "../m1_final_2026-09-16/manifest_baseline_preserved_repository.json"
+  ],
+  "superseded_code": {
+    "path": "/home/bps-yichin/lilia_analysis/plot_index_vs_raw.py",
+    "sha256": "a72e170ac7075b39e0bbbbf8e3b48e903ec4e75dbec51430b5a69275994a5884",
+    "snapshot": "../m1_final_2026-09-16/legacy_plot_index_vs_raw.py.txt"
+  },
+  "reason": "Original capture predates rendering-only source-segment line-break correction. Original manifests and all artifact/array/table hashes are retained. Only the old code path is rebound to identical frozen bytes; this is historical baseline evidence, not current code validation.",
+  "current_code_evidence": "../m1_marker_gap_2026-09-16/manifest_local.json",
+  "current_cases": [
+    "talk_markers",
+    "move_head_markers",
+    "gap_markers"
+  ],
+  "final_checks": "../m1_final_checks_2026-09-16/summary.json",
+  "unchanged_scope": "Remaining 16 entry cases retain their original numerical capture; no scientific implementation changed.",
+  "original_full_checks": "../m1_checks_2026-09-16/summary.json"
+}

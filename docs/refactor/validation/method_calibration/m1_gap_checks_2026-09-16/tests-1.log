@@ -1,0 +1,9 @@
+test_between_window_gaps_break_lines_without_dropping_valid_points (test_custom_marker_quality_regression.CustomMarkerQualityRegression) ... ok
+test_direct_helper_preserves_two_result_api_and_adds_raw_audit (test_custom_marker_quality_regression.CustomMarkerQualityRegression) ... ok
+test_old_scorer_unavailable_and_error_propagation (test_custom_marker_quality_regression.CustomMarkerQualityRegression) ... ok
+test_source_reader_rejects_rehashed_window_and_diagnostic_forgery (test_custom_marker_quality_regression.CustomMarkerQualityRegression) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.150s
+
+OK

@@ -1,0 +1,157 @@
+{
+  "kind": "state_band_entropy",
+  "schema_version": 1,
+  "index_space": "raw_samples",
+  "source_path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/inputs/continuous/merged.csv",
+  "source_id": "e7699f4720616c1260d60ce2925b1c732630f19f3dd75305a82ef16e330f921b",
+  "parameters": {
+    "fs": 500.0,
+    "channel": 1,
+    "win_sec": 2.0,
+    "step_sec": 2.0,
+    "ranges": {
+      "baseline": [
+        0.001,
+        1.0
+      ],
+      "event": [
+        2.0,
+        2.5
+      ]
+    },
+    "clean": false,
+    "quality_threshold": 0.5,
+    "quality_state_version": 1,
+    "quality_diagnostics_version": 1,
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "quality_channels": [],
+    "quality_params": null,
+    "saturation_fraction_max": null,
+    "saturation_rail": null,
+    "window_policy": "interval_first_sample_reset_per_segment_complete_only",
+    "aggregation": "equal_window_mean_psd_and_separate_per_window_entropy",
+    "bands": [
+      [
+        "theta",
+        [
+          4.0,
+          8.0
+        ]
+      ],
+      [
+        "alpha",
+        [
+          8.0,
+          13.0
+        ]
+      ],
+      [
+        "beta",
+        [
+          13.0,
+          30.0
+        ]
+      ]
+    ],
+    "welch_nperseg": null,
+    "welch_noverlap": null
+  },
+  "config_id": "584a4541a44d23edee171a57cd35e8e40210051f75b79162f3cb4146766787a2",
+  "states": {
+    "baseline": {
+      "lo_us": 1778566200001000,
+      "hi_us": 1778566201000000,
+      "windows": [
+        {
+          "window_start_idx": 1,
+          "window_end_idx": 500,
+          "window_start_us": 1778566200002000,
+          "window_end_us": 1778566201000000,
+          "window_center_us": 1778566200500000,
+          "segment_id": 0,
+          "complete": false,
+          "status": "incomplete_window",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 499
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 0,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 0,
+      "n_accepted_epochs": 0,
+      "per_window_entropy": []
+    },
+    "event": {
+      "lo_us": 1778566202000000,
+      "hi_us": 1778566202500000,
+      "windows": [
+        {
+          "window_start_idx": 1000,
+          "window_end_idx": 1250,
+          "window_start_us": 1778566202000000,
+          "window_end_us": 1778566202500000,
+          "window_center_us": 1778566202250000,
+          "segment_id": 0,
+          "complete": false,
+          "status": "incomplete_window",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 250
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 0,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 0,
+      "n_accepted_epochs": 0,
+      "per_window_entropy": []
+    }
+  },
+  "audit_id": "3ffc8a68ade7a153abc088ff28717942c2e09158de4c0cf4892a172038ff523a",
+  "code_sha256": "36db7f3185d058d47fa895251b41268f47928beab5c4fabd3ae4228758445261",
+  "table_sha256": "c2fa49abdc98a806b7a2bda93f6946a92f9b6facb66c5ebc79b57c65aa0038dc",
+  "quality_diagnostics_version": 1
+}

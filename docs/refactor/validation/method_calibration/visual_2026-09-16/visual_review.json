@@ -1,0 +1,65 @@
+{
+  "date": "2026-09-16",
+  "reviewed_by": "Codex visual inspection",
+  "scope": "three overview images plus three supplemental Goertzel images",
+  "passed": true,
+  "observations": [
+    "Frozen/current entropy PSD traces overlap in real talk, synthetic gap and short source.",
+    "Real talk TFLite session shows five seed-42 selections; synthetic gap explicitly insufficient, short has no complete model block.",
+    "MI observed/null distributions are visible; they do not establish estimator validity or behavioral significance.",
+    "Initial overview Goertzel .5s panel was blank because all windows were excluded. Supplemental plots preserve unmasked power and explicitly mark exclusions.",
+    "Supplemental real talk: 5s accepted 12/12, .5s excluded 122/122; synthetic gap: 5s accepted 8/12, .5s excluded 120/120; 30\u201340s gap disconnected and isolated accepted markers visible.",
+    "Short source: 5s has zero windows, .5s has one excluded point. Distinct messages visible."
+  ],
+  "supplemental_plots": [
+    {
+      "case": "real_1",
+      "path": "local/real_1.png",
+      "sha256": "aa2122edaaed91e37c359212ae12a106b9b5b01cf4d92f54f92817e2366a5542",
+      "counts": {
+        "5.0": {
+          "windows": 12,
+          "accepted": 12
+        },
+        "0.5": {
+          "windows": 122,
+          "accepted": 0
+        }
+      }
+    },
+    {
+      "case": "synthetic_gap",
+      "path": "synthetic_gap.png",
+      "sha256": "2ec1f87cfa4cde50d2ca881f20cb1faab17869b6462c03ebf452a54e43078a1e",
+      "counts": {
+        "5.0": {
+          "windows": 12,
+          "accepted": 8
+        },
+        "0.5": {
+          "windows": 120,
+          "accepted": 0
+        }
+      }
+    },
+    {
+      "case": "synthetic_short",
+      "path": "synthetic_short.png",
+      "sha256": "cd461eb765a0c9f827bad4a3b5b9652f355e9098a68ca961a4deddf45cec99f9",
+      "counts": {
+        "5.0": {
+          "windows": 0,
+          "accepted": 0
+        },
+        "0.5": {
+          "windows": 1,
+          "accepted": 0
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Figures are verification plots, not newly accepted product entrypoint outputs.",
+    "Legacy Goertzel smoothing remains across row adjacency; plot separation does not change that method."
+  ]
+}

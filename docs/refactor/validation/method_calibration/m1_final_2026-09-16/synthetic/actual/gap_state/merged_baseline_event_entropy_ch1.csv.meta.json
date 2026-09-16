@@ -1,0 +1,1816 @@
+{
+  "kind": "state_band_entropy",
+  "schema_version": 1,
+  "index_space": "raw_samples",
+  "source_path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m1_final_2026-09-16/synthetic/inputs/gap/merged.csv",
+  "source_id": "f3fe0011115358231b2926d2308e9c5a9dfb0ff928457eb765190f47ba203faa",
+  "parameters": {
+    "fs": 500.0,
+    "channel": 1,
+    "win_sec": 2.0,
+    "step_sec": 2.0,
+    "ranges": {
+      "baseline": [
+        0.0,
+        60.0
+      ],
+      "event": [
+        60.0,
+        120.0
+      ]
+    },
+    "clean": false,
+    "quality_threshold": 0.5,
+    "quality_state_version": 1,
+    "quality_diagnostics_version": 1,
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "quality_channels": [],
+    "quality_params": null,
+    "saturation_fraction_max": null,
+    "saturation_rail": null,
+    "window_policy": "interval_first_sample_reset_per_segment_complete_only",
+    "aggregation": "equal_window_mean_psd_and_separate_per_window_entropy",
+    "bands": [
+      [
+        "theta",
+        [
+          4.0,
+          8.0
+        ]
+      ],
+      [
+        "alpha",
+        [
+          8.0,
+          13.0
+        ]
+      ],
+      [
+        "beta",
+        [
+          13.0,
+          30.0
+        ]
+      ]
+    ],
+    "welch_nperseg": null,
+    "welch_noverlap": null
+  },
+  "config_id": "38a1e6aa3e44e7f0c2701ef19e5e015704c194241ef07feb9f4d96c6a40a430d",
+  "states": {
+    "baseline": {
+      "lo_us": 1778566200000000,
+      "hi_us": 1778566260000000,
+      "windows": [
+        {
+          "window_start_idx": 0,
+          "window_end_idx": 1000,
+          "window_start_us": 1778566200000000,
+          "window_end_us": 1778566202000000,
+          "window_center_us": 1778566201000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 1000,
+          "window_end_idx": 2000,
+          "window_start_us": 1778566202000000,
+          "window_end_us": 1778566204000000,
+          "window_center_us": 1778566203000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 2000,
+          "window_end_idx": 3000,
+          "window_start_us": 1778566204000000,
+          "window_end_us": 1778566206000000,
+          "window_center_us": 1778566205000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 3000,
+          "window_end_idx": 4000,
+          "window_start_us": 1778566206000000,
+          "window_end_us": 1778566208000000,
+          "window_center_us": 1778566207000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 4000,
+          "window_end_idx": 5000,
+          "window_start_us": 1778566208000000,
+          "window_end_us": 1778566210000000,
+          "window_center_us": 1778566209000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 5000,
+          "window_end_idx": 6000,
+          "window_start_us": 1778566210000000,
+          "window_end_us": 1778566212000000,
+          "window_center_us": 1778566211000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 6000,
+          "window_end_idx": 7000,
+          "window_start_us": 1778566212000000,
+          "window_end_us": 1778566214000000,
+          "window_center_us": 1778566213000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 7000,
+          "window_end_idx": 8000,
+          "window_start_us": 1778566214000000,
+          "window_end_us": 1778566216000000,
+          "window_center_us": 1778566215000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 8000,
+          "window_end_idx": 9000,
+          "window_start_us": 1778566216000000,
+          "window_end_us": 1778566218000000,
+          "window_center_us": 1778566217000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 9000,
+          "window_end_idx": 10000,
+          "window_start_us": 1778566218000000,
+          "window_end_us": 1778566220000000,
+          "window_center_us": 1778566219000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 10000,
+          "window_end_idx": 11000,
+          "window_start_us": 1778566220000000,
+          "window_end_us": 1778566222000000,
+          "window_center_us": 1778566221000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 11000,
+          "window_end_idx": 12000,
+          "window_start_us": 1778566222000000,
+          "window_end_us": 1778566224000000,
+          "window_center_us": 1778566223000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 12000,
+          "window_end_idx": 13000,
+          "window_start_us": 1778566224000000,
+          "window_end_us": 1778566226000000,
+          "window_center_us": 1778566225000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 13000,
+          "window_end_idx": 14000,
+          "window_start_us": 1778566226000000,
+          "window_end_us": 1778566228000000,
+          "window_center_us": 1778566227000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 14000,
+          "window_end_idx": 15000,
+          "window_start_us": 1778566228000000,
+          "window_end_us": 1778566230000000,
+          "window_center_us": 1778566229000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 15000,
+          "window_end_idx": 16000,
+          "window_start_us": 1778566230000000,
+          "window_end_us": 1778566232000000,
+          "window_center_us": 1778566231000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 16000,
+          "window_end_idx": 17000,
+          "window_start_us": 1778566232000000,
+          "window_end_us": 1778566234000000,
+          "window_center_us": 1778566233000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 17000,
+          "window_end_idx": 18000,
+          "window_start_us": 1778566234000000,
+          "window_end_us": 1778566236000000,
+          "window_center_us": 1778566235000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 18000,
+          "window_end_idx": 19000,
+          "window_start_us": 1778566236000000,
+          "window_end_us": 1778566238000000,
+          "window_center_us": 1778566237000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 19000,
+          "window_end_idx": 20000,
+          "window_start_us": 1778566238000000,
+          "window_end_us": 1778566240000000,
+          "window_center_us": 1778566239000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 20000,
+          "window_end_idx": 21000,
+          "window_start_us": 1778566240000000,
+          "window_end_us": 1778566242000000,
+          "window_center_us": 1778566241000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 21000,
+          "window_end_idx": 22000,
+          "window_start_us": 1778566242000000,
+          "window_end_us": 1778566244000000,
+          "window_center_us": 1778566243000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 22000,
+          "window_end_idx": 23000,
+          "window_start_us": 1778566244000000,
+          "window_end_us": 1778566246000000,
+          "window_center_us": 1778566245000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 23000,
+          "window_end_idx": 24000,
+          "window_start_us": 1778566246000000,
+          "window_end_us": 1778566248000000,
+          "window_center_us": 1778566247000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 24000,
+          "window_end_idx": 25000,
+          "window_start_us": 1778566248000000,
+          "window_end_us": 1778566250000000,
+          "window_center_us": 1778566249000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 25000,
+          "window_end_idx": 26000,
+          "window_start_us": 1778566250000000,
+          "window_end_us": 1778566252000000,
+          "window_center_us": 1778566251000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 26000,
+          "window_end_idx": 27000,
+          "window_start_us": 1778566252000000,
+          "window_end_us": 1778566254000000,
+          "window_center_us": 1778566253000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 27000,
+          "window_end_idx": 28000,
+          "window_start_us": 1778566254000000,
+          "window_end_us": 1778566256000000,
+          "window_center_us": 1778566255000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 28000,
+          "window_end_idx": 29000,
+          "window_start_us": 1778566256000000,
+          "window_end_us": 1778566258000000,
+          "window_center_us": 1778566257000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 29000,
+          "window_end_idx": 30000,
+          "window_start_us": 1778566258000000,
+          "window_end_us": 1778566260000000,
+          "window_center_us": 1778566259000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        }
+      ],
+      "missing_spans": [],
+      "n_total_epochs": 30,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 30,
+      "n_accepted_epochs": 30,
+      "per_window_entropy": [
+        0.04667850780492514,
+        0.031706138525754726,
+        0.05038313219306327,
+        0.0433406864630614,
+        0.03644801929809359,
+        0.050463619112762446,
+        0.031447095293778586,
+        0.04933366008360318,
+        0.04064994716654326,
+        0.034952285868229696,
+        0.03858757667230153,
+        0.04083738458774947,
+        0.037500033087762966,
+        0.04746909205472199,
+        0.04202668980755585,
+        0.032959513155671624,
+        0.0369071145408692,
+        0.03449991781356175,
+        0.04060098492371413,
+        0.04091154252277754,
+        0.04464344782807068,
+        0.03643228534273092,
+        0.03530926410198347,
+        0.04966656188697582,
+        0.043742872595489674,
+        0.039850161931704556,
+        0.0339100219457261,
+        0.03761683158979861,
+        0.04820826221049976,
+        0.05347931126578344
+      ],
+      "per_window_entropy_norm": [
+        0.029450859426444775,
+        0.020004346166756923,
+        0.031788217178727575,
+        0.02734492862975713,
+        0.022996139833913916,
+        0.031838998771139104,
+        0.019840908084241864,
+        0.031126073999325803,
+        0.025647261148479903,
+        0.022052437109601298,
+        0.024346050240774925,
+        0.02576552099445161,
+        0.02365988663498379,
+        0.029949662552346573,
+        0.026515889043705294,
+        0.02079513751314311,
+        0.02328579668230416,
+        0.02176702464434605,
+        0.025616369412677416,
+        0.025812309442124235,
+        0.028166879536744852,
+        0.022986212813334243,
+        0.02227766529865394,
+        0.03133611165209119,
+        0.02759867982717996,
+        0.025142652847353033,
+        0.021394841789819683,
+        0.023733578285090654,
+        0.030416026996578818,
+        0.03374168867809201
+      ]
+    },
+    "event": {
+      "lo_us": 1778566260000000,
+      "hi_us": 1778566320000000,
+      "windows": [
+        {
+          "window_start_idx": 30000,
+          "window_end_idx": 31000,
+          "window_start_us": 1778566260000000,
+          "window_end_us": 1778566262000000,
+          "window_center_us": 1778566261000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 31000,
+          "window_end_idx": 32000,
+          "window_start_us": 1778566262000000,
+          "window_end_us": 1778566264000000,
+          "window_center_us": 1778566263000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 32000,
+          "window_end_idx": 33000,
+          "window_start_us": 1778566264000000,
+          "window_end_us": 1778566266000000,
+          "window_center_us": 1778566265000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 33000,
+          "window_end_idx": 34000,
+          "window_start_us": 1778566266000000,
+          "window_end_us": 1778566268000000,
+          "window_center_us": 1778566267000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 34000,
+          "window_end_idx": 35000,
+          "window_start_us": 1778566268000000,
+          "window_end_us": 1778566270000000,
+          "window_center_us": 1778566269000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 35000,
+          "window_end_idx": 36000,
+          "window_start_us": 1778566270000000,
+          "window_end_us": 1778566272000000,
+          "window_center_us": 1778566271000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 36000,
+          "window_end_idx": 37000,
+          "window_start_us": 1778566272000000,
+          "window_end_us": 1778566274000000,
+          "window_center_us": 1778566273000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 37000,
+          "window_end_idx": 38000,
+          "window_start_us": 1778566274000000,
+          "window_end_us": 1778566276000000,
+          "window_center_us": 1778566275000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 38000,
+          "window_end_idx": 39000,
+          "window_start_us": 1778566276000000,
+          "window_end_us": 1778566278000000,
+          "window_center_us": 1778566277000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 39000,
+          "window_end_idx": 40000,
+          "window_start_us": 1778566278000000,
+          "window_end_us": 1778566280000000,
+          "window_center_us": 1778566279000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 40000,
+          "window_end_idx": 41000,
+          "window_start_us": 1778566280000000,
+          "window_end_us": 1778566282000000,
+          "window_center_us": 1778566281000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 41000,
+          "window_end_idx": 42000,
+          "window_start_us": 1778566282000000,
+          "window_end_us": 1778566284000000,
+          "window_center_us": 1778566283000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 42000,
+          "window_end_idx": 43000,
+          "window_start_us": 1778566284000000,
+          "window_end_us": 1778566286000000,
+          "window_center_us": 1778566285000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 43000,
+          "window_end_idx": 44000,
+          "window_start_us": 1778566286000000,
+          "window_end_us": 1778566288000000,
+          "window_center_us": 1778566287000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 44000,
+          "window_end_idx": 45000,
+          "window_start_us": 1778566288000000,
+          "window_end_us": 1778566290000000,
+          "window_center_us": 1778566289000000,
+          "segment_id": 0,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 45000,
+          "window_end_idx": 46000,
+          "window_start_us": 1778566300000000,
+          "window_end_us": 1778566302000000,
+          "window_center_us": 1778566301000000,
+          "segment_id": 1,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 46000,
+          "window_end_idx": 47000,
+          "window_start_us": 1778566302000000,
+          "window_end_us": 1778566304000000,
+          "window_center_us": 1778566303000000,
+          "segment_id": 1,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 47000,
+          "window_end_idx": 48000,
+          "window_start_us": 1778566304000000,
+          "window_end_us": 1778566306000000,
+          "window_center_us": 1778566305000000,
+          "segment_id": 1,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 48000,
+          "window_end_idx": 49000,
+          "window_start_us": 1778566306000000,
+          "window_end_us": 1778566308000000,
+          "window_center_us": 1778566307000000,
+          "segment_id": 1,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 49000,
+          "window_end_idx": 50000,
+          "window_start_us": 1778566308000000,
+          "window_end_us": 1778566310000000,
+          "window_center_us": 1778566309000000,
+          "segment_id": 1,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 50000,
+          "window_end_idx": 51000,
+          "window_start_us": 1778566310000000,
+          "window_end_us": 1778566312000000,
+          "window_center_us": 1778566311000000,
+          "segment_id": 1,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 51000,
+          "window_end_idx": 52000,
+          "window_start_us": 1778566312000000,
+          "window_end_us": 1778566314000000,
+          "window_center_us": 1778566313000000,
+          "segment_id": 1,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 52000,
+          "window_end_idx": 53000,
+          "window_start_us": 1778566314000000,
+          "window_end_us": 1778566316000000,
+          "window_center_us": 1778566315000000,
+          "segment_id": 1,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 53000,
+          "window_end_idx": 54000,
+          "window_start_us": 1778566316000000,
+          "window_end_us": 1778566318000000,
+          "window_center_us": 1778566317000000,
+          "segment_id": 1,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        },
+        {
+          "window_start_idx": 54000,
+          "window_end_idx": 55000,
+          "window_start_us": 1778566318000000,
+          "window_end_us": 1778566320000000,
+          "window_center_us": 1778566319000000,
+          "segment_id": 1,
+          "complete": true,
+          "status": "accepted",
+          "quality_state": "disabled",
+          "quality": null,
+          "saturation_fraction": null,
+          "quality_diagnostics": {
+            "schema_version": 1,
+            "state": "not_scored",
+            "score_policy": "legacy_overall",
+            "request": {
+              "fs": 500.0,
+              "parameters": null,
+              "stage": "filtered",
+              "n_channels": 0,
+              "n_samples": 1000
+            },
+            "reasons": [
+              "quality_disabled"
+            ],
+            "result": null
+          }
+        }
+      ],
+      "missing_spans": [
+        {
+          "start_us": 1778566290000000,
+          "end_us": 1778566300000000,
+          "reason": "no_recorded_samples"
+        }
+      ],
+      "n_total_epochs": 25,
+      "n_saturated_epochs": 0,
+      "n_lowquality_epochs": 0,
+      "n_nonfinite_epochs": 0,
+      "n_invalid_quality_epochs": 0,
+      "n_clean_epochs": 25,
+      "n_accepted_epochs": 25,
+      "per_window_entropy": [
+        0.04789872429881187,
+        0.03918786327076502,
+        0.05049881084496288,
+        0.05597894770211105,
+        0.04113267356545744,
+        0.04219839002386366,
+        0.03920959977543498,
+        0.037036804580365866,
+        0.04721213219608621,
+        0.05325894113995343,
+        0.04766355175326057,
+        0.04155826766296039,
+        0.0383632639301123,
+        0.03481118978906999,
+        0.05426251163392777,
+        0.036753664495372394,
+        0.04028742591516529,
+        0.03691853021553325,
+        0.04101696344169549,
+        0.037104779981937105,
+        0.0459360162506511,
+        0.03684085975877266,
+        0.03888160276827964,
+        0.037140313261125726,
+        0.04567005453350156
+      ],
+      "per_window_entropy_norm": [
+        0.030220730318236553,
+        0.024724788916415743,
+        0.03186120228206408,
+        0.03531878367888243,
+        0.025951827596389265,
+        0.02662421981886855,
+        0.024738503123950664,
+        0.023367621986964463,
+        0.029787538932059744,
+        0.033602650608907575,
+        0.030072352962025102,
+        0.02622034757544827,
+        0.024204524657622538,
+        0.021963415395147165,
+        0.034235833093362394,
+        0.023188980482913332,
+        0.02541853570468359,
+        0.0232929991711068,
+        0.025878822636518417,
+        0.023410509690326726,
+        0.028982399413077765,
+        0.023243994568963058,
+        0.024531560053053975,
+        0.023432928693408787,
+        0.02881459625241716
+      ]
+    }
+  },
+  "audit_id": "5723ed74a9ea81f68eea9aff37cbd5c751dfa3814a798fca41455fec8d950e76",
+  "code_sha256": "36db7f3185d058d47fa895251b41268f47928beab5c4fabd3ae4228758445261",
+  "table_sha256": "1ff56778b262f85217bc6c482a86b179c90b8c2566a5dd5fed0fcd17842f36fe",
+  "quality_diagnostics_version": 1
+}

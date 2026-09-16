@@ -1,0 +1,33 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789544543.617800     189 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789544544.391251     189 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_capture_2026-09-16/local/frozen_source/analyze_jenqwei_pipeline.py", line 205, in process_segments
+    after = np.asarray(apply_tflite_windowed(before))
+  File "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_capture_2026-09-16/local/frozen_source/plot_event_markers.py", line 288, in apply_tflite_windowed
+    return _apply_tflite_shared(data, tflite_path, tflite_win=TFLITE_WIN)
+  File "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_capture_2026-09-16/local/frozen_source/lilia/tflite.py", line 42, in apply_tflite_windowed
+    interp = tf.lite.Interpreter(model_path=tflite_path)
+  File "/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py", line 490, in __init__
+    self._interpreter = _interpreter_wrapper.CreateWrapperFromFile(
+ValueError: Could not open '/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_capture_2026-09-16/local/frozen_source/tiny_v4_optimized.tflite'.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/bps-yichin/lilia_analysis/tools/freeze_psd_profiles.py", line 259, in <module>
+    main()
+  File "/home/bps-yichin/lilia_analysis/tools/freeze_psd_profiles.py", line 195, in main
+    worker(args)
+  File "/home/bps-yichin/lilia_analysis/tools/freeze_psd_profiles.py", line 103, in worker
+    result = jen.process_segments(time, raw)
+  File "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_capture_2026-09-16/local/frozen_source/analyze_jenqwei_pipeline.py", line 213, in process_segments
+    raise ValueError(f"Jenqwei segment {segment['segment_id']} raw [{a}:{b}] failed: {exc}") from exc
+ValueError: Jenqwei segment 0 raw [0:29984] failed: Could not open '/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_capture_2026-09-16/local/frozen_source/tiny_v4_optimized.tflite'.

@@ -1,11 +1,11 @@
 # 重構短進度
 
-更新：2026-09-15。接手先讀本檔，再只讀當前任務；歷史細節按需查閱。
+更新：2026-09-16。接手先讀本檔，再只讀當前任務；歷史細節按需查閱。
 
 - 已完成：第十八階段品質 scorer 全部呼叫端與整階段收斂驗收；詳見 [Stage18 完整驗收](docs/refactor/STAGE18_ACCEPTANCE_REPORT_2026-09-15.md)。
-- 本輪：最後剩餘的 `compute_quality_windowed` → `plot_custom_markers` 保存 raw 逐窗診斷、CSV／sidecar／來源 reader 與品質圖；舊雙值 API、外部 scorer 簽名、`legacy_overall` 門檻與 qEEG 缺口 mask 保留。
-- 驗證：348 tests／0 skipped、192 Python／Pyflakes／bundle／diff；16 helper＋5 plot 案例，102 陣列精確相同、5 來源 reader／五圖目視；R1–R6 與新 helper 本機來源綁定 1,364 項、可提交範圍 1,351 項原 hash／表／NPZ 核對通過。
-- 下一步：[方法校準](docs/refactor/TASKS.md)：baseline／PSD／Goertzel／MI 舊 profile 與真實比較基準；再接架構／F19、批次／原子發佈及跨階段整體驗收。
+- 本輪：方法校準 M1 baseline 完整入口完成；新增 meditation／marker／legacy sampler／entropy-state、多事件與鍵盤／protocol 案例。目視修正 custom marker 窗口間缺口連線，數值與政策不變；詳見 [M1 增量](docs/refactor/METHOD_CALIBRATION_M1_REPORT_2026-09-16.md)。
+- 驗證：357 tests／0 skipped、197 Python／Pyflakes／bundle／diff；19 案例、585 陣列／metadata 精確一致、20 reader；繪圖修正再驗 3 案例／72 陣列／3 reader；15 張圖目視（含原缺陷與修正後圖）。
+- 下一步：[方法校準 M2](docs/refactor/TASKS.md#method-calibration)：補 P-jenqwei／P-quality-plot PSD 基準並定比較契約；再接 Goertzel、MI，最後架構／F19、批次／原子發佈及整體驗收。
 
 ## 必須保留
 
@@ -23,7 +23,10 @@
 
 ## 驗證入口
 
-- 本輪：[完整檢查](docs/refactor/validation/stage18/direct_quality_helper_final_checks/summary.json) 348 tests／0 skipped、192 Python；[舊新數值](docs/refactor/validation/stage18/direct_quality_helper_visual_final/analysis.json)／本機 78 項來源證據／[可提交 59 項證據](docs/refactor/validation/stage18/direct_quality_helper_visual_final/repository_evidence_release/summary.json)／[五圖目視](docs/refactor/validation/stage18/direct_quality_helper_visual_final/visual_review.json)。
+- 方法校準 M1：[數值基準](docs/refactor/validation/method_calibration/m1_final_2026-09-16/analysis.json)／[marker 修正重驗](docs/refactor/validation/method_calibration/m1_marker_gap_2026-09-16/analysis.json)／[最新完整檢查](docs/refactor/validation/method_calibration/m1_final_checks_2026-09-16/summary.json)／[歷史與當前證據範圍](docs/refactor/validation/method_calibration/m1_acceptance_2026-09-16/scope.json)。真實衍生產物留 ignored `local/`。
+- 方法校準 M0：[核心基準增量](docs/refactor/METHOD_CALIBRATION_BASELINE_REPORT_2026-09-16.md) 與 [profiles／涵蓋界線](docs/refactor/METHOD_CALIBRATION_PROFILES.md)；當時 1,255 陣列精確一致，保留原證據，不當成本輪重跑。
+
+- Stage18：[當時完整檢查](docs/refactor/validation/stage18/direct_quality_helper_final_checks/summary.json) 348 tests／0 skipped、192 Python；[舊新數值](docs/refactor/validation/stage18/direct_quality_helper_visual_final/analysis.json)／本機 78 項來源證據／[可提交 59 項證據](docs/refactor/validation/stage18/direct_quality_helper_visual_final/repository_evidence_release/summary.json)／[五圖目視](docs/refactor/validation/stage18/direct_quality_helper_visual_final/visual_review.json)。
 - 整階段：[8 模組原 hash／reader／NPZ 核對](docs/refactor/validation/stage18/final_acceptance/evidence_rollup.json) 本機 1,364 項、可提交範圍 1,351 項；[範圍與舊程式 hash 排除明細](docs/refactor/validation/stage18/final_acceptance/scope.json)。較早程式 hash 被後續增量替代，原產物 hash 與原 NPZ 不重算。
 - R6：[增量數值](docs/refactor/validation/stage18/quality_check_r6_release/analysis.json) 974 陣列、17 reader／八圖；[可提交 142 項](docs/refactor/validation/stage18/quality_check_r6_repository_evidence/summary.json) 與 [本機 156 項](docs/refactor/validation/stage18/quality_check_r6_source_evidence/summary.json) 均為當時增量證據。
 
