@@ -26,9 +26,9 @@ raw／BP／model 索引與品質 stage 不共用。一般 event baseline 接受 
 | P-entropy | `spectral_entropy._compute_welch_psd`：float64，Hann、constant detrend、density；預設 `min(N,max(8,round(fs)))`，50% overlap。 | 1 秒 PSD；band helper 可控制 upper bound，單一頻點用 `PSD×df`；不可以共用 helper 抹平與 P-qeeg 的差異。 |
 | P-hardy | `lilia.hardy2.window_metrics`：4 秒 Welch，`int(fs*4)`／`int(fs*2)`。 | delta 1–4、theta 4–8、alpha 8–13、beta 13–30、gamma 30–45，各帶**兩端包含**；五帶總和 +1e−12；qEEG 四指標另外呼叫 P-qeeg。 |
 | P-comparison | `lilia.comparison.segmented_psd`：固定 `nfft=round(4fs)`；短段縮 Welch 窗再補零至同一格點。 | 逐來源段、不跨缺口；線性 PSD 以 Welch 子窗數加權，再 `10log10(power+1e−12)`；本輪保存完整頻率／dB／權重 audit。 |
-| P-jenqwei | `lilia.jenqwei_plot.compute_panels`：200 Hz、`nperseg=min(800,Before段長,當前branch長)`、density，其餘 SciPy defaults。 | Before 保留完整重採樣尾端，After 段內裁 400 點；每段各畫 PSD，不串接／平均；本輪只凍結程式，Stage16 保存真實模型與 PSD/STFT 比較。 |
+| P-jenqwei | `lilia.jenqwei_plot.compute_panels`：200 Hz、`nperseg=min(800,Before段長,當前branch長)`、density，其餘 SciPy defaults。 | Before 保留完整重採樣尾端，After 段內裁 400 點；每段各畫 PSD，不串接／平均；M2 已獨立捕獲舊新模型／PSD／實際圖線，四個來源通道及短段／缺口均核對。 |
 | P-quality | `lilia.quality` spectrum component：`welch(ch_data,fs,nperseg=fs*2)`；fit `(1,spectrum_fit_hi)`。 | 2 秒 profile 與 component fallback／preset 相連，不能用分析圖 PSD 替換；新基準透過實際 scorer 間接涵蓋。 |
-| P-quality-plot | `quality_check` sample PSD：float64、`nperseg=4fs`、overlap `2fs`，raw/filtered 分畫。 | 圖形與 quality component 是不同 profile；本輪只凍結程式，Stage18 R6 已有來源表與圖形證據。 |
+| P-quality-plot | `quality_check` sample PSD：float64、`nperseg=4fs`、overlap `2fs`，raw/filtered 分畫。 | 圖形與 quality component 是不同 profile；M2 已獨立捕獲舊新實際 Welch 呼叫／圖線、seed 42 選取、品質表與來源 reader；不足兩段 30 秒仍 skip。 |
 
 新增基準對 P-qeeg 保存 relative powers，P-hardy 保存各 band／index，P-entropy／P-comparison 保存頻譜。這不是所有 PSD 入口的全量驗收。SciPy／NumPy 版本與凍結原碼 hash 均記在 `config.json`，未把依賴 defaults 偷換成新參數。
 
@@ -67,13 +67,19 @@ raw／BP／model 索引與品質 stage 不共用。一般 event baseline 接受 
 - Jenqwei talk／move-head `time_marker.csv` 是鍵盤 trigger；原始相對時間只在獨立四通道副本加 header offset。talk 的 `Abs Time − (offset + Rel Time)` 為 −1 µs，move-head 為 0；保留絕對欄六位小數，不自動修正。TYY 為完整 2,009,328 列正式來源，其事件／meditation 時段來自既有 protocol 設定，不是觀測標註。
 - 合成注入品質 .5／.49 的案例保留 diagnostics unavailable；不把注入分數當實際品質診斷。legacy sampler continuity guard 保留。
 - 目視發現 custom marker 在兩個完整窗口間仍跨缺口連線；僅繪圖依來源段插 NaN，保留有效端點／孤立點，raw 同樣不丟端點。修正後真實兩例＋合成缺口 72 陣列、3 reader 與原版一致；CSV、baseline、品質政策未改。
-- 原 19 案例產物及預期 hash 不重算；舊繪圖程式 hash 綁定同 bytes 快照，當前版本由 marker 重驗與最新全套檢查支持。詳見 [驗收範圍](validation/method_calibration/m1_acceptance_2026-09-16/scope.json)；其餘 PSD capture 仍待 M2。
+- 原 19 案例產物及預期 hash 不重算；舊繪圖程式 hash 綁定同 bytes 快照，當前版本由 marker 重驗與最新全套檢查支持。詳見 [驗收範圍](validation/method_calibration/m1_acceptance_2026-09-16/scope.json)；當時待補的 PSD capture 已於 M2 完成。
+
+## M2 PSD 比較完成
+
+- [報告](METHOD_CALIBRATION_M2_REPORT_2026-09-17.md)／[預先比較契約](PSD_COMPARISON_CONTRACT.md)：8 案例、938 陣列、19 reader，舊新頻率／線性 PSD／圖線／metadata 精確一致。模型以同一絕對路徑明示綁定；不修改舊原碼或產品預設。
+- 160 合成窗長控制＋1 單頻點探針、128 捕獲輸入的 256 次計算；1／4 秒、頻帶邊界、單點積分與分母差異逐列保存。短段 602 點的窄頻訊號相對值差可達 0.66944，不能宣告各 profile 可互換。
+- 364 tests、200 Python 靜態／bundle、10 圖目視與完整／repository 證據通過。科學效用或最佳窗長未據此判定，未新增 profile，舊方法、品質與索引政策保留。
 
 ## 後續校準順序與驗收門檻
 
 1. **Baseline 完整入口基準：M1 完成**。各入口與缺口／不足／品質邊界的候選、排除、selected indices、reference、delta 已核對；範圍與限制見 [M1 報告](METHOD_CALIBRATION_M1_REPORT_2026-09-16.md)。政策仍各自保留。
-2. **PSD 校準**：補 P-jenqwei／P-quality-plot 新 capture；用同輸入評估1秒／4秒、頻帶邊界及單頻點規則。校準前先定比較量與容許差異，保留 legacy profile；不能把 PSD 差異混入搬移。
-3. **Goertzel 校準**：先單獨比較分段平滑，再評估 raw/BP、窗長與 normalization；須列線性功率、dB、接受／排除窗口差異，既有門檻不直接套新單位。
+2. **PSD 比較：M2 完成**。P-jenqwei／P-quality-plot capture 與同輸入窗長／邊界／單點／分母差異已保存；既有 profile 保留，不宣告等價或優劣。
+3. **Goertzel 校準：M3 當前**。先單獨比較分段平滑，再評估 raw/BP、窗長與 normalization；須列線性功率、dB、接受／排除窗口差異，既有門檻不直接套新單位。
 4. **MI 校準**：分開 histogram、event KSG、各 null 與品質 population；新增有已知關係的合成控制及真实事件標註；評估 bins／樣本數／k／seed／surrogate數的敏感度。方法判讀前另查一手方法文獻，這一輪不下科學結論。
 
 每次方法變更需具名新 profile、明示預設／相容策略、獨立原基準、數值差異與 NaN／索引／品質差異、来源讀回與目視；受影響測試及階段完整檢查通過後才標完成。架構／F19、批次原子發佈仍排在方法校準之後。

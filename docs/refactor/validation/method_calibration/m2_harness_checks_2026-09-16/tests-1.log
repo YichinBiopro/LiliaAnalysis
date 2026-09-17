@@ -1,0 +1,12 @@
+test_boundary_and_denominator_changes_remain_distinct (test_psd_profile_freeze_regression.PsdProfileFreezeTests) ... ok
+test_explicit_model_overrides_definition_time_frozen_default (test_psd_profile_freeze_regression.PsdProfileFreezeTests) ... ok
+test_missing_duplicate_and_invented_panels_cannot_pass_by_equality (test_psd_profile_freeze_regression.PsdProfileFreezeTests) ... ok
+test_normalization_keeps_hashes_indices_and_diagnostics (test_psd_profile_freeze_regression.PsdProfileFreezeTests) ... ok
+test_odd_and_even_one_sided_density_preserves_known_energy (test_psd_profile_freeze_regression.PsdProfileFreezeTests) ... ok
+test_short_case_rejects_silent_model_success (test_psd_profile_freeze_regression.PsdProfileFreezeTests) ... ok
+test_single_bin_policy_and_nominal_window_capping_are_observable (test_psd_profile_freeze_regression.PsdProfileFreezeTests) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.705s
+
+OK

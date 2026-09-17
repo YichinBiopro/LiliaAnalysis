@@ -1,0 +1,71 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789545394.459617     194 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1789545395.346782     194 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+  [M2/real_0] loading… 29984 pts, 4 ch
+    WARNING: only 1 segment(s) found, skipping
+PASS real_0: 65 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+  [M2/real_1] loading… 30648 pts, 4 ch
+       → /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_1/M2_real_1_sample_quality.png
+PASS real_1: 154 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+  [M2/real_2] loading… 30976 pts, 4 ch
+       → /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_2/M2_real_2_sample_quality.png
+PASS real_2: 154 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+  [M2/real_3] loading… 32312 pts, 4 ch
+       → /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_3/M2_real_3_sample_quality.png
+PASS real_3: 154 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+  [M2/real_4] loading… 30648 pts, 4 ch
+       → /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_4/M2_real_4_sample_quality.png
+PASS real_4: 154 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+  [M2/continuous] loading… 32500 pts, 4 ch
+       → /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/synthetic/actual/continuous/M2_continuous_sample_quality.png
+PASS continuous: 154 arrays
+/home/bps-yichin/.local/lib/python3.10/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+  [M2/gap] loading… 6751 pts, 4 ch
+    WARNING: only 0 segment(s) found, skipping
+PASS gap: 101 arrays
+  [M2/short] loading… 250 pts, 4 ch
+    WARNING: only 0 segment(s) found, skipping
+PASS short: 2 arrays

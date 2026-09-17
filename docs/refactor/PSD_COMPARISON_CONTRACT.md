@@ -16,4 +16,8 @@
 
 真實捕獲：五份 Jenqwei 完整錄製／獨立四通道副本、實際 TFLite；P-jenqwei 全四個顯示通道逐段捕獲；P-quality-plot 捕獲入口實際 Welch 呼叫與 semilogy 線值、seed 42 starts、raw／filtered 品質表。表重讀不取代模型／PSD 重算。真實合成產物分開保存，原始來源與模型不覆寫。
 
+M2 收斂補充（最終 capture 前固定）：舊／新 process 明確傳入相同模型絕對路徑，不依賴凍結原碼目錄的預設模型位置；檢查各 process 的實際匯入目錄。Jenqwei 的四個顯示通道也擷取真實 `Line2D` 值，逐段 Before／After、ch3/4 無 After、短段排除及顯示線數均須完整，兩邊同樣漏算不算通過。
+
+同輸入敏感度另套到全部成功捕獲的 Jenqwei 每段／每通道 Before／After，以及 quality 的每個 raw／filtered Welch 輸入；不串接缺口、不改產品選取／品質／索引。逐輸入保存兩窗長的 PSD、實際 nperseg／df、峰值差、相對功率差、頻帶邊界／單點／分母差，NumPy FFT 核對沿用上表容差。半秒全短案例明示無成功產品頻譜；合成控制仍涵蓋半秒。160 個窗長控制與額外 1 個單頻點探針分開計數，最大差異包含該探針，窗長差除外。
+
 Welch 的分段平均、density 單位、預設 detrend／overlap 依本環境 [SciPy 1.15.3 官方文件](https://docs.scipy.org/doc/scipy-1.15.3/reference/generated/scipy.signal.welch.html)；窗函數與頻譜洩漏的解釋參照 [SciPy spectral analysis](https://docs.scipy.org/doc/scipy/tutorial/signal.html#spectral-analysis)。版本與預設另存 config，不把新版文件的預設直接移植到舊程式。這些來源不支持 EEG 行為效應或哪個窗長適合受試者的結論。

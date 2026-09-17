@@ -1,0 +1,104 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "case": "real_0",
+      "spectra": 6,
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "real_1",
+      "spectra": 22,
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "real_2",
+      "spectra": 22,
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "real_3",
+      "spectra": 22,
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "real_4",
+      "spectra": 22,
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "continuous",
+      "spectra": 22,
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "gap",
+      "spectra": 12,
+      "max_abs_error": 0.0
+    }
+  ],
+  "spectra": 128,
+  "inputs": [
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/config.json",
+      "sha256": "c222edde77beb89a1af747151fa34d566b12c19e2368018826b717b8f852c87f"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_0/numeric.npz",
+      "sha256": "d64f800558209297f6d65c20ef46fc5c5139a34f765a12615dfbb96a46fcc0a9"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_0/sensitivity.npz",
+      "sha256": "f2e639f252ab7f3e558e1fee2025fd268fcd7387c6d5c90d4e4fd2ca6a69557c"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_1/numeric.npz",
+      "sha256": "88f5975e3eb5b0a3ad48ceba6ba78c3dd85d86bfc061b6e5aafdecac9467f28d"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_1/sensitivity.npz",
+      "sha256": "a3db9551afdaa0ffde55116f529b57c0b47119f048b1817fcca80dfec00fac55"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_2/numeric.npz",
+      "sha256": "70901762b1fb978bdb03f9870b5c4c3774a53b22143b6aa32221109817908de1"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_2/sensitivity.npz",
+      "sha256": "c417520299f6613af2ea121ac5c555d5306d36dec37ade6f0a608c654607ec2f"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_3/numeric.npz",
+      "sha256": "516a5243b5c5af6d8b3a09a20b3d58525214ece26a49f80f6d4cb35c9e608b72"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_3/sensitivity.npz",
+      "sha256": "4c2cab7f8edc2c2a088e454872da39dfc82037be7beacfbb8b861dc66d27216a"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_4/numeric.npz",
+      "sha256": "0af8ed138ae1e5ec9c40e096f8c43b3bb6bf19effe48519fe39fd09d285617be"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/local/actual/real_4/sensitivity.npz",
+      "sha256": "aa8f705223e370a78c5433fd0bc3680610dc51ecb1cc7e55a8e2f62992158ebd"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/synthetic/actual/continuous/numeric.npz",
+      "sha256": "412843fb11d210d46bdb35bea7ec516ca1906b6cad075e0b09855a3535d49a11"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/synthetic/actual/continuous/sensitivity.npz",
+      "sha256": "eb9e727f65df894f58ea483a274124c5778bb48b4b50994e49f0aefff26c31cf"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/synthetic/actual/gap/numeric.npz",
+      "sha256": "9f2e4c15fcaea9688aa339800d3013251d890c26573ab2e2b2a2f9700ead2143"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m2_final_2026-09-16/synthetic/actual/gap/sensitivity.npz",
+      "sha256": "ad52024ece16e1eba6f3e08e66a5a4e3f6dba97cda87737b0942baa51eff4d47"
+    }
+  ],
+  "script_sha256": "020035cd5523fc7f5ae5faaf44c1220013d0912209c21b9d15669dcb13ad6dba"
+}

@@ -1,0 +1,17 @@
+{
+  "case": "short",
+  "inputs": 0,
+  "comparisons": 0,
+  "maxima": {
+    "reference_max_abs_error": null,
+    "boundary_max_abs": null,
+    "singleton_max_abs": null,
+    "denominator_max_abs": null,
+    "window_ratio_max_abs": null,
+    "window_peak_hz_abs": null
+  },
+  "rows": [],
+  "profile_changes": false,
+  "quality_or_selection_changes": false,
+  "empty_reason": "no complete model/quality windows"
+}

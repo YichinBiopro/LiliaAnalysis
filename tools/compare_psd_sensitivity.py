@@ -78,11 +78,13 @@ def run(out):
                 for row in rows[-2:]:
                     row['window_ratio_max_abs'] = float(np.max(abs(pair[0]-pair[1])))
     f, p, singleton = measurements(2*np.sin(2*np.pi*25*np.arange(8)/200), 200, 1)
-    assert singleton['half_band'][2] == 0 and singleton['entropy_band'][2] > 0
+    if singleton['half_band'][2] != 0 or singleton['entropy_band'][2] <= 0:
+        raise AssertionError('Single-bin legacy policies changed')
     arrays['singleton_frequency'], arrays['singleton_density'] = f, p
     np.savez_compressed(out/'sensitivity.npz', **arrays)
-    summary = dict(controls=len(rows), singleton=singleton, rows=rows,
-        maxima={k: max(r[k] for r in rows) for k in ('reference_max_abs_error', 'boundary_max_abs',
+    summary = dict(controls=len(rows), singleton_controls=1, singleton=singleton, rows=rows,
+        maxima_scope='160 window controls plus the single-bin probe; window delta excludes singleton',
+        maxima={k: max(r.get(k, 0.) for r in rows+[singleton]) for k in ('reference_max_abs_error', 'boundary_max_abs',
             'singleton_max_abs', 'denominator_max_abs', 'window_ratio_max_abs')},
         scientific_ranking=False, profile_changes=False)
     write_json(out/'sensitivity.json', summary)
@@ -101,3 +103,67 @@ def run(out):
     fig.savefig(out/'sensitivity.png', dpi=120)
     plt.close(fig)
     return summary
+
+
+def run_captured(out, cases):
+    """Compare identical captured inputs; never concatenate across source gaps."""
+    from tools.freeze_method_profiles import write_json
+    import matplotlib.pyplot as plt
+    totals, all_rows = [], []
+    plots = {}
+    for case in cases:
+        folder = out/('local' if case['real'] else 'synthetic')/'actual'/case['name']
+        rows, spectra = [], {}
+        with np.load(folder/'numeric.npz', allow_pickle=False) as captured:
+            keys = sorted(k for k in captured.files if
+                          (k.startswith('jen_ch') and k.endswith('_values')) or
+                          (k.startswith('quality_welch_') and k.endswith('_input')))
+            for key in keys:
+                values = captured[key].astype(np.float64)
+                fs = 200 if key.startswith('jen_') else 500
+                pair = []
+                for seconds in (1, 4):
+                    f, p, row = measurements(values, fs, seconds)
+                    row.update(capture_key=key, fs=fs, samples=len(values), nominal_seconds=seconds)
+                    pair.append(row)
+                    spectra[f'{key}_{seconds}_frequency'] = f
+                    spectra[f'{key}_{seconds}_density'] = p
+                    if case['name'] == 'real_1' and key in (
+                            'jen_ch1_panel0_values', 'jen_ch1_panel1_values',
+                            'quality_welch_0_input', 'quality_welch_1_input'):
+                        plots[key, seconds] = (f, p)
+                delta = float(np.max(np.abs(np.array(pair[0]['ratios_by_denominator'][0])-
+                                           np.array(pair[1]['ratios_by_denominator'][0]))))
+                peak_delta = abs(pair[0]['peak_hz']-pair[1]['peak_hz'])
+                for row in pair:
+                    row.update(window_ratio_max_abs=delta, window_peak_hz_abs=peak_delta)
+                rows.extend(pair)
+        if not keys and case['model_expected'] != 'no_complete_window':
+            raise AssertionError('Missing captured sensitivity inputs')
+        maxima = {k: max((r[k] for r in rows), default=None) for k in
+                  ('reference_max_abs_error', 'boundary_max_abs', 'singleton_max_abs',
+                   'denominator_max_abs', 'window_ratio_max_abs', 'window_peak_hz_abs')}
+        summary = dict(case=case['name'], inputs=len(keys), comparisons=len(rows), maxima=maxima,
+                       rows=rows, profile_changes=False, quality_or_selection_changes=False,
+                       empty_reason='no complete model/quality windows' if not keys else None)
+        write_json(folder/'sensitivity.json', summary)
+        if spectra:
+            np.savez_compressed(folder/'sensitivity.npz', **spectra)
+        totals.append({k: summary[k] for k in ('case', 'inputs', 'comparisons', 'maxima', 'empty_reason')})
+        all_rows.extend(rows)
+    if plots:
+        fig, axes = plt.subplots(2, 2, figsize=(12, 7), constrained_layout=True)
+        for ax, key, label in zip(axes.flat,
+                ('jen_ch1_panel0_values', 'jen_ch1_panel1_values', 'quality_welch_0_input', 'quality_welch_1_input'),
+                ('Jenqwei Before ch1 S0', 'Jenqwei After ch1 S0', 'Quality raw ch1 sample 0', 'Quality filtered ch1 sample 0')):
+            for seconds in (1, 4):
+                f, p = plots[key, seconds]
+                ax.semilogy(f, np.maximum(p, 1e-15), label=f'{seconds}s Welch')
+            ax.set(title=label, xlim=(0, 50), xlabel='Hz', ylabel='Input-unit²/Hz')
+            ax.legend(fontsize=8)
+            ax.grid(alpha=.2)
+        fig.savefig(out/'local/real_sensitivity.png', dpi=120)
+        plt.close(fig)
+    return dict(cases=totals, inputs=sum(r['inputs'] for r in totals), comparisons=len(all_rows),
+                maxima={k: max(r[k] for r in all_rows) for k in totals[0]['maxima']},
+                scientific_ranking=False, profile_changes=False, quality_or_selection_changes=False)

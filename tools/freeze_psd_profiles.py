@@ -6,10 +6,18 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+from functools import partial
+from tempfile import TemporaryDirectory
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from tools.freeze_method_profiles import BASELINE, sha, write_json, verify_files, compare_arrays
+
+
+def bind_model(pipeline, model):
+    """Override the frozen wrapper's definition-time default, not its computation."""
+    model = Path(model).resolve(strict=True)
+    pipeline.apply_tflite_windowed = partial(pipeline.apply_tflite_windowed, tflite_path=str(model))
 
 
 def normalize(value, folder):
@@ -33,6 +41,17 @@ def check_coverage(case, arrays, metadata):
             raise AssertionError('Missing model/panels')
         if any(p['branch'] == 'after' and p['channel'] > 2 for p in metadata['panels']):
             raise AssertionError('Invented model channel')
+        retained = [s['segment_id'] for s in metadata['segments'] if s['status'] == 'retained']
+        expected_panels = {(sid, ch, branch) for sid in retained for ch in range(1, 5)
+                           for branch in (('before', 'after') if ch <= 2 else ('before',))}
+        found = [(p['segment_id'], p['channel'], p['branch']) for p in metadata['panels']]
+        if set(found) != expected_panels or len(found) != len(expected_panels):
+            raise AssertionError('Missing or duplicate segment/channel PSD panels')
+        if metadata['jen_display_count'] != len(found):
+            raise AssertionError('Missing rendered Jenqwei PSD lines')
+        if case['name'] == 'gap' and (retained != [1, 2] or
+                [s['segment_id'] for s in metadata['segments'] if s['status'] == 'excluded'] != [0, 3]):
+            raise AssertionError('Short segment exclusion changed')
     elif metadata['model_status'] != 'no_complete_window':
         raise AssertionError('Missing short-model outcome')
 
@@ -92,6 +111,15 @@ def worker(args):
     from lilia.jenqwei_io import write_signal_tables, load_signal_table
     from lilia.quality_check_io import load_quality_samples_table
     config = json.loads(args.config.read_text())
+    verify_files(config['inputs'], ROOT)
+    bind_model(jen, config['model'])
+    # Fail closed if either process accidentally imports the other source tree.
+    for name, module in list(sys.modules.items()):
+        filename = getattr(module, '__file__', None)
+        if filename and (name in ('analyze_jenqwei_pipeline', 'quality_check', 'plot_event_markers')
+                         or name.startswith('lilia.')):
+            if not Path(filename).resolve().is_relative_to(args.code_root.resolve()):
+                raise AssertionError('Wrong source tree imported: '+name)
     for case in config['cases']:
         folder = args.out/('local' if case['real'] else 'synthetic')/args.label/case['name']
         folder.mkdir(parents=True)
@@ -122,14 +150,37 @@ def worker(args):
                     metadata['panels'].append(dict(channel=ch+1, branch=panel['branch'],
                         segment_id=panel['segment_id'], samples=len(panel['values']),
                         frequency_bins=len(panel['psd']), stft_status=panel['stft_status']))
+            # Read actual plotted Line2D values in both processes, including ch3/4.
+            original_semilogy, original_save = Axes.semilogy, Figure.savefig
+            display_count = 0
+            for ch in range(4):
+                displayed = []
+                def capture_display(ax, *values, **kwargs):
+                    lines = original_semilogy(ax, *values, **kwargs)
+                    displayed.extend(lines)
+                    return lines
+                render = case['render'] and args.label == 'actual' and ch in (0, 2)
+                with TemporaryDirectory(prefix='lilia-m2-plot-') as scratch, \
+                     patch.object(Axes, 'semilogy', capture_display), \
+                     patch.object(Figure, 'savefig', original_save if render else lambda *a, **k: None):
+                    plot_result(result, folder if render else scratch, case['name'], ch=ch)
+                panels = [p for p in metadata['panels'] if p['channel'] == ch+1]
+                if len(displayed) != len(panels):
+                    raise AssertionError('Jenqwei rendered panel count changed')
+                for i, (line, panel) in enumerate(zip(displayed, panels)):
+                    prefix = f'jen_ch{ch+1}_panel{i}'
+                    if line.get_label() != f"{panel['branch'].title()} S{panel['segment_id']}":
+                        raise AssertionError('Jenqwei branch/segment display order changed')
+                    for key, values in [('frequency', line.get_xdata()), ('density', line.get_ydata())]:
+                        np.testing.assert_array_equal(values, arrays[prefix+'_display_'+key])
+                        arrays[prefix+'_display_'+key] = np.asarray(values).copy()
+                display_count += len(displayed)
+            metadata['jen_display_count'] = display_count
             write_signal_tables(folder, case['source'], result, config['model'], {})
             for branch in ('before', 'after'):
                 table = folder/(Path(case['source']).stem+'_'+branch+'.csv')
                 load_signal_table(table, case['source'], model_path=config['model'])
                 tables.append(dict(kind='jenqwei_signal', path=str(table), raw_csv=case['source'], model_path=config['model']))
-            if case['render'] and args.label == 'actual':
-                for ch in (0, 2):
-                    plot_result(result, folder, case['name'], ch=ch)
         # Capture real caller Welch arguments and actual semilogy line data.
         original_welch, original_semilogy, original_save = quality.welch, Axes.semilogy, Figure.savefig
         calls, displays = [], []
@@ -162,7 +213,8 @@ def worker(args):
             _, audit = load_quality_samples_table(table, case['source'])
             metadata['quality_audit'] = audit
             tables.append(dict(kind='quality_check_samples', path=str(table), raw_csv=case['source']))
-            assert len(displays) == len(calls)
+            if len(displays) != len(calls):
+                raise AssertionError('Missing quality PSD display lines')
             for i in range(len(calls)):
                 f = arrays[f'quality_welch_{i}_frequency']
                 for part in ('frequency', 'density'):
@@ -204,6 +256,7 @@ def main():
     config.update(frozen_source_hashes={}, current_source_hashes={},
         tools={n: sha(ROOT/n) for n in ('tools/freeze_psd_profiles.py', 'tools/compare_psd_sensitivity.py', 'tools/freeze_method_profiles.py')},
         python=sys.version, packages={p: importlib.metadata.version(p) for p in ('numpy', 'scipy', 'pandas', 'matplotlib', 'tensorflow')})
+    config['capture_inputs'] = [dict(path=c['source'], sha256=sha(c['source'])) for c in config['cases']]
     for name in names:
         path = frozen/name
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -230,15 +283,19 @@ def main():
         tables += found
         rows.append(dict(name=case['name'], arrays=count, readers=len(found),
             model_status=case['model_expected'], quality_status=case['quality_expected']))
-    from tools.compare_psd_sensitivity import run
+    from tools.compare_psd_sensitivity import run, run_captured
     sensitivity = run(out)
+    captured_sensitivity = run_captured(out, config['cases'])
     verify_files(config['inputs'], ROOT)
+    verify_files(config['capture_inputs'], ROOT)
+    verify_files([dict(path=n, sha256=d) for n, d in config['frozen_source_hashes'].items()], frozen)
     for name, digest in {**config['current_source_hashes'], **config['tools']}.items():
         if sha(ROOT/name) != digest:
             raise ValueError('Code changed during capture: '+name)
     write_json(out/'analysis.json', dict(cases=rows, arrays=sum(r['arrays'] for r in rows), reader_checks=len(tables),
         max_abs_error=0., rtol=0., atol=0., metadata_equal=True, sensitivity_controls=sensitivity['controls'],
         sensitivity_maxima=sensitivity['maxima'], profile_changes=False))
+    write_json(out/'sensitivity_capture_summary.json', captured_sensitivity)
     def relative(row):
         return {k: str(Path(v).relative_to(out)) if k in ('path', 'raw_csv', 'model_path', 'actual', 'expected')
                 and Path(v).is_relative_to(out) else v for k, v in row.items()}

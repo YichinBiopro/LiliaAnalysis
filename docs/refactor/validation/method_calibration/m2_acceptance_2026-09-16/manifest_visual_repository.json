@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "../m2_final_2026-09-16/sensitivity.png",
+      "sha256": "9539f3f4b52555500a39260d6e86b6c6a03befd13fc6cdfcc0a3c0a99a39f4e9"
+    },
+    {
+      "path": "../m2_final_2026-09-16/synthetic/actual/continuous/M2_continuous_sample_quality.png",
+      "sha256": "fa702a6fe2f6d006b18c9d6533abc8464b4ddd7c27f082210b25fa3811e59316"
+    },
+    {
+      "path": "../m2_final_2026-09-16/synthetic/actual/continuous/continuous_ch1_pipeline_comparison.png",
+      "sha256": "d1864f9bcb26c6f2b9a965ff24c339efbf58183df6b42f10cb2e2691278037c6"
+    },
+    {
+      "path": "../m2_final_2026-09-16/synthetic/actual/continuous/continuous_ch3_pipeline_comparison.png",
+      "sha256": "1e922eb93fcf28c690dcf7ce62628653019172e82e7ae12a512a04ac844272cd"
+    },
+    {
+      "path": "../m2_final_2026-09-16/synthetic/actual/gap/gap_ch1_pipeline_comparison.png",
+      "sha256": "67bee8fbf991db5a4b9aaf1854406b6cc215e37527271fed3932343959c19254"
+    },
+    {
+      "path": "../m2_final_2026-09-16/synthetic/actual/gap/gap_ch3_pipeline_comparison.png",
+      "sha256": "85f23cd3b5129a157accb5c6479956754f4ec15da6aa2fc65edf0b404e9ebb26"
+    },
+    {
+      "path": "visual_review.json",
+      "sha256": "620ebcdb4f9b95f1de8556dfe2b116c4fc31c119f7b44eda66c85e94bf079c03"
+    },
+    {
+      "path": "scope.json",
+      "sha256": "ea5d12f7c36dbafc4bf3315c519f9270ce73a231a302128e0ef466086b4067a8"
+    },
+    {
+      "path": "check_captured_psd.py.txt",
+      "sha256": "020035cd5523fc7f5ae5faaf44c1220013d0912209c21b9d15669dcb13ad6dba"
+    },
+    {
+      "path": "captured_psd_check.json",
+      "sha256": "5630c7759f3238071c5509c77c91aa61cf29492fe07e21ed93a5150a988c2cec"
+    },
+    {
+      "path": "captured_psd_check.log",
+      "sha256": "bef9e332402d321dd384b3bb099f1269a054d7b7d3beb5201160f194fdd80117"
+    }
+  ]
+}

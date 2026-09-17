@@ -4,3 +4,5 @@ freeze_2026-09-16/
 checks_2026-09-16/
 # Successful development subset, superseded by M1 full precision and real TYY run.
 m1_dev_2026-09-16/
+# Model-path development capture; superseded by M2 final display/sensitivity validation.
+m2_model_binding_2026-09-16/

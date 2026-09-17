@@ -1,0 +1,67 @@
+{
+  "status": "reviewed",
+  "review_method": "Assistant inspected the ten original PNG files using view_image; no automated inference of visual acceptance.",
+  "figures": [
+    {
+      "path": "sensitivity.png",
+      "sha256": "9539f3f4b52555500a39260d6e86b6c6a03befd13fc6cdfcc0a3c0a99a39f4e9",
+      "result": "pass",
+      "observations": "8 Hz boundary tone and mixture: PSD resolution/height differences visible; half-open three-band ratios and both windows labelled; no ranking of methods."
+    },
+    {
+      "path": "local/real_sensitivity.png",
+      "sha256": "a58dc6efce3548508bc6d0645270a2d6806af1ce441086eeade0194bbd7013bb",
+      "result": "pass",
+      "observations": "Talk ch1: Before/After and quality raw/filtered remain separate. Both window lengths visible. Full-array extrema affect y limits beyond the displayed 0–50 Hz range; the floor is plotting-only."
+    },
+    {
+      "path": "synthetic/actual/gap/gap_ch1_pipeline_comparison.png",
+      "sha256": "67bee8fbf991db5a4b9aaf1854406b6cc215e37527271fed3932343959c19254",
+      "result": "pass",
+      "observations": "S1/S2 PSD lines remain separate. Gaps blank; S0/S3 excluded; After tail shown; Before and After preserve their own time coordinates."
+    },
+    {
+      "path": "synthetic/actual/gap/gap_ch3_pipeline_comparison.png",
+      "sha256": "85f23cd3b5129a157accb5c6479956754f4ec15da6aa2fc65edf0b404e9ebb26",
+      "result": "pass",
+      "observations": "Two Before segment spectra; no invented After ch3, explicit missing-model label; gap and excluded spans visible."
+    },
+    {
+      "path": "local/actual/real_1/real_1_ch1_pipeline_comparison.png",
+      "sha256": "0ebe633e2df81ac8a30d733d080269efe800541b6006b487c77d0c3688bf1d2c",
+      "result": "pass",
+      "observations": "Talk Before/After ch1 traces and two density spectra, elapsed time and source-segment legend readable."
+    },
+    {
+      "path": "local/actual/real_1/real_1_ch3_pipeline_comparison.png",
+      "sha256": "9e6c187631b41a0d5b86608487167edd6635c104788e1263e8615cc41f6e3ac5",
+      "result": "pass",
+      "observations": "Talk real source ch3 Before spectrum; After explicitly unavailable."
+    },
+    {
+      "path": "synthetic/actual/continuous/continuous_ch1_pipeline_comparison.png",
+      "sha256": "d1864f9bcb26c6f2b9a965ff24c339efbf58183df6b42f10cb2e2691278037c6",
+      "result": "pass",
+      "observations": "Continuous ch1 peak around 8 Hz; model After adds spectral features which are preserved by exact old/new comparison, not interpreted as model improvement."
+    },
+    {
+      "path": "synthetic/actual/continuous/continuous_ch3_pipeline_comparison.png",
+      "sha256": "1e922eb93fcf28c690dcf7ce62628653019172e82e7ae12a512a04ac844272cd",
+      "result": "pass",
+      "observations": "Continuous ch3 peak around 14 Hz; only Before and explicit absent After."
+    },
+    {
+      "path": "local/actual/real_1/M2_real_1_sample_quality.png",
+      "sha256": "527121659666dc9182b27c7073d5ef59a98813bf065d1a103673004e4b4998b8",
+      "result": "pass",
+      "observations": "Two 30 s samples, four raw/filtered PSD panels each, stage labels and quality scores visible; low quality is displayed rather than silently filtered out."
+    },
+    {
+      "path": "synthetic/actual/continuous/M2_continuous_sample_quality.png",
+      "sha256": "fa702a6fe2f6d006b18c9d6533abc8464b4ddd7c27f082210b25fa3811e59316",
+      "result": "pass",
+      "observations": "Two disjoint samples, channel-specific tone peaks, raw/filtered lines and quality threshold visible. Saturated qEEG scores retain legacy behavior."
+    }
+  ],
+  "scope": "PSD rendering, branch/channel attribution, gaps/tails/exclusions, quality stages and sensitivity labels; no scientific efficacy claims."
+}

@@ -1,11 +1,11 @@
 # 重構短進度
 
-更新：2026-09-16。接手先讀本檔，再只讀當前任務；歷史細節按需查閱。
+更新：2026-09-17。接手先讀本檔，再只讀當前任務；歷史細節按需查閱。
 
 - 已完成：第十八階段品質 scorer 全部呼叫端與整階段收斂驗收；詳見 [Stage18 完整驗收](docs/refactor/STAGE18_ACCEPTANCE_REPORT_2026-09-15.md)。
-- 本輪：方法校準 M1 baseline 完整入口完成；新增 meditation／marker／legacy sampler／entropy-state、多事件與鍵盤／protocol 案例。目視修正 custom marker 窗口間缺口連線，數值與政策不變；詳見 [M1 增量](docs/refactor/METHOD_CALIBRATION_M1_REPORT_2026-09-16.md)。
-- 驗證：357 tests／0 skipped、197 Python／Pyflakes／bundle／diff；19 案例、585 陣列／metadata 精確一致、20 reader；繪圖修正再驗 3 案例／72 陣列／3 reader；15 張圖目視（含原缺陷與修正後圖）。
-- 下一步：[方法校準 M2](docs/refactor/TASKS.md#method-calibration)：補 P-jenqwei／P-quality-plot PSD 基準並定比較契約；再接 Goertzel、MI，最後架構／F19、批次／原子發佈及整體驗收。
+- 本輪：方法校準 M2 PSD 基準與同輸入敏感度比較完成；修正驗證工具的凍結模型路徑，產品方法／預設／品質／索引不變；詳見 [M2 增量](docs/refactor/METHOD_CALIBRATION_M2_REPORT_2026-09-17.md)。
+- 驗證：364 tests／0 skipped、200 Python／Pyflakes／bundle／diff；8 案例／938 陣列與 metadata 精確一致、19 reader；160 控制＋1 單頻點探針、128 捕獲輸入／256 次窗長比較、10 圖目視。本機 394／repository 151 項證據通過；既有檢查指紋收尾匹配。
+- 下一步：[方法校準 M3](docs/refactor/TASKS.md#method-calibration)：Goertzel 分段平滑獨立比較，再評估 normalization／濾波／單位；後接 M4 MI、架構／F19、批次／原子發佈與整體驗收。
 
 ## 必須保留
 
@@ -19,11 +19,12 @@
 - Jenqwei 顯示 ch3/4 僅 Before，After 明示不存在；PSD 分別畫各來源段、不串接或平均。分段 main 可接受缺口，舊 `run_pipeline` guard 保留。
 - 資料集每來源段先等分再裁窗口，不是 train/test split、不執行模型；保留連續數值／舊欄位，新增真實窗口數、`fs_out` 及 raw／resampled 索引；短段排除需 `--allow-short-drop`，全排除仍失敗。
 - 不覆寫原始錄製、模型或舊圖。bundle 改主版後執行 `python build_bundles.py`，再 `--check`。
-- Git：核心 `a0a7ba6`、raw／TFLite 程式 `40d2a23` 與 73 個舊產物補提交 `0dd9ff3` 保留；R1–R6 的程式、測試、文件及最終驗收證據整理於本分支。重複開發期 run 與正式錄製副本不納入 Git；局部 ignore 只放行必要產物，R6 可提交／正式來源核對範圍分開記錄。
+- Git：分支 `spectral-entropy-flow-rework`；前輪 `8dfbf00` 已與本機 `origin` 追蹤分支一致（reflog 為 push），M2 增量留工作區未提交／推送。歷史核心與驗收產物保留；重複開發 run、正式來源及真實衍生副本依現有 ignore 留本機，完整／repository 證據範圍分開。
 
 ## 驗證入口
 
-- 方法校準 M1：[數值基準](docs/refactor/validation/method_calibration/m1_final_2026-09-16/analysis.json)／[marker 修正重驗](docs/refactor/validation/method_calibration/m1_marker_gap_2026-09-16/analysis.json)／[最新完整檢查](docs/refactor/validation/method_calibration/m1_final_checks_2026-09-16/summary.json)／[歷史與當前證據範圍](docs/refactor/validation/method_calibration/m1_acceptance_2026-09-16/scope.json)。真實衍生產物留 ignored `local/`。
+- 方法校準 M2：[數值](docs/refactor/validation/method_calibration/m2_final_2026-09-16/analysis.json)／[敏感度](docs/refactor/validation/method_calibration/m2_final_2026-09-16/sensitivity_capture_summary.json)／[最新完整檢查](docs/refactor/validation/method_calibration/m2_final_checks_2026-09-16/summary.json)／[驗收範圍](docs/refactor/validation/method_calibration/m2_acceptance_2026-09-16/scope.json)。run 日期保留 09-16，收尾 09-17；真實產物留 ignored `local/`。
+- 方法校準 M1：[入口基準與 marker 修正](docs/refactor/METHOD_CALIBRATION_M1_REPORT_2026-09-16.md)；當時 19 案例／585 陣列、20 reader，修正子集 72 陣列；原證據保留。
 - 方法校準 M0：[核心基準增量](docs/refactor/METHOD_CALIBRATION_BASELINE_REPORT_2026-09-16.md) 與 [profiles／涵蓋界線](docs/refactor/METHOD_CALIBRATION_PROFILES.md)；當時 1,255 陣列精確一致，保留原證據，不當成本輪重跑。
 
 - Stage18：[當時完整檢查](docs/refactor/validation/stage18/direct_quality_helper_final_checks/summary.json) 348 tests／0 skipped、192 Python；[舊新數值](docs/refactor/validation/stage18/direct_quality_helper_visual_final/analysis.json)／本機 78 項來源證據／[可提交 59 項證據](docs/refactor/validation/stage18/direct_quality_helper_visual_final/repository_evidence_release/summary.json)／[五圖目視](docs/refactor/validation/stage18/direct_quality_helper_visual_final/visual_review.json)。

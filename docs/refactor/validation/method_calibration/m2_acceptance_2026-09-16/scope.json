@@ -1,0 +1,27 @@
+{
+  "completed": "2026-09-17",
+  "capture_directory_date": "2026-09-16",
+  "baseline_commit": "aa0df5f4ebaefddae1fee8c9e50e95323e777aed",
+  "cases": 8,
+  "real_cases": 5,
+  "synthetic_cases": 3,
+  "exact_arrays": 938,
+  "source_readers": 19,
+  "local_evidence_checks": 394,
+  "repository_evidence_checks": 151,
+  "synthetic_controls": 160,
+  "singleton_probes": 1,
+  "captured_sensitivity_inputs": 128,
+  "captured_sensitivity_comparisons": 256,
+  "visual_figures": 10,
+  "profile_changes": false,
+  "quality_or_index_policy_changes": false,
+  "limits": [
+    "All-short model case has an expected no-complete-window error and no product PSD.",
+    "Quality samples skip move-head (29984 samples), synthetic gap and short cases under the unchanged two-30-second policy.",
+    "Repository evidence omits real derivatives and model-dependent Jenqwei table readers; local evidence checks all 19 readers. Synthetic old/new numeric NPZ comparisons remain in repository evidence.",
+    "Full-spectrum peak differences are not restricted to displayed 0–50 Hz or a physiological band.",
+    "Original failed m2_capture run is retained; model-binding development run is ignored and superseded.",
+    "No EEG behavioral or clinical efficacy claim; no new profile/default introduced."
+  ]
+}

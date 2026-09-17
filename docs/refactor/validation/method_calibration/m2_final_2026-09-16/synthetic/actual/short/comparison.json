@@ -1,0 +1,9 @@
+{
+  "panels": [],
+  "model_status": "no_complete_window",
+  "model_error": "No source segment contains a complete TFLite window after resampling",
+  "quality_status": "insufficient_samples",
+  "welch_calls": [],
+  "display_labels": [],
+  "tables": {}
+}

@@ -1,0 +1,47 @@
+"""Run with Python: CAPTURE_DIRECTORY NEW_RESULT_JSON; never rewrite evidence."""
+import hashlib
+import json
+from pathlib import Path
+import sys
+
+import numpy as np
+
+capture, target = map(Path, sys.argv[1:])
+manifest = json.loads((capture/'manifest_local.json').read_text())
+expected = {str((capture/r['path']).resolve()): r['sha256'] for r in manifest['files']}
+inputs, rows = [], []
+
+
+def verify(path):
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    if digest != expected[str(path.resolve())]:
+        raise ValueError('Saved capture hash changed: '+str(path))
+    inputs.append(dict(path=str(path.resolve()), sha256=digest))
+
+
+verify(capture/'config.json')
+for case in json.loads((capture/'config.json').read_text())['cases']:
+    folder = capture/('local' if case['real'] else 'synthetic')/'actual'/case['name']
+    if case['model_expected'] == 'no_complete_window':
+        continue
+    for name in ('numeric.npz', 'sensitivity.npz'):
+        verify(folder/name)
+    with np.load(folder/'numeric.npz', allow_pickle=False) as original, \
+         np.load(folder/'sensitivity.npz', allow_pickle=False) as sensitivity:
+        keys = [k for k in original.files if (k.startswith('jen_ch') and k.endswith('_values')) or
+                (k.startswith('quality_welch_') and k.endswith('_input'))]
+        if not keys:
+            raise AssertionError('No input spectra')
+        for key in keys:
+            prefix = key.rsplit('_', 1)[0]
+            frequency = prefix+('_psd_frequency' if key.startswith('jen_') else '_frequency')
+            density = prefix+('_psd' if key.startswith('jen_') else '_density')
+            np.testing.assert_array_equal(original[frequency], sensitivity[key+'_4_frequency'])
+            np.testing.assert_array_equal(original[density], sensitivity[key+'_4_density'])
+        rows.append(dict(case=case['name'], spectra=len(keys), max_abs_error=0.))
+with target.open('x') as handle:
+    json.dump(dict(passed=True, cases=rows, spectra=sum(r['spectra'] for r in rows),
+                   inputs=inputs, script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()),
+              handle, indent=2, allow_nan=False)
+    handle.write('\n')
+print(f'PASS {sum(r["spectra"] for r in rows)} captured 4s spectra exactly match sensitivity 4s spectra')
