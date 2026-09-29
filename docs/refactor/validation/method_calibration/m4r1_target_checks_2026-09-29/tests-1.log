@@ -1,0 +1,11 @@
+test_complete_null_replay_detects_missing_or_corrupted_null (test_mi_radius_profiles_regression.RadiusProfileTests) ... ok
+test_invalid_inputs_and_null_boundaries (test_mi_radius_profiles_regression.RadiusProfileTests) ... ok
+test_plot_uses_actual_run_context_and_leaves_curves_unchanged (test_mi_radius_profiles_regression.RadiusProfileTests) ... ok
+test_search_algorithm_boundary_counterexample_is_preserved (test_mi_radius_profiles_regression.RadiusProfileTests) ... ok
+test_small_samples_ties_singletons_and_k_caps (test_mi_radius_profiles_regression.RadiusProfileTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.085s
+
+OK
+Saved: /tmp/tmpkc45lps7/plot.png

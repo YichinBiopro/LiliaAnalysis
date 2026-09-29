@@ -1,5 +1,5 @@
 """
-Joint band-power × event mutual-information analysis (Σ vs true Joint-KSG).
+Joint amplitude-envelope × event mutual-information analysis (Σ vs true Joint-KSG).
 
 Two subcommands, sharing the Ross-2014 mixed KSG estimator that lives in
 ``spectral_entropy``:
@@ -29,7 +29,7 @@ import matplotlib.pyplot as plt
 
 from lilia.io import load_merged_csv
 from spectral_entropy import (
-    DEFAULT_FS, run_band_event_mi_pipeline,
+    DEFAULT_FS, run_band_event_mi_pipeline, event_mi_provenance,
 )
 from plot_event_markers import EVENTS, hhmm_to_us
 
@@ -151,16 +151,17 @@ def plot_subject(df: pd.DataFrame, label: str, outpath: str) -> None:
                 if np.isfinite(p) and p < 0.05 and np.isfinite(j):
                     ax.text(xpos[xi], j, "*", ha="center", va="bottom",
                             fontsize=12, color=palette.get(ch, None))
-        ax.set_title(f"Window = {int(w)} s", fontsize=11)
+        ax.set_title(f"Pre/post half-window = {w:g} s", fontsize=11)
         ax.set_ylabel("MI (bits)")
         ax.grid(True, axis="y", alpha=0.3)
         ax.set_xticks(x)
         ax.set_xticklabels(events, rotation=40, ha="right", fontsize=8)
     axes[0].legend(fontsize=8, ncol=2)
-    fig.suptitle(f"{label} — per-event Joint band-power MI  I(θ,α,β ; pre/post)\n"
+    fig.suptitle(f"{label} — per-event amplitude-envelope MI  I(θ,α,β ; pre/post)\n"
                  "bars = true Joint-KSG · ticks = Σ (sum) · * = surrogate p<.05",
                  fontsize=13)
-    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    fig.text(0.02, 0.015, event_mi_provenance(df), fontsize=8, va='bottom')
+    fig.tight_layout(rect=(0, 0.09, 1, 0.95))
     fig.savefig(outpath, dpi=150)
     fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
@@ -193,10 +194,11 @@ def plot_cross_subject(df: pd.DataFrame, outpath: str) -> None:
         ax.set_xticklabels(events, rotation=40, ha="right", fontsize=8)
         ax.grid(True, alpha=0.3)
     axes[0].set_ylabel("Joint-KSG  I(θ,α,β ; event)  [bits]")
-    axes[-1].legend(title="Window", fontsize=8)
-    fig.suptitle("Per-event Joint band-power MI, averaged across 5 subjects "
+    axes[-1].legend(title="Pre/post half-window", fontsize=8)
+    fig.suptitle("Per-event amplitude-envelope MI, averaged across subjects "
                  "(shaded = ±1σ)", fontsize=12)
-    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    fig.text(0.02, 0.015, event_mi_provenance(df), fontsize=8, va='bottom')
+    fig.tight_layout(rect=(0, 0.14, 1, 0.95))
     fig.savefig(outpath, dpi=150)
     fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
@@ -292,15 +294,16 @@ def plot_gap(df: pd.DataFrame, outpath: str) -> None:
                 label="across-subject mean", zorder=5)
         ax.axhline(0.0, color="0.5", lw=1.0, ls=":")
         ax.set_title(f"{ch}: redundancy gap  Σ − Joint")
-        ax.set_xlabel("Window Size (s)")
+        ax.set_xlabel("Pre/post half-window duration (s)")
         ax.set_xticks(sorted(df["Window_Size"].unique()))
         ax.grid(True, alpha=0.3)
     axes[0].set_ylabel("Gap  (Σ − Joint-KSG)  [bits]")
     axes[-1].legend(fontsize=8, title="Subject")
-    fig.suptitle("Shared/redundant band information across pre→post event transition\n"
+    fig.suptitle("Shared/redundant amplitude-envelope information across pre→post event transition\n"
                  "positive gap = information the summation Σ over-counts",
                  fontsize=12)
-    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    fig.text(0.02, 0.015, event_mi_provenance(df), fontsize=8, va='bottom')
+    fig.tight_layout(rect=(0, 0.14, 1, 0.95))
     fig.savefig(outpath, dpi=150)
     fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)

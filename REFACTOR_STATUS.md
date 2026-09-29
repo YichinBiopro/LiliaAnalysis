@@ -1,11 +1,11 @@
 # 重構短進度
 
-更新：2026-09-17。接手先讀本檔，再只讀當前任務；歷史細節按需查閱。
+更新：2026-09-29。接手先讀本檔，再只讀當前任務；歷史細節按需查閱。
 
 - 已完成：第十八階段品質 scorer 全部呼叫端與整階段收斂驗收；詳見 [Stage18 完整驗收](docs/refactor/STAGE18_ACCEPTANCE_REPORT_2026-09-15.md)。
-- 本輪：方法校準 M2 PSD 基準與同輸入敏感度比較完成；修正驗證工具的凍結模型路徑，產品方法／預設／品質／索引不變；詳見 [M2 增量](docs/refactor/METHOD_CALIBRATION_M2_REPORT_2026-09-17.md)。
-- 驗證：364 tests／0 skipped、200 Python／Pyflakes／bundle／diff；8 案例／938 陣列與 metadata 精確一致、19 reader；160 控制＋1 單頻點探針、128 捕獲輸入／256 次窗長比較、10 圖目視。本機 394／repository 151 項證據通過；既有檢查指紋收尾匹配。
-- 下一步：[方法校準 M3](docs/refactor/TASKS.md#method-calibration)：Goertzel 分段平滑獨立比較，再評估 normalization／濾波／單位；後接 M4 MI、架構／F19、批次／原子發佈與整體驗收。
+- 本輪：M4-R1 完成；`ross_euclidean_direct_v1` 僅校準，legacy 仍是產品預設。事件圖明示振幅包絡及當次設定；詳見 [增量報告](docs/refactor/METHOD_CALIBRATION_M4_R1_REPORT_2026-09-29.md)。
+- 驗證：384 tests／0 skipped、211 Python／Pyflakes／bundle／diff；18入口＋1控制套件／5,884陣列精確一致、48 reader／8 event來源重載。124有效呼叫／20,801 null 對獨立幾何參考最大誤差0；legacy 有7 observed及1,026 null差異，含5組 observed相同但null不同。九張產品／context圖與五張半徑圖目視；本機570／repository293、半徑23／17、圖形28項證據通過。
+- 下一步：[架構與 F19](docs/refactor/TASKS.md#architecture-f19)：先盤點大入口／私有繪圖函式依賴及 deprecated 參數相容界線；後接批次／原子發佈與整體驗收。
 
 ## 必須保留
 
@@ -19,10 +19,14 @@
 - Jenqwei 顯示 ch3/4 僅 Before，After 明示不存在；PSD 分別畫各來源段、不串接或平均。分段 main 可接受缺口，舊 `run_pipeline` guard 保留。
 - 資料集每來源段先等分再裁窗口，不是 train/test split、不執行模型；保留連續數值／舊欄位，新增真實窗口數、`fs_out` 及 raw／resampled 索引；短段排除需 `--allow-short-drop`，全排除仍失敗。
 - 不覆寫原始錄製、模型或舊圖。bundle 改主版後執行 `python build_bundles.py`，再 `--check`。
-- Git：分支 `spectral-entropy-flow-rework`；前輪 `8dfbf00` 已與本機 `origin` 追蹤分支一致（reflog 為 push），M2 增量留工作區未提交／推送。歷史核心與驗收產物保留；重複開發 run、正式來源及真實衍生副本依現有 ignore 留本機，完整／repository 證據範圍分開。
+- Git：分支 `spectral-entropy-flow-rework`；M2 已提交 `6eef079`，前輪以 `git ls-remote` 確認遠端同版本。M3／M4／M4-R1 增量隨本輪提交與推送；實際遠端狀態以 Git 為準。歷史核心與驗收產物保留；重複開發 run、正式來源及真實衍生副本依現有 ignore 留本機，完整／repository 證據範圍分開。
 
 ## 驗證入口
 
+- 方法校準 M4-R1：[報告](docs/refactor/METHOD_CALIBRATION_M4_R1_REPORT_2026-09-29.md)／[完整檢查](docs/refactor/validation/method_calibration/m4r1_full_checks_2026-09-29/summary.json)／[入口數值](docs/refactor/validation/method_calibration/m4r1_verified_release_2026-09-29/analysis.json)／[完整null](docs/refactor/validation/method_calibration/m4r1_radius_2026-09-29/analysis.json)／[圖形](docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/analysis.json)。legacy差異保留且明示，不作候選已採用的證據。
+
+- 方法校準 M4：[數值](docs/refactor/validation/method_calibration/m4_release_2026-09-22/analysis.json)／[最新完整檢查](docs/refactor/validation/method_calibration/m4_final_checks_2026-09-22/summary.json)／[KSG差異](docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/findings.json)／[範圍](docs/refactor/validation/method_calibration/m4_acceptance_2026-09-22/scope.json)。7組幾何差異最大0.20037 bits，未採新估計器；原圖標示限制及補充圖見報告。
+- 方法校準 M3：[數值與比較](docs/refactor/validation/method_calibration/m3_release_2026-09-17/analysis.json)／[最新完整檢查](docs/refactor/validation/method_calibration/m3_release_checks_2026-09-17/summary.json)／[驗收範圍](docs/refactor/validation/method_calibration/m3_acceptance_2026-09-17/scope.json)。分段平滑與 normalization 未採入產品；真實產物留 ignored `local/`。
 - 方法校準 M2：[數值](docs/refactor/validation/method_calibration/m2_final_2026-09-16/analysis.json)／[敏感度](docs/refactor/validation/method_calibration/m2_final_2026-09-16/sensitivity_capture_summary.json)／[最新完整檢查](docs/refactor/validation/method_calibration/m2_final_checks_2026-09-16/summary.json)／[驗收範圍](docs/refactor/validation/method_calibration/m2_acceptance_2026-09-16/scope.json)。run 日期保留 09-16，收尾 09-17；真實產物留 ignored `local/`。
 - 方法校準 M1：[入口基準與 marker 修正](docs/refactor/METHOD_CALIBRATION_M1_REPORT_2026-09-16.md)；當時 19 案例／585 陣列、20 reader，修正子集 72 陣列；原證據保留。
 - 方法校準 M0：[核心基準增量](docs/refactor/METHOD_CALIBRATION_BASELINE_REPORT_2026-09-16.md) 與 [profiles／涵蓋界線](docs/refactor/METHOD_CALIBRATION_PROFILES.md)；當時 1,255 陣列精確一致，保留原證據，不當成本輪重跑。

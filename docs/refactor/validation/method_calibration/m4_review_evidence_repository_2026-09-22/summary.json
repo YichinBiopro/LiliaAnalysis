@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-22T06:00:19.425831+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/findings.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_continuous/event_review.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_continuous/radius_comparison.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_continuous/radius_comparison.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_gap/event_review.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_gap/radius_comparison.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_gap/radius_comparison.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/manifest_local.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/manifest_repository.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tools/review_mi_calibration.py",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/manifest_local.json": "4fd6f76a4b450ab41558817ca602831662e409776f4734688561826f3841c0ed",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/manifest_repository.json": "333b00bf9bf9d222b59789050b0ffcb5c437951f4cddaa8336e5857e8e700678",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/.gitignore": "587e0ce1d4c3eb37947fe68d1e1f4da42ebc43dcaebe1c28e34b248d15fd87f2",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/findings.json": "f96b0b9b3e078655207336e8495feb2afad4f777b953837f607484c36e06482b",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/manifest_repository.json": "c1e9d01433f3d0986e181025f71b75eeeb323221d6cb0747470401ada07ecb35",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_continuous/event_review.png": "0490a2776615c1c3aae38367266f8f431846e3baacb389a009b1a933f9f94009",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_continuous/radius_comparison.npz": "2791ac6171c85212bf066dbade5c6edc340d925118089daf9289c147d2ef1ffc",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_continuous/radius_comparison.png": "44b657f4f9d1bb3710a1de75d12107f0510c84872084235ebe58c45a52d88e54",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_gap/event_review.png": "17d8b32cbdbefacace23797da4d466da7cde413b2df9fd03190ea3cdd2cda17d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_gap/radius_comparison.npz": "c60b1805fa21a957214dd115b57e8b7869034e199c57021209febf7f898e9af1",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_gap/radius_comparison.png": "8692a674cb8668be4228777b4f90996a4b8bcb69e0f7d612fa787a1cc4231ccf",
+    "/home/bps-yichin/lilia_analysis/tools/review_mi_calibration.py": "17cef32522f2f164fe418f0d58c8fd0811ba43734be18ce4a1c14d9cb68cdac6"
+  },
+  "log": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_evidence_repository_2026-09-22/evidence.log"
+}

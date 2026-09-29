@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "587e0ce1d4c3eb37947fe68d1e1f4da42ebc43dcaebe1c28e34b248d15fd87f2"
+    },
+    {
+      "path": "findings.json",
+      "sha256": "f96b0b9b3e078655207336e8495feb2afad4f777b953837f607484c36e06482b"
+    },
+    {
+      "path": "local/event_move_head/event_review.png",
+      "sha256": "4a8176405393db66e5a8b1422e50e5ed895aef4a78350281740fd96bdc70e9d8"
+    },
+    {
+      "path": "local/event_move_head/radius_comparison.npz",
+      "sha256": "1d45b2d2c04f4e32165705671df5a536e16353084b6770888146b67d566993e8"
+    },
+    {
+      "path": "local/event_move_head/radius_comparison.png",
+      "sha256": "06d44f8d2e3627c3b547f1ffb9626ef2656a81701429b163fe4d22abea0c7326"
+    },
+    {
+      "path": "local/event_talk/event_review.png",
+      "sha256": "b16e9e8629ae4decefe6331ac193b1c6d1716766f2b63d650f6347e4b16153cc"
+    },
+    {
+      "path": "local/event_talk/radius_comparison.npz",
+      "sha256": "641d091372604da8c83628bdbbbfb3dcc34ecdd3325afa8b62e9b2b47ba0c75e"
+    },
+    {
+      "path": "local/event_talk/radius_comparison.png",
+      "sha256": "341cae9234e0347b090b3afe3cce7ccfda9ace47935f6b86041b12ccd39502ad"
+    },
+    {
+      "path": "synthetic/event_continuous/event_review.png",
+      "sha256": "0490a2776615c1c3aae38367266f8f431846e3baacb389a009b1a933f9f94009"
+    },
+    {
+      "path": "synthetic/event_continuous/radius_comparison.npz",
+      "sha256": "2791ac6171c85212bf066dbade5c6edc340d925118089daf9289c147d2ef1ffc"
+    },
+    {
+      "path": "synthetic/event_continuous/radius_comparison.png",
+      "sha256": "44b657f4f9d1bb3710a1de75d12107f0510c84872084235ebe58c45a52d88e54"
+    },
+    {
+      "path": "synthetic/event_gap/event_review.png",
+      "sha256": "17d8b32cbdbefacace23797da4d466da7cde413b2df9fd03190ea3cdd2cda17d"
+    },
+    {
+      "path": "synthetic/event_gap/radius_comparison.npz",
+      "sha256": "c60b1805fa21a957214dd115b57e8b7869034e199c57021209febf7f898e9af1"
+    },
+    {
+      "path": "synthetic/event_gap/radius_comparison.png",
+      "sha256": "8692a674cb8668be4228777b4f90996a4b8bcb69e0f7d612fa787a1cc4231ccf"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/manifest_local.json",
+      "sha256": "4fd6f76a4b450ab41558817ca602831662e409776f4734688561826f3841c0ed"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/manifest_repository.json",
+      "sha256": "333b00bf9bf9d222b59789050b0ffcb5c437951f4cddaa8336e5857e8e700678"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tools/review_mi_calibration.py",
+      "sha256": "17cef32522f2f164fe418f0d58c8fd0811ba43734be18ce4a1c14d9cb68cdac6"
+    }
+  ]
+}

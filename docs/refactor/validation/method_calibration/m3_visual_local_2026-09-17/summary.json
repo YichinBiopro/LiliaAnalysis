@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-17T02:40:45.378259+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/controls.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/local/actual/real_1_ch1_5s/plot.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/local/actual/real_1_ch1_5s/plot_linear.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/local/actual/real_1_ch1_5s/smoothing_comparison.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/local/actual/real_gap/plot.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/local/actual/real_gap/plot_linear.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/local/actual/real_gap/smoothing_comparison.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/gap/plot.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/gap/plot_linear.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/gap/smoothing_comparison.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/gap_quality_witness/plot.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/gap_quality_witness/plot_linear.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/gap_quality_witness/smoothing_comparison.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/short/plot.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/short/plot_linear.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/short/smoothing_comparison.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_acceptance_2026-09-17/visual_review.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_acceptance_2026-09-17/scope.json",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_acceptance_2026-09-17/manifest_visual_local.json": "79972157ffaab68ad9424ce58abce3c0732e1f3b843932bccce3209a8286b939",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_acceptance_2026-09-17/scope.json": "fe5a398cd41210005bd09951093eddea3c9fb9b0fe03cffec64097602ee949b4",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_acceptance_2026-09-17/visual_review.json": "664d3e9e766686f2dba79edc8182eaa495c42cf12bd28ceee4b8e5b237bab422",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/controls.png": "083e954f9ea8570c3a574fa722aa0aff0d5b06985410c8f861d9911961db2d1e",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/local/actual/real_1_ch1_5s/plot.png": "4c6e5ca50444baca0f340e705d36c46439c794bab417b73180ca3344c305bece",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/local/actual/real_1_ch1_5s/plot_linear.png": "f6d3a0595f91488a698fbaf777fa0b49014b2caba0e3e6c87c7ca58fbb50c935",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/local/actual/real_1_ch1_5s/smoothing_comparison.png": "e1ba28ab326701063564c83863aec94b0d7bb8416f6b9443cf4ba64a6f60e50b",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/local/actual/real_gap/plot.png": "aa60dd484810470fb4a01fdfed5b651aa20d006b052b44c6b89e5de575e177f1",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/local/actual/real_gap/plot_linear.png": "8c9084167cf9f11b31900f396a2e82ef87ff59247ef2e0f2e7a72a0f27dea89c",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/local/actual/real_gap/smoothing_comparison.png": "47f8e62c53c4012758fed898d7cc332397aba7fc3d26d7db1569724e7b3b4e79",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/gap/plot.png": "01b39cfd9ce1f0be0bc47820c2d9ab190c02475e0ee974ba303808da4bbafd64",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/gap/plot_linear.png": "9a21e77e9f529dcddbc40195d8fd49bef514ce20824ed588de60d3dfba543117",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/gap/smoothing_comparison.png": "c8542716963e828956a4b3318bd8df91ff30010b996867c98180bc8c68829c2d",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/gap_quality_witness/plot.png": "dfa86b351bc270ff1f4760db8da2c7e2ba328c65d4742641c4f58f3fee5ec671",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/gap_quality_witness/plot_linear.png": "532f926211afa5621e374f50272206241b33eaba81437879c4feee05fdf17643",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/gap_quality_witness/smoothing_comparison.png": "bdff8023d2ae6ba21ebda72417264aecfc6fc5fcf973b9e6bf10dc48f2d972c6",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/short/plot.png": "d611f0062c1afc650ef8ba6e88330e5dd7a18528a0b5fc63f3d8f7599d2bae01",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/short/plot_linear.png": "87b5881d8756294274a1b1fa41a34f16bfbc58dd59000af934de484dd13fb6cd",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/actual/short/smoothing_comparison.png": "3824315c687aa1b673d1d6390467f921c17440f9bf218e9d3cf053787cd65b2d"
+  },
+  "log": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_visual_local_2026-09-17/evidence.log"
+}

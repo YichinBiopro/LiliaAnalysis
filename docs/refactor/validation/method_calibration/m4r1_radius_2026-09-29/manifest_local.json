@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "587e0ce1d4c3eb37947fe68d1e1f4da42ebc43dcaebe1c28e34b248d15fd87f2"
+    },
+    {
+      "path": "analysis.json",
+      "sha256": "de675d2f300dc444eae67a4cd1ddb598e1960eb28f99303c1e02ca15974e0004"
+    },
+    {
+      "path": "local/event_move_head/analysis.json",
+      "sha256": "1e4f870977de9595f9e6acc609d2dad0f8637cf7239c96713844e2e59b789457"
+    },
+    {
+      "path": "local/event_move_head/comparison.npz",
+      "sha256": "c997a04435c91b4555afac09b427a89cad0abf69ce84a97df50a9f457012cd00"
+    },
+    {
+      "path": "local/event_move_head/comparison.png",
+      "sha256": "62128e5aa9d48bb6c161ab4f346304a5d35f0f8efe5ebd8a7bad748b3635e6db"
+    },
+    {
+      "path": "local/event_talk/analysis.json",
+      "sha256": "e63e7197e93d48c79345de915337a420e6b451dac177cc1f576479c71d1b8238"
+    },
+    {
+      "path": "local/event_talk/comparison.npz",
+      "sha256": "e3615fd01b4d55a15632efe950869654152fc065e4a04ba474ce2f12a05947aa"
+    },
+    {
+      "path": "local/event_talk/comparison.png",
+      "sha256": "b24cd39b14093e3205c252f3b0c930a03aca4135acc0061db171013067e4e7a4"
+    },
+    {
+      "path": "synthetic/controls/analysis.json",
+      "sha256": "5f205bdedd996ad4611cdf6699895fd9fcb722dff06e2ae4f6bfa27077d142eb"
+    },
+    {
+      "path": "synthetic/controls/comparison.npz",
+      "sha256": "2f70590fb9643cb32e126c5e08fbc282231764efde9859217da7951c961e923a"
+    },
+    {
+      "path": "synthetic/controls/comparison.png",
+      "sha256": "0657883aee11d05fd5a0ac126b10d3bba1a4964883c0249fb1a080cc5357ab97"
+    },
+    {
+      "path": "synthetic/event_continuous/analysis.json",
+      "sha256": "979a005ab791820de572a60c957a850df031aa81cf1e0f4473ffacab3abc1bc2"
+    },
+    {
+      "path": "synthetic/event_continuous/comparison.npz",
+      "sha256": "e9a9d4831d89aa28482b35f45c94efd2f65f5c56a3ea7559662b62da46b32325"
+    },
+    {
+      "path": "synthetic/event_continuous/comparison.png",
+      "sha256": "9943acfc564a6dd9386dcfba3fc5f7b8388e26d460c4cc3e32e8a2613016ea0b"
+    },
+    {
+      "path": "synthetic/event_gap/analysis.json",
+      "sha256": "7e65336a7410ba5d5d1a28e26c5c831986ec2c529839d4a86bc6ba68c924fc13"
+    },
+    {
+      "path": "synthetic/event_gap/comparison.npz",
+      "sha256": "b9001179acc2e3c2bf45f4bf4a7243770d59ad594e8ec29a82a74534efb65424"
+    },
+    {
+      "path": "synthetic/event_gap/comparison.png",
+      "sha256": "9077cc8068dfc257a7796e4375d0f863718d6992e2aec000f9ea4e6b8041c870"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_verified_release_2026-09-29/manifest_local.json",
+      "sha256": "2120e3cff4694c195965e10ed1dcd749f6ecde0467784e9756e38b2d4bb88f51"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_verified_release_2026-09-29/manifest_repository.json",
+      "sha256": "49e045427e8d2b2e4cc97ddaec512adbeb1755f8709f9e002167b1256cb544fe"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/MI_COMPARISON_CONTRACT.md",
+      "sha256": "e845adfec664c1b0defba1ce17c371a0d857b2b13e1e4729eea7edbddfc3f561"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tools/validate_mi_radius_profiles.py",
+      "sha256": "84a1699779c1038ab6c4225f1529deb72f730f8e24556fd7409618ae35f67977"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tools/mi_radius_profiles.py",
+      "sha256": "11f8e1de42b309f339105a9eb1421abff6096d862400664f0ff16abefa601b07"
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/tools/compare_mi_methods.py",
+      "sha256": "80f0759694fdb02caaa5cd390d77fbbbf8d8316e2600d1bd21a88d6aa15837b2"
+    }
+  ]
+}

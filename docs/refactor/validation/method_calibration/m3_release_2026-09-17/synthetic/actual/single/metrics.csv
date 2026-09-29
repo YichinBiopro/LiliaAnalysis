@@ -1,0 +1,2 @@
+window_start_idx,window_end_idx,time_s,window_start_us,window_end_us,window_center_us,goertzel_power,goertzel_db,quality,quality_final,sat_frac_1950,peak_to_peak_uv,max_abs_diff_uv,bp_edge_shift_uv,artifact_hard_clip,quality_diagnostic_state,quality_diagnostic_reason,quality_stage,quality_score_policy
+0,2500,2.5,0,5000000,2500000,560456.5721470572,57.48541966248402,0.3286525803681263,0.3286525803681263,0.0,64.89414978027344,25.507112503051758,4.127777099609375,0,valid,[],filtered,legacy_overall

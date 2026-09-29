@@ -1,0 +1,7 @@
+{
+  "status": "nonfinite_rejected",
+  "readers": [],
+  "rows": 0,
+  "error": "Non-finite EEG samples: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_verified_release_2026-09-29/synthetic/inputs/nonfinite.csv",
+  "empty_arrays": {}
+}

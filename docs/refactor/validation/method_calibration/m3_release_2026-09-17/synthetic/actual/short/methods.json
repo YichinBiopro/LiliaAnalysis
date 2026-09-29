@@ -1,0 +1,25 @@
+{
+  "rows": 0,
+  "accepted": 0,
+  "smoothing": {
+    "goertzel_power": {
+      "changed_indices": [],
+      "changed": 0,
+      "max_abs_delta": 0.0,
+      "accepted_indices": [],
+      "rejected_indices": [],
+      "acceptance_changes": 0,
+      "nan_position_changes": 0
+    },
+    "goertzel_db": {
+      "changed_indices": [],
+      "changed": 0,
+      "max_abs_delta": 0.0,
+      "accepted_indices": [],
+      "rejected_indices": [],
+      "acceptance_changes": 0,
+      "nan_position_changes": 0
+    }
+  },
+  "measures": []
+}

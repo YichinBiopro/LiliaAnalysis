@@ -1,0 +1,204 @@
+PASS controls: 149 measurements
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-move head/2026-06-18-lilia-move head.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=16 (quantile), fs=500Hz
+  Masked 0/29 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_0_bp/2026-06-18-lilia-move head_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_0_bp/2026-06-18-lilia-move head_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_0_bp/2026-06-18-lilia-move head_joint_mi_ch1_ch2_distribution.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_0_bp/2026-06-18-lilia-move head_joint_mi_ch1_ch2_excess.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_0_bp/2026-06-18-lilia-move head_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.0696 bits  (Miller–Madow 0.0642; norm 0.0174)
+  surrogate null: mean=0.0140±0.0043 bits, p=0.00498, z=12.79 (n=200)
+  windowed MI   : mean=0.3181, std=0.0615, min=0.2286, max=0.5053 (n=29 windows)
+PASS real_0_bp: complete, 29 rows
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=16 (quantile), fs=500Hz
+  Masked 0/30 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_1_bp/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_1_bp/2026-06-18-lilia-talk_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_1_bp/2026-06-18-lilia-talk_joint_mi_ch1_ch2_distribution.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_1_bp/2026-06-18-lilia-talk_joint_mi_ch1_ch2_excess.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_1_bp/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.0746 bits  (Miller–Madow 0.0693; norm 0.0187)
+  surrogate null: mean=0.0085±0.0014 bits, p=0.00498, z=46.69 (n=200)
+  windowed MI   : mean=0.3189, std=0.0511, min=0.2276, max=0.4124 (n=30 windows)
+PASS real_1_bp: complete, 30 rows
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level1/2026-06-18-lilia-vibration-level1.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=16 (quantile), fs=500Hz
+  Masked 0/30 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_2_bp/2026-06-18-lilia-vibration-level1_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_2_bp/2026-06-18-lilia-vibration-level1_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_2_bp/2026-06-18-lilia-vibration-level1_joint_mi_ch1_ch2_distribution.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_2_bp/2026-06-18-lilia-vibration-level1_joint_mi_ch1_ch2_excess.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_2_bp/2026-06-18-lilia-vibration-level1_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.0965 bits  (Miller–Madow 0.0912; norm 0.0241)
+  surrogate null: mean=0.0071±0.0008 bits, p=0.00498, z=112.25 (n=200)
+  windowed MI   : mean=0.3300, std=0.0922, min=0.2246, max=0.7525 (n=30 windows)
+PASS real_2_bp: complete, 30 rows
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level2/2026-06-18-lilia-vibration-level2.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=16 (quantile), fs=500Hz
+  Masked 0/32 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_3_bp/2026-06-18-lilia-vibration-level2_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_3_bp/2026-06-18-lilia-vibration-level2_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_3_bp/2026-06-18-lilia-vibration-level2_joint_mi_ch1_ch2_distribution.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_3_bp/2026-06-18-lilia-vibration-level2_joint_mi_ch1_ch2_excess.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_3_bp/2026-06-18-lilia-vibration-level2_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.0684 bits  (Miller–Madow 0.0634; norm 0.0171)
+  surrogate null: mean=0.0068±0.0008 bits, p=0.00498, z=75.86 (n=200)
+  windowed MI   : mean=0.3065, std=0.0781, min=0.1923, max=0.5376 (n=32 windows)
+PASS real_3_bp: complete, 32 rows
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-vibration-level3/2026-06-18-lilia-vibration-level3.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=16 (quantile), fs=500Hz
+  Masked 0/30 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_4_bp/2026-06-18-lilia-vibration-level3_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_4_bp/2026-06-18-lilia-vibration-level3_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_4_bp/2026-06-18-lilia-vibration-level3_joint_mi_ch1_ch2_distribution.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_4_bp/2026-06-18-lilia-vibration-level3_joint_mi_ch1_ch2_excess.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_4_bp/2026-06-18-lilia-vibration-level3_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.0930 bits  (Miller–Madow 0.0877; norm 0.0232)
+  surrogate null: mean=0.0216±0.0099 bits, p=0.00498, z=7.19 (n=200)
+  windowed MI   : mean=0.3216, std=0.0418, min=0.2435, max=0.4714 (n=30 windows)
+PASS real_4_bp: complete, 30 rows
+Loading: /home/bps-yichin/lilia_analysis/jenqwei/2026-06-18-lilia-talk/2026-06-18-lilia-talk.csv
+Bandpass: DISABLED (--no-bandpass) — analysing raw channels.
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=16 (quantile), fs=500Hz
+  Masked 0/30 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_talk_raw/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_talk_raw/2026-06-18-lilia-talk_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_talk_raw/2026-06-18-lilia-talk_joint_mi_ch1_ch2_distribution.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_talk_raw/2026-06-18-lilia-talk_joint_mi_ch1_ch2_excess.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/real_talk_raw/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.0487 bits  (Miller–Madow 0.0435; norm 0.0122)
+  surrogate null: mean=0.0082±0.0027 bits, p=0.00498, z=15.03 (n=200)
+  windowed MI   : mean=0.2355, std=0.0409, min=0.1650, max=0.3349 (n=30 windows)
+PASS real_talk_raw: complete, 30 rows
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/event_talk/events.png
+PASS event_talk: complete, 20 rows
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/expected/event_move_head/events.png
+PASS event_move_head: complete, 20 rows
+Loading: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/inputs/continuous.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=16 (quantile), fs=500Hz
+  Masked 0/12 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/continuous/continuous_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/continuous/continuous_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/continuous/continuous_joint_mi_ch1_ch2_distribution.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/continuous/continuous_joint_mi_ch1_ch2_excess.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/continuous/continuous_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.9429 bits  (Miller–Madow 0.9343; norm 0.2357)
+  surrogate null: mean=0.8411±0.2856 bits, p=0.299, z=0.36 (n=200)
+  windowed MI   : mean=1.0582, std=0.0511, min=0.9174, max=1.1383 (n=12 windows)
+PASS continuous: complete, 12 rows
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/event_continuous/events.png
+PASS event_continuous: complete, 20 rows
+Loading: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/inputs/gap.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=16 (quantile), fs=500Hz
+  Masked 0/12 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/gap/gap_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/gap/gap_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/gap/gap_joint_mi_ch1_ch2_distribution.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/gap/gap_joint_mi_ch1_ch2_excess.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/gap/gap_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.9046 bits  (Miller–Madow 0.8950; norm 0.2261)
+  surrogate null: mean=0.4172±0.2550 bits, p=0.0647, z=1.91 (n=200)
+  windowed MI   : mean=1.0359, std=0.0749, min=0.8456, max=1.1207 (n=12 windows)
+PASS gap: complete, 12 rows
+  [skip] ch1 @ 10s — too few usable sub-epochs.
+  [skip] ch2 @ 10s — too few usable sub-epochs.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/event_gap/events.png
+PASS event_gap: complete, 18 rows
+Loading: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/inputs/short.csv
+PASS short: short_rejected, 0 rows
+Loading: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/inputs/nonfinite.csv
+PASS nonfinite: nonfinite_rejected, 0 rows
+Loading: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/inputs/gap.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=16 (quantile), fs=500Hz
+  Masked 0/12 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_0.5/gap_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_0.5/gap_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_0.5/gap_joint_mi_ch1_ch2_distribution.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_0.5/gap_joint_mi_ch1_ch2_excess.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_0.5/gap_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.9046 bits  (Miller–Madow 0.8950; norm 0.2261)
+  surrogate null: mean=0.4172±0.2550 bits, p=0.0647, z=1.91 (n=200)
+  windowed MI   : mean=1.0359, std=0.0749, min=0.8456, max=1.1207 (n=12 windows)
+PASS quality_0.5: complete, 12 rows
+Loading: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/inputs/gap.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=16 (quantile), fs=500Hz
+  Masked 12/12 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_0.49/gap_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_0.49/gap_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_0.49/gap_joint_mi_ch1_ch2_distribution.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_0.49/gap_joint_mi_ch1_ch2_excess.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_0.49/gap_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.9046 bits  (Miller–Madow 0.8950; norm 0.2261)
+  surrogate null: mean=0.4172±0.2550 bits, p=0.0647, z=1.91 (n=200)
+PASS quality_0.49: complete, 12 rows
+Loading: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/inputs/gap.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=16 (quantile), fs=500Hz
+  Masked 12/12 MI windows with invalid quality or below 0.5.
+  Series quality: scored; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_nan/gap_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_nan/gap_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_nan/gap_joint_mi_ch1_ch2_distribution.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_nan/gap_joint_mi_ch1_ch2_excess.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_nan/gap_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.9046 bits  (Miller–Madow 0.8950; norm 0.2261)
+  surrogate null: mean=0.4172±0.2550 bits, p=0.0647, z=1.91 (n=200)
+PASS quality_nan: complete, 12 rows
+Loading: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/inputs/gap.csv
+Bandpass: 0.5-45 Hz zero-phase Butterworth (fs=500Hz).
+Computing joint probability distribution & mutual information — ch1 vs ch2, bins=16 (quantile), fs=500Hz
+  Series quality: disabled; population summary and pre/onset histograms are unmasked.
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_disabled/gap_joint_mi_ch1_ch2_timeseries.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_disabled/gap_joint_mi_ch1_ch2_summary.csv
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_disabled/gap_joint_mi_ch1_ch2_distribution.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_disabled/gap_joint_mi_ch1_ch2_excess.png
+Saved: /home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/expected/quality_disabled/gap_joint_mi_ch1_ch2_timeseries.png
+
+Joint MI (ch1 ↔ ch2):
+  I(X;Y)        : 0.9046 bits  (Miller–Madow 0.8950; norm 0.2261)
+  surrogate null: mean=0.4172±0.2550 bits, p=0.0647, z=1.91 (n=200)
+  windowed MI   : mean=1.0359, std=0.0749, min=0.8456, max=1.1207 (n=12 windows)
+PASS quality_disabled: complete, 12 rows

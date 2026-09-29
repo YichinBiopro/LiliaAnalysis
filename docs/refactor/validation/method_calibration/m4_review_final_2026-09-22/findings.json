@@ -1,0 +1,202 @@
+{
+  "quality_scope": [
+    {
+      "case": "gap",
+      "rows": 12,
+      "accepted": 12,
+      "finite_mi": 12,
+      "population_samples": 12000,
+      "population_bits": 0.9045686628411937
+    },
+    {
+      "case": "quality_0.5",
+      "rows": 12,
+      "accepted": 12,
+      "finite_mi": 12,
+      "population_samples": 12000,
+      "population_bits": 0.9045686628411937
+    },
+    {
+      "case": "quality_0.49",
+      "rows": 12,
+      "accepted": 0,
+      "finite_mi": 0,
+      "population_samples": 12000,
+      "population_bits": 0.9045686628411937
+    },
+    {
+      "case": "quality_nan",
+      "rows": 12,
+      "accepted": 0,
+      "finite_mi": 0,
+      "population_samples": 12000,
+      "population_bits": 0.9045686628411937
+    },
+    {
+      "case": "quality_disabled",
+      "rows": 12,
+      "accepted": 12,
+      "finite_mi": 12,
+      "population_samples": 12000,
+      "population_bits": 0.9045686628411937
+    }
+  ],
+  "event_geometry": [
+    {
+      "case": "event_talk",
+      "geometric_observed_checks": 20,
+      "disagreements": [
+        {
+          "call": 0,
+          "seed": 0,
+          "count": 200,
+          "duration": 2.0,
+          "channel": "ch1",
+          "k": 3,
+          "sub_step": 0.5,
+          "effective_k": 3,
+          "n_pre": 6,
+          "n_post": 6,
+          "legacy_bits": 0.0,
+          "geometric_bits": 0.0615955837262669,
+          "delta_bits": 0.0615955837262669,
+          "legacy_p": 1.0,
+          "geometric_p": 0.3383084577114428,
+          "null_max_abs_delta_bits": 0.172321907661738
+        },
+        {
+          "call": 3,
+          "seed": 0,
+          "count": 200,
+          "duration": 2.0,
+          "channel": "ch2",
+          "k": 3,
+          "sub_step": 0.5,
+          "effective_k": 3,
+          "n_pre": 6,
+          "n_post": 6,
+          "legacy_bits": 0.17981642735466702,
+          "geometric_bits": 0.20386134470281728,
+          "delta_bits": 0.024044917348150258,
+          "legacy_p": 0.0945273631840796,
+          "geometric_p": 0.14925373134328357,
+          "null_max_abs_delta_bits": 0.1894968486247024
+        }
+      ]
+    },
+    {
+      "case": "event_move_head",
+      "geometric_observed_checks": 20,
+      "disagreements": [
+        {
+          "call": 0,
+          "seed": 0,
+          "count": 200,
+          "duration": 2.0,
+          "channel": "ch1",
+          "k": 3,
+          "sub_step": 0.5,
+          "effective_k": 3,
+          "n_pre": 6,
+          "n_post": 6,
+          "legacy_bits": 0.0,
+          "geometric_bits": 0.07533553649663793,
+          "delta_bits": 0.07533553649663793,
+          "legacy_p": 1.0,
+          "geometric_p": 0.2935323383084577,
+          "null_max_abs_delta_bits": 0.27479905540742255
+        }
+      ]
+    },
+    {
+      "case": "event_continuous",
+      "geometric_observed_checks": 20,
+      "disagreements": [
+        {
+          "call": 3,
+          "seed": 0,
+          "count": 200,
+          "duration": 2.0,
+          "channel": "ch2",
+          "k": 3,
+          "sub_step": 0.5,
+          "effective_k": 3,
+          "n_pre": 6,
+          "n_post": 6,
+          "legacy_bits": 0.0011970413398426395,
+          "geometric_bits": 0.10539168318182489,
+          "delta_bits": 0.10419464184198225,
+          "legacy_p": 0.24378109452736318,
+          "geometric_p": 0.1791044776119403,
+          "null_max_abs_delta_bits": 0.2344379441444573
+        }
+      ]
+    },
+    {
+      "case": "event_gap",
+      "geometric_observed_checks": 18,
+      "disagreements": [
+        {
+          "call": 3,
+          "seed": 0,
+          "count": 200,
+          "duration": 2.0,
+          "channel": "ch2",
+          "k": 3,
+          "sub_step": 0.5,
+          "effective_k": 2,
+          "n_pre": 3,
+          "n_post": 3,
+          "legacy_bits": 0.5490256127827444,
+          "geometric_bits": 0.7493999240173226,
+          "delta_bits": 0.20037431123457816,
+          "legacy_p": 0.11442786069651742,
+          "geometric_p": 0.11442786069651742,
+          "null_max_abs_delta_bits": 0.22842671480741936
+        },
+        {
+          "call": 9,
+          "seed": 0,
+          "count": 200,
+          "duration": 5.0,
+          "channel": "ch2",
+          "k": 5,
+          "sub_step": 0.5,
+          "effective_k": 5,
+          "n_pre": 9,
+          "n_post": 9,
+          "legacy_bits": 0.1288760344464377,
+          "geometric_bits": 0.2671979200907534,
+          "delta_bits": 0.1383218856443157,
+          "legacy_p": 0.01990049751243781,
+          "geometric_p": 0.009950248756218905,
+          "null_max_abs_delta_bits": 0.13466425932812812
+        },
+        {
+          "call": 19,
+          "seed": 0,
+          "count": 200,
+          "duration": 5.0,
+          "channel": "ch2",
+          "k": 3,
+          "sub_step": 1.0,
+          "effective_k": 3,
+          "n_pre": 5,
+          "n_post": 5,
+          "legacy_bits": 0.0,
+          "geometric_bits": 0.10877462609877131,
+          "delta_bits": 0.10877462609877131,
+          "legacy_p": 1.0,
+          "geometric_p": 0.22388059701492538,
+          "null_max_abs_delta_bits": 0.22602222307260467
+        }
+      ]
+    }
+  ],
+  "controls": 149,
+  "geometry_tolerance": 1e-12,
+  "geometry_equivalent": false,
+  "product_changed": false,
+  "geometric_reference_adopted": false,
+  "interpretation": "Reference disagreement is a measured limitation, not a passed equivalence check."
+}

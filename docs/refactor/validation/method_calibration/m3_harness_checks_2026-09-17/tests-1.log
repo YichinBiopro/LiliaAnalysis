@@ -1,0 +1,12 @@
+test_arbitrary_frequency_matches_direct_dtft_and_detects_wrong_power (test_goertzel_method_comparison_regression.GoertzelMethodComparisonTests) ... ok
+test_bad_shape_and_window_are_rejected (test_goertzel_method_comparison_regression.GoertzelMethodComparisonTests) ... ok
+test_continuous_candidate_retains_masked_positions_and_even_window_semantics (test_goertzel_method_comparison_regression.GoertzelMethodComparisonTests) ... ok
+test_empty_and_unexpected_failure_cannot_pass_equal_outputs (test_goertzel_method_comparison_regression.GoertzelMethodComparisonTests) ... ok
+test_repeated_segment_labels_do_not_reconnect_disjoint_runs (test_goertzel_method_comparison_regression.GoertzelMethodComparisonTests) ... ok
+test_segment_candidate_has_no_cross_boundary_influence (test_goertzel_method_comparison_regression.GoertzelMethodComparisonTests) ... ok
+test_units_and_floor_remain_explicit (test_goertzel_method_comparison_regression.GoertzelMethodComparisonTests) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.007s
+
+OK

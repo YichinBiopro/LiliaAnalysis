@@ -1,0 +1,1514 @@
+{
+  "cases": [
+    {
+      "case": "real_0_ch1_5s",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 11,
+      "status": "complete"
+    },
+    {
+      "case": "real_0_ch2_5s",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 11,
+      "status": "complete"
+    },
+    {
+      "case": "real_1_ch1_5s",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 12,
+      "status": "complete"
+    },
+    {
+      "case": "real_1_ch2_5s",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 12,
+      "status": "complete"
+    },
+    {
+      "case": "real_2_ch1_5s",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 12,
+      "status": "complete"
+    },
+    {
+      "case": "real_2_ch2_5s",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 12,
+      "status": "complete"
+    },
+    {
+      "case": "real_3_ch1_5s",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 12,
+      "status": "complete"
+    },
+    {
+      "case": "real_3_ch2_5s",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 12,
+      "status": "complete"
+    },
+    {
+      "case": "real_4_ch1_5s",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 12,
+      "status": "complete"
+    },
+    {
+      "case": "real_4_ch2_5s",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 12,
+      "status": "complete"
+    },
+    {
+      "case": "real_1_ch1_0.5s",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 122,
+      "status": "complete"
+    },
+    {
+      "case": "real_1_ch1_1.0s",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 61,
+      "status": "complete"
+    },
+    {
+      "case": "real_gap",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 12,
+      "status": "complete"
+    },
+    {
+      "case": "continuous",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 12,
+      "status": "complete"
+    },
+    {
+      "case": "gap",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 6,
+      "status": "complete"
+    },
+    {
+      "case": "single",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 1,
+      "status": "complete"
+    },
+    {
+      "case": "short",
+      "arrays": 49,
+      "empty_arrays": [
+        "window_start_idx",
+        "window_end_idx",
+        "time_s",
+        "goertzel_power",
+        "goertzel_db",
+        "quality",
+        "quality_final",
+        "sat_frac_1950",
+        "peak_to_peak_uv",
+        "max_abs_diff_uv",
+        "bp_edge_shift_uv",
+        "hard_artifact",
+        "segment_ids",
+        "render_db_0_x",
+        "render_db_0_y",
+        "render_db_1_x",
+        "render_db_1_y",
+        "render_linear_0_x",
+        "render_linear_0_y",
+        "render_linear_1_x",
+        "render_linear_1_y",
+        "table_window_start_idx",
+        "table_window_end_idx",
+        "table_time_s",
+        "table_window_start_us",
+        "table_window_end_us",
+        "table_window_center_us",
+        "table_goertzel_power",
+        "table_goertzel_db",
+        "table_quality",
+        "table_quality_final",
+        "table_sat_frac_1950",
+        "table_peak_to_peak_uv",
+        "table_max_abs_diff_uv",
+        "table_bp_edge_shift_uv",
+        "table_artifact_hard_clip",
+        "accepted_False_0.49",
+        "legacy_smooth_goertzel_power_False_0.49",
+        "legacy_smooth_goertzel_db_False_0.49",
+        "accepted_False_0.5",
+        "legacy_smooth_goertzel_power_False_0.5",
+        "legacy_smooth_goertzel_db_False_0.5",
+        "accepted_True_0.49",
+        "legacy_smooth_goertzel_power_True_0.49",
+        "legacy_smooth_goertzel_db_True_0.49",
+        "accepted_True_0.5",
+        "legacy_smooth_goertzel_power_True_0.5",
+        "legacy_smooth_goertzel_db_True_0.5"
+      ],
+      "rows": 0,
+      "status": "empty"
+    },
+    {
+      "case": "half",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 12,
+      "status": "complete"
+    },
+    {
+      "case": "nonfinite",
+      "arrays": 1,
+      "empty_arrays": [],
+      "rows": 0,
+      "status": "nonfinite_rejected"
+    },
+    {
+      "case": "gap_quality_witness",
+      "arrays": 49,
+      "empty_arrays": [],
+      "rows": 6,
+      "status": "complete"
+    }
+  ],
+  "arrays": 932,
+  "reader_checks": 38,
+  "window_rows": 350,
+  "rtol": 0.0,
+  "atol": 0.0,
+  "max_abs_error": 0.0,
+  "metadata_equal": true,
+  "method_comparisons": [
+    {
+      "case": "real_0_ch1_5s",
+      "rows": 11,
+      "accepted": 11,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 4.1909515857696533e-07,
+      "max_reference_error_fraction_of_tolerance": 9.98018620991642e-06,
+      "max_abs_frontend_db_delta": 22.68283019776117
+    },
+    {
+      "case": "real_0_ch2_5s",
+      "rows": 11,
+      "accepted": 7,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            10
+          ],
+          "rejected_indices": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            10
+          ],
+          "rejected_indices": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 3.546476364135742e-06,
+      "max_reference_error_fraction_of_tolerance": 3.5496769168187096e-05,
+      "max_abs_frontend_db_delta": 22.63438199879286
+    },
+    {
+      "case": "real_1_ch1_5s",
+      "rows": 12,
+      "accepted": 12,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 1.8067657947540283e-07,
+      "max_reference_error_fraction_of_tolerance": 6.362325045096616e-06,
+      "max_abs_frontend_db_delta": 22.62297649619977
+    },
+    {
+      "case": "real_1_ch2_5s",
+      "rows": 12,
+      "accepted": 10,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            6,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [
+            4,
+            7
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            6,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [
+            4,
+            7
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 1.1995434761047363e-06,
+      "max_reference_error_fraction_of_tolerance": 2.3120108568361934e-05,
+      "max_abs_frontend_db_delta": 22.612169988084815
+    },
+    {
+      "case": "real_2_ch1_5s",
+      "rows": 12,
+      "accepted": 9,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            7,
+            9,
+            11
+          ],
+          "rejected_indices": [
+            6,
+            8,
+            10
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            7,
+            9,
+            11
+          ],
+          "rejected_indices": [
+            6,
+            8,
+            10
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 3.948807716369629e-07,
+      "max_reference_error_fraction_of_tolerance": 8.103432029044941e-06,
+      "max_abs_frontend_db_delta": 22.57176786377478
+    },
+    {
+      "case": "real_2_ch2_5s",
+      "rows": 12,
+      "accepted": 12,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 4.898756742477417e-07,
+      "max_reference_error_fraction_of_tolerance": 4.807910799253256e-05,
+      "max_abs_frontend_db_delta": 22.625225813200828
+    },
+    {
+      "case": "real_3_ch1_5s",
+      "rows": 12,
+      "accepted": 12,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 4.6566128730773926e-07,
+      "max_reference_error_fraction_of_tolerance": 8.66027119304105e-06,
+      "max_abs_frontend_db_delta": 22.51943375734342
+    },
+    {
+      "case": "real_3_ch2_5s",
+      "rows": 12,
+      "accepted": 11,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [
+            4
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [
+            4
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 7.450580596923828e-07,
+      "max_reference_error_fraction_of_tolerance": 1.504304222683393e-05,
+      "max_abs_frontend_db_delta": 22.52307990759941
+    },
+    {
+      "case": "real_4_ch1_5s",
+      "rows": 12,
+      "accepted": 11,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [
+            1
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [
+            1
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 8.866190910339355e-07,
+      "max_reference_error_fraction_of_tolerance": 1.009229029540815e-05,
+      "max_abs_frontend_db_delta": 22.520101645881795
+    },
+    {
+      "case": "real_4_ch2_5s",
+      "rows": 12,
+      "accepted": 12,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 4.880130290985107e-07,
+      "max_reference_error_fraction_of_tolerance": 3.717982918824222e-05,
+      "max_abs_frontend_db_delta": 22.558984168740217
+    },
+    {
+      "case": "real_1_ch1_0.5s",
+      "rows": 122,
+      "accepted": 0,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [],
+          "rejected_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [],
+          "rejected_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 1.9208528101444244e-09,
+      "max_reference_error_fraction_of_tolerance": 3.01864098043815e-06,
+      "max_abs_frontend_db_delta": 23.11127760058622
+    },
+    {
+      "case": "real_1_ch1_1.0s",
+      "rows": 61,
+      "accepted": 61,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 1.862645149230957e-08,
+      "max_reference_error_fraction_of_tolerance": 9.212561488632518e-06,
+      "max_abs_frontend_db_delta": 22.672419215975232
+    },
+    {
+      "case": "real_gap",
+      "rows": 12,
+      "accepted": 12,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [
+            4,
+            6,
+            7
+          ],
+          "changed": 3,
+          "max_abs_delta": 48327.839501569804,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [
+            4,
+            6,
+            7
+          ],
+          "changed": 3,
+          "max_abs_delta": 2.0796497226193864,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 1.8067657947540283e-07,
+      "max_reference_error_fraction_of_tolerance": 7.150248882005385e-06,
+      "max_abs_frontend_db_delta": 22.622976245673264
+    },
+    {
+      "case": "continuous",
+      "rows": 12,
+      "accepted": 11,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "rejected_indices": [
+            11
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "rejected_indices": [
+            11
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 1.9669532775878906e-06,
+      "max_reference_error_fraction_of_tolerance": 1.471564032557868e-06,
+      "max_abs_frontend_db_delta": 22.538191019438543
+    },
+    {
+      "case": "gap",
+      "rows": 6,
+      "accepted": 5,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "changed": 4,
+          "max_abs_delta": 979017.2890718221,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "rejected_indices": [
+            5
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "changed": 4,
+          "max_abs_delta": 11.722475972637739,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "rejected_indices": [
+            5
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 1.0132789611816406e-06,
+      "max_reference_error_fraction_of_tolerance": 2.0283720469253597e-06,
+      "max_abs_frontend_db_delta": 22.534621380465737
+    },
+    {
+      "case": "single",
+      "rows": 1,
+      "accepted": 0,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [],
+          "rejected_indices": [
+            0
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [],
+          "rejected_indices": [
+            0
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 3.725290298461914e-07,
+      "max_reference_error_fraction_of_tolerance": 3.7106417794735744e-07,
+      "max_abs_frontend_db_delta": 22.531691206857175
+    },
+    {
+      "case": "short",
+      "rows": 0,
+      "accepted": 0,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 0.0,
+      "max_reference_error_fraction_of_tolerance": 0.0,
+      "max_abs_frontend_db_delta": 0.0
+    },
+    {
+      "case": "half",
+      "rows": 12,
+      "accepted": 0,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [],
+          "rejected_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [],
+          "changed": 0,
+          "max_abs_delta": 0.0,
+          "accepted_indices": [],
+          "rejected_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 6.984919309616089e-09,
+      "max_reference_error_fraction_of_tolerance": 5.775883104258812e-07,
+      "max_abs_frontend_db_delta": 22.683003900250263
+    },
+    {
+      "case": "gap_quality_witness",
+      "rows": 6,
+      "accepted": 6,
+      "smoothing": {
+        "goertzel_power": {
+          "changed_indices": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "changed": 4,
+          "max_abs_delta": 2205.4204078689218,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        },
+        "goertzel_db": {
+          "changed_indices": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "changed": 4,
+          "max_abs_delta": 0.11940954801982429,
+          "accepted_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "rejected_indices": [],
+          "acceptance_changes": 0,
+          "nan_position_changes": 0
+        }
+      },
+      "max_reference_abs_error": 1.0132789611816406e-06,
+      "max_reference_error_fraction_of_tolerance": 2.0283720469253597e-06,
+      "max_abs_frontend_db_delta": 22.534621380465737
+    }
+  ],
+  "controls": 30,
+  "product_changes": false
+}

@@ -1,0 +1,32 @@
+{
+  "baseline_commit": "aa0df5f4ebaefddae1fee8c9e50e95323e777aed",
+  "cases": 19,
+  "real_entries": 8,
+  "synthetic_entries": 10,
+  "control_suite": 1,
+  "controls": 149,
+  "real_histogram_sensitivity": 180,
+  "event_parameter_calls": 80,
+  "event_successful_observed_geometric_checks": 78,
+  "exact_arrays": 5884,
+  "nonempty_evidence_arrays": 5880,
+  "empty_arrays": 4,
+  "source_table_readers": 48,
+  "event_source_reloads": 8,
+  "images": 29,
+  "geometric_disagreements": 7,
+  "max_observed_geometry_delta_bits": 0.20037431123457816,
+  "legacy_equivalence": true,
+  "geometric_equivalence": false,
+  "product_changes": false,
+  "model_used": false,
+  "limitations": [
+    "Keyboard triggers are not behavioral truth.",
+    "Only 1D sklearn and small dense geometric controls validate estimator references; no efficacy claim.",
+    "Geometric null replay is limited to the 7 observed-disagreement calls, not an exhaustive null audit.",
+    "Event frames are exact CSV round trips with separate source/audit reloads; no versioned product event-table reader exists.",
+    "Original event-plot labels/footer have recorded limitations; explicit comparison plots supplied.",
+    "All real recordings/model/history remain untouched.",
+    "KSG finite-radius issue remains a method follow-up; no new product profile adopted."
+  ]
+}

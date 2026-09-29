@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-29T02:49:38.179515+00:00",
+  "scope": "evidence",
+  "checks": [
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/.gitignore",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/analysis.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/cross_subject.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/cross_subject.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/cross_subject.svg",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/cross_subject_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/custom_frontend.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/custom_frontend.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/custom_frontend.svg",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/custom_frontend_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/event_audit.json",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_event.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_event.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_event.svg",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_event_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_gap.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_gap.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_gap.svg",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_gap_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/per_event.csv",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/subject.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/subject.png",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/subject.svg",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/subject_expected.npz",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/tools/validate_event_mi_plots.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/spectral_entropy.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/joint_mi.py",
+      "passed": true
+    },
+    {
+      "name": "hash",
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_verified_release_2026-09-29/config.json",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "inputs": {
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/.gitignore": "ea25965bcb118b779bce8498b2b715c30a355278f0bec6142c37b8e3a09cf521",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/analysis.json": "22948fef7caabc1063fd2dc79f8bbd044fd2c0a075c16bbc068168c705808009",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/cross_subject.npz": "0866b2007829a69cc87b15633f97e3f03d147fc00b11d38b1d7623a27b76332f",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/cross_subject.png": "5ceec6195e6587aa499d02ad2bada642ad2574bf274d36a480ead8cf67a68155",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/cross_subject.svg": "0fc691eccc345190f25f98906ae01cc4694259a6684fd63c8ff2e77d09b02c6e",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/cross_subject_expected.npz": "0866b2007829a69cc87b15633f97e3f03d147fc00b11d38b1d7623a27b76332f",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/custom_frontend.npz": "311bef6fc1ed83916d1ee3f44ca190a48e8ff500a33e0c9d662eaef8b423399f",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/custom_frontend.png": "2c651a3eea037bb521b227c182b6a5b68ca73e55e7172fd85396b897c96fc3d9",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/custom_frontend.svg": "52db25bace0fb147a20b2d0f7f1c599a06d90655ec3d9841724915f8fe7008c4",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/custom_frontend_expected.npz": "311bef6fc1ed83916d1ee3f44ca190a48e8ff500a33e0c9d662eaef8b423399f",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/event_audit.json": "19842444816055b999d2c222656d916fe690a5f3853418418a9ef93aefb1bd1c",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_event.npz": "311bef6fc1ed83916d1ee3f44ca190a48e8ff500a33e0c9d662eaef8b423399f",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_event.png": "70e305e9b811af8497963116e1d167939e153dfb9330d3909532e44d04cf0053",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_event.svg": "b58c51502fbb216b1cf2d844586810608f2130bce6e151bf601d972f7b05c273",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_event_expected.npz": "311bef6fc1ed83916d1ee3f44ca190a48e8ff500a33e0c9d662eaef8b423399f",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_gap.npz": "e03fb3c418c5dd2b6a8f37ecb3adda6a83cfa6e15fa41159b6ce56e159e7c3fc",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_gap.png": "d3bc0ea0bef731544264c0d7f80b8748c36b5d4c64411cc8d776baebdaa87e93",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_gap.svg": "f3141b412b397f40b4af0eaf37493f6d4378935274d8c0b9c03ee91f65ee0f58",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/historical_gap_expected.npz": "e03fb3c418c5dd2b6a8f37ecb3adda6a83cfa6e15fa41159b6ce56e159e7c3fc",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/manifest.json": "d2078ea589e659f00371bfe6887ae66e632f40bab7c7f42a53290fa543682c96",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/per_event.csv": "94677cb74dae203d35d93b842d669d12146595a4aba767048c16fd43fc31a84e",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/subject.npz": "9d5fb6e92a6cc5d6f3eaa04a566c7a6505291c300a136b003486dc2864a51eee",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/subject.png": "e833814d8a0906ae7b5da19b68b915f236a84383ab36219f4ac516cbbcced12a",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/subject.svg": "1f9854340337a166d1ff3a946b9dfe210d21446f03656b6b2454d74e12a4d622",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_final_plots_2026-09-29/subject_expected.npz": "9d5fb6e92a6cc5d6f3eaa04a566c7a6505291c300a136b003486dc2864a51eee",
+    "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_verified_release_2026-09-29/config.json": "61ca63e49cecd0a3e7fd19811e6a3beb1caca5986c024bb031703c7dbd1c307a",
+    "/home/bps-yichin/lilia_analysis/joint_mi.py": "1dd6b9bd51bcc0c8631f26e909fe6fcf7eb9e5fc906041e74f4748d152a6d07f",
+    "/home/bps-yichin/lilia_analysis/spectral_entropy.py": "491f93766f411c804352beb30a0073f59d7c8b76538b279ac69c8500f5a30c63",
+    "/home/bps-yichin/lilia_analysis/tools/validate_event_mi_plots.py": "b9899a95082a6edd3a5e9dec35ac1ec7fa281892b43ee0c4a171438b99abe927"
+  },
+  "log": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_plot_evidence_2026-09-29/evidence.log"
+}

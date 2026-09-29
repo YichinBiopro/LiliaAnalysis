@@ -38,7 +38,7 @@ raw／BP／model 索引與品質 stage 不共用。一般 event baseline 接受 
 - CLI／single CSV 預設 500 Hz、60 Hz、5 秒窗／5 秒步、smooth 5。輸入為來源段內 float32 **0.5–45 Hz BP**；因此 60 Hz 值與前端衰減綁定，現有 dB 門檻不能直接移植至 raw 或新 normalization。
 - `10log10(max(power,1e−12))`；raw ch 的 abs≥1950 比例≥.12、PTP≥1000，或 filtered 首尾 1 秒 median 差≥80 任一成立為 hard artifact；max diff 僅記錄，不是門檻。
 - 共用品質選取 `valid_goertzel_rows` 使用 **quality > .5**（嚴格大於）；預設排 hard artifact，須同時有限時間／dB。filtered 全通道評分後取指定通道 legacy overall。
-- 顯示先 mask，再 pandas 中置 rolling median 5／min_periods=1，再 mask；這個 rolling 本身沒有 segment 分組，仍可能受缺口另一側窗口影響；圖上斷線不代表平滑已分段。本輪凍結此行為，分段平滑須另開明示差異。
+- 顯示先 mask，再 pandas 中置 rolling median 5／min_periods=1，再 mask；這個 rolling 本身沒有 segment 分組，仍可能受缺口另一側窗口影響；圖上斷線不代表平滑已分段。M3 已獨立量測分段平滑差異，產品預設仍保留此 legacy 行為。
 - 新基準涵蓋 5 秒與 .5 秒窗、raw artifacts／品質、接受 mask／平滑；下游 distribution/sampling 的共用選取規則不改。
 
 ## MI profiles
@@ -75,11 +75,25 @@ raw／BP／model 索引與品質 stage 不共用。一般 event baseline 接受 
 - 160 合成窗長控制＋1 單頻點探針、128 捕獲輸入的 256 次計算；1／4 秒、頻帶邊界、單點積分與分母差異逐列保存。短段 602 點的窄頻訊號相對值差可達 0.66944，不能宣告各 profile 可互換。
 - 364 tests、200 Python 靜態／bundle、10 圖目視與完整／repository 證據通過。科學效用或最佳窗長未據此判定，未新增 profile，舊方法、品質與索引政策保留。
 
+## M3 Goertzel 比較完成
+
+- [報告](METHOD_CALIBRATION_M3_REPORT_2026-09-17.md)／[預先比較契約](GOERTZEL_COMPARISON_CONTRACT.md)：20 案例、932 陣列與 metadata 精確一致、38 來源表重讀；linear／dB 實際圖線、品質／hard 選取及空結果均保留。
+- G-segment-rolling 限制 rolling 到連續來源段；真實完整 talk 缺口副本最大差 2.07965 dB，合成 gap 最大差 11.72248 dB。連續來源相同；接受／排除和 NaN 位置差異均 0，候選只供比較。
+- 30 功率控制及 350 窗 raw／BP 以直接 DTFT 核對；.5／1／5 秒與 P/N²／Hann coherent mean-square／density 各自記錄。legacy dB 同時受窗長與 BP 衰減影響，原門檻不能直接移植至其他單位。
+- 371 tests、203 Python 靜態／bundle、16 圖目視與完整／repository 證據通過；未新增產品 profile 或修改預設，未推論科學效用。
+
+## M4 MI 比較與 M4-R1 收斂
+
+- [報告](METHOD_CALIBRATION_M4_REPORT_2026-09-22.md)／[契約](MI_COMPARISON_CONTRACT.md)：舊新5,884陣列精確一致、48 reader及8 event來源重載；149合成控制、180真實 histogram設定、80 event參數呼叫。品質只遮 series、population unmasked、KSG quality disabled 均保留。
+- 小樣本／較大 k 的自動 brute 半徑與 KDTree 邊界計數有浮點差異；78個 event observed 中7個與暴力幾何參考超過1e−12，最大0.20037 bits；同 labels 的 null／p 亦可改變。這是方法限制，不是新舊回歸；未放寬等價門檻或採新產品 profile。
+- 真實鍵盤 trigger 只映射原絕對微秒減 header offset，非行為真值；重疊子窗沒有獨立可交換保證。M4-R1 產品圖已修正 amplitude envelope／實際設定標示，舊圖保留歷史證據。
+- [M4-R1 報告](METHOD_CALIBRATION_M4_R1_REPORT_2026-09-29.md)：`ross_euclidean_direct_v1` 僅校準，124呼叫／20,801 null 與獨立幾何參考誤差0；legacy 1,026筆 null 差異，含5組 observed 相同但 null 不同。384 tests、211 Python靜態／bundle、14圖目視；產品預設不變，不宣告事件效應或方法優劣。denoised／模型路徑未在本輪重跑。
+
 ## 後續校準順序與驗收門檻
 
 1. **Baseline 完整入口基準：M1 完成**。各入口與缺口／不足／品質邊界的候選、排除、selected indices、reference、delta 已核對；範圍與限制見 [M1 報告](METHOD_CALIBRATION_M1_REPORT_2026-09-16.md)。政策仍各自保留。
 2. **PSD 比較：M2 完成**。P-jenqwei／P-quality-plot capture 與同輸入窗長／邊界／單點／分母差異已保存；既有 profile 保留，不宣告等價或優劣。
-3. **Goertzel 校準：M3 當前**。先單獨比較分段平滑，再評估 raw/BP、窗長與 normalization；須列線性功率、dB、接受／排除窗口差異，既有門檻不直接套新單位。
-4. **MI 校準**：分開 histogram、event KSG、各 null 與品質 population；新增有已知關係的合成控制及真实事件標註；評估 bins／樣本數／k／seed／surrogate數的敏感度。方法判讀前另查一手方法文獻，這一輪不下科學結論。
+3. **Goertzel 校準：M3 完成**。分段平滑、raw/BP、窗長與 normalization 差異已保存；legacy rolling 與既有門檻保留，新單位僅比較。
+4. **MI 校準：M4 與 M4-R1 完成**。histogram／event KSG／各 null 的敏感度與半徑差異已保存；事件圖語義修正，原1e−12參考差異明示，legacy預設保留。
 
 每次方法變更需具名新 profile、明示預設／相容策略、獨立原基準、數值差異與 NaN／索引／品質差異、来源讀回與目視；受影響測試及階段完整檢查通過後才標完成。架構／F19、批次原子發佈仍排在方法校準之後。

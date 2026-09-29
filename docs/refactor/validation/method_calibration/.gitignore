@@ -6,3 +6,17 @@ checks_2026-09-16/
 m1_dev_2026-09-16/
 # Model-path development capture; superseded by M2 final display/sensitivity validation.
 m2_model_binding_2026-09-16/
+# M3 development capture superseded by final singleton and tolerance audit.
+m3_dev_2026-09-17/
+# Successful numeric capture before unused-import cleanup; release binds final tool hash.
+m3_final_2026-09-17/
+# M4 development failures retained in m4_acceptance_2026-09-22/failures.
+m4_dev_2026-09-22/
+m4_capture_2026-09-22/
+# Superseded review/check before explicit event-envelope figure labels.
+m4_review_2026-09-22/
+m4_full_checks_2026-09-22/
+# M4-R1 first capture: numeric pass, metadata comparator needed source-hash handling.
+m4r1_release_2026-09-29/
+m4r1_final_release_2026-09-29/
+m4r1_plots_2026-09-29/

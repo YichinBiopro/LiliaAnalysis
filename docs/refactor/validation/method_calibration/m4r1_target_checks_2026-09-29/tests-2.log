@@ -1,0 +1,12 @@
+test_capture_detects_wrong_estimator_and_keeps_actual_input (test_mi_method_comparison_regression.MIComparisonTests) ... ok
+test_circular_runs_do_not_merge_repeated_labels (test_mi_method_comparison_regression.MIComparisonTests) ... ok
+test_known_discrete_information_and_corruption (test_mi_method_comparison_regression.MIComparisonTests) ... ok
+test_mixed_multivariate_singleton_and_invalid_input (test_mi_method_comparison_regression.MIComparisonTests) ... ok
+test_mixed_reference_matches_public_sklearn_in_one_dimension (test_mi_method_comparison_regression.MIComparisonTests) ... ok
+test_null_ddof_and_zero_variance (test_mi_method_comparison_regression.MIComparisonTests) ... ok
+test_unexpected_empty_or_failure_cannot_pass_baseline_comparison (test_mi_method_comparison_regression.MIComparisonTests) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.043s
+
+OK

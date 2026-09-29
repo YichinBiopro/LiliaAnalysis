@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "kind": "joint_mi_summary",
+  "source_id": "43371634e46827157fb380ac4c89d35625fb46a31fcdc1f8f9bbe15a1ad13cad",
+  "series_path": "gap_joint_mi_ch1_ch2_timeseries.csv",
+  "series_sha256": "6d37d685b2f0274a9fe9429ebf4ea82249dcbcdf922be3aab39d7b5ef1a8b7cb",
+  "series_meta_sha256": "657376f9b992a4aa7b656a7bfba46c9be7769ef5b1a4dc32c8c492b520adf886",
+  "table_sha256": "a4965a110adae7ac027915165bdf86529288a9fdc4893060098235452ac58ee2"
+}

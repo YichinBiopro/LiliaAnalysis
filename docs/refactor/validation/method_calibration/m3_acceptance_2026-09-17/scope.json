@@ -1,0 +1,32 @@
+{
+  "baseline_commit": "aa0df5f4ebaefddae1fee8c9e50e95323e777aed",
+  "cases": 20,
+  "real_entry_cases": 13,
+  "synthetic_cases": 7,
+  "exact_arrays": 932,
+  "nonempty_evidence_arrays": 884,
+  "empty_arrays_checked": 48,
+  "window_rows": 350,
+  "reader_checks": 38,
+  "controls": 30,
+  "visual_figures": 16,
+  "model_used": false,
+  "product_changes": false,
+  "method_profiles": [
+    "G-legacy-rolling",
+    "G-segment-rolling (comparison only)",
+    "P/N²",
+    "2P/(sum Hann)²",
+    "2P/(fs sum Hann²)"
+  ],
+  "limits": [
+    "Full real source gap copy preserves all samples and adds 10 seconds at a fixed split; not an observed recording gap.",
+    "Injected .7 quality is a policy witness with diagnostics unavailable, not measured signal quality.",
+    "0.5-second rows are retained in tables but all rejected under the existing quality policy in these cases.",
+    "Single-window case is quality-rejected; unit tests separately cover an accepted singleton.",
+    "Short case empty shapes are checked in the capture and metadata, while general evidence compares only nonempty NPZ arrays including row_count; source readers independently verify empty tables.",
+    "67.15 dB +/-0.5 is a predeclared probe; the sampler actual default +/-0.6 remains unchanged.",
+    "Normalization comparisons are not a product profile migration or a recommended EEG threshold.",
+    "Repository manifest excludes original recordings and real derivatives, but includes all synthetic table readers and numeric comparisons."
+  ]
+}

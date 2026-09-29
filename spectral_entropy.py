@@ -124,8 +124,8 @@ try:
 except ImportError:
     _IBRAIN_AVAILABLE = False
 
-# ── KNN/KSG mutual-information estimators for band-power × event MI (optional) ─
-# The band-power-vs-event joint MI mode (I(θ,α,β power ; pre/post-event)) uses
+# ── KNN/KSG mutual-information estimators for amplitude-envelope × event MI (optional) ─
+# The amplitude-envelope-vs-event joint MI mode (I(θ,α,β amplitude envelopes ; pre/post-event)) uses
 # scikit-learn's KNN entropy estimators. sklearn is only needed for that mode,
 # so it is imported defensively — the histogram-based channel-vs-channel MI that
 # the rest of the module uses has no such dependency.
@@ -1875,7 +1875,7 @@ def plot_event_pre_onset_comparison(
 
 
 # ═════════════════════════════════════════════════════════════════════════════
-# Band-power × Event joint MI:  I(θ-power, α-power, β-power ; pre/post-event)
+# Amplitude-envelope × Event joint MI:  I(θ-envelope, α-envelope, β-envelope ; pre/post-event)
 # ═════════════════════════════════════════════════════════════════════════════
 # Ported from the standalone joint_mi_band_analysis.py and adapted to this
 # module's real, *continuous* recordings. Where the standalone script assumed
@@ -1886,7 +1886,7 @@ def plot_event_pre_onset_comparison(
 # --ibrain-events is used the sub-epochs are pooled across every session event,
 # which is the faithful analogue of the standalone script's "trials".
 #
-# Two estimates of I(θ,α,β power ; event) are reported, both in bits:
+# Two estimates of I(θ,α,β amplitude envelopes ; event) are reported, both in bits:
 #   * sum-of-per-band  -- Σ_j I(X_j ; Y) from sklearn.mutual_info_classif; equals
 #     the joint MI only if the bands are conditionally independent given the
 #     label, so for correlated bands it over-counts shared information.
@@ -2043,7 +2043,7 @@ def compute_band_event_joint_mi(
     random_state: int = 0,
     event_windows=None,
 ) -> dict | None:
-    """Joint MI I(θ,α,β power ; pre/post-event) for one window size.
+    """Joint MI I(θ,α,β amplitude envelopes ; pre/post-event) for one half-window.
 
     For every onset in ``onset_indices`` the pre-event window
     ``[onset − window_samples, onset)`` (label 0) and post-event window
@@ -2055,7 +2055,7 @@ def compute_band_event_joint_mi(
     counts, and — if ``n_surrogates > 0`` — a label-shuffle permutation null.
     """
     if not _SKLEARN_MI_AVAILABLE:
-        raise RuntimeError('scikit-learn is required for band-power × event MI.')
+        raise RuntimeError('scikit-learn is required for amplitude-envelope × event MI.')
 
     sub_len = max(1, int(round(sub_sec * fs)))
     sub_step = max(1, int(round(sub_step_sec * fs)))
@@ -2238,7 +2238,31 @@ def run_band_event_mi_pipeline(
                     if key in res:
                         rec[key] = res[key]
                 records.append(rec)
-    return pd.DataFrame.from_records(records)
+    frame = pd.DataFrame.from_records(records)
+    frame.attrs['event_mi_context'] = {
+        'fs': float(fs), 'front_bandpass': bool(front_bandpass),
+        'sub_sec': float(sub_sec), 'sub_step_sec': float(sub_step_sec),
+        'n_neighbors': int(n_neighbors), 'n_surrogates': int(n_surrogates),
+        'random_state': int(random_state), 'pool_events': bool(pool_events),
+        'profile': 'legacy_auto_kdtree', 'quality': 'disabled',
+    }
+    return frame
+
+
+def event_mi_provenance(df: pd.DataFrame) -> str:
+    """Describe the producing call; historical tables must not inherit _PROV."""
+    context = df.attrs.get('event_mi_context')
+    if context is None:
+        return ('Band filters + Hilbert amplitude envelopes; pre/post half-windows\n'
+                'Run settings unknown (no event MI context in this table)')
+    front = (f'{DEFAULT_BP_LOW:g}-{DEFAULT_BP_HIGH:g} Hz' if context['front_bandpass'] else 'OFF')
+    pool = 'pooled events' if context['pool_events'] else 'per event'
+    return (f'Band filters + Hilbert amplitude envelopes | extra front BP {front} | fs={context["fs"]:g} Hz\n'
+            f'Sub-epoch={context["sub_sec"]:g} s / step={context["sub_step_sec"]:g} s | '
+            f'k requested={context["n_neighbors"]} | seed={context["random_state"]} | '
+            f'{context["n_surrogates"]} label shuffles\n'
+            f'{context["profile"]} | {pool} | quality {context["quality"]}; '
+            'overlapping sub-epochs are not independent observations')
 
 
 def plot_band_event_mi(df: pd.DataFrame, title: str, outpath: str) -> None:
@@ -2252,7 +2276,7 @@ def plot_band_event_mi(df: pd.DataFrame, title: str, outpath: str) -> None:
     if df.empty:
         print('  [warn] band-event MI DataFrame is empty — nothing to plot.')
         return
-    fig, ax = plt.subplots(figsize=(8.5, 5.5))
+    fig, ax = plt.subplots(figsize=(10, 6))
 
     palette = ['#0072B2', '#D55E00', '#009E73', '#CC79A7']
     has_p = 'surrogate_p_value' in df.columns
@@ -2271,16 +2295,15 @@ def plot_band_event_mi(df: pd.DataFrame, title: str, outpath: str) -> None:
                            s=140, facecolors='none', edgecolors=color, linewidths=1.8,
                            zorder=5)
 
-    ax.set_xlabel('Window Size (s)')
-    ax.set_ylabel('Joint MI  I(θ, α, β power ; Event)  [bits]')
+    ax.set_xlabel('Pre/post half-window duration (s)')
+    ax.set_ylabel('MI  I(θ, α, β amplitude envelopes ; pre/post)  [bits]')
     star_note = '  (ringed = surrogate p<.05)' if has_p else ''
-    ax.set_title(f'{title}\nJoint band-power mutual information vs. window size{star_note}')
+    ax.set_title(f'{title}\nAmplitude-envelope mutual information{star_note}')
     ax.set_xticks(sorted(df['Window_Size'].unique()))
     ax.grid(True, alpha=0.3)
     ax.legend(title='Channel / estimator', fontsize=8)
-    _add_footer(fig, _provenance(DEFAULT_FS, DEFAULT_WIN_SEC, None,
-                                 extra='band-power × event joint MI'))
-    fig.tight_layout(rect=(0, 0.02, 1, 1))
+    fig.text(0.02, 0.015, event_mi_provenance(df), fontsize=8, va='bottom')
+    fig.tight_layout(rect=(0, 0.12, 1, 1))
     fig.savefig(outpath, dpi=150)
     fig.savefig(os.path.splitext(outpath)[0] + '.svg')
     plt.close(fig)
@@ -3175,8 +3198,8 @@ def _parse_args() -> argparse.Namespace:
                               'Play button/slider grows each event\'s real MI '
                               'trace left→right around onset. Requires plotly.'))
     parser.add_argument('--band-event-mi', action='store_true', default=False,
-                        help=('Band-power × event mode: estimate the joint MI '
-                              'I(θ,α,β power ; pre/post-event) across window sizes '
+                        help=('Amplitude-envelope × event mode: estimate the joint MI '
+                              'I(θ,α,β amplitude envelopes ; pre/post-event) across window sizes '
                               '(--mi-windows) for two channels (--band-mi-channels). '
                               'Reports both the summed per-band and the true '
                               'multivariate KSG estimate (bits). Onsets come from '
@@ -3708,10 +3731,10 @@ def _run_band_event_mi_mode(args: argparse.Namespace,
                             time_us: np.ndarray,
                             data: np.ndarray,
                             outdir: str) -> None:
-    """Estimate I(θ,α,β power ; pre/post-event) across window sizes for the
+    """Estimate I(θ,α,β amplitude envelopes ; pre/post-event) across window sizes for the
     requested channels, write the results CSV, and plot MI vs. window size.
 
-    See the "Band-power × Event joint MI" section for the method: sub-epoch
+    See the "Amplitude-envelope × Event joint MI" section for the method: sub-epoch
     tiling of each pre/post window (pooled across onsets) feeds both the summed
     per-band and the true multivariate KSG estimator, reported in bits.
     """
@@ -3730,7 +3753,7 @@ def _run_band_event_mi_mode(args: argparse.Namespace,
                      f'(file has {data.shape[1]} channels).')
         signals[f'ch{ch}'] = data[:, idx]
 
-    print(f'Band-power × event joint MI — channels={list(signals)}, '
+    print(f'Amplitude-envelope × event joint MI — channels={list(signals)}, '
           f'windows={[f"{w:g}s" for w in args.mi_windows]}, '
           f'sub={args.mi_sub_sec:g}s/step={args.mi_sub_step:g}s, '
           f'surrogates={args.mi_surrogates}, fs={args.fs:g}Hz')

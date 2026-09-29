@@ -1,0 +1,152 @@
+{
+  "cases": [
+    {
+      "case": "controls",
+      "arrays": 1991,
+      "empty_arrays": [
+        "disabled__surrogates",
+        "short_run__surrogates"
+      ],
+      "readers": 0,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "real_0_bp",
+      "arrays": 559,
+      "empty_arrays": [],
+      "readers": 4,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "real_1_bp",
+      "arrays": 559,
+      "empty_arrays": [],
+      "readers": 4,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "real_2_bp",
+      "arrays": 559,
+      "empty_arrays": [],
+      "readers": 4,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "real_3_bp",
+      "arrays": 559,
+      "empty_arrays": [],
+      "readers": 4,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "real_4_bp",
+      "arrays": 559,
+      "empty_arrays": [],
+      "readers": 4,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "real_talk_raw",
+      "arrays": 45,
+      "empty_arrays": [],
+      "readers": 4,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "event_talk",
+      "arrays": 198,
+      "empty_arrays": [],
+      "readers": 0,
+      "event_source_reloads": 2
+    },
+    {
+      "case": "event_move_head",
+      "arrays": 198,
+      "empty_arrays": [],
+      "readers": 0,
+      "event_source_reloads": 2
+    },
+    {
+      "case": "continuous",
+      "arrays": 45,
+      "empty_arrays": [],
+      "readers": 4,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "event_continuous",
+      "arrays": 198,
+      "empty_arrays": [],
+      "readers": 0,
+      "event_source_reloads": 2
+    },
+    {
+      "case": "gap",
+      "arrays": 45,
+      "empty_arrays": [],
+      "readers": 4,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "event_gap",
+      "arrays": 190,
+      "empty_arrays": [
+        "event_call_2_estimates_nats",
+        "event_call_5_estimates_nats"
+      ],
+      "readers": 0,
+      "event_source_reloads": 2
+    },
+    {
+      "case": "short",
+      "arrays": 1,
+      "empty_arrays": [],
+      "readers": 0,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "nonfinite",
+      "arrays": 1,
+      "empty_arrays": [],
+      "readers": 0,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "quality_0.5",
+      "arrays": 45,
+      "empty_arrays": [],
+      "readers": 4,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "quality_0.49",
+      "arrays": 45,
+      "empty_arrays": [],
+      "readers": 4,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "quality_nan",
+      "arrays": 45,
+      "empty_arrays": [],
+      "readers": 4,
+      "event_source_reloads": 0
+    },
+    {
+      "case": "quality_disabled",
+      "arrays": 42,
+      "empty_arrays": [],
+      "readers": 4,
+      "event_source_reloads": 0
+    }
+  ],
+  "arrays": 5884,
+  "reader_checks": 48,
+  "event_source_reloads": 8,
+  "max_abs_error": 0.0,
+  "rtol": 0.0,
+  "atol": 0.0,
+  "semantic_metadata_equal": true,
+  "source_fingerprint_fields_compared_via_readers": true,
+  "product_changes": true
+}

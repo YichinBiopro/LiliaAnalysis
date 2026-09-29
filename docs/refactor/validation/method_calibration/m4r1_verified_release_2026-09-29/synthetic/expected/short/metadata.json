@@ -1,0 +1,7 @@
+{
+  "status": "short_rejected",
+  "readers": [],
+  "rows": 0,
+  "error": "No complete analysis window within any continuous segment",
+  "empty_arrays": {}
+}

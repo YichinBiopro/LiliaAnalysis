@@ -1,0 +1,261 @@
+{
+  "status": "empty",
+  "readers": 1,
+  "quality_audit": [],
+  "table_metadata": {
+    "schema_version": 1,
+    "source_path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m3_release_2026-09-17/synthetic/inputs/short.csv",
+    "source_sha256": "6ec469807188eee7c003642727f7c10085cd023bc52478690d5274c0e4623077",
+    "table_sha256": "a46a099cc45ff640bde64bdbaa67e702c6bcb4c2aae0ba2dc5f67c9a833b8c99",
+    "code_sha256": "b38a4dd8c7d253ffbc404c3b7c4535b9917b1c503d387b224647d53f28b9a50d",
+    "parameters": {
+      "ch": 1,
+      "fs": 500.0,
+      "target_freq": 60.0,
+      "win_sec": 5.0,
+      "step_sec": 5.0,
+      "sat_uv": 1950.0,
+      "sat_frac_threshold": 0.12,
+      "step_ptp_threshold": 1000.0,
+      "bp_shift_sec": 1.0,
+      "bp_shift_threshold": 80.0,
+      "bp_low": 0.5,
+      "bp_high": 45.0,
+      "quality_params": {
+        "target_score": 0.8,
+        "flat_activity_k": 0.35,
+        "spectrum_fit_hi": 40.0,
+        "flat_ratio_start": 0.3,
+        "flat_penalty_floor": 0.2,
+        "spike_ratio_start": 0.0001,
+        "spike_ratio_end": 0.0015,
+        "spike_penalty_floor": 0.2,
+        "clip_ratio_start": 0.001,
+        "clip_ratio_end": 0.01,
+        "clip_penalty_floor": 0.2,
+        "range_start": 6.0,
+        "range_end": 12.0,
+        "range_penalty_floor": 0.3,
+        "slope_good_low": -2.5,
+        "slope_center": -1.0,
+        "slope_good_high": -0.2,
+        "slope_edge_score": 0.7,
+        "slope_outer_floor": 0.2,
+        "alpha_dpr_good": 0.55,
+        "alpha_dpr_bad": 0.8,
+        "alpha_artifact_floor": 0.5,
+        "nonalpha_dpr_good": 0.25,
+        "nonalpha_dpr_bad": 0.5,
+        "nonalpha_artifact_floor": 0.1,
+        "low_freq_penalty_floor": 0.3,
+        "low_freq_penalty_ceiling": 0.7,
+        "line_noise_penalty_floor": 0.4,
+        "line_noise_penalty_ceiling": 0.7,
+        "kurtosis_good_low": 2.0,
+        "kurtosis_good_high": 8.0,
+        "kurtosis_bad_high": 15.0,
+        "kurtosis_floor": 0.2,
+        "corr_low": 0.2,
+        "corr_mid": 0.4,
+        "corr_high": 0.9,
+        "corr_floor": 0.3,
+        "corr_low_score": 0.75,
+        "corr_mid_score": 0.9,
+        "flat_weight": 1.0,
+        "spectrum_weight": 0.9,
+        "kurtosis_weight": 0.0,
+        "corr_weight": 0.0
+      }
+    },
+    "kind": "goertzel",
+    "quality_diagnostics_version": 1,
+    "quality_audit": [],
+    "feature_sources": {
+      "quality": "filtered",
+      "goertzel_power": "filtered",
+      "goertzel_db": "filtered",
+      "sat_frac_1950": "raw",
+      "peak_to_peak_uv": "raw",
+      "max_abs_diff_uv": "raw",
+      "bp_edge_shift_uv": "filtered",
+      "artifact_hard_clip": [
+        "sat_frac_1950",
+        "peak_to_peak_uv",
+        "bp_edge_shift_uv"
+      ],
+      "quality_final": "zero_if_hard_else_legacy_overall_selected_channel"
+    }
+  },
+  "table": {
+    "columns": [
+      "window_start_idx",
+      "window_end_idx",
+      "time_s",
+      "window_start_us",
+      "window_end_us",
+      "window_center_us",
+      "goertzel_power",
+      "goertzel_db",
+      "quality",
+      "quality_final",
+      "sat_frac_1950",
+      "peak_to_peak_uv",
+      "max_abs_diff_uv",
+      "bp_edge_shift_uv",
+      "artifact_hard_clip",
+      "quality_diagnostic_state",
+      "quality_diagnostic_reason",
+      "quality_stage",
+      "quality_score_policy"
+    ],
+    "index": [],
+    "data": []
+  },
+  "rows": 0,
+  "empty_arrays": {
+    "window_start_idx": [
+      0
+    ],
+    "window_end_idx": [
+      0
+    ],
+    "time_s": [
+      0
+    ],
+    "goertzel_power": [
+      0
+    ],
+    "goertzel_db": [
+      0
+    ],
+    "quality": [
+      0
+    ],
+    "quality_final": [
+      0
+    ],
+    "sat_frac_1950": [
+      0
+    ],
+    "peak_to_peak_uv": [
+      0
+    ],
+    "max_abs_diff_uv": [
+      0
+    ],
+    "bp_edge_shift_uv": [
+      0
+    ],
+    "hard_artifact": [
+      0
+    ],
+    "segment_ids": [
+      0
+    ],
+    "render_db_0_x": [
+      0
+    ],
+    "render_db_0_y": [
+      0
+    ],
+    "render_db_1_x": [
+      0
+    ],
+    "render_db_1_y": [
+      0
+    ],
+    "render_linear_0_x": [
+      0
+    ],
+    "render_linear_0_y": [
+      0
+    ],
+    "render_linear_1_x": [
+      0
+    ],
+    "render_linear_1_y": [
+      0
+    ],
+    "table_window_start_idx": [
+      0
+    ],
+    "table_window_end_idx": [
+      0
+    ],
+    "table_time_s": [
+      0
+    ],
+    "table_window_start_us": [
+      0
+    ],
+    "table_window_end_us": [
+      0
+    ],
+    "table_window_center_us": [
+      0
+    ],
+    "table_goertzel_power": [
+      0
+    ],
+    "table_goertzel_db": [
+      0
+    ],
+    "table_quality": [
+      0
+    ],
+    "table_quality_final": [
+      0
+    ],
+    "table_sat_frac_1950": [
+      0
+    ],
+    "table_peak_to_peak_uv": [
+      0
+    ],
+    "table_max_abs_diff_uv": [
+      0
+    ],
+    "table_bp_edge_shift_uv": [
+      0
+    ],
+    "table_artifact_hard_clip": [
+      0
+    ],
+    "accepted_False_0.49": [
+      0
+    ],
+    "legacy_smooth_goertzel_power_False_0.49": [
+      0
+    ],
+    "legacy_smooth_goertzel_db_False_0.49": [
+      0
+    ],
+    "accepted_False_0.5": [
+      0
+    ],
+    "legacy_smooth_goertzel_power_False_0.5": [
+      0
+    ],
+    "legacy_smooth_goertzel_db_False_0.5": [
+      0
+    ],
+    "accepted_True_0.49": [
+      0
+    ],
+    "legacy_smooth_goertzel_power_True_0.49": [
+      0
+    ],
+    "legacy_smooth_goertzel_db_True_0.49": [
+      0
+    ],
+    "accepted_True_0.5": [
+      0
+    ],
+    "legacy_smooth_goertzel_power_True_0.5": [
+      0
+    ],
+    "legacy_smooth_goertzel_db_True_0.5": [
+      0
+    ]
+  }
+}

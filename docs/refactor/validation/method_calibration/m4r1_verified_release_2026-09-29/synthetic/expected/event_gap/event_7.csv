@@ -1,0 +1,3 @@
+Window_Size,Channel,Joint_MI_Sum_Bits,Joint_MI_KSG_Bits,N_Pre,N_Post,K_Neighbors,Quality_State,N_Events,surrogate_mean_bits,surrogate_std_bits,surrogate_p_value,surrogate_z
+5.0,ch1,0.02341516951284044,0.0,5,5,3,disabled,1,0.005043135164758267,0.019354712737143974,1.0,-0.26056367941229613
+5.0,ch2,0.08009247469062063,0.0,5,5,3,disabled,1,0.017637233123883597,0.06494221577484997,1.0,-0.2715834825382402

@@ -1,0 +1,211 @@
+{
+  "date": "2026-09-22",
+  "method": "Manual inspection of each original PNG with view_image",
+  "images": [
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/actual/event_move_head/events.png",
+      "sha256": "204e47701dd35ff9ec9a67f0151bf02ab747fd10d904df492cb839dfe7f31405",
+      "status": "reviewed_with_label_limitations",
+      "notes": "Legacy plot says power though features are amplitude envelopes; helper footer uses generic defaults and inherited _PROV, not the actual event settings. Use event_review.png and capture metadata for method interpretation; original preserved.",
+      "repository": false
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/actual/event_talk/events.png",
+      "sha256": "8ea18a309a6a6eb9313bb6eafee103df22a812d6faf92104f3f1f926d3952468",
+      "status": "reviewed_with_label_limitations",
+      "notes": "Legacy plot says power though features are amplitude envelopes; helper footer uses generic defaults and inherited _PROV, not the actual event settings. Use event_review.png and capture metadata for method interpretation; original preserved.",
+      "repository": false
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/actual/real_1_bp/2026-06-18-lilia-talk_joint_mi_ch1_ch2_distribution.png",
+      "sha256": "763f0ae87f313454ad7fb3b684d92545fd17113ad20f6dbdca7a949a325b8a87",
+      "status": "reviewed",
+      "notes": "Axes and units readable; original source-gap breaks / mask state preserved where applicable. Legacy layout has crowded adjacent-axis ticks; recorded as presentation limitation.",
+      "repository": false
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/actual/real_1_bp/2026-06-18-lilia-talk_joint_mi_ch1_ch2_excess.png",
+      "sha256": "b4cd1238cca9b89b8549cb5a47c7579466067c570529a5c5780f449068f9d459",
+      "status": "reviewed",
+      "notes": "Axes and units readable; original source-gap breaks / mask state preserved where applicable.",
+      "repository": false
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/actual/real_1_bp/2026-06-18-lilia-talk_joint_mi_ch1_ch2_quality.png",
+      "sha256": "cb9f212a26bb235b7d226daa236b8f6d6f7e4bb1efdd8bb1b42cb99914561bd8",
+      "status": "reviewed",
+      "notes": "Axes and units readable; original source-gap breaks / mask state preserved where applicable.",
+      "repository": false
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/local/actual/real_1_bp/2026-06-18-lilia-talk_joint_mi_ch1_ch2_timeseries.png",
+      "sha256": "dd771f3dab650a13827f12982c16ee6af8220ec1b9b7a7460d51bc8f529c260e",
+      "status": "reviewed",
+      "notes": "Axes and units readable; original source-gap breaks / mask state preserved where applicable.",
+      "repository": false
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/continuous/continuous_joint_mi_ch1_ch2_distribution.png",
+      "sha256": "45c6566a5e73037f6b17b8f36c598d936bf83f61f1015073a9bbaea94e4b3b89",
+      "status": "reviewed",
+      "notes": "Axes and units readable; original source-gap breaks / mask state preserved where applicable. Legacy layout has crowded adjacent-axis ticks; recorded as presentation limitation.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/continuous/continuous_joint_mi_ch1_ch2_excess.png",
+      "sha256": "1ec59428757beff15259624c4430be5b1772143cb4ba07176b2a3a54337b2513",
+      "status": "reviewed",
+      "notes": "Axes and units readable; original source-gap breaks / mask state preserved where applicable.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/continuous/continuous_joint_mi_ch1_ch2_quality.png",
+      "sha256": "ea2950242073ad3e50c9fb3a47e889739393c3b3f8945720563872fb7a39e02b",
+      "status": "reviewed",
+      "notes": "Axes and units readable; original source-gap breaks / mask state preserved where applicable.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/continuous/continuous_joint_mi_ch1_ch2_timeseries.png",
+      "sha256": "5d8450e9c0905a0536cadea2cd26aa2c006bfae2239c67624388ffc277815be1",
+      "status": "reviewed",
+      "notes": "Axes and units readable; original source-gap breaks / mask state preserved where applicable.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/controls/controls.png",
+      "sha256": "355d67f0fad86c28db798b3b3af67a6f0a634bc2368ffae2b9d761be7a3df6bd",
+      "status": "reviewed",
+      "notes": "Finite-sample MI, segment-conditioned vs global null, k and redundant-feature sum/joint differences visible.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/event_continuous/events.png",
+      "sha256": "7f2fd1f815e9259ea6020965e18a4c09f1eb78e1a98733bbdfb775e693504939",
+      "status": "reviewed_with_label_limitations",
+      "notes": "Legacy plot says power though features are amplitude envelopes; helper footer uses generic defaults and inherited _PROV, not the actual event settings. Use event_review.png and capture metadata for method interpretation; original preserved.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/event_gap/events.png",
+      "sha256": "90145b0c8b30f34e95fef204a43c429684724932cfb2fc5f564d1e4f1d93d394",
+      "status": "reviewed_with_label_limitations",
+      "notes": "Legacy plot says power though features are amplitude envelopes; helper footer uses generic defaults and inherited _PROV, not the actual event settings. Use event_review.png and capture metadata for method interpretation; original preserved.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/gap/gap_joint_mi_ch1_ch2_distribution.png",
+      "sha256": "255403aba5b66a23c3448e566c0e283c537a98cc3ee440d74475fda898d65f92",
+      "status": "reviewed",
+      "notes": "Axes and units readable; original source-gap breaks / mask state preserved where applicable. Legacy layout has crowded adjacent-axis ticks; recorded as presentation limitation.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/gap/gap_joint_mi_ch1_ch2_excess.png",
+      "sha256": "30d63e11f1d147d87938fbebf79924b1ae145aad10ec68febc40f93cd9c5a50d",
+      "status": "reviewed",
+      "notes": "Axes and units readable; original source-gap breaks / mask state preserved where applicable.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/gap/gap_joint_mi_ch1_ch2_quality.png",
+      "sha256": "fe05a77d37622e2ca8ff34d385a58da7472d54aa616ed9f8a679a8d6924422cd",
+      "status": "reviewed",
+      "notes": "Axes and units readable; original source-gap breaks / mask state preserved where applicable.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/gap/gap_joint_mi_ch1_ch2_timeseries.png",
+      "sha256": "7fdb5a8b36f3755a53bbd6f72b861a9f6e9f788eec57f067a5b8ad82b519c81f",
+      "status": "reviewed",
+      "notes": "Axes and units readable; original source-gap breaks / mask state preserved where applicable.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/quality_0.49/gap_joint_mi_ch1_ch2_distribution.png",
+      "sha256": "255403aba5b66a23c3448e566c0e283c537a98cc3ee440d74475fda898d65f92",
+      "status": "reviewed",
+      "notes": "All-rejected series explicitly empty; diagnostic unavailable and .49 threshold rejection visible; unmasked population retained. Legacy layout has crowded adjacent-axis ticks; recorded as presentation limitation.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/quality_0.49/gap_joint_mi_ch1_ch2_excess.png",
+      "sha256": "30d63e11f1d147d87938fbebf79924b1ae145aad10ec68febc40f93cd9c5a50d",
+      "status": "reviewed",
+      "notes": "All-rejected series explicitly empty; diagnostic unavailable and .49 threshold rejection visible; unmasked population retained.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/quality_0.49/gap_joint_mi_ch1_ch2_quality.png",
+      "sha256": "a6b0227a851be1b7fd9cfda5c1e50332edeb206f1b3ec916f77666764dafecaf",
+      "status": "reviewed",
+      "notes": "All-rejected series explicitly empty; diagnostic unavailable and .49 threshold rejection visible; unmasked population retained.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_release_2026-09-22/synthetic/actual/quality_0.49/gap_joint_mi_ch1_ch2_timeseries.png",
+      "sha256": "7084ce4730901e248f896ae802ee06a1f4aae09a64374ac02d15463118c3282e",
+      "status": "reviewed",
+      "notes": "All-rejected series explicitly empty; diagnostic unavailable and .49 threshold rejection visible; unmasked population retained.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/local/event_move_head/event_review.png",
+      "sha256": "4a8176405393db66e5a8b1422e50e5ed895aef4a78350281740fd96bdc70e9d8",
+      "status": "reviewed",
+      "notes": "Correct amplitude-envelope label, front filter OFF, sub-epoch settings, counts and overlap limitation are explicit; same saved values.",
+      "repository": false
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/local/event_move_head/radius_comparison.png",
+      "sha256": "06d44f8d2e3627c3b547f1ffb9626ef2656a81701429b163fe4d22abea0c7326",
+      "status": "reviewed",
+      "notes": "Both observed/null distributions and changed p values visible; single differing call uses markers; no significance claim.",
+      "repository": false
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/local/event_talk/event_review.png",
+      "sha256": "b16e9e8629ae4decefe6331ac193b1c6d1716766f2b63d650f6347e4b16153cc",
+      "status": "reviewed",
+      "notes": "Correct amplitude-envelope label, front filter OFF, sub-epoch settings, counts and overlap limitation are explicit; same saved values.",
+      "repository": false
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/local/event_talk/radius_comparison.png",
+      "sha256": "341cae9234e0347b090b3afe3cce7ccfda9ace47935f6b86041b12ccd39502ad",
+      "status": "reviewed",
+      "notes": "Both observed/null distributions and changed p values visible; single differing call uses markers; no significance claim.",
+      "repository": false
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_continuous/event_review.png",
+      "sha256": "0490a2776615c1c3aae38367266f8f431846e3baacb389a009b1a933f9f94009",
+      "status": "reviewed",
+      "notes": "Correct amplitude-envelope label, front filter OFF, sub-epoch settings, counts and overlap limitation are explicit; same saved values.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_continuous/radius_comparison.png",
+      "sha256": "44b657f4f9d1bb3710a1de75d12107f0510c84872084235ebe58c45a52d88e54",
+      "status": "reviewed",
+      "notes": "Both observed/null distributions and changed p values visible; single differing call uses markers; no significance claim.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_gap/event_review.png",
+      "sha256": "17d8b32cbdbefacace23797da4d466da7cde413b2df9fd03190ea3cdd2cda17d",
+      "status": "reviewed",
+      "notes": "Correct amplitude-envelope label, front filter OFF, sub-epoch settings, counts and overlap limitation are explicit; same saved values.",
+      "repository": true
+    },
+    {
+      "path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4_review_final_2026-09-22/synthetic/event_gap/radius_comparison.png",
+      "sha256": "8692a674cb8668be4228777b4f90996a4b8bcb69e0f7d612fa787a1cc4231ccf",
+      "status": "reviewed",
+      "notes": "Both observed/null distributions and changed p values visible; single differing call uses markers; no significance claim.",
+      "repository": true
+    }
+  ],
+  "count": 29,
+  "legacy_event_labels_approved": false
+}

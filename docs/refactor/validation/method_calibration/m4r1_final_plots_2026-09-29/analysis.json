@@ -1,0 +1,131 @@
+{
+  "cases": [
+    {
+      "case": "custom_frontend",
+      "arrays": 8,
+      "empty": [],
+      "labels": [
+        "Synthetic custom settings\nAmplitude-envelope mutual information  (ringed = surrogate p<.05)",
+        "Pre/post half-window duration (s)",
+        "MI  I(\u03b8, \u03b1, \u03b2 amplitude envelopes ; pre/post)  [bits]",
+        "Channel / estimator",
+        "Band filters + Hilbert amplitude envelopes | extra front BP 0.5-45 Hz | fs=200 Hz\nSub-epoch=0.5 s / step=0.25 s | k requested=1 | seed=7 | 19 label shuffles\nlegacy_auto_kdtree | per event | quality disabled; overlapping sub-epochs are not independent observations",
+        "Synthetic custom settings\nAmplitude-envelope mutual information  (ringed = surrogate p<.05)",
+        "Pre/post half-window duration (s)",
+        "MI  I(\u03b8, \u03b1, \u03b2 amplitude envelopes ; pre/post)  [bits]",
+        "Channel / estimator",
+        "Band filters + Hilbert amplitude envelopes | extra front BP 0.5-45 Hz | fs=200 Hz\nSub-epoch=0.5 s / step=0.25 s | k requested=1 | seed=7 | 19 label shuffles\nlegacy_auto_kdtree | per event | quality disabled; overlapping sub-epochs are not independent observations"
+      ]
+    },
+    {
+      "case": "subject",
+      "arrays": 32,
+      "empty": [],
+      "labels": [
+        "Pre/post half-window = 2 s",
+        "",
+        "MI (bits)",
+        "",
+        "Pre/post half-window = 5 s",
+        "",
+        "MI (bits)",
+        "Pre/post half-window = 10 s",
+        "",
+        "MI (bits)",
+        "Pre/post half-window = 15 s",
+        "",
+        "MI (bits)",
+        "Synthetic gap probe \u2014 per-event amplitude-envelope MI  I(\u03b8,\u03b1,\u03b2 ; pre/post)\nbars = true Joint-KSG \u00b7 ticks = \u03a3 (sum) \u00b7 * = surrogate p<.05",
+        "Band filters + Hilbert amplitude envelopes | extra front BP 0.5-45 Hz | fs=200 Hz\nSub-epoch=0.5 s / step=0.25 s | k requested=1 | seed=7 | 19 label shuffles\nlegacy_auto_kdtree | per event | quality disabled; overlapping sub-epochs are not independent observations",
+        "Pre/post half-window = 2 s",
+        "",
+        "MI (bits)",
+        "",
+        "Pre/post half-window = 5 s",
+        "",
+        "MI (bits)",
+        "Pre/post half-window = 10 s",
+        "",
+        "MI (bits)",
+        "Pre/post half-window = 15 s",
+        "",
+        "MI (bits)",
+        "Synthetic gap probe \u2014 per-event amplitude-envelope MI  I(\u03b8,\u03b1,\u03b2 ; pre/post)\nbars = true Joint-KSG \u00b7 ticks = \u03a3 (sum) \u00b7 * = surrogate p<.05",
+        "Band filters + Hilbert amplitude envelopes | extra front BP 0.5-45 Hz | fs=200 Hz\nSub-epoch=0.5 s / step=0.25 s | k requested=1 | seed=7 | 19 label shuffles\nlegacy_auto_kdtree | per event | quality disabled; overlapping sub-epochs are not independent observations"
+      ]
+    },
+    {
+      "case": "cross_subject",
+      "arrays": 24,
+      "empty": [],
+      "labels": [
+        "ch1: mean Joint-KSG across subjects",
+        "",
+        "Joint-KSG  I(\u03b8,\u03b1,\u03b2 ; event)  [bits]",
+        "ch2: mean Joint-KSG across subjects",
+        "",
+        "",
+        "Pre/post half-window",
+        "Per-event amplitude-envelope MI, averaged across subjects (shaded = \u00b11\u03c3)",
+        "Band filters + Hilbert amplitude envelopes | extra front BP 0.5-45 Hz | fs=200 Hz\nSub-epoch=0.5 s / step=0.25 s | k requested=1 | seed=7 | 19 label shuffles\nlegacy_auto_kdtree | per event | quality disabled; overlapping sub-epochs are not independent observations",
+        "ch1: mean Joint-KSG across subjects",
+        "",
+        "Joint-KSG  I(\u03b8,\u03b1,\u03b2 ; event)  [bits]",
+        "ch2: mean Joint-KSG across subjects",
+        "",
+        "",
+        "Pre/post half-window",
+        "Per-event amplitude-envelope MI, averaged across subjects (shaded = \u00b11\u03c3)",
+        "Band filters + Hilbert amplitude envelopes | extra front BP 0.5-45 Hz | fs=200 Hz\nSub-epoch=0.5 s / step=0.25 s | k requested=1 | seed=7 | 19 label shuffles\nlegacy_auto_kdtree | per event | quality disabled; overlapping sub-epochs are not independent observations"
+      ]
+    },
+    {
+      "case": "historical_gap",
+      "arrays": 12,
+      "empty": [],
+      "labels": [
+        "ch1: redundancy gap  \u03a3 \u2212 Joint",
+        "Pre/post half-window duration (s)",
+        "Gap  (\u03a3 \u2212 Joint-KSG)  [bits]",
+        "ch2: redundancy gap  \u03a3 \u2212 Joint",
+        "Pre/post half-window duration (s)",
+        "",
+        "Subject",
+        "Shared/redundant amplitude-envelope information across pre\u2192post event transition\npositive gap = information the summation \u03a3 over-counts",
+        "Band filters + Hilbert amplitude envelopes; pre/post half-windows\nRun settings unknown (no event MI context in this table)",
+        "ch1: redundancy gap  \u03a3 \u2212 Joint",
+        "Pre/post half-window duration (s)",
+        "Gap  (\u03a3 \u2212 Joint-KSG)  [bits]",
+        "ch2: redundancy gap  \u03a3 \u2212 Joint",
+        "Pre/post half-window duration (s)",
+        "",
+        "Subject",
+        "Shared/redundant amplitude-envelope information across pre\u2192post event transition\npositive gap = information the summation \u03a3 over-counts",
+        "Band filters + Hilbert amplitude envelopes; pre/post half-windows\nRun settings unknown (no event MI context in this table)"
+      ]
+    },
+    {
+      "case": "historical_event",
+      "arrays": 8,
+      "empty": [],
+      "labels": [
+        "Historical context absent\nAmplitude-envelope mutual information  (ringed = surrogate p<.05)",
+        "Pre/post half-window duration (s)",
+        "MI  I(\u03b8, \u03b1, \u03b2 amplitude envelopes ; pre/post)  [bits]",
+        "Channel / estimator",
+        "Band filters + Hilbert amplitude envelopes; pre/post half-windows\nRun settings unknown (no event MI context in this table)",
+        "Historical context absent\nAmplitude-envelope mutual information  (ringed = surrogate p<.05)",
+        "Pre/post half-window duration (s)",
+        "MI  I(\u03b8, \u03b1, \u03b2 amplitude envelopes ; pre/post)  [bits]",
+        "Channel / estimator",
+        "Band filters + Hilbert amplitude envelopes; pre/post half-windows\nRun settings unknown (no event MI context in this table)"
+      ]
+    }
+  ],
+  "arrays": 84,
+  "numeric_max_error": 0.0,
+  "event_rows": 16,
+  "source_reload": "synthetic array; CSV exact round trip",
+  "acceptance_audit_equal": true,
+  "plot_reference_scope": "frozen plot functions; same supplied frame"
+}

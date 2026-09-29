@@ -1,0 +1,17 @@
+test_cli_gap_success_and_exclusion_audit_on_failure (test_event_windows_regression.EventWindowTests) ... ok
+test_continuous_numerics_match_pre_refactor (test_event_windows_regression.EventWindowTests) ... ok
+test_filter_hilbert_never_borrow_across_gap (test_event_windows_regression.EventWindowTests) ... ok
+test_gap_onset_pre_post_and_incomplete_intervals (test_event_windows_regression.EventWindowTests) ... ok
+test_half_open_true_time_after_gap_and_between_samples (test_event_windows_regression.EventWindowTests) ... ok
+test_invalid_timestamps_and_lengths_rejected (test_event_windows_regression.EventWindowTests) ... ok
+test_nonfinite_channel_is_excluded_and_quality_not_claimed (test_event_windows_regression.EventWindowTests) ... ok
+test_participation_and_legacy_index_interfaces_use_real_time (test_event_windows_regression.EventWindowTests) ... ok
+test_pre_onset_histograms_use_complete_physical_intervals (test_event_windows_regression.EventWindowTests) ... ok
+test_short_unused_segment_and_per_duration_eligibility (test_event_windows_regression.EventWindowTests) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.125s
+
+OK
+  [skip] ch1 @ 5s — too few usable sub-epochs.
+  [skip] ch1 @ 10s — too few usable sub-epochs.

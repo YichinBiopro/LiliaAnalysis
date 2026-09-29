@@ -1,6 +1,6 @@
 # 階段任務單
 
-只讀當前卡片。14–18 已完成；方法校準 M0／M1／M2 已完成，當前為 M3：Goertzel 分段平滑比較。歷史卡片的 Git 狀態是當時紀錄，現況見 `REFACTOR_STATUS.md`。
+只讀當前卡片。14–18 與方法校準 M0–M4-R1 已完成；當前為架構與 F19。歷史卡片的 Git 狀態是當時紀錄，現況見 `REFACTOR_STATUS.md`。
 所有任務共用 [WORKFLOW](WORKFLOW.md) 的驗證與收尾規則。方法校準另立任務，勿混入等價搬移。
 
 <a id="stage-14"></a>
@@ -70,24 +70,33 @@
 - 完成條件：callers／readers／圖形與 preset／stage 可追蹤；真實舊新數值、短窗／污染／fallback／例外、接受排除、目視、整階段證據及完整檢查均已通過。Git 發佈狀態以分支遠端為準。
 
 <a id="method-calibration"></a>
-## 方法校準：進行中
+## 方法校準：完成（M4-R1 2026-09-29）
 
 - 範圍：[舊 profiles／比較契約](METHOD_CALIBRATION_PROFILES.md)；與等價重構分開，不改目前 CLI 預設、方法數值或品質接受政策。
 - M0 已完成（2026-09-16）：baseline／PSD／Goertzel／MI 盤點，固定 Stage18 後 `aa0df5f4` 原碼與來源／模型／環境；五份真實＋三份合成案例共 1,255 陣列與選取 audit 精確一致。詳見 [首輪增量報告](METHOD_CALIBRATION_BASELINE_REPORT_2026-09-16.md)。這是核心 helper／模型比較基準，不代表所有入口或科學方法已驗收。
 - M1 已完成（2026-09-16）：meditation／marker／legacy sampler／entropy-state 完整入口與多事件、非參與者、鍵盤標記／protocol 案例；19 案例、585 陣列與 metadata 精確一致、20 來源 reader。目視另修正 marker 窗口間缺口連線，3 案例／72 陣列重驗；357 tests／0 skipped。詳見 [M1 增量報告](METHOD_CALIBRATION_M1_REPORT_2026-09-16.md)。來源標註不等於觀測行為，缺 baseline／品質邊界／guard 政策保留。
 - M2 已完成（2026-09-17）：P-jenqwei／P-quality-plot 獨立舊新 PSD capture，8 案例／938 陣列與 metadata 精確相同、19 reader；160 控制＋1 單頻點探針及 128 捕獲輸入的 256 次窗長比較，10 圖目視；364 tests／0 skipped。詳見 [M2 報告](METHOD_CALIBRATION_M2_REPORT_2026-09-17.md) 與 [比較契約](PSD_COMPARISON_CONTRACT.md)。窗長／邊界／單點／分母差異明示，legacy profile／預設／品質／索引不改。
-- **M3 當前任務**：Goertzel 分段平滑獨立比較，再處理 normalization／前端濾波與門檻單位；舊 > 門檻、不正規化 power 及 rolling 行為保留可重現版本。
-- M3 完成條件：固定同來源／模型／環境及 legacy 基準；先定比較量，再列分段平滑前後線性 power／dB、有效窗口與接受／排除差異。raw／BP、窗長、normalization 分開比較；如採新方法，需具名 profile／明示相容策略，不能把舊門檻直接套到新單位。真實／合成／缺口／短段、reader、目視及完整檢查通過才標完成。
-- M3 起始測試：`tests/test_goertzel_quality_regression.py`、`tests/test_goertzel_sampling_regression.py`、`tests/test_goertzel_distribution_regression.py`，依變更補共享模組測試；先讀 profiles 的 Goertzel 段，按需查 Stage18 R5 證據；涉及方法判讀查一手文獻，收尾 `--full`。
-- M4：MI histogram／KSG／null 分開校準；含合成控制、真實標註、bins／k／樣本數／seed／surrogates 敏感度；方法結論另查一手文獻。
+- M3 已完成（2026-09-17）：Goertzel 分段平滑、raw／BP、窗長與 normalization 分別比較；20 案例／932 陣列與 metadata 精確一致、38 reader、30 功率控制、16 圖目視；371 tests／0 skipped。詳見 [M3 報告](METHOD_CALIBRATION_M3_REPORT_2026-09-17.md) 與 [比較契約](GOERTZEL_COMPARISON_CONTRACT.md)。真實缺口副本平滑差最大 2.07965 dB，接受／排除與 NaN 位置不变；候選只供比較，legacy rolling／門檻／產品預設保留。
+- M4 比較完成（2026-09-22）：18入口＋1控制套件，5,884陣列精確一致、48 reader／8 event來源重載；149控制、180真實 histogram設定、80 event參數呼叫、29圖目視；378 tests／0 skipped。[M4報告](METHOD_CALIBRATION_M4_REPORT_2026-09-22.md)／[契約與發現增補](MI_COMPARISON_CONTRACT.md)。7組小樣本 KSG 幾何等價未通過，最大差0.20037 bits且影響 null／p；原方法保留，未宣告科學驗證完成。
+- **M4-R1 已完成**：[增量報告](METHOD_CALIBRATION_M4_R1_REPORT_2026-09-29.md)。具名直接幾何候選只供校準，legacy 維持預設；124有效呼叫／20,801 null 候選對獨立參考誤差0。原7組 observed 差異之外另有5組 observed 相同但 null 不同，總計1,026筆 legacy null 差異；圖形標示已修正。
+- M4-R1 完成條件：候選與獨立參考的容許誤差預先固定，小樣本／ties／singleton／不同 k 與搜尋演算法有反例測試；原 profile 數值、NaN／索引／品質相容。真實 trigger／缺口／短窗、完整 null、圖線與標籤、來源表及全套檢查；新 profile 採用與預設策略須明示，不能以相容測試通過替代方法核對。
+- M4 完成條件：預先定義比較量；明示 bits／nats、population／逐窗品質、circular shift／label shuffle 及樣本數的差異。真實 keyboard trigger／protocol 與探針不得當作觀測行為真值；方法判讀查一手文獻。如採新方法，需具名 profile／明示相容策略。舊新數值、索引／NaN／接受排除、來源 reader、合成與真實圖形目視及完整檢查通過才標完成。
+- M4-R1 起始測試：`tests/test_mi_method_comparison_regression.py`、`tests/test_joint_mi_windows_regression.py`、`tests/test_state_entropy_regression.py`、`tests/test_entropy_quality_diagnostics_regression.py`；先讀 M4 報告與 `m4_review_final_2026-09-22/findings.json`，不重跑未受影響的 M0–M3；收尾 `--full`。
 - 重跑核心基準：`python tools/freeze_method_profiles.py --out /path/to/new-directory`；只寫新目錄。真實衍生產物在 ignored `local/`，合成與摘要可提交；完整來源版與 repository manifest 分開。
 - 校準完成條件：具名 legacy／新 profile、明示預設與相容政策、預先定義的數值差異驗收、真實與合成／圖形／完整檢查；不得以 M0 精確相同替代方法有效性驗證。
+
+<a id="architecture-f19"></a>
+## 架構與 F19：當前任務
+
+- 先盤點大型入口與計算對繪圖私有函式的依賴，依入口／共享模組拆成可獨立驗收的小步驟；每步保留既有 raw／filtered／model stage、baseline、品質、索引及 legacy guard。
+- F19 原已列出 `target_score` 與十個不參與分數的品質 preset key，保留現有對外接受與數值；先盤點讀寫者與文件，再明示 deprecated 參數的相容策略。不得僅因未見 repo 內引用而移除公開介面或讓舊參數暗中生效。
+- 起始資料：`PYTHON_REVIEW_2026-09-06.md` 的 F19 與 `PYTHON_FIX_REPORT_2026-09-06.md` 當時處理；驗收依 [WORKFLOW](WORKFLOW.md) 選測試、真實數值／圖形、完整檢查與增量報告。
 
 ## 入口遷移後的其餘待辦（尚未編號）
 
 | 工作單元 | 接手範圍／完成依據 |
 | --- | --- |
-| 方法校準 | 進行中；M0／M1／M2 完成，下一步 M3 Goertzel，見上方卡片。 |
-| 架構與 F19 | 大入口拆分、移除計算對繪圖私有函式的依賴、明示 deprecated 參數的相容策略。 |
+| 方法校準 | M0–M4-R1 已完成；候選未採入產品，legacy 的半徑差異與科學解讀限制見 M4-R1 報告。 |
+| 架構與 F19 | 當前任務；大入口拆分、移除計算對繪圖私有函式的依賴、明示 deprecated 參數的相容策略。 |
 | 批次與產物 | 批次失敗報告、來源／設定追蹤、CSV／sidecar／圖形成套原子發佈。 |
 | 整體驗收 | 所有入口、真實基準、必要方法差異、bundle、文件與發佈狀態；提交／推送依當時授權。 |

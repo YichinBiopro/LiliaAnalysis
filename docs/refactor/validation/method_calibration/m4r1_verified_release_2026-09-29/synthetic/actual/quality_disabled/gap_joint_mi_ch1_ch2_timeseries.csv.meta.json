@@ -1,0 +1,283 @@
+{
+  "kind": "joint_mi",
+  "schema_version": 1,
+  "source_id": "43371634e46827157fb380ac4c89d35625fb46a31fcdc1f8f9bbe15a1ad13cad",
+  "source_path": "/home/bps-yichin/lilia_analysis/docs/refactor/validation/method_calibration/m4r1_verified_release_2026-09-29/synthetic/inputs/gap.csv",
+  "source_samples": 12000,
+  "source_epoch_us": 0,
+  "config_id": "7a9236474f3d89cb0cb9b61bf7946afd5128744aee4488e9c8510d29c4a8c847",
+  "parameters": {
+    "fs": 500.0,
+    "channels": [
+      1,
+      2
+    ],
+    "win_sec": 2.0,
+    "step_sec": 2.0,
+    "win_samples": 1000,
+    "step_samples": 1000,
+    "bandpass": [
+      0.5,
+      45.0
+    ],
+    "quality_enabled": false,
+    "quality_threshold": 0.5,
+    "quality_state_version": 1,
+    "quality_params": null,
+    "quality_channels": [
+      1,
+      2
+    ],
+    "quality_reduction": "channel median",
+    "mi_bins": 16,
+    "mi_binning": "quantile",
+    "denoise": false,
+    "grid_policy": "original sample grid; complete continuous windows; gap > 3 sample periods",
+    "code_sha256": "74fb5027cea0e41008b11d8fdc71beec13a687a392d762ea4bf65447cd6352c8"
+  },
+  "code_sha256": "74fb5027cea0e41008b11d8fdc71beec13a687a392d762ea4bf65447cd6352c8",
+  "table_sha256": "94c403a632a32e1c8c89ba9c4b3ed6adfe157c92353f0dd321f1ba6305671377",
+  "quality_diagnostics_version": 1,
+  "quality_audit": [
+    {
+      "window_start_idx": 0,
+      "window_end_idx": 1000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 1000,
+      "window_end_idx": 2000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 2000,
+      "window_end_idx": 3000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 3000,
+      "window_end_idx": 4000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 4000,
+      "window_end_idx": 5000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 5000,
+      "window_end_idx": 6000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 6000,
+      "window_end_idx": 7000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 7000,
+      "window_end_idx": 8000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 8000,
+      "window_end_idx": 9000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 9000,
+      "window_end_idx": 10000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 10000,
+      "window_end_idx": 11000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    },
+    {
+      "window_start_idx": 11000,
+      "window_end_idx": 12000,
+      "quality_diagnostics": {
+        "schema_version": 1,
+        "state": "not_scored",
+        "score_policy": "legacy_overall",
+        "request": {
+          "fs": 500.0,
+          "parameters": null,
+          "stage": "filtered",
+          "n_channels": 2,
+          "n_samples": 1000
+        },
+        "reasons": [
+          "quality_disabled"
+        ],
+        "result": null
+      }
+    }
+  ]
+}
